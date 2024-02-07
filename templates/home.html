@@ -1,4 +1,6 @@
-{%extends "base.html" %} {% load static %} {%block content%}
+{%extends "base.html" %} 
+{% load static %} 
+{%block content%}
 
 <section id="intro">
     <div class="intro-container">
@@ -12,9 +14,10 @@
                     <div class="carousel-background"><img src="{% static 'base/img/intro-carousel/1.jpg'%}" alt=""></div>
                     <div class="carousel-container">
                         <div class="carousel-content">
-                            <h2 >Welcome to the Alumni Social Network</h2>
+                            <h2 >Welcome to the Alumni's Hub</h2>
                             <p style="font-size:25px">
-                                Be a part of a network comprosing of {{no_of_alumnis}} alumnis from {{no_of_colleges}} Colleges. Sign up now and be a part of the massive community of fellow alumni an colleges.
+                                {% comment %} Be a part of a network comprosing of {{no_of_alumnis}} alumnis from {{no_of_colleges}} Colleges. Sign up now and be a part of the massive community of fellow alumni an colleges. {% endcomment %}
+                                Let’s Pick Up Where We Left Off!
                             </p>
                             {% if request.user.is_authenticated %}
                             <a href="{% url 'alumni-profile' request.user.id%}" class="btn-get-started scrollto">Your Profile</a>
