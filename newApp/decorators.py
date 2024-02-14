@@ -1,6 +1,7 @@
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.decorators import user_passes_test
 
+from functools import wraps
 
 def alumni_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url='login'):
     actual_decorator = user_passes_test(
@@ -8,9 +9,7 @@ def alumni_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, logi
         login_url=login_url,
         redirect_field_name=redirect_field_name
     )
-    if function:
-        return actual_decorator(function)
-    return actual_decorator
+    return actual_decorator(function) if function else actual_decorator
 
 
 def college_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url='login'):
@@ -19,9 +18,7 @@ def college_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, log
         login_url=login_url,
         redirect_field_name=redirect_field_name
     )
-    if function:
-        return actual_decorator(function)
-    return actual_decorator
+    return actual_decorator(function) if function else actual_decorator
 
 
 def admin_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url='login'):
@@ -30,6 +27,7 @@ def admin_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login
         login_url=login_url,
         redirect_field_name=redirect_field_name
     )
-    if function:
-        return actual_decorator(function)
-    return actual_decorator
+    return actual_decorator(function) if function else actual_decorator
+
+
+

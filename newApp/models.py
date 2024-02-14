@@ -24,11 +24,11 @@ COLLEGE_CHOICES = (
 
 
 class User(AbstractUser):
-    #    is_alumni = models.BooleanField(default=False)
+    is_alumni = models.BooleanField(default=False)
     is_college = models.BooleanField(default=False)
     College = models.CharField(
         max_length=80,
-        choices=COLLEGE_CHOICES,
+        choices=COLLEGE_CHOICES, 
         default="None"
     )
     About = models.TextField(max_length=800)
@@ -41,6 +41,7 @@ class User(AbstractUser):
     )
     Verified = models.BooleanField(default=False)
 
+    # modle methods
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         img = Image.open(self.Image.path)
@@ -48,3 +49,24 @@ class User(AbstractUser):
             output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.Image.path)
+
+
+class Post(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,default=0)
+    content = models.TextField(default='')
+    comments = models.JSONField(default=list)   
+    likes = models.PositiveIntegerField(default=0)
+    is_alumni_post = models.BooleanField(default=False)
+    is_college_post = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+       
+        if self.user.is_alumni:
+            self.is_alumni_post = True
+        elif self.user.is_college:
+            self.is_college_post = True
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Post by {self.user.username}"

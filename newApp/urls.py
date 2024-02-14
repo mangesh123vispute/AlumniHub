@@ -1,4 +1,5 @@
 from django.urls import path
+import newApp
 from . import views, alumniView, collegeView
 from django.conf import settings
 from django.conf.urls.static import static
@@ -48,5 +49,8 @@ urlpatterns = [
         'authenticate/<int:pk>/',
         collegeView.AlumniAuthenticationView.as_view(),
         name="alumni-authentication"
-        )
+        ),
+   path('addpost/', alumniView.post, name='post'),
+  
+   
 ]+static(settings.MEDIA_URL, document_root=settings. MEDIA_ROOT)

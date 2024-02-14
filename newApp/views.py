@@ -1,10 +1,13 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-from .models import User
-# from .forms import AddAlumniForm
+from .models import User,Post
 from django.views.generic import View
 from .filters import AlumniFilter
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger    
+from django.shortcuts import redirect
+from django.contrib import messages
+from .forms import PostForm  
+
 
 
 def home(request):
@@ -33,7 +36,7 @@ def AlumniListView(request):
 
 
 def CollegeListView(request):
-    total = User.objects.filter(is_college=True).all()
+    total = User.objects.filter(is_college=True).all()  
     template_name = 'showcollege.html'
     paginator = Paginator(total, 5)
     page_number = request.GET.get('page')
@@ -47,6 +50,7 @@ def CollegeListView(request):
 
 
 class CollegeDetailView(View):
+    
     def get(self, request, *args, **kwargs):
         college = get_object_or_404(User, pk=kwargs['pk'])
         alumnis = User.objects.filter(is_college=False).filter(College=college.College).filter(Verified=True).all()
@@ -59,3 +63,5 @@ class AlumniDetailView(View):
         alumni = get_object_or_404(User, pk=kwargs['pk'])
         context = {'alumni': alumni}
         return render(request, "alumni.html", context)
+
+

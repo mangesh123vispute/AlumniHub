@@ -11,8 +11,7 @@ urlpatterns = [
         admin.site.urls
         ),
     path(
-        '',
-        include('newApp.urls')
+        '', include('newApp.urls')
     ),
     path(
         'accounts/',
@@ -27,5 +26,7 @@ urlpatterns = [
         'accounts/signup/college/',
         college.SignupView.as_view(),
         name='college_signup'
-        )
+        ),
+    
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
