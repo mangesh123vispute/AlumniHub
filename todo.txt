@@ -1,1 +1,15 @@
 get the emails address of ssbt alumni.
+change fileds in search alumni
+change ui:
+it is for only ssbt college 
+
+currectEvents-->current post 
+crud
+
+chage ui of home
+just correct the ui of the forms
+
+in alumni :
+show dynamic alumni
+
+create collge user profile 
