@@ -1,4 +1,4 @@
-get the emails address of ssbt alumni.
+
 change fileds in search alumni
 change ui:
 it is for only ssbt college 
@@ -13,3 +13,9 @@ in alumni :
 show dynamic alumni
 
 create collge user profile 
+remove college sign up ,
+it is only for ssbt
+remove alumni chat
+after sign in rediret to profile
+make college post page , 
+alumni is post render page 

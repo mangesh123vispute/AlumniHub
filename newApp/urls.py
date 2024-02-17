@@ -50,10 +50,10 @@ urlpatterns = [
         collegeView.AlumniAuthenticationView.as_view(),
         name="alumni-authentication"
         ),
-   path('addpost/', alumniView.post, name='post'),
-   path('getallposts/', alumniView.get_posts, name='get-all-posts'),
-   path('updatepost/', alumniView.updatePost, name='update-post'),
-   path('deletepost/', alumniView.deletePost, name='delete-post'),
+        path('AlumniPost', views.AlumniAddPost, name='AlumniPost'),
+   
+   path('AlumniPostlist', views.AlumniPostList, name='AlumniPostlist'),
+
   
    
 ]+static(settings.MEDIA_URL, document_root=settings. MEDIA_ROOT)

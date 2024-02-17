@@ -1,12 +1,12 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-from .models import User,Post
+from .models import User,AlumniPost
 from django.views.generic import View
 from .filters import AlumniFilter
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger    
 from django.shortcuts import redirect
 from django.contrib import messages
-from .forms import PostForm  
+from .forms import AlumniPostForm
 
 
 
@@ -65,3 +65,25 @@ class AlumniDetailView(View):
         return render(request, "alumni.html", context)
 
 
+# create 
+def AlumniAddPost(request):
+    if request.method == 'POST':
+        form = AlumniPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            Alumni=request.user
+            tag=form.cleaned_data['tag']
+            title=form.cleaned_data['title']
+            content=form.cleaned_data['content']
+            image=form.cleaned_data['Image']
+            alumnipost=AlumniPost(Alumni=Alumni,tag=tag,title=title,content=content,Image=image)
+            alumnipost.save()
+            return redirect('AlumniPostlist')
+    else:
+        form = AlumniPostForm()
+    return render(request, 'post/post.html', {'form': form})
+
+# read 
+def AlumniPostList(request):
+    alumniposts = AlumniPost.objects.all()
+
+    return render(request, 'post/postlist.html', {'alumniposts': alumniposts,"request":request})

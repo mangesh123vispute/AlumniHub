@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import User, Post
+from .models import User,AlumniPost
 
 
 class AlumniSignupForm(UserCreationForm):
@@ -59,7 +59,12 @@ class CollegeDetailsForm(forms.ModelForm):
 
 
 
-class PostForm(forms.ModelForm):
+class AlumniPostForm(forms.ModelForm):
+
     class Meta:
-        model = Post
-        fields = ['comments','content','likes','is_alumni_post','is_college_post']  
+        model = AlumniPost
+        fields = ['tag','Image','title', 'content']
+       
+
+        
+
