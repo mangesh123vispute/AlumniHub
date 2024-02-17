@@ -11,17 +11,12 @@ from .forms import AlumniPostForm
 
 
 def home(request):
-    no_of_alumnis = User.objects.filter(is_college=False).filter(is_superuser=False).all().count()
-    no_of_colleges = User.objects.filter(is_college=True).all().count()
-    context = {
-        "no_of_colleges":no_of_colleges,
-        "no_of_alumnis":no_of_alumnis
-    }
-    return render(request, 'home.html',context)
+   
+    return render(request, 'home.html')
 
 
 def AlumniListView(request):
-    total = User.objects.filter(Verified=True).filter(is_college=False).all()
+    total = User.objects.filter(is_alumni=True).all()
     alfilter = AlumniFilter(request.GET, queryset=total)
     template_name = 'showalumni.html'
     paginator = Paginator(alfilter.qs, 5)
@@ -87,3 +82,19 @@ def AlumniPostList(request):
     alumniposts = AlumniPost.objects.all()
 
     return render(request, 'post/postlist.html', {'alumniposts': alumniposts,"request":request})
+
+
+# delete 
+
+# if logged in alumni and alumni stored in the database
+#  of that post is same then only he can delete 
+
+# def AlumniPostDelete(request,id):
+#     if request.method =="POST":
+#         idOfLoggedinAlumni=request.POST.get('id')
+        
+        
+
+
+
+

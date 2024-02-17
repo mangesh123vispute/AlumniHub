@@ -1,55 +1,170 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% load templatetags %}
 
 {% block content %}
-<br>
-<div class="container-fluid">
-    <br>
+  <style>
+    /* Container styles */
+    .container-fluid {
+      margin-top: 20px;
+    }
+    
+    /* Form styles */
+    .col-sm-3 form {
+      margin-bottom: 20px;
+    }
+    
+    /* Avatar styles */
+    .avatar img {
+      height: 150px;
+      width: 200px;
+    }
+    
+    /* Card title styles */
+    .card-title {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    
+    /* Text info styles */
+    .text-info {
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+    
+    /* Pagination styles */
+    .pagination {
+      margin-left: 100px;
+      margin-top: 50px;
+    }
+    
+    .pagination span {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .pagination a {
+      margin: 0 5px;
+    }
+    
+    .pagination .disabled {
+      cursor: not-allowed;
+    }
+    
+    /* Additional styles for enhanced UI */
+    .card {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease-in-out;
+    }
+    
+    .card:hover {
+      transform: scale(1.05);
+    }
+    
+    .card-header img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px 10px 0 0;
+    }
+    
+    .card-body {
+      padding: 20px;
+    }
+    
+    .card-body h4 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    
+    .card-body p {
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    
+    .user {
+      display: flex;
+      align-items: center;
+    }
+    
+    .user img {
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+    }
+    
+    .user-info h5 {
+      font-size: 16px;
+      margin: 0;
+    }
+    
+    .user-info small {
+      font-size: 14px;
+      color: #777;
+    }
+    
+    button.create-post-btn {
+      background-color: #47bcd4;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+    
+    button.create-post-btn a {
+      text-decoration: none;
+      color: #fff;
+    }
+  </style>
+
+  <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-3">
-            <form method="get">
-                {{ filter.form|crispy }}
-                <button class="btn btn-outline-info" type="submit">Search</button>
-            </form>
-        </div>
-        <div class="col-sm-7">
-            {% for p in page_obj %}
-            <hr>
-            <a href="{% url 'alumni-detail' p.id %}" style="color: black">
-                <div class="mx-auto">
-                    <div class="row">
-                        <div class="avatar mx-auto white col-sm-5">
-                            <img src="{{ p.Image.url }}" style="height: 150px;width: 200px" class="rounded mx-auto d-block">
-                        </div>
-                        <div class="col-sm-6">
-                            <h4 class="card-title text-danger">{{p.first_name}} {{p.last_name}}</h4>
-                            <hr>
-                            <p class="text-info">College - {{p.College}} ({{p.Branch}})</p>
-                            <p class="text-info">Joining Year - {{p.Year_Joined}}</p>
-                        </div>
-                    </div>
+      <div class="col-sm-3">
+        <form method="get">
+          {{ filter.form|crispy }}
+          <button class="btn btn-outline-info" type="submit">Search</button>
+        </form>
+      </div>
+      <div class="col-sm-7">
+        {% for p in page_obj %}
+          <hr />
+          <a href="{% url 'alumni-detail' p.id %}" style="color: black">
+            <div class="mx-auto">
+              <div class="row">
+                <div class="avatar mx-auto white col-sm-5">
+                  <img src="{{ p.Image.url }}" class="rounded mx-auto d-block" />
                 </div>
-            </a>
-            {% endfor %}
-            <div class="pagination" style="margin-left: 100px;margin-top: 50px">
-                <span>
-                    {% if page_obj.has_previous %}
-                    <a class="btn btn-outline-info" href="?{% query_transform request page=1 %}">&laquo; first</a>
-                    <a class="btn btn-outline-info" href="?{% query_transform request page=page_obj.previous_page_number %}">previous</a>
-                    {% endif %}
-                    <a class="cbtn btn-outline-info disabled">
-                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-                    </a>
-                    {% if page_obj.has_next %}
-                    <a class="btn btn-outline-info" href="?{% query_transform request page=page_obj.next_page_number %}">next</a>
-                    <a class="btn btn-outline-info" href="?{% query_transform request page=page_obj.paginator.num_pages %}">last &raquo;</a>
-                    {% endif %}
-                </span>
+                <div class="col-sm-6">
+                  <h4 class="card-title text-danger">{{ p.first_name }} {{ p.last_name }}</h4>
+                  <hr />
+                  <p class="text-info">College - {{ p.College }} ({{ p.Branch }})</p>
+                  <p class="text-info">Joining Year - {{ p.Year_Joined }}</p>
+                </div>
+              </div>
             </div>
+          </a>
+        {% endfor %}
+        <div class="pagination">
+          <span>
+            {% if page_obj.has_previous %}
+              {% comment %} <a class="btn btn-outline-info" href="?{% query_transform request page = 1 %}">&laquo; first</a>
+              <a class="btn btn-outline-info" href="?{% query_transform request page = page_obj.previous_page_number %}">previous</a> {% endcomment %}
+            {% endif %}
+            {% comment %} <a class="cbtn btn-outline-info disabled">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a> {% endcomment %}
+            {% if page_obj.has_next %}
+              {% comment %} <a class="btn btn-outline-info" href="?{% query_transform request page = page_obj.next_page_number %}">next</a> {% endcomment %}
+              {% comment %} <a class="btn btn-outline-info" href="?{% query_transform request page = page_obj.paginator.num_pages %}">last &raquo;</a> {% endcomment %}
+            {% endif %}
+          </span>
         </div>
+      </div>
     </div>
-    <br>
-</div>
+  </div>
 {% endblock %}

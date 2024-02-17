@@ -3,29 +3,16 @@ from django.contrib.auth.models import AbstractUser
 from PIL import Image
 from django.contrib.auth.models import User
 
-COLLEGE_CHOICES = (
-    ('Indian Institute Of Technology, Jodhpur',
-     'Indian Institute Of Technology, Jodhpur'),
-    ('Indian Institute Of Technology, Indore',
-     'Indian Institute Of Technology, Indore'),
-    ('Indian Institute Of Technology, Mumbai',
-     'Indian Institute Of Technology, Mumbai'),
-    ('Indian Institute Of Technology, Palakkad',
-     'Indian Institute Of Technology, Palakkad'),
-    ('Indian Institute Of Technology, Dhanbad',
-     'Indian Institute Of Technology, Dhanbad'),
-    ('Indian Institute Of Technology, Delhi',
-     'Indian Institute Of Technology, Delhi'),
-    ('Indian Institute Of Technology, Kanpur',
-     'Indian Institute Of Technology, Kanpur'),
-    ('Indian Institute Of Technology, Kharagpur',
-     'Indian Institute Of Technology, Kharagpur'),
-)
+COLLEGE_CHOICES = [
+    ('SSBT COET, Jalgaon', 'SSBT COET, Jalgaon'),
+    
+]
+
 
 
 class User(AbstractUser):
     is_alumni = models.BooleanField(default=False)
-    is_college = models.BooleanField(default=False)
+    is_student = models.BooleanField(default=False)
     College = models.CharField(
         max_length=80,
         choices=COLLEGE_CHOICES, 
@@ -39,7 +26,7 @@ class User(AbstractUser):
         upload_to='images',
         default='default/test.png'
     )
-    Verified = models.BooleanField(default=False)
+    admin=models.BooleanField(default=False)
 
     # modle methods
     def save(self, *args, **kwargs):
@@ -49,6 +36,9 @@ class User(AbstractUser):
             output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.Image.path)
+        if not self.is_alumni and not self.is_student:
+            self.admin=True
+       
 
 
 class AlumniPost(models.Model):

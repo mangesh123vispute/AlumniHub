@@ -159,7 +159,6 @@
     {% if request.user.is_authenticated %}
       <button class="create-post-btn" style="float: right; margin-right: 10px; margin-left: 30px;" onclick="window.location.href='{% url 'AlumniPost' %}'">Add Post</button>
     {% endif %}
-
     <div class="container" style="margin-top: 100px; margin-bottom: 300px">
       {% for post in alumniposts %}
         <div class="card">
@@ -182,6 +181,15 @@
       {% endfor %}
     </div>
   {% else %}
-    <h3>No posts</h3>
+    <div style="display:flex; justify-content: center; align-items: center; ">
+      <h1>No posts found.</h1>
+      {% if request.user.is_authenticated %}
+        <button class="create-post-btn" style="margin-top: 20px; margin-left: 100px;" onclick="window.location.href='{% url 'AlumniPost' %}'">Add Post</button>
+      {% endif %}
+    </div>
+
+    <div style="display:flex; justify-content: center; align-items: center; height: 100vh;">
+      <img src="https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif" alt="image" />
+    </div>
   {% endif %}
 {% endblock %}

@@ -4,8 +4,8 @@ from .models import User,AlumniPost
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['id','username', 'email', 'is_alumni', 'is_college', 'College', 'About', 'Work', 'Year_Joined', 'Branch', 'Image', 'Verified']
-    list_filter = ['is_alumni', 'is_college', 'College', 'Verified']
+    list_display = ['id','username', 'email', 'is_alumni', 'is_student', 'College', 'About', 'Work', 'Year_Joined', 'Branch', 'Image',"admin"]
+    list_filter = ['is_alumni', 'is_student', 'College',"admin"]
 
 class AlumniAdmin(admin.ModelAdmin):
     list_display = ['id','Alumni','tag', 'content', 'title', 'Image']

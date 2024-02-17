@@ -51,7 +51,7 @@ class PendingQueryView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return User.objects.filter(
             Verified=False,
-            is_college=False,
+            is_student=False,
             College=self.request.user.College)
     template_name = "pendingalumni.html"
     context_object_name = 'alumnis'

@@ -9,7 +9,7 @@ class AlumniSignupForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.is_college = False
+        user.is_student = False
         if commit:
             user.save()
         return user
