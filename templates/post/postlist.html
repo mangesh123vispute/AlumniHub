@@ -154,23 +154,41 @@
       color: #fff;
     }
   </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
   {% if alumniposts %}
-    {% if request.user.is_authenticated %}
-      <button class="create-post-btn" style="float: right; margin-right: 10px; margin-left: 30px;" onclick="window.location.href='{% url 'AlumniPost' %}'">Add Post</button>
+    {% if request.user.is_alumni or request.user.admin %}
+      <div style="float: right; margin-right: 30px; margin-left: 30px;">
+        <button class="create-post-btn" onclick="window.location.href='{% url 'AlumniPost' %}'">Add Post</button>
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Settings And filters</button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </div>
+      </div>
     {% endif %}
     <div class="container" style="margin-top: 100px; margin-bottom: 300px">
       {% for post in alumniposts %}
         <div class="card">
           <div class="card-header">
-            <img src="https://c0.wallpaperflare.com/preview/483/210/436/car-green-4x4-jeep.jpg" alt="rover" />
+            <img src="/media/{{ post.Image }} " alt="rover" style="border-radius: 5px;" />
           </div>
+
           <div class="card-body">
-            <span class="tag tag-teal">{{ post.tag }}</span>
+            <div display="flex justify-content: space-between; align-items: center">
+              <span class="tag tag-teal">{{ post.tag }}</span>
+
+              <i class="fa-solid fa-pen-to-square mx-2" style="cursor: pointer;"></i>
+              <i class="fa-solid fa-trash-can" onclick="window.location.href='{% url 'AlumniPostdelete' post.id %}'" style="cursor: pointer;"></i>
+            </div>
+
             <h4 class="mt-3">{{ post.title }}</h4>
             <p>{{ post.content }}</p>
             <div class="user">
-              <img src="https://yt3.ggpht.com/a/AGF-l7-0J1G0Ue0mcZMw-99kMeVuBmRxiPjyvIYONg=s900-c-k-c0xffffffff-no-rj-mo" alt="user" />
+              <img src="/media/{{ post.Alumni.Image }}" alt="user" />
               <div class="user-info">
                 <h5>{{ post.Alumni }}</h5>
                 <small>{{ post.Alumni.Work }}</small>
@@ -192,4 +210,5 @@
       <img src="https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif" alt="image" />
     </div>
   {% endif %}
+  <script></script>
 {% endblock %}

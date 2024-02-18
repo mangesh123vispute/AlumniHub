@@ -50,9 +50,10 @@ urlpatterns = [
         collegeView.AlumniAuthenticationView.as_view(),
         name="alumni-authentication"
         ),
-        path('AlumniPost', views.AlumniAddPost, name='AlumniPost'),
-   
-   path('AlumniPostlist', views.AlumniPostList, name='AlumniPostlist'),
+    path('AlumniPost', views.AlumniAddPost, name='AlumniPost'),
+    path('EditAlumniPost/<int:id>', views.AlumniPostEdit, name='AlumniPostupdate'),
+    path('AlumniPostlist', views.AlumniPostList, name='AlumniPostlist'),
+    path('AlumniPostdelete/<int:id>', views.AlumniPostDelete, name='AlumniPostdelete'),
 
   
    

@@ -13,7 +13,7 @@ COLLEGE_CHOICES = [
 class User(AbstractUser):
     is_alumni = models.BooleanField(default=False)
     is_student = models.BooleanField(default=False)
-    College = models.CharField(
+    College = models.CharField( 
         max_length=80,
         choices=COLLEGE_CHOICES, 
         default="None"
@@ -24,7 +24,7 @@ class User(AbstractUser):
     Branch = models.CharField(max_length=50)
     Image = models.ImageField(
         upload_to='images',
-        default='default/test.png'
+        default='default/def.jpeg'
     )
     admin=models.BooleanField(default=False)
 
@@ -48,7 +48,7 @@ class AlumniPost(models.Model):
     title = models.CharField(max_length=255,default='')
     Image = models.ImageField(
         upload_to='images',
-        default='default/test.png'
+        default='default/def.jpeg'
     )
     likes = models.IntegerField(default=0)
   

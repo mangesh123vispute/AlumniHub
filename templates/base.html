@@ -54,6 +54,10 @@
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'alumni-profile' request.user.id %}">Profile</a>
                 </li>
+              {% else %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+                </li>
               {% endif %}
             {% else %}
               <li class="nav-item">
@@ -67,6 +71,18 @@
         </div>
       </nav>
     </header>
+    <div class="message-container fixed-top">
+      {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              <strong>{{ message }}</strong>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
     {% block content %}
 
     {% endblock %}
