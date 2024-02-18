@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser,BaseUserManager
 from PIL import Image
 from django.contrib.auth.models import User
 
@@ -7,6 +7,7 @@ COLLEGE_CHOICES = [
     ('SSBT COET, Jalgaon', 'SSBT COET, Jalgaon'),
     
 ]
+
 
 
 
@@ -27,6 +28,7 @@ class User(AbstractUser):
         default='default/def.jpeg'
     )
     admin=models.BooleanField(default=False)
+ 
 
     # modle methods
     def save(self, *args, **kwargs):
