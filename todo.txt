@@ -1,21 +1,46 @@
+Task to be accomplished:
+Change about page 
+apply links to the footer (regarding to the college )
+correct the ui of the Alumnipost
+correct the ui of the Alumnis
 
-change fileds in search alumni
-change ui:
-it is for only ssbt college 
+Change user profile just like linkedin profile
+bug while login student 
+search functionality in the Alumni section
+ui of the sign up form
+Error in the alumni pagination
+search alumni in the alumni section
 
+
+just like the linkedin... 
+
+
+
+features given by sir:
+1.Alumni should have the features to send email/ message to the student/alumni in bulk  through email /whatsapp / message and all the contacts information
+2.if student is graduated is_student=false and is_alumni=true
+3.ui of the profile should be like liked in .
+key features= followd by , follower , all the network , just like linked in
+
+insights given by sir:
+it is hard to get data from the liked in or other platforms ,
+but we can manage the data of the students who will be alumni after some time ...
+
+
+Working:in signup section:
+add button to change the alumni to user vice versa
+    
+
+
+
+Done:
 currectEvents-->current post 
 crud
 
-chage ui of home
-just correct the ui of the forms
-
-in alumni :
-show dynamic alumni
-
-create collge user profile 
-remove college sign up ,
 it is only for ssbt
 remove alumni chat
+
 after sign in rediret to profile
-make college post page , 
-alumni is post render page 
+
+change ui:
+it is for only ssbt college 

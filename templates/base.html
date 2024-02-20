@@ -117,22 +117,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
   </body>
-  <script>
-    document.getElementById('Signup').addEventListener('click', function () {
-      let AlumniorStuent = prompt('Enter 1 for Student and 2 for Alumni')
-      let Signup = document.getElementById('Signup')
-    
-      switch (AlumniorStuent) {
-        case '1':
-          Signup.href = "{% url 'student_signup' %}"
-          break
-        case '2':
-          Signup.href = "{% url 'alumni_signup' %}"
-          break
-        default:
-          alert('Please enter a valid input')
-          break
-      }
-    })
-  </script>
+  {% block script %}
+
+  {% endblock %}
 </html>
