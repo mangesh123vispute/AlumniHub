@@ -25,6 +25,11 @@ urlpatterns = [
         alumni.SignupView.as_view(),
         name='alumni_signup'
         ),
+     path(
+        'accounts/signup/student/',
+        alumni.StudentSignupView.as_view(),
+        name='student_signup'
+        ),
     path(
         'accounts/signup/college/',
         college.SignupView.as_view(),

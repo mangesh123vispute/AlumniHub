@@ -28,6 +28,10 @@ class User(AbstractUser):
         default='default/def.jpeg'
     )
     admin=models.BooleanField(default=False)
+    mobile=models.CharField(max_length=10,default='')
+    linkedin=models.CharField(max_length=100,default='')
+    instagram=models.CharField(max_length=100,default='')
+    skills=models.TextField(default='')
  
 
     # modle methods

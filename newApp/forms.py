@@ -10,10 +10,23 @@ class AlumniSignupForm(UserCreationForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.is_student = False
+        user.is_alumni = True
         if commit:
             user.save()
         return user
 
+
+class StudentSignupForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
+        model = User
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.is_student = True
+        user.is_alumni = False
+        if commit:
+            user.save()
+        return user
 
 class CollegeSignupForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
@@ -43,6 +56,7 @@ class RegistrationForm(forms.ModelForm):
             "Year_Joined",
             "Branch",
             "Image"
+
         ]
 
 
