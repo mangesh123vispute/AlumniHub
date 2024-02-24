@@ -168,7 +168,7 @@
   </style>
 
   {% if alumniposts %}
-    {% if not request.user.is_student %}
+    {% if not request.user.is_student and request.user.is_authenticated %}
       <div style="float: right; margin-right: 30px; margin-left: 30px;">
         <button class="create-post-btn" onclick="window.location.href='{% url 'AlumniPost' %}'">Add Post</button>
       </div>
@@ -240,7 +240,7 @@
   {% else %}
     <div style="display:flex; justify-content: center; align-items: center; ">
       <h1>No posts found.</h1>
-      {% if request.user.is_authenticated %}
+      {% if request.user.is_authenticated and not request.user.is_student %}
         <button class="create-post-btn" style="margin-top: 20px; margin-left: 100px;" onclick="window.location.href='{% url 'AlumniPost' %}'">Add Post</button>
       {% endif %}
     </div>

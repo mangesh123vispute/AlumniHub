@@ -39,7 +39,7 @@
               <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'AlumniPostlist' %}">Alumni's Posts</a>
+              <a class="nav-link" href="{% url 'AlumniPostlist' %}">Posts</a>
             </li>
 
             <li class="nav-item">
@@ -86,7 +86,7 @@
     {% block content %}
 
     {% endblock %}
-    <footer id="footer">
+    {% comment %} <footer id="footer">
       <div class="footer-top">
         <div class="container">
           <div class="row">
@@ -107,7 +107,7 @@
           </div>
         </div>
       </div>
-    </footer>
+    </footer> {% endcomment %}
     <script src="{% static 'base/header/js/jquery-3.2.1.min.js' %}"></script>
     <script src="{% static 'base/header/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'base/header/js/owl.carousel.min.js' %}"></script>

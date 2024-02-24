@@ -49,7 +49,6 @@ class StudentSignupView(CreateView):
 
 
 @login_required
-@alumni_required
 def profile(request,pk):
     if request.method == 'POST':
         u_form = RegistrationForm(request.POST,request.FILES, instance=request.user)

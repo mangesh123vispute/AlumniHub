@@ -7,6 +7,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import redirect
 from django.contrib import messages
 from .forms import AlumniPostForm
+from django.contrib.auth.decorators import login_required
 
 
 
@@ -14,7 +15,7 @@ def home(request):
    
     return render(request, 'home.html')
 
-
+@login_required
 def AlumniListView(request):
     total = User.objects.filter(is_alumni=True).all()
     alfilter = AlumniFilter(request.GET, queryset=total)
@@ -60,7 +61,9 @@ class AlumniDetailView(View):
         return render(request, "alumni.html", context)
 
 
+
 # create 
+@login_required
 def AlumniAddPost(request):
     try:
         if request.method == 'POST':
@@ -83,6 +86,7 @@ def AlumniAddPost(request):
         return render(request, 'post/postlist.html')
 
 # read 
+@login_required
 def AlumniPostList(request):
     try: 
         alumniposts = AlumniPost.objects.all()
@@ -94,7 +98,7 @@ def AlumniPostList(request):
 # delete 
 # logged in user is only able to delete the post if it is created by him
 # id of looged in user === id of the alumni post
-
+@login_required
 def AlumniPostDelete(request, id):
     try:
         alumnipost = get_object_or_404(AlumniPost, id=id)
@@ -115,7 +119,7 @@ def AlumniPostDelete(request, id):
 # edit post
 # logged in user is only able to edit the post if it is created by him
 # id of looged in user === id of the alumni post
-
+@login_required
 def AlumniPostEdit(request, id):
     try:
         alumnipost = get_object_or_404(AlumniPost, id=id)

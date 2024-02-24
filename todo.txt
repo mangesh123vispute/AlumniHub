@@ -1,17 +1,15 @@
 Task to be accomplished:
+
 Change about page 
-apply links to the footer (regarding to the college )
 correct the ui of the Alumnipost
 correct the ui of the Alumnis
-
+Ui of all the pages
 Change user profile just like linkedin profile
-bug while login student 
 search functionality in the Alumni section
-ui of the sign up form
 Error in the alumni pagination
 search alumni in the alumni section
 
-
+Onclicking the profile in the post , it must lead it to the profile of that user
 just like the linkedin... 
 
 
@@ -27,8 +25,7 @@ it is hard to get data from the liked in or other platforms ,
 but we can manage the data of the students who will be alumni after some time ...
 
 
-Working:in signup section:
-add button to change the alumni to user vice versa
+Working:After logged in it is essential to fill all the detials of the profile.
     
 
 
@@ -44,3 +41,5 @@ after sign in rediret to profile
 
 change ui:
 it is for only ssbt college 
+bug while login student 
+add button to change the alumni to user vice versa
