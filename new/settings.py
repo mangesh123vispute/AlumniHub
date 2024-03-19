@@ -84,14 +84,10 @@ WSGI_APPLICATION = 'new.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-        'default': {
-            'ENGINE': 'djongo',
-            'NAME': 'AlumniTrakingSystem',
-            'ENFORCE_SCHEMA': False,
-            'CLIENT': {
-                'host': 'mongodb+srv://Mangesh:1234@cluster0.msc6a5q.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
-            }  
-        }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
 
 
@@ -143,3 +139,13 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+
+# Email settings 
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'mangesh2003vispute@gmail.com'
+EMAIL_HOST_PASSWORD = 'bxnd nvlx eazh nbcz'
+EMAIL_PORT = 587    
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
