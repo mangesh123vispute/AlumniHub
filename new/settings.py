@@ -84,10 +84,14 @@ WSGI_APPLICATION = 'new.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+        'default': {
+            'ENGINE': 'djongo',
+            'NAME': 'AlumniTrakingSystem',
+            'ENFORCE_SCHEMA': False,
+            'CLIENT': {
+                'host': 'mongodb+srv://Mangesh:1234@cluster0.msc6a5q.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+            }  
+        }
 }
 
 

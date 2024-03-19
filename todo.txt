@@ -1,45 +1,13 @@
-Task to be accomplished:
 
-Change about page 
-correct the ui of the Alumnipost
-correct the ui of the Alumnis
-Ui of all the pages
-Change user profile just like linkedin profile
-search functionality in the Alumni section
-Error in the alumni pagination
-search alumni in the alumni section
-
-Onclicking the profile in the post , it must lead it to the profile of that user
-just like the linkedin... 
-
-
-
-features given by sir:
-1.Alumni should have the features to send email/ message to the student/alumni in bulk  through email /whatsapp / message and all the contacts information
-2.if student is graduated is_student=false and is_alumni=true
-3.ui of the profile should be like liked in .
-key features= followd by , follower , all the network , just like linked in
 
 insights given by sir:
 it is hard to get data from the liked in or other platforms ,
 but we can manage the data of the students who will be alumni after some time ...
 
 
-Working:After logged in it is essential to fill all the detials of the profile.
-    
 
 
 
-Done:
-currectEvents-->current post 
-crud
 
-it is only for ssbt
-remove alumni chat
 
-after sign in rediret to profile
 
-change ui:
-it is for only ssbt college 
-bug while login student 
-add button to change the alumni to user vice versa
