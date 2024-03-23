@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\laxma\OneDrive\Desktop\dsa and practice\learning\django\Minor project\ALUMNI-TRACKING-SYSTEM\ALUMNI-TRACKING-SYSTEM\myenv"
+VIRTUAL_ENV="C:\Users\laxma\OneDrive\Desktop\coding\learning\django\Minor project\ALUMNI-TRACKING-SYSTEM\ALUMNI-TRACKING-SYSTEM\myenv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

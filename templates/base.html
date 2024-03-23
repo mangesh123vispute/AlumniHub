@@ -47,7 +47,10 @@
             </li>
             {% if request.user.is_authenticated %}
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                <form action="{% url 'logout' %}" method="post">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-outline-info">Logout</button>
+                </form>
               </li>
 
               {% if request.user.is_alumni or request.user.is_student %}
