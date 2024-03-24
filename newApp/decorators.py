@@ -3,7 +3,10 @@ from django.contrib.auth.decorators import user_passes_test
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse
-
+from functools import wraps
+from django.shortcuts import redirect
+from django.urls import reverse
+from django.contrib import messages
 from functools import wraps
 
 def alumni_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url='login'):
@@ -35,10 +38,6 @@ def admin_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login
 
 
 
-from functools import wraps
-from django.shortcuts import redirect
-from django.urls import reverse
-from django.contrib import messages
 
 def check_profile_completion(view_func):
     @wraps(view_func)

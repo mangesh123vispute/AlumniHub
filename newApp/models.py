@@ -14,9 +14,10 @@ COLLEGE_CHOICES = [
 
 
 class User(AbstractUser):
-    is_alumni = models.BooleanField(default=False)
-    is_student = models.BooleanField(default=False)
-    admin=models.BooleanField(default=False)
+    is_alumni = models.BooleanField(default=False,  blank=True)
+    is_student = models.BooleanField(default=False, blank=True)
+    admin=models.BooleanField(default=False,  blank=True)
+    email = models.EmailField(unique=True) 
     College = models.CharField( 
         max_length=80,
         choices=COLLEGE_CHOICES, 
@@ -24,16 +25,18 @@ class User(AbstractUser):
     )
     About = models.TextField(max_length=800)
     Work = models.TextField(max_length=50)
-    Year_Joined = models.CharField(max_length=4)
+    Year_Joined = models.CharField(max_length=4,  blank=True)
     Branch = models.CharField(max_length=50)
     Image = models.ImageField(
         upload_to='images',
-        default='default/def.jpeg'
+        default='default/def.jpeg',
     )
-    mobile=models.CharField(max_length=10,default='')
+    mobile=models.CharField(max_length=10,default='',blank=True)
     linkedin=models.CharField(max_length=100,default='')
-    instagram=models.CharField(max_length=100,default='')
+    instagram=models.CharField(max_length=100,default='',blank=True)
     skills=models.TextField(default='')
+    first_name = models.CharField(max_length=30)  
+    last_name = models.CharField(max_length=150)
  
 
     # modle methods
@@ -53,16 +56,15 @@ class Command(createsuperuser.Command):
     help = 'Custom createsuperuser command'
 
     def handle(self, *args, **options):
-        # Your custom logic before calling super().handle()
+       
         self.stdout.write(self.style.SUCCESS('Custom logic before createsuperuser'))
 
-        # Call the super().handle() to execute the original createsuperuser logic
+        
         super().handle(*args, **options)
 
-        # Your custom logic after calling super().handle()
+
         self.stdout.write(self.style.SUCCESS('Custom logic after createsuperuser'))
 
-        # Set admin=True for the created superuser
         username = options.get('username', None)
         if username:
             try:
