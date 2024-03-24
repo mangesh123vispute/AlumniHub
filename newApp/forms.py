@@ -49,12 +49,17 @@ class RegistrationForm(forms.ModelForm):
             "username",
             "first_name",
             "last_name",
+            "Branch",
+            "skills",
             "email",
+            'mobile',
+            'linkedin', 
+            'instagram',
             "College",
+            "Year_Joined",
             "About",
             "Work",
             "Year_Joined",
-            "Branch",
             "Image"
 
         ]

@@ -4,7 +4,7 @@ from .models import User
 from .forms import AlumniSignupForm, RegistrationForm,StudentSignupForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from .decorators import alumni_required
+from .decorators import alumni_required,check_profile_completion
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
@@ -49,6 +49,7 @@ class StudentSignupView(CreateView):
 
 
 @login_required
+@check_profile_completion
 def profile(request,pk):
     if request.method == 'POST':
         u_form = RegistrationForm(request.POST,request.FILES, instance=request.user)

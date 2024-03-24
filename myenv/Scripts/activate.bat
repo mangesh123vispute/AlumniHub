@@ -8,7 +8,11 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
+<<<<<<< HEAD
 set VIRTUAL_ENV=C:\Users\laxma\OneDrive\Desktop\coding\learning\django\Minor project\ALUMNI-TRACKING-SYSTEM\ALUMNI-TRACKING-SYSTEM\myenv
+=======
+set VIRTUAL_ENV=C:\Users\laxma\OneDrive\Desktop\coding\learning\Minor\Alumni-Navigator\myenv
+>>>>>>> c860dece7555d1461871242c738d47c4a9861e79
 
 if not defined PROMPT set PROMPT=$P$G
 

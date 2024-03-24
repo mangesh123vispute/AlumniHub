@@ -8,14 +8,16 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from .forms import AlumniPostForm
 from django.contrib.auth.decorators import login_required
+from .decorators import check_profile_completion
 
 
-
+@check_profile_completion
 def home(request):
    
     return render(request, 'home.html')
 
 @login_required
+@check_profile_completion
 def AlumniListView(request):
     total = User.objects.filter(is_alumni=True).all()
     alfilter = AlumniFilter(request.GET, queryset=total)
@@ -87,6 +89,7 @@ def AlumniAddPost(request):
 
 # read 
 @login_required
+@check_profile_completion
 def AlumniPostList(request):
     try: 
         alumniposts = AlumniPost.objects.all()
