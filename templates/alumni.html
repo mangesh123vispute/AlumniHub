@@ -1,51 +1,44 @@
-{% extends "base.html" %}
-{%block content%}
-
-<div class="container ">
-    <br>
+{% extends 'base.html' %}
+{% block content %}
+  <div class="container">
+    <br />
     <div class="card testimonial-card mr-3 mb-3 ml-3">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-sm-4">
-                    <img src="{{ alumni.Image.url }}" style="height: 200px;width: 250px">
-                </div>
-                <div class="col-sm-8">
-                    <h2 class="card-title text-danger">{{alumni.first_name}}  {{alumni.last_name}}</h2>
-                    <h6 class="text-primary">{{alumni.Work}}</h6>
-                    <br>
-                    <h5 class="text-info">College: {{alumni.College}}</h5>
-                    <h5 class="text-info">Branch: {{alumni.Branch}}</h5>
-                </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-4">
+            <img src="{{ alumni.Image.url }}" style="height: 200px;width: 250px" />
+          </div>
+          <div class="col-sm-8">
+            <h2 class="card-title text-danger">{{ alumni.first_name }} {{ alumni.last_name }}</h2>
+            <br />
+            <p class="text-info">User Name - {{ alumni.username }}</p>
+            <p class="text-info">Woking as - {{ alumni.Work }}</p>
+            <p class="text-info">Branch - {{ alumni.Branch }}</p>
+            <p class="text-info">Skills - {{ alumni.skills }}</p>
+            <div class="btn-group btn-group-lg" style="margin-top: 10px;">
+              <button type="button" class="btn btn-primary">Followers</button>
+              <button type="button" class="btn btn-secondary">Following</button>
+              <button type="button" class="btn btn-warning">Posts</button>
+              <button type="button" class="btn btn-success">Follow</button>
             </div>
-            <hr>
-            <h4>About:</h4>
-            <h6>{{alumni.About|safe|linebreaks}}</h6>
-            <h5 class="text-info">Contact: {{alumni.email}}</h5>
+          </div>
         </div>
-        {% if request.user.is_authenticated %}
-        {% if alumni.Verified %}
-        {%else%}
-        <div>
-            <button class="btn btn-outline-info" style="margin:100px"><a href="{% url 'alumni-authentication' alumni.id %}">Authenticate</a></button>
+        <hr />
+        <h2 class="card-title text-danger">About</h2>
+        <h6>{{ alumni.About|safe|linebreaks }}</h6>
+        <hr />
+        <h2 class="card-title text-danger">Contacts</h2>
+        <div style="border: 1px solid black; padding: 10px; border-radius: 5px; margin-top: 10px; margin-bottom: 10px; background-color: #f8f9fa;  font-size: 14px; font-weight: bold; color: #333;  ">
+          <h6 style="margin-bottom: 5px;">Contact:</h6>
+          <p class="text-info">Email - {{ alumni.email }}</p>
+          <p class="text-info">Phone - {{ alumni.mobile }}</p>
+          <p class="text-info">LinkedIn - {{ alumni.linkedin }}</p>
         </div>
-        {%endif%}
-        {% endif %}
+      </div>
     </div>
-</div>
-</div>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-{%endblock%}
+  </div>
+
+  <br />
+  <br />
+  <br />
+{% endblock %}
