@@ -44,7 +44,8 @@ def check_profile_completion(view_func):
     def wrapped_view(request, *args, **kwargs):
       
   
-        if  not request.user.is_authenticated or ( not (request.user.is_alumni and request.user.is_student)):
+        if  not request.user.is_authenticated or (not request.user.is_alumni and not request.user.is_student):
+            
             return view_func(request, *args, **kwargs)
         
         required_fields = ['username', 'first_name', 'last_name', 'email', 'Branch', 'skills', 'linkedin', 'Work', 'About']
