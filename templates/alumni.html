@@ -12,9 +12,9 @@
             <h2 class="card-title text-danger">{{ alumni.first_name }} {{ alumni.last_name }}</h2>
             <br />
             <p class="text-info">User Name - {{ alumni.username }}</p>
-            <p class="text-info">Woking as - {{ alumni.Work }}</p>
+            <p class="text-info">Woking as - {{ alumni.Work|safe|linebreaks }}</p>
             <p class="text-info">Branch - {{ alumni.Branch }}</p>
-            <p class="text-info">Skills - {{ alumni.skills }}</p>
+            <p class="text-info">Skills - {{ alumni.skills|safe|linebreaks }}</p>
             <div class="btn-group btn-group-lg" style="margin-top: 10px;">
               <button type="button" class="btn btn-primary">Followers</button>
               <button type="button" class="btn btn-secondary">Following</button>

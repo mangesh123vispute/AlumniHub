@@ -24,7 +24,7 @@ class User(AbstractUser):
         default="None"
     )
     About = models.TextField(max_length=800)        
-    Work = models.TextField(max_length=50)
+    Work = models.TextField(max_length=800)
     Year_Joined = models.CharField(max_length=4,  blank=True)
     Branch = models.CharField(max_length=50)
     Image = models.ImageField(
