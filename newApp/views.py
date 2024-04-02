@@ -9,6 +9,10 @@ from django.contrib import messages
 from .forms import AlumniPostForm
 from django.contrib.auth.decorators import login_required
 from .decorators import check_profile_completion
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+import json
 
 
 @check_profile_completion
@@ -146,5 +150,43 @@ def AlumniPostEdit(request, id):
 
 
 
+# get Alumni id , find alumni by id
+# if request.user.id present in the follow least then remove it 
+# if not present then add it 
+
+@login_required
+def Follow(request, id):
+    alumni = get_object_or_404(User, id=id)
+    user = request.user
+
+    Alumnifollowerjson = alumni.get_followers().get("Ids")
+    alumnifollowerlist = json.loads(Alumnifollowerjson)
+    print(alumnifollowerlist)
+
+    userfollowingjson = user.get_following().get("Ids")
+    userfollowinglist = json.loads(userfollowingjson)
+
+    # following 
+    if user.id not in alumnifollowerlist:
+        alumnifollowerlist.append(user.id)
+        alumni.set_followers(alumnifollowerlist)
+        alumni.save()
+        userfollowinglist.append(alumni.id)
+        user.set_following(userfollowinglist)
+        user.save()
+        messages.success(request, "You are now following this alumni")
+    # unfollow
+    else:
+        alumnifollowerlist.remove(user.id)
+        alumni.set_followers(alumnifollowerlist)
+        alumni.save()
+        userfollowinglist.remove(alumni.id)
+        user.set_following(userfollowinglist)
+        user.save()
+        messages.success(request, "You are no longer following this alumni")
+
+    # Redirect back to the alumni profile page
+    return HttpResponseRedirect(reverse('alumni-profile', kwargs={'pk': alumni.id}))
 
 
+    

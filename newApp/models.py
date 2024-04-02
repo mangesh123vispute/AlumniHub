@@ -5,13 +5,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth.management.commands import createsuperuser
 from django.core.management import CommandError
 from django.utils.text import capfirst
-
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.contrib.postgres.fields import ArrayField
+import json
 COLLEGE_CHOICES = [
     ('SSBT COET, Jalgaon', 'SSBT COET, Jalgaon'),
-    
+     
 ]   
-
-
 
 class User(AbstractUser):
     is_alumni = models.BooleanField(default=False,  blank=True)
@@ -23,7 +23,7 @@ class User(AbstractUser):
         choices=COLLEGE_CHOICES, 
         default="None"
     )
-    About = models.TextField(max_length=800)
+    About = models.TextField(max_length=800)        
     Work = models.TextField(max_length=50)
     Year_Joined = models.CharField(max_length=4,  blank=True)
     Branch = models.CharField(max_length=50)
@@ -37,9 +37,24 @@ class User(AbstractUser):
     skills=models.TextField(default='')
     first_name = models.CharField(max_length=30)  
     last_name = models.CharField(max_length=150)
- 
+    followers = models.TextField(default='{"Ids": "[]"}')  
+    following = models.TextField(default='{"Ids": "[]"}')
 
-    # modle methods
+    def set_followers(self, followers_list):
+        print("This are the followers list",json.dumps(followers_list))
+        self.followers = json.dumps(followers_list)
+        # print("This are the followers",self.followers)
+
+    def get_followers(self):
+        return json.loads(self.followers)
+
+    def set_following(self, following_list):
+        self.following = json.dumps(following_list)
+        
+
+    def get_following(self):
+        return json.loads(self.following)
+    
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         img = Image.open(self.Image.path)

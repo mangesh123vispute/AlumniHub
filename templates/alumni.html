@@ -19,7 +19,9 @@
               <button type="button" class="btn btn-primary">Followers</button>
               <button type="button" class="btn btn-secondary">Following</button>
               <button type="button" class="btn btn-warning">Posts</button>
-              <button type="button" class="btn btn-success">Follow</button>
+              {% if not request.user.id == alumni.id %}
+                <a href="{% url 'follow' alumni.id %}" class="btn btn-info">Follow</a>
+              {% endif %}
             </div>
           </div>
         </div>
@@ -29,7 +31,6 @@
         <hr />
         <h2 class="card-title text-danger">Contacts</h2>
         <div style="border: 1px solid black; padding: 10px; border-radius: 5px; margin-top: 10px; margin-bottom: 10px; background-color: #f8f9fa;  font-size: 14px; font-weight: bold; color: #333;  ">
-          <h6 style="margin-bottom: 5px;">Contact:</h6>
           <p class="text-info">Email - {{ alumni.email }}</p>
           <p class="text-info">Phone - {{ alumni.mobile }}</p>
           <p class="text-info">LinkedIn - {{ alumni.linkedin }}</p>
