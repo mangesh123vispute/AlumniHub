@@ -9,7 +9,12 @@
             <img src="{{ alumni.Image.url }}" style="height: 200px;width: 250px; border-radius: 10px;" />
           </div>
           <div class="col-sm-8">
-            <h2 class="card-title text-danger">{{ alumni.first_name }} {{ alumni.last_name }}</h2>
+            <h2 class="card-title text-danger">
+              {{ alumni.first_name }} {{ alumni.last_name }}
+              {% if request.user.id == alumni.id %}
+                (You)
+              {% endif %}
+            </h2>
             <br />
             <p class="text-info">User Name - {{ alumni.username }}</p>
             <p class="text-info">Woking as - {{ alumni.Work|safe|linebreaks }}</p>
@@ -20,7 +25,11 @@
               <button type="button" class="btn btn-secondary">Following</button>
               <button type="button" class="btn btn-warning">Posts</button>
               {% if not request.user.id == alumni.id %}
-                <a href="{% url 'follow' alumni.id %}" class="btn btn-info">Follow</a>
+                {% if request.user.id|stringformat:'s' in alumni.get_followers %}
+                  <a href="{% url 'follow' alumni.id %}" class="btn btn-danger">Unfollow</a>
+                {% else %}
+                  <a href="{% url 'follow' alumni.id %}" class="btn btn-info">Follow</a>
+                {% endif %}
               {% endif %}
             </div>
           </div>
