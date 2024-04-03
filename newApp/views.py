@@ -148,48 +148,39 @@ def AlumniPostEdit(request, id):
         print(e)
         return render(request, 'post/postlist.html')
 
-
-
 # get Alumni id , find alumni by id
 # if request.user.id present in the follow least then remove it 
 # if not present then add it 
+
+from django.shortcuts import redirect
 
 @login_required
 def Follow(request, id):
     alumni = get_object_or_404(User, id=id)
     user = request.user
-    alumnifollower=alumni.get_followers()
-    userfollowing=user.get_following()
-    print("this is user and alumni follower",user.id , alumnifollower)
-    print("This is user following",userfollowing)
-
-    # follow
+    alumnifollower = alumni.get_followers()
+    userfollowing = user.get_following()
+    
+    # Follow
     if str(user.id) not in alumnifollower:
         alumnifollower.append(user.id)
         alumni.set_followers(alumnifollower)
         userfollowing.append(alumni.id)
         user.set_following(userfollowing)
         messages.success(request, f"You are now following {alumni.first_name} {alumni.last_name}")
-        alumni.save()
-        user.save()
-        # i am getting called 
-        context = {'alumni': alumni}
-        return render(request, "alumni.html", context)
-    # unfollow
+    # Unfollow
     else:
         alumnifollower.remove(str(user.id))
         alumni.set_followers(alumnifollower)
         userfollowing.remove(str(alumni.id))
         user.set_following(userfollowing)
         messages.success(request, f"You are no longer following {alumni.first_name} {alumni.last_name}")
-        alumni.save()
-        user.save()
-        context = {'alumni': alumni}
-        return render(request, "alumni.html", context)
-       
 
-    context = {'alumni': alumni}
-    return render(request, "alumni.html", context)
+    alumni.save()
+    user.save()
+
+    return redirect('alumni-detail', pk=id)
+
 
 
     
