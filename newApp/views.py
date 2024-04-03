@@ -158,35 +158,38 @@ def AlumniPostEdit(request, id):
 def Follow(request, id):
     alumni = get_object_or_404(User, id=id)
     user = request.user
+    alumnifollower=alumni.get_followers()
+    userfollowing=user.get_following()
+    print("this is user and alumni follower",user.id , alumnifollower)
+    print("This is user following",userfollowing)
 
-    Alumnifollowerjson = alumni.get_followers().get("Ids")
-    alumnifollowerlist = json.loads(Alumnifollowerjson)
-    print(alumnifollowerlist)
-
-    userfollowingjson = user.get_following().get("Ids")
-    userfollowinglist = json.loads(userfollowingjson)
-
-    # following 
-    if user.id not in alumnifollowerlist:
-        alumnifollowerlist.append(user.id)
-        alumni.set_followers(alumnifollowerlist)
+    # follow
+    if str(user.id) not in alumnifollower:
+        alumnifollower.append(user.id)
+        alumni.set_followers(alumnifollower)
+        userfollowing.append(alumni.id)
+        user.set_following(userfollowing)
+        messages.success(request, f"You are now following {alumni.first_name} {alumni.last_name}")
         alumni.save()
-        userfollowinglist.append(alumni.id)
-        user.set_following(userfollowinglist)
         user.save()
-        messages.success(request, "You are now following this alumni")
+        # i am getting called 
+        context = {'alumni': alumni}
+        return render(request, "alumni.html", context)
     # unfollow
     else:
-        alumnifollowerlist.remove(user.id)
-        alumni.set_followers(alumnifollowerlist)
+        alumnifollower.remove(str(user.id))
+        alumni.set_followers(alumnifollower)
+        userfollowing.remove(str(alumni.id))
+        user.set_following(userfollowing)
+        messages.success(request, f"You are no longer following {alumni.first_name} {alumni.last_name}")
         alumni.save()
-        userfollowinglist.remove(alumni.id)
-        user.set_following(userfollowinglist)
         user.save()
-        messages.success(request, "You are no longer following this alumni")
+        context = {'alumni': alumni}
+        return render(request, "alumni.html", context)
+       
 
-    # Redirect back to the alumni profile page
-    return HttpResponseRedirect(reverse('alumni-profile', kwargs={'pk': alumni.id}))
+    context = {'alumni': alumni}
+    return render(request, "alumni.html", context)
 
 
     

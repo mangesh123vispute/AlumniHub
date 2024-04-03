@@ -6,7 +6,7 @@
       <div class="card-body">
         <div class="row">
           <div class="col-sm-4">
-            <img src="{{ alumni.Image.url }}" style="height: 200px;width: 250px" />
+            <img src="{{ alumni.Image.url }}" style="height: 200px;width: 250px; border-radius: 10px;" />
           </div>
           <div class="col-sm-8">
             <h2 class="card-title text-danger">{{ alumni.first_name }} {{ alumni.last_name }}</h2>
@@ -15,7 +15,7 @@
             <p class="text-info">Woking as - {{ alumni.Work|safe|linebreaks }}</p>
             <p class="text-info">Branch - {{ alumni.Branch }}</p>
             <p class="text-info">Skills - {{ alumni.skills|safe|linebreaks }}</p>
-            <div class="btn-group btn-group-lg" style="margin-top: 10px;">
+            <div class="btn-group" style="margin-top: 10px;">
               <button type="button" class="btn btn-primary">Followers</button>
               <button type="button" class="btn btn-secondary">Following</button>
               <button type="button" class="btn btn-warning">Posts</button>
@@ -34,6 +34,8 @@
           <p class="text-info">Email - {{ alumni.email }}</p>
           <p class="text-info">Phone - {{ alumni.mobile }}</p>
           <p class="text-info">LinkedIn - {{ alumni.linkedin }}</p>
+          <p class="text-info">Github - {{ alumni.Github }}</p>
+          <p class="text-info">Instagram - {{ alumni.instagram }}</p>
         </div>
       </div>
     </div>

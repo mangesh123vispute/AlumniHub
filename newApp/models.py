@@ -33,27 +33,41 @@ class User(AbstractUser):
     )
     mobile=models.CharField(max_length=10,default='',blank=True)
     linkedin=models.CharField(max_length=100,default='')
+    Github=models.CharField(max_length=100,default='',blank=True)
     instagram=models.CharField(max_length=100,default='',blank=True)
     skills=models.TextField(default='')
     first_name = models.CharField(max_length=30)  
     last_name = models.CharField(max_length=150)
-    followers = models.TextField(default='{"Ids": "[]"}')  
-    following = models.TextField(default='{"Ids": "[]"}')
+    followers = models.TextField(default='[]')  
+    following = models.TextField(default='[]')
+
+    def string_to_list(self, string):
+        """Converts a string representing a list to a Python list."""
+        items = string.strip('[]').split(',')
+        items = [item.strip() for item in items if item.strip()]
+        return items
+    
+    def list_to_string(self, lst):
+        """Converts a Python list to a string representing a list."""
+        str_items = map(str, lst)
+        joined_str = ', '.join(str_items)
+        return '[' + joined_str + ']'
+
 
     def set_followers(self, followers_list):
-        print("This are the followers list",json.dumps(followers_list))
-        self.followers = json.dumps(followers_list)
-        # print("This are the followers",self.followers)
+        stringfollowers_list = self.list_to_string(followers_list)
+        self.followers = stringfollowers_list
 
     def get_followers(self):
-        return json.loads(self.followers)
+        return self.string_to_list(self.followers)
 
     def set_following(self, following_list):
-        self.following = json.dumps(following_list)
+        stringfollowing_list = self.list_to_string(following_list)
+        self.following = stringfollowing_list
         
-
+        
     def get_following(self):
-        return json.loads(self.following)
+        return self.string_to_list(self.following)
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
