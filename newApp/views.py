@@ -75,13 +75,13 @@ def AlumniAddPost(request):
         if request.method == 'POST':
             form = AlumniPostForm(request.POST, request.FILES)
             if form.is_valid():
-                Alumni=request.user
+                author=request.user
                 tag=form.cleaned_data['tag']
                 title=form.cleaned_data['title']
                 content=form.cleaned_data['content']
                 image=form.cleaned_data['Image']
-                print(Alumni,tag,title,content,image)
-                alumnipost=AlumniPost(Alumni=Alumni,tag=tag,title=title,content=content,Image=image)
+                print(author,tag,title,content,image)
+                alumnipost=AlumniPost(author=author,tag=tag,title=title,content=content,Image=image)
                 alumnipost.save()
                 return redirect('AlumniPostlist')
         else:
@@ -91,7 +91,7 @@ def AlumniAddPost(request):
         print(e)
         return render(request, 'post/postlist.html')
 
-# read 
+# read all posts of all authors
 @login_required
 @check_profile_completion
 def AlumniPostList(request):
@@ -183,4 +183,15 @@ def Follow(request, id):
 
 
 
-    
+# read all post of specific author
+@login_required
+def AlumniPosts(request, author_username): 
+    print("i am getting callled",author_username)
+    author = get_object_or_404(User, username=author_username)
+    try: 
+        alumniposts = author.alumnipost_set.all()
+        print("These are the alumni posts:", alumniposts)
+        return render(request, 'post/postlist.html', {'alumniposts': alumniposts, "request": request})
+    except AlumniPost.DoesNotExist:
+        #
+        return render(request, 'post/postlist.html', {'alumniposts': [], "request": request})

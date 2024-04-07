@@ -108,7 +108,7 @@ class Command(createsuperuser.Command):
 
 
 class AlumniPost(models.Model):
-    Alumni=models.ForeignKey(User, on_delete=models.CASCADE,default=0)
+    author=models.ForeignKey(User, on_delete=models.CASCADE,default=0)
     tag = models.CharField(max_length=255,default='')
     content = models.TextField(default='')
     title = models.CharField(max_length=255,default='')

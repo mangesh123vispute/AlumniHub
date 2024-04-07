@@ -174,7 +174,6 @@
       </div>
     {% endif %}
     <div class="container" style="margin-top: 100px; margin-bottom: 300px">
-      {% comment %}for{% endcomment %}
       {% for post in alumniposts %}
         <div class="card">
           <div class="card-header">
@@ -196,8 +195,8 @@
             <div class="user">
               <img src="/media/{{ post.Alumni.Image }}" alt="user" />
               <div class="user-info">
-                <h5>{{ post.Alumni|slice:'14'|upper }}</h5>
-                <small>{{ post.Alumni.Work|slice:'30' }}</small>
+                <h5>{{ post.author|slice:'14'|upper }}</h5>
+                <small>{{ post.author.Work|slice:'30' }}</small>
               </div>
             </div>
           </div>

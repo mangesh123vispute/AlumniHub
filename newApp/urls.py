@@ -55,6 +55,7 @@ urlpatterns = [
     path('AlumniPostlist', views.AlumniPostList, name='AlumniPostlist'),
     path('AlumniPostdelete/<int:id>', views.AlumniPostDelete, name='AlumniPostdelete'),
     path('follow/<int:id>/', views.Follow, name='follow'),
+    path('AlumniPosts/<str:author_username>/', views.AlumniPosts, name='AlumniPosts'),
     
   
    

@@ -57,8 +57,8 @@ class UserAdmin(admin.ModelAdmin):
 
 
 class AlumniAdmin(admin.ModelAdmin):
-    list_display = ['id', 'Alumni', 'tag', 'content', 'title', 'Image']
-    list_filter = ['tag', 'title']
+    list_display = ['id', 'author', 'tag', 'content', 'title', 'Image']
+    list_filter = ['author','tag', 'title']
 
 
 admin.site.register(User, UserAdmin)

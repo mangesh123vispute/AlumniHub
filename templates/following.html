@@ -126,17 +126,8 @@
 
   <div class="container-fluid">
     <div class="row">
-      {% block filter %}
-        <div class="col-sm-3">
-          <form method="get">
-            {{ filter.form|crispy }}
-            <button class="btn btn-outline-info" type="submit">Search</button>
-          </form>
-        </div>
-      {% endblock %}
-
       <div class="col-sm-7">
-        <h2 class="text-center" style=" margin-top: 20px; margin-bottom: 20px; color: #47bcd4; font-size: 50px; font-weight: bold ; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;  border: #47bcd4 5px solid; border-radius: 10px; ">Alumni List</h2>
+        <h2 class="text-center" style=" margin-top: 20px; margin-bottom: 20px; color: #47bcd4; font-size: 50px; font-weight: bold ; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;  border: #47bcd4 5px solid; border-radius: 10px; ">Following List</h2>
         <br />
 
         {% for p in page_obj %}
@@ -160,33 +151,18 @@
                     <p class="text-info">Skills - {{ p.skills|slice:':100' }}......</p>
                     <hr />
                     <div class="btn-group btn-group">
-                      <!-- Form for followers button -->
-                      {% comment %} <form action="{% url 'followers' p.id %}" method="GET">
-                        {% endcomment %}
-                        <button type="submit" class="btn btn-primary">{{ p.get_followers|length }} Followers</button>
-                        {% comment %}
-                      </form> {% endcomment %}
-
-                      <!-- Form for following button -->
-                      {% comment %} <form action="{% url 'following' p.id %}" method="GET">
-                        {% endcomment %}
-                        <button type="submit" class="btn btn-secondary">{{ p.get_following|length }} Following</button>
-                        {% comment %}
-                      </form> {% endcomment %}
-
-                      <!-- Form for posts button -->
-                      <form action="{% url 'AlumniPosts' p.username %}" method="GET">
-                        <button type="submit" class="btn btn-warning">{{ p.alumnipost_set.all|length }} Posts</button>
-                      </form>
-
-                      <!-- Form for follow/unfollow button -->
+                      <button type="button" class="btn btn-primary">{{ p.get_followers|length }} Followers</button>
+                      <button type="button" class="btn btn-secondary">{{ p.get_following|length }} Following</button>
+                      <button type="button" class="btn btn-warning">Posts</button>
                       {% if not request.user.id == p.id %}
                         <form action="{% url 'follow' p.id %}" method="post">
                           {% csrf_token %}
-                          {% if request.user.id|stringformat:'s' in p.get_followers %}
-                            <button type="submit" class="btn btn-danger follow-btn">Unfollow</button>
-                          {% else %}
-                            <button type="submit" class="btn btn-info follow-btn">Follow</button>
+                          {% if not request.user.id == p.id %}
+                            {% if request.user.id|stringformat:'s' in p.get_followers %}
+                              <button type="submit" class="btn btn-danger follow-btn">Unfollow</button>
+                            {% else %}
+                              <button type="submit" class="btn btn-info follow-btn">Follow</button>
+                            {% endif %}
                           {% endif %}
                         </form>
                       {% endif %}
