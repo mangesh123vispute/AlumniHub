@@ -136,7 +136,8 @@
       {% endblock %}
 
       <div class="col-sm-7">
-        <h2 class="text-center" style=" margin-top: 20px; margin-bottom: 20px; color: #47bcd4; font-size: 50px; font-weight: bold ; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;  border: #47bcd4 5px solid; border-radius: 10px; ">Alumni List</h2>
+        <h2 class="text-center" style=" margin-top: 20px; margin-bottom: 20px; color: #47bcd4; font-size: 50px; font-weight: bold ; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;  border: #47bcd4 5px solid; border-radius: 10px; ">{{ title }} List</h2>
+        <h4>Total number of {{ title }} : {{ totallength }}</h4>
         <br />
 
         {% for p in page_obj %}
@@ -161,18 +162,14 @@
                     <hr />
                     <div class="btn-group btn-group">
                       <!-- Form for followers button -->
-                      {% comment %} <form action="{% url 'followers' p.id %}" method="GET">
-                        {% endcomment %}
+                      <form action="{% url 'followers' p.id %}" method="GET">
                         <button type="submit" class="btn btn-primary">{{ p.get_followers|length }} Followers</button>
-                        {% comment %}
-                      </form> {% endcomment %}
+                      </form>
 
                       <!-- Form for following button -->
-                      {% comment %} <form action="{% url 'following' p.id %}" method="GET">
-                        {% endcomment %}
+                      <form action="{% url 'following' p.id %}" method="GET">
                         <button type="submit" class="btn btn-secondary">{{ p.get_following|length }} Following</button>
-                        {% comment %}
-                      </form> {% endcomment %}
+                      </form>
 
                       <!-- Form for posts button -->
                       <form action="{% url 'AlumniPosts' p.username %}" method="GET">
@@ -197,7 +194,7 @@
             </a>
           </div>
         {% endfor %}
-        <div class="pagination">
+        <div class="pagination col-sm-3 mx-auto text-center">
           <span>
             {% if page_obj.has_previous %}
               <a class="btn btn-outline-info" href="?page=1">&laquo; first</a>

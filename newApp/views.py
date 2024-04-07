@@ -24,6 +24,7 @@ def home(request):
 @check_profile_completion
 def AlumniListView(request):
     total = User.objects.filter(is_alumni=True).all()
+    totallength=total.count()
     alfilter = AlumniFilter(request.GET, queryset=total)
     template_name = 'showalumni.html'
     paginator = Paginator(alfilter.qs, 5)
@@ -34,7 +35,7 @@ def AlumniListView(request):
         page_obj = paginator.page(1)
     except EmptyPage:
         page_obj = paginator.page(paginator.num_pages)
-    return render(request, template_name, {'filter': alfilter, 'page_obj': page_obj})
+    return render(request, template_name, {'filter': alfilter, 'page_obj': page_obj, 'title': "Alumni",'totallength':totallength})
 
 
 def CollegeListView(request):
@@ -182,7 +183,6 @@ def Follow(request, id):
     return redirect('alumni-detail', pk=id)
 
 
-
 # read all post of specific author
 @login_required
 def AlumniPosts(request, author_username): 
@@ -195,3 +195,49 @@ def AlumniPosts(request, author_username):
     except AlumniPost.DoesNotExist:
         #
         return render(request, 'post/postlist.html', {'alumniposts': [], "request": request})
+
+# show all followers of a user
+@login_required
+def Followers(request,id):
+    user=User.objects.get(id=id)
+    followers=user.get_followers()
+    integerfollowers=[]
+    for i in followers:
+        integerfollowers.append(int(i))    
+    total = User.objects.filter(id__in=integerfollowers).all()
+    totallength=total.count()
+    alfilter = AlumniFilter(request.GET, queryset=total)
+    template_name = 'showalumni.html'
+    paginator = Paginator(alfilter.qs, 5)
+    page_number = request.GET.get('page')
+    try:
+        page_obj = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+    return render(request, template_name, {'filter': alfilter, 'page_obj': page_obj, 'title': "Followers",'totallength':totallength})
+
+
+# show all following of a user
+@login_required
+def Following(request,id):
+    user=User.objects.get(id=id)
+    following=user.get_following()
+    integerfollowing=[]
+    for i in following:
+        integerfollowing.append(int(i))    
+    total = User.objects.filter(id__in=integerfollowing).all()
+    totallength=total.count()
+    alfilter = AlumniFilter(request.GET, queryset=total)
+    template_name = 'showalumni.html'
+    paginator = Paginator(alfilter.qs, 5)
+    page_number = request.GET.get('page')
+    try:
+        page_obj = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+    return render(request, template_name, {'filter': alfilter, 'page_obj': page_obj, 'title': "Following",'totallength':totallength})
+

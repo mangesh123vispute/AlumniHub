@@ -21,8 +21,8 @@
             <p class="text-info">Branch - {{ alumni.Branch }}</p>
             <p class="text-info">Skills - {{ alumni.skills|safe|linebreaks }}</p>
             <div class="btn-group" style="margin-top: 10px;">
-              <button type="button" class="btn btn-primary">{{ alumni.get_followers|length }} Followers</button>
-              <button type="button" class="btn btn-secondary">{{ alumni.get_following|length }} Following</button>
+              <a href="{% url 'followers' alumni.id %}" class="btn btn-primary">{{ alumni.get_followers|length }} Followers</a>
+              <a href="{% url 'following' alumni.id %}" class="btn btn-secondary">{{ alumni.get_following|length }} Following</a>
               <a href="{% url 'AlumniPosts' alumni.username %}" class="btn btn-warning">{{ alumni.alumnipost_set.all|length }} Posts</a>
               {% if request.user.id == alumni.id %}
                 <a href="{% url 'alumni-profile' alumni.id %}" class="btn btn-info">Edit your profile</a>
