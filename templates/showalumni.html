@@ -122,22 +122,45 @@
       text-decoration: none;
       color: #fff;
     }
+    .reset-btn {
+      color: white;
+      background-color: red;
+      border-color: red;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    
+    .reset-btn:hover {
+      background-color: darkred;
+      border-color: darkred;
+      color: white;
+    }
   </style>
 
   <div class="container-fluid">
     <div class="row">
       {% block filter %}
-        <div class="col-sm-3">
-          <form method="get">
+        <div class="col-sm-3" style="background-color: aliceblue; border-radius: 10px; padding: 20px; margin-top: 25px; margin-bottom: 70px; margin-left: 15px;">
+          <form method="get" style="margin-top: 50px;">
+            <h4 class="text-center text-danger" style="margin-bottom: 20px;">Filters</h4>
+            <hr />
             {{ filter.form|crispy }}
-            <button class="btn btn-outline-info" type="submit">Search</button>
+            <br />
+
+            <button class="btn btn-outline-info btn-block create-post-btn" type="submit" id="searchBtn">Search</button>
+            <button class="btn btn-outline-info btn-block create-post-btn reset-btn" type="reset">Reset</button>
+
+            <hr />
           </form>
         </div>
       {% endblock %}
 
       <div class="col-sm-7">
         <h2 class="text-center" style=" margin-top: 20px; margin-bottom: 20px; color: #47bcd4; font-size: 50px; font-weight: bold ; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;  border: #47bcd4 5px solid; border-radius: 10px; ">{{ title }} List</h2>
-        <h4>Total number of {{ title }} : {{ totallength }}</h4>
+        <div class="row">
+          <h4 class="col-sm-6">Total number of {{ title }} : {{ totallength }}</h4>
+          <h4 class="col-sm-6">Total filtered number of {{ title }} : {{ totalfiltered }}</h4>
+        </div>
+
         <br />
 
         {% for p in page_obj %}
@@ -194,20 +217,73 @@
             </a>
           </div>
         {% endfor %}
-        <div class="pagination col-sm-3 mx-auto text-center">
-          <span>
+        <div class="pagination-container text-center">
+          <ul class="pagination justify-content-center">
             {% if page_obj.has_previous %}
-              <a class="btn btn-outline-info" href="?page=1">&laquo; first</a>
-              <a class="btn btn-outline-info" href="?page={{ page_obj.previous_page_number }}">previous</a>
+              <li class="page-item">
+                <a class="page-link" href="?page=1" aria-label="First" title="First Page">
+                  <span aria-hidden="true">&laquo;</span>
+                  <span class="sr-only">First</span>
+                </a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous" title="Previous Page">
+                  <span aria-hidden="true">&lsaquo;</span>
+                  <span class="sr-only">Previous</span>
+                </a>
+              </li>
+            {% else %}
+              <li class="page-item disabled">
+                <span class="page-link" aria-hidden="true">&laquo;</span>
+              </li>
+              <li class="page-item disabled">
+                <span class="page-link" aria-hidden="true">&lsaquo;</span>
+              </li>
             {% endif %}
-            <a class="cbtn btn-outline-info disabled">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
+
+            <li class="page-item disabled">
+              <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            </li>
+
             {% if page_obj.has_next %}
-              <a class="btn btn-outline-info" href="?page={{ page_obj.next_page_number }}">next</a>
-              <a class="btn btn-outline-info" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next" title="Next Page">
+                  <span aria-hidden="true">&rsaquo;</span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last" title="Last Page">
+                  <span aria-hidden="true">&raquo;</span>
+                  <span class="sr-only">Last</span>
+                </a>
+              </li>
+            {% else %}
+              <li class="page-item disabled">
+                <span class="page-link" aria-hidden="true">&rsaquo;</span>
+              </li>
+              <li class="page-item disabled">
+                <span class="page-link" aria-hidden="true">&raquo;</span>
+              </li>
             {% endif %}
-          </span>
+          </ul>
         </div>
       </div>
     </div>
   </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const resetButton = document.querySelector('.reset-btn')
+      const searchButton = document.getElementById('searchBtn')
+      const inputFieldsToClear = ['id_skills', 'id_Branch', 'id_Work', 'id_first_name', 'id_last_name', 'id_About']
+    
+      resetButton.addEventListener('click', function () {
+        inputFieldsToClear.forEach(function (id) {
+          document.getElementById(id).value = ''
+        })
+    
+        searchButton.click()
+      })
+    })
+  </script>
 {% endblock %}
