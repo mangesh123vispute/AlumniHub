@@ -12,34 +12,36 @@ COLLEGE_CHOICES = [
     ('SSBT COET, Jalgaon', 'SSBT COET, Jalgaon'),
      
 ]   
-
 class User(AbstractUser):
     is_alumni = models.BooleanField(default=False,  blank=True)
     is_student = models.BooleanField(default=False, blank=True)
     admin=models.BooleanField(default=False,  blank=True)
     email = models.EmailField(unique=True) 
+
     College = models.CharField( 
         max_length=80,
         choices=COLLEGE_CHOICES, 
-        default="None"
+        default="SSBT COET",
+        blank=True
     )
     About = models.TextField(max_length=800)        
     Work = models.TextField(max_length=800)
     Year_Joined = models.CharField(max_length=4,  blank=True)
     Branch = models.CharField(max_length=50)
     Image = models.ImageField(
-        upload_to='images',
+        upload_to='images', 
         default='default/def.jpeg',
+        blank=True
     )
     mobile=models.CharField(max_length=10,default='',blank=True)
-    linkedin=models.CharField(max_length=100,default='')
+    linkedin=models.CharField(max_length=100,default='',blank=True)
     Github=models.CharField(max_length=100,default='',blank=True)
     instagram=models.CharField(max_length=100,default='',blank=True)
     skills=models.TextField(default='')
     first_name = models.CharField(max_length=30)  
     last_name = models.CharField(max_length=150)
-    followers = models.TextField(default='[]')  
-    following = models.TextField(default='[]')
+    followers = models.TextField(default='[]',blank=True)  
+    following = models.TextField(default='[]',blank=True)
 
     def string_to_list(self, string):
         """Converts a string representing a list to a Python list."""

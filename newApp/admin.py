@@ -2,11 +2,11 @@ import tkinter as tk
 from django.contrib import admin
 from django.core.mail import send_mail
 from django.utils.translation import gettext_lazy as _
-
+from import_export.admin import ImportExportModelAdmin
 from .models import User, AlumniPost
 
 
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(ImportExportModelAdmin):
     list_display = ['id', 'username', 'is_alumni', 'is_student', "admin", 'email', 'mobile', 'linkedin', 'instagram',
                     'skills', 'College', 'About', 'Work', 'Year_Joined','following','followers', 'Branch', 'Image']
     list_filter = ['is_alumni', 'is_student', 'College', "admin"]

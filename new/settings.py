@@ -38,9 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    
     'crispy_forms',
     'newApp',
     'crispy_bootstrap5', 
+    'import_export',
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'newApp/media')
