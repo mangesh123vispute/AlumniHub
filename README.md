@@ -140,7 +140,7 @@ License
 Alumni-Navigator is licensed under the MIT License.
 
 Contact Information
-For questions or issues, please contact us at your-email@example.com.
+For questions or issues, please contact us at mangesh2003vispute@gmail.com.
 
 Roadmap
 We have plans to enhance Alumni-Navigator by adding more features and improving user experience. You can find the project's roadmap in the ROADMAP.md file.
