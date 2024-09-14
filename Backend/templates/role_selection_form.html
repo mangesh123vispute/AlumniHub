@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <form method="post">
+    {% csrf_token %}
+    <label><input type="radio" name="role" value="alumni" />Alumni</label><br />
+    <label><input type="radio" name="role" value="student" />Student</label><br />
+    <label><input type="radio" name="role" value="faculty" />Faculty</label><br />
+    <button type="submit">Submit</button>
+  </form>
+{% endblock %}

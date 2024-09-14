@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <div>
+    <div class="mx-auto bg-warning" style="width:600px">
+      <div class="card text-center border border-light p-2">
+        <div class="col-md-10 col-sm-10 col-12">
+          <h5 class="card-header info-color white-text text-center py-4"><strong>Sign up as a <span id="user_type">{{ user_type }}</span></strong></h5>
+
+          <div class="md-forms">
+            <form class="border border-light p-5" method="post" novalidate>
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ next }}" />
+              {{ form|crispy }}
+              <button class="btn btn-info btn-block my-4" type="submit">Sign Up</button>
+              <a href="#" onclick="redirectToSignup()" id="btn" style="display: flex; justify-self: start; margin-top: 10px;"></a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+  <script>
+    let user_type = document.getElementById('user_type').textContent
+    if (user_type == 'alumni') {
+      document.getElementById('btn').textContent = ' Sign Up as a Student'
+    } else if (user_type == 'student') {
+      document.getElementById('btn').textContent = ' Sign Up as an Alumni'
+    }
+    
+    function redirectToSignup() {
+      let user_type = document.getElementById('user_type').textContent
+      let url
+    
+      if (user_type == 'alumni') {
+        url = '{% url "student_signup" %}'
+      } else if (user_type == 'student') {
+        url = '{% url "alumni_signup" %}'
+      }
+    
+      window.location.href = url
+    }
+  </script>
+{% endblock %}

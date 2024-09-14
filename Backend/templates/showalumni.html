@@ -1,0 +1,289 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load templatetags %}
+
+{% block content %}
+  <style>
+    /* Container styles */
+    .container-fluid {
+      margin-top: 20px;
+    }
+    
+    /* Form styles */
+    .col-sm-3 form {
+      margin-bottom: 20px;
+    }
+    
+    /* Avatar styles */
+    .avatar img {
+      height: 150px;
+      width: 200px;
+    }
+    
+    /* Card title styles */
+    .card-title {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    
+    /* Text info styles */
+    .text-info {
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+    
+    /* Pagination styles */
+    .pagination {
+      margin-left: 100px;
+      margin-top: 50px;
+    }
+    
+    .pagination span {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .pagination a {
+      margin: 0 5px;
+    }
+    
+    .pagination .disabled {
+      cursor: not-allowed;
+    }
+    
+    /* Additional styles for enhanced UI */
+    .card {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease-in-out;
+    }
+    
+    .card:hover {
+      transform: scale(1.05);
+    }
+    
+    .card-header img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px 10px 0 0;
+    }
+    
+    .card-body {
+      padding: 20px;
+    }
+    
+    .card-body h4 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    
+    .card-body p {
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    
+    .user {
+      display: flex;
+      align-items: center;
+    }
+    
+    .user img {
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+    }
+    
+    .user-info h5 {
+      font-size: 16px;
+      margin: 0;
+    }
+    
+    .user-info small {
+      font-size: 14px;
+      color: #777;
+    }
+    
+    button.create-post-btn {
+      background-color: #47bcd4;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+    
+    button.create-post-btn a {
+      text-decoration: none;
+      color: #fff;
+    }
+    .reset-btn {
+      color: white;
+      background-color: red;
+      border-color: red;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    
+    .reset-btn:hover {
+      background-color: darkred;
+      border-color: darkred;
+      color: white;
+    }
+  </style>
+
+  <div class="container-fluid">
+    <div class="row">
+      {% block filter %}
+        <div class="col-sm-3" style="background-color: aliceblue; border-radius: 10px; padding: 20px; margin-top: 25px; margin-bottom: 70px; margin-left: 15px;">
+          <form method="get" style="margin-top: 50px;">
+            <h4 class="text-center text-danger" style="margin-bottom: 20px;">Filters</h4>
+            <hr />
+            {{ filter.form|crispy }}
+            <br />
+
+            <button class="btn btn-outline-info btn-block create-post-btn" type="submit" id="searchBtn">Search</button>
+            <button class="btn btn-outline-info btn-block create-post-btn reset-btn" type="reset">Reset</button>
+
+            <hr />
+          </form>
+        </div>
+      {% endblock %}
+
+      <div class="col-sm-7">
+        <h2 class="text-center" style=" margin-top: 20px; margin-bottom: 20px; color: #47bcd4; font-size: 50px; font-weight: bold ; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;  border: #47bcd4 5px solid; border-radius: 10px; ">{{ title }} List</h2>
+        <div class="row">
+          <h4 class="col-sm-6">Total number of {{ title }} : {{ totallength }}</h4>
+          <h4 class="col-sm-6">Total filtered number of {{ title }} : {{ page_obj.paginator.count }}</h4>
+        </div>
+
+        <br />
+
+        {% for p in page_obj %}
+          <hr />
+          <div style="background-color: aliceblue; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); transition: transform 0.3s ease-in-out; margin: 10px; padding: 20px;">
+            <a href="{% url 'alumni-detail' p.id %}" style="color: black">
+              <div class="mx-auto">
+                <div class="row">
+                  <div class="avatar mx-auto white col-sm-5">
+                    <img src="{{ p.Image.url }}" class="rounded mx-auto d-block" style="margin-top: 50px; height: 250px; width: 300px; " />
+                  </div>
+                  <div class="col-sm-6">
+                    <h4 class="card-title text-danger">
+                      {{ p.first_name }} {{ p.last_name }} {% if request.user.id == p.id %}
+                        (You)
+                      {% endif %}
+                    </h4>
+                    <hr />
+                    <p class="text-info">UserName - {{ p.username }}</p>
+                    <p class="text-info">Branch - {{ p.Branch }}</p>
+                    <p class="text-info">Skills - {{ p.skills|slice:':100' }}......</p>
+                    <hr />
+                    <div class="btn-group btn-group">
+                      <!-- Form for followers button -->
+                      <form action="{% url 'followers' p.id %}" method="GET">
+                        <button type="submit" class="btn btn-primary">{{ p.get_followers|length }} Followers</button>
+                      </form>
+
+                      <!-- Form for following button -->
+                      <form action="{% url 'following' p.id %}" method="GET">
+                        <button type="submit" class="btn btn-secondary">{{ p.get_following|length }} Following</button>
+                      </form>
+
+                      <!-- Form for posts button -->
+                      <form action="{% url 'AlumniPosts' p.username %}" method="GET">
+                        <button type="submit" class="btn btn-warning">{{ p.alumnipost_set.all|length }} Posts</button>
+                      </form>
+
+                      <!-- Form for follow/unfollow button -->
+                      {% if not request.user.id == p.id %}
+                        <form action="{% url 'follow' p.id %}" method="post">
+                          {% csrf_token %}
+                          {% if request.user.id|stringformat:'s' in p.get_followers %}
+                            <button type="submit" class="btn btn-danger follow-btn">Unfollow</button>
+                          {% else %}
+                            <button type="submit" class="btn btn-info follow-btn">Follow</button>
+                          {% endif %}
+                        </form>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+        {% endfor %}
+        <div class="pagination-container text-center">
+          <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page=1" aria-label="First" title="First Page">
+                  <span aria-hidden="true">&laquo;</span>
+                  <span class="sr-only">First</span>
+                </a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous" title="Previous Page">
+                  <span aria-hidden="true">&lsaquo;</span>
+                  <span class="sr-only">Previous</span>
+                </a>
+              </li>
+            {% else %}
+              <li class="page-item disabled">
+                <span class="page-link" aria-hidden="true">&laquo;</span>
+              </li>
+              <li class="page-item disabled">
+                <span class="page-link" aria-hidden="true">&lsaquo;</span>
+              </li>
+            {% endif %}
+
+            <li class="page-item disabled">
+              <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            </li>
+
+            {% if page_obj.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next" title="Next Page">
+                  <span aria-hidden="true">&rsaquo;</span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last" title="Last Page">
+                  <span aria-hidden="true">&raquo;</span>
+                  <span class="sr-only">Last</span>
+                </a>
+              </li>
+            {% else %}
+              <li class="page-item disabled">
+                <span class="page-link" aria-hidden="true">&rsaquo;</span>
+              </li>
+              <li class="page-item disabled">
+                <span class="page-link" aria-hidden="true">&raquo;</span>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const resetButton = document.querySelector('.reset-btn')
+      const searchButton = document.getElementById('searchBtn')
+      const inputFieldsToClear = ['id_skills', 'id_Branch', 'id_Work', 'id_first_name', 'id_last_name', 'id_About']
+    
+      resetButton.addEventListener('click', function () {
+        inputFieldsToClear.forEach(function (id) {
+          document.getElementById(id).value = ''
+        })
+    
+        searchButton.click()
+      })
+    })
+  </script>
+{% endblock %}
