@@ -114,24 +114,51 @@ This platform aims to strengthen connections between students, alumni, and the c
 - **User-Centric Design:** 
   - Prioritizes user experience, security, and scalability across platforms.
 
-## Installation
+```markdown
+# Installation Guide
 
-To get started with Alumni-Navigator, follow these installation steps:
-
-1. Clone this repository.
-
-2. Install the required dependencies:
+1. **Clone the repository**:
    ```bash
-   pip install -r requirements.txt
-Migrate the database:
-python manage.py migrate
-Run the development server:
+   git clone <repository_url>
+   ```
 
-bash
-Copy code
-python manage.py runserver
-Usage
-After installation, you can access the Alumni-Navigator web application through your browser. Here, alumni can update their information, and administrators can manage and search for alumni records.
+2. **Backend Setup**:
+   - Navigate to the `Backend` directory:
+     ```bash
+     cd Backend
+     ```
+   - Create a virtual environment:
+     ```bash
+     python -m venv myenv
+     ```
+   - Activate the virtual environment:
+     - On Windows:
+       ```bash
+       myenv\Scripts\activate
+       ```
+     - On macOS/Linux:
+       ```bash
+       source myenv/bin/activate
+       ```
+   - Install the required dependencies:
+     ```bash
+     pip install -r req.txt
+     ```
+
+3. **Frontend Setup**:
+   - Navigate to the `Frontend` directory:
+     ```bash
+     cd Frontend
+     ```
+   - Install the dependencies:
+     ```bash
+     npm install
+     ```
+   - Start the application:
+     ```bash
+     npm run start
+     ```
+```
 
 Contributing
 We welcome contributions from the community. If you'd like to contribute to Alumni-Navigator, please follow our Contribution Guidelines.
@@ -140,7 +167,7 @@ License
 Alumni-Navigator is licensed under the MIT License.
 
 Contact Information
-For questions or issues, please contact us at your-email@example.com.
+For questions or issues, please contact us at mangesh2003vispute@gmail.com.
 
 Roadmap
 We have plans to enhance Alumni-Navigator by adding more features and improving user experience. You can find the project's roadmap in the ROADMAP.md file.
