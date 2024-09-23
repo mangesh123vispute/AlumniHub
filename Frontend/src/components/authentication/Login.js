@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useContext } from "react";
-import AuthContext from "../context/AuthContext.js";
+import AuthContext from "../../context/AuthContext.js";
 
 const Login = () => {
   let { loginUser } = useContext(AuthContext);

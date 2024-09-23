@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useContext } from "react";
-import AuthContext from "../context/AuthContext.js";
+import AuthContext from "../../context/AuthContext.js";
 
 const Register = () => {
   let { registerUser, loading } = useContext(AuthContext);
@@ -10,7 +10,7 @@ const Register = () => {
     password: "",
     confirmPassword: "",
   });
-  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -19,7 +19,7 @@ const Register = () => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match!");
+      setMessage("Passwords do not match!");
       return;
     }
 
@@ -39,16 +39,17 @@ const Register = () => {
 
     if (response.ok) {
       // Handle successful registration (e.g., redirect to login)
+      
       console.log("Registration successful:", data);
     } else {
-      // Handle error response
+      // Handle message response
       console.log("Registration failed:", data);
        if (data.email) {
-         setError(`Email: ${data.email[0]}`); 
+         setMessage(`Email: ${data.email[0]}`); 
        } else if (data.username) {
-         setError(`Username: ${data.username[0]}`);
+         setMessage(`Username: ${data.username[0]}`);
        } else {
-         setError(data.detail || "Something went wrong.");
+         setMessage(data.detail || "Something went wrong.");
        }
     }
   };
@@ -86,7 +87,7 @@ const Register = () => {
           <div className="card-body register-card-body">
             <p className="login-box-msg">Register a new membership</p>
 
-            {error && <p style={{ color: "red" }}>{error}</p>}
+            {message && <p style={{ color: "red" }}>{message}</p>}
 
             <form onSubmit={handleSubmit}>
               <div className="input-group mb-3">

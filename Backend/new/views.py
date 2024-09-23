@@ -257,6 +257,8 @@ class OtpVerifyAPIView(APIView):
                 if totp.verify(otp):
                     # Get the user
                     user = get_object_or_404(User, username=username)
+                    user.is_active = True
+                    user.save()
                     # Log the user in
                     login(request, user)
 
