@@ -42,6 +42,7 @@ const Otp = () => {
                   className="form-control"
                   placeholder="Enter Otp"
                   name='otp'
+                  
                 />
                 <div className="input-group-append">
                   <div className="input-group-text">
