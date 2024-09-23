@@ -6,8 +6,10 @@ const Login = () => {
   let { loginUser } = useContext(AuthContext);
   return (
     <>
-      <div className="content-wrapper">
-        <title>Log in</title>
+      <div className="hold-transition login-page">
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>AlumniHub| Log in</title>
         {/* Google Font: Source Sans Pro */}
         <link
           rel="stylesheet"
@@ -25,23 +27,26 @@ const Login = () => {
         />
         {/* Theme style */}
         <link rel="stylesheet" href="../../dist/css/adminlte.min.css" />
-        
-        <div className="login-box">     
-        <div className="">
-          <div className="card d-flex aligns-items-center justify-content-center card text-center">
+        <div className="login-box">
+          <div className="login-logo">
+            <a href="../../index2.html">
+              <b>ALumni</b>Hub
+            </a>
+          </div>
+          {/* /.login-logo */}
+          <div className="card">
             <div className="card-body login-card-body">
               <p className="login-box-msg">Sign in to start your session</p>
-              <form onSubmit={loginUser} method="post">
+              <form action="../../index3.html" method="post">
                 <div className="input-group mb-3">
                   <input
-                    type="text"
+                    type="email"
                     className="form-control"
-                    placeholder="Username"
-                    name="username"
+                    placeholder="Email"
                   />
                   <div className="input-group-append">
                     <div className="input-group-text">
-                      <span className="fas fa-user" />
+                      <span className="fas fa-envelope" />
                     </div>
                   </div>
                 </div>
@@ -50,7 +55,6 @@ const Login = () => {
                     type="password"
                     className="form-control"
                     placeholder="Password"
-                    name="password"
                   />
                   <div className="input-group-append">
                     <div className="input-group-text">
@@ -60,10 +64,10 @@ const Login = () => {
                 </div>
                 <div className="row">
                   <div className="col-8">
-                    <div className="icheck-primary">
+                    {/* <div className="icheck-primary">
                       <input type="checkbox" id="remember" />
                       <label htmlFor="remember">Remember Me</label>
-                    </div>
+                    </div> */}
                   </div>
                   {/* /.col */}
                   <div className="col-4">
@@ -74,7 +78,7 @@ const Login = () => {
                   {/* /.col */}
                 </div>
               </form>
-              <div className="social-auth-links text-center mb-3">
+              {/* <div className="social-auth-links text-center mb-3">
                 <p>- OR -</p>
                 <a href="#" className="btn btn-block btn-primary">
                   <i className="fab fa-facebook mr-2" /> Sign in using Facebook
@@ -83,13 +87,13 @@ const Login = () => {
                   <i className="fab fa-google-plus mr-2" /> Sign in using
                   Google+
                 </a>
-              </div>
+              </div> */}
               {/* /.social-auth-links */}
               <p className="mb-1">
-                <a href="forgot-password.html">I forgot my password</a>
+                <a href="/forgot_password mb-1">I forgot my password</a>
               </p>
               <p className="mb-0">
-                <a href="register.html" className="text-center">
+                <a href="/register" className="text-center">
                   Register a new membership
                 </a>
               </p>
@@ -101,7 +105,6 @@ const Login = () => {
         {/* jQuery */}
         {/* Bootstrap 4 */}
         {/* AdminLTE App */}
-      </div>
       </div>
     </>
   );

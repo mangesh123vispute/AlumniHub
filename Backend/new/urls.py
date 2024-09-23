@@ -37,13 +37,13 @@ urlpatterns = [
         name='college_signup'
         ),
 
-
-        # urls using admin lte 
-    path('login/', views.user_login, name='login'),
-    path('register/', views.user_register, name='register'),
-    path('logout/', views.user_logout, name='logout'),
-    path('forgot-password/', views.forgot_password, name='forgot-password'),
-    path('otp/', views.otp_view,name='otp'),
+#^ AuthenticationForm 
+# urls using admin lte 
+    path('loginuser/', views.UserLoginAPIView.as_view()),
+    path('registeruser/', views.UserRegisterAPIView.as_view()),
+    path('logout/', views.UserLogoutAPIView.as_view()),
+    path('forgot-password/', views.forgot_password),
+    path('otp/', views.OtpVerifyAPIView.as_view()),
         
     
 

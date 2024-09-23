@@ -22,7 +22,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<Home />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/accounts/reset_password" element={<Reset_password />} />
+          <Route path="/forgot_password" element={<Reset_password />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

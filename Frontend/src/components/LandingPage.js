@@ -33,10 +33,7 @@ function LandingPage() {
 
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>
-          {" "}
-          Alumni Hub{" "}
-        </title>
+        <title> Alumni Hub </title>
         {/* <div
           style={{
             position: "absolute",
@@ -97,7 +94,14 @@ function LandingPage() {
                 <button
                   type="button"
                   className="btn btn-light"
-                  style={{ fontSize: "1.5em",borderRadius: "10px", border: "1px solid  " }}
+                  style={{
+                    fontSize: "1.5em",
+                    borderRadius: "10px",
+                    border: "1px solid  ",
+                    fontFamily: "cursive",
+                    fontWeight: "bold",
+                    
+                  }}
                 >
                   LogIn
                 </button>
@@ -106,7 +110,12 @@ function LandingPage() {
                 <button
                   type="button"
                   className="btn btn-light"
-                  style={{ fontSize: "1.5em", borderRadius: "10px" }}
+                  style={{
+                    fontSize: "1.5em",
+                    borderRadius: "10px",
+                    fontFamily: "cursive",
+                    fontWeight: "bold",
+                  }}
                 >
                   Register
                 </button>

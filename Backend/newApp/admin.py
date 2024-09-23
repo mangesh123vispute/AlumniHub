@@ -12,7 +12,7 @@ admin.site.index_title = "Welcome to  SSBT COET-Alumni Admin Portal"
 
 class UserAdmin(ImportExportModelAdmin):
     resource_class = UserResource
-    list_display = ['id','username', 'first_name', 'last_name',  'is_alumni', 'is_student', "is_superuser", 'email', 'mobile', 'linkedin', 'instagram',
+    list_display = ['id','username', 'first_name', 'last_name', "is_active", 'is_alumni', 'is_student', "is_superuser", 'email', 'mobile', 'linkedin', 'instagram',
                     'skills', 'College', 'About', 'Work', 'Year_Joined','following','followers', 'Branch', 'Image']
     list_filter = ['is_alumni', 'is_student', 'College', "is_superuser", "Branch"]
     actions = ['send_email_action']

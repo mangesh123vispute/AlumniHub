@@ -38,11 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    
+    'corsheaders',
     'crispy_forms',
     'newApp',
     'crispy_bootstrap5', 
     'import_export',
+    'rest_framework',
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'newApp/media')
@@ -51,6 +52,7 @@ MEDIA_URL = '/media/'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -145,6 +147,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
+
 
 # Email settings 
 
@@ -155,3 +161,12 @@ EMAIL_HOST_PASSWORD = 'bxnd nvlx eazh nbcz'
 EMAIL_PORT = 587    
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 SITE_URL = 'http://localhost:8000' 
+
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',  
+    ),
+}
