@@ -29,6 +29,7 @@ const Register = () => {
 
     const response = await fetch("http://127.0.0.1:8000/registeruser/", {
       method: "POST",
+      
       headers: {
         "Content-Type": "application/json",
       },
@@ -64,137 +65,138 @@ const Register = () => {
   };
 
   return (
-    <div className="hold-transition register-page">
+    <>
       <LoadingSpinner isLoading={Loading} />
-      <meta charSet="utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <title>AlumniHub | Registration Page</title>
-      {/* Google Font: Source Sans Pro */}
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
-      />
-      {/* Font Awesome */}
-      <link
-        rel="stylesheet"
-        href="../../plugins/fontawesome-free/css/all.min.css"
-      />
-      {/* icheck bootstrap */}
-      <link
-        rel="stylesheet"
-        href="../../plugins/icheck-bootstrap/icheck-bootstrap.min.css"
-      />
-      {/* Theme style */}
-      <link rel="stylesheet" href="../../dist/css/adminlte.min.css" />
-      <div className="register-box">
-        
-        <div className="register-logo">
-          <a href="../../index2.html">
-            <b>Alumni</b>Hub
-          </a>
-        </div>
-        <div className="card">
-          <div className="card-body register-card-body">
-            <p className="login-box-msg">Register a new membership</p>
+      <div className="hold-transition register-page">
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>AlumniHub | Registration Page</title>
+        {/* Google Font: Source Sans Pro */}
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
+        />
+        {/* Font Awesome */}
+        <link
+          rel="stylesheet"
+          href="../../plugins/fontawesome-free/css/all.min.css"
+        />
+        {/* icheck bootstrap */}
+        <link
+          rel="stylesheet"
+          href="../../plugins/icheck-bootstrap/icheck-bootstrap.min.css"
+        />
+        {/* Theme style */}
+        <link rel="stylesheet" href="../../dist/css/adminlte.min.css" />
+        <div className="register-box">
+          <div className="register-logo">
+            <a href="../../index2.html">
+              <b>Alumni</b>Hub
+            </a>
+          </div>
+          <div className="card">
+            <div className="card-body register-card-body">
+              <p className="login-box-msg">Register a new membership</p>
 
-            {message && <p style={{ color: "red" }}>{message}</p>}
+              {message && <p style={{ color: "red" }}>{message}</p>}
 
-            <form onSubmit={handleSubmit}>
-              <div className="input-group mb-3">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Username"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleChange}
-                  required
-                />
-                <div className="input-group-append">
-                  <div className="input-group-text">
-                    <span className="fas fa-user" />
+              <form onSubmit={handleSubmit}>
+                <div className="input-group mb-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Username"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                    required
+                  />
+                  <div className="input-group-append">
+                    <div className="input-group-text">
+                      <span className="fas fa-user" />
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="input-group mb-3">
-                <input
-                  type="email"
-                  className="form-control"
-                  placeholder="Email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-                <div className="input-group-append">
-                  <div className="input-group-text">
-                    <span className="fas fa-envelope" />
+                <div className="input-group mb-3">
+                  <input
+                    type="email"
+                    className="form-control"
+                    placeholder="Email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
+                  <div className="input-group-append">
+                    <div className="input-group-text">
+                      <span className="fas fa-envelope" />
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="input-group mb-3">
-                <input
-                  type="password"
-                  className="form-control"
-                  placeholder="Password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                />
-                <div className="input-group-append">
-                  <div className="input-group-text">
-                    <span className="fas fa-lock" />
+                <div className="input-group mb-3">
+                  <input
+                    type="password"
+                    className="form-control"
+                    placeholder="Password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                  />
+                  <div className="input-group-append">
+                    <div className="input-group-text">
+                      <span className="fas fa-lock" />
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="input-group mb-3">
-                <input
-                  type="password"
-                  className="form-control"
-                  placeholder="Confirm Password"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  required
-                />
-                <div className="input-group-append">
-                  <div className="input-group-text">
-                    <span className="fas fa-lock" />
+                <div className="input-group mb-3">
+                  <input
+                    type="password"
+                    className="form-control"
+                    placeholder="Confirm Password"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    required
+                  />
+                  <div className="input-group-append">
+                    <div className="input-group-text">
+                      <span className="fas fa-lock" />
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="row">
-                <div className="col-8">
-                  {/* <button
+                <div className="row">
+                  <div className="col-8">
+                    {/* <button
                     type="submit"
                     className="btn btn-primary btn-block"
                     disabled={loading}
                   >
                     {loading ? "Loading..." : "Register"}
                   </button> */}
+                  </div>
+                  <div className="col-4">
+                    <button
+                      type="submit"
+                      className="btn btn-primary btn-block"
+                      disabled={loading}
+                    >
+                      {loading ? "Loading..." : "Register"}
+                    </button>
+                  </div>
                 </div>
-                <div className="col-4">
-                  <button
-                    type="submit"
-                    className="btn btn-primary btn-block"
-                    disabled={loading}
-                  >
-                    {loading ? "Loading..." : "Register"}
-                  </button>
-                </div>
-              </div>
-            </form>
-            <p>
-              {" "}
-              <a href="/login" className="text-center mt-3">
-                I already have a membership
-              </a>
-            </p>
+              </form>
+              <p>
+                {" "}
+                <a href="/login" className="text-center mt-3">
+                  I already have a membership
+                </a>
+              </p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -1,12 +1,58 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useContext } from "react";
+import React, { useContext ,useState } from "react";
 import AuthContext from "../../context/AuthContext.js";
+import LoadingSpinner from "../Loading/Loading.js";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   let { loginUser } = useContext(AuthContext);
+  let { registerUser, loading } = useContext(AuthContext);
+   const navigate = useNavigate();
+   const [Loading, setLoading] = useState(false);
+   const [formData, setFormData] = useState({
+     username: "",
+     password: "",
+   });
+   const [message, setMessage] = useState("");
+   const handleChange = (e) => {
+     setFormData({ ...formData, [e.target.name]: e.target.value });
+   };
+   const handleSubmit = async (e) => {
+     e.preventDefault();
+     setLoading(true);
+     console.log(formData);
+     const response = await fetch("http://127.0.0.1:8000/loginuser/", {
+       method: "POST",
+       headers: {
+         "Content-Type": "application/json",
+       },
+       body: JSON.stringify({
+         username: formData.username,
+         password: formData.password,
+       }),
+     });
+
+     const data = await response.json();
+
+     if (response.ok) {
+       // Handle successful registration (e.g., redirect to login)
+       // console.log("Registration successful:", data);
+       setLoading(false);
+       if (response.status === 200) {
+         console.log("Login successful:", data);
+         navigate("/home");
+       }
+     } else {
+       // Handle message response
+       console.log("Login failed:", data);
+       setMessage(data.detail || "Something went wrong.");
+       setLoading(false);
+     }
+   };
 
   return (
     <>
+      <LoadingSpinner isLoading={Loading} />
       <div className="hold-transition login-page">
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -30,24 +76,29 @@ const Login = () => {
         <link rel="stylesheet" href="../../dist/css/adminlte.min.css" />
         <div className="login-box">
           <div className="login-logo">
-            <a href="../../index2.html">
+            <a href="/home">
               <b>ALumni</b>Hub
             </a>
           </div>
           {/* /.login-logo */}
           <div className="card">
             <div className="card-body login-card-body">
+              {message && <p style={{ color: "red" }}>{message}</p>}
               <p className="login-box-msg">Sign in to start your session</p>
-              <form action="../../index3.html" method="post">
+              <form onSubmit={handleSubmit}>
                 <div className="input-group mb-3">
                   <input
-                    type="email"
+                    type="text"
                     className="form-control"
-                    placeholder="Email"
+                    placeholder="Username"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                    required
                   />
                   <div className="input-group-append">
                     <div className="input-group-text">
-                      <span className="fas fa-envelope" />
+                      <span className="fas fa-user" />
                     </div>
                   </div>
                 </div>
@@ -56,6 +107,10 @@ const Login = () => {
                     type="password"
                     className="form-control"
                     placeholder="Password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
                   />
                   <div className="input-group-append">
                     <div className="input-group-text">
@@ -91,7 +146,7 @@ const Login = () => {
               </div> */}
               {/* /.social-auth-links */}
               <p className="mb-1">
-                <a href="/forgot_password mb-1">I forgot my password</a>
+                <a href="/forgot_password">I forgot my password</a>
               </p>
               <p className="mb-0">
                 <a href="/register" className="text-center">

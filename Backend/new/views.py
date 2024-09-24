@@ -166,29 +166,65 @@ class UserRegisterAPIView(APIView):
         
 #     return render(request, 'website/authentication/login.html', {'form': form})
 
+# ^Login with otp 
+# class UserLoginAPIView(APIView):
+#     def post(self, request):
+#         serializer = UserLoginSerializer(data=request.data)
+#         if serializer.is_valid():
+#             username = serializer.validated_data.get('username')
+#             password = serializer.validated_data.get('password')
+            
+#             user = authenticate(username=username, password=password)
+            
+            
+#             if user is not None:
+#                 if user.is_active:
+#                     # Send OTP and handle session
+#                     send_otp(request, user)  # Assuming you have a function like this
+#                     request.session['username'] = username
+#                     return Response(
+#                         {"detail": "OTP has been sent to your email."},
+#                         status=status.HTTP_200_OK
+#                     )
+#                 else:
+#                     return Response(
+#                         {"detail": "Your account is inactive. Please verify your email to activate your account."},
+#                         status=status.HTTP_403_FORBIDDEN
+#                     )
+#             else:
+#                 return Response(
+#                     {"detail": "Invalid credentials. Please try again."},
+#                     status=status.HTTP_401_UNAUTHORIZED
+#                 )
+#         else:
+#             return Response(
+#                 {"detail": "Invalid credentials. Please try again."},
+#                 status=status.HTTP_400_BAD_REQUEST
+#             )
 
+# ^Loing without otp authentication 
 class UserLoginAPIView(APIView):
     def post(self, request):
         serializer = UserLoginSerializer(data=request.data)
         if serializer.is_valid():
             username = serializer.validated_data.get('username')
             password = serializer.validated_data.get('password')
-            
+
+            # Authenticate user with provided credentials
             user = authenticate(username=username, password=password)
-            
-            
+
             if user is not None:
                 if user.is_active:
-                    # Send OTP and handle session
-                    send_otp(request, user)  # Assuming you have a function like this
-                    request.session['username'] = username
+                    # Handle session or token creation (for DRF)
+                    request.session['username'] = username  # Create session
+                    # Alternatively, for token-based authentication, return a token here
                     return Response(
-                        {"detail": "OTP has been sent to your email."},
+                        {"detail": "Login successful."},
                         status=status.HTTP_200_OK
                     )
                 else:
                     return Response(
-                        {"detail": "Your account is inactive. Please verify your email to activate your account."},
+                        {"detail": "Your account is inactive. Please contact support."},
                         status=status.HTTP_403_FORBIDDEN
                     )
             else:
@@ -198,10 +234,11 @@ class UserLoginAPIView(APIView):
                 )
         else:
             return Response(
-                {"detail": "Invalid credentials. Please try again."},
+                {"detail": "Invalid input. Please check your data.", "errors": serializer.errors},
                 status=status.HTTP_400_BAD_REQUEST
             )
-
+        
+#^ otp in django 
 # def otp_view(request):
 #     if request.method == 'POST':
 #         otp = request.POST['otp']
