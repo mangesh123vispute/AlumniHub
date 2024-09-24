@@ -6,8 +6,13 @@ def send_otp(request,user):
     totp=pyotp.TOTP(pyotp.random_base32(), interval=60)
     otp=totp.now()
     request.session['otp_secret_key']=totp.secret
+    
     valid_date=datetime.now()+timedelta(minutes=1)
     request.session['otp_valid_date']=str(valid_date)
+
+     # Print session data for verification
+    print("Stored OTP Secret Key:", request.session.get('otp_secret_key'))
+    print("Stored OTP Valid Date:", request.session.get('otp_valid_date'))
 
      # Email details
     subject = 'Your OTP Code'

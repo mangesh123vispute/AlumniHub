@@ -128,6 +128,7 @@ class UserRegisterAPIView(APIView):
                 # Send OTP and store the username in the session
                 send_otp(request, new_user)
                 request.session['username'] = new_user.username
+
                 return Response(
                     {"detail": "Registration successful! OTP has been sent to your email."},
                     status=status.HTTP_201_CREATED
@@ -248,7 +249,10 @@ class OtpVerifyAPIView(APIView):
         username = request.session.get('username')
         otp_secret_key = request.session.get('otp_secret_key')
         otp_valid_until = request.session.get('otp_valid_date')
-
+        print(request.session.items())  # To print all session data
+        print(request.session.get('otp_secret_key'))  # To specifically check the OTP secret key
+        print(request.session.get('otp_valid_date'))  # To check the OTP valid date
+        
         if otp_secret_key and otp_valid_until:
             valid_until = datetime.fromisoformat(otp_valid_until)
             if valid_until > datetime.now():
@@ -263,8 +267,8 @@ class OtpVerifyAPIView(APIView):
                     login(request, user)
 
                     # Send email notification
-                    subject = 'Login Successful'
-                    message = 'You have successfully logged in to your account.'
+                    subject = 'Registration Successful'
+                    message = 'Your account has been successfully activated! You are now registered and logged in. Welcome!'
                     from_email = settings.EMAIL_HOST_USER
                     to_email = user.email
 
@@ -281,7 +285,7 @@ class OtpVerifyAPIView(APIView):
                     del request.session['otp_valid_date']
 
                     return Response(
-                        {"detail": "Login successful!"},
+                        {"detail": "Your account has been successfully activated! You are now registered and logged in. Welcome!"},
                         status=status.HTTP_200_OK
                     )
                 else:

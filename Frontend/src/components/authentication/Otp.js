@@ -1,6 +1,36 @@
-import React from 'react'
-
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 const Otp = () => {
+  const navigate = useNavigate();
+  const [message, setMessage] = useState("");
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const otp = event.target.otp.value;
+
+    const response = await fetch("http://127.0.0.1:8000/otp/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        otp: Number(otp),
+      }),
+    });
+    const data = await response.json();
+
+    if (response.ok) {
+      // Handle successful registration (e.g., redirect to login)
+      // console.log("Registration successful:", data);
+      if (response.status === 200) {
+        console.log("Registration successful:", data);
+        setMessage("Registration successful!");
+        navigate("/");
+      }
+    } else {
+      // Handle message response
+      setMessage(data.detail || "Something went wrong.");
+    }
+  };
   return (
     <div className="hold-transition login-page">
       <meta charSet="utf-8" />
@@ -32,17 +62,17 @@ const Otp = () => {
         {/* /.login-logo */}
         <div className="card">
           <div className="card-body login-card-body">
+            {message && <p style={{ color: "red" }}>{message}</p>}
             <p className="login-box-msg">
-             Enter Your Otp, Its validity is 1 min 
+              Enter Your Otp, Its validity is 1 min
             </p>
-            <form action="recover-password.html" method="post">
+            <form onSubmit={handleSubmit}>
               <div className="input-group mb-3">
                 <input
                   type="number"
                   className="form-control"
                   placeholder="Enter Otp"
-                  name='otp'
-                  
+                  name="otp"
                 />
                 <div className="input-group-append">
                   <div className="input-group-text">
@@ -77,6 +107,6 @@ const Otp = () => {
       {/* AdminLTE App */}
     </div>
   );
-}
+};
 
-export default Otp
+export default Otp;

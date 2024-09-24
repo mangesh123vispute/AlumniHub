@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useContext } from "react";
 import AuthContext from "../../context/AuthContext.js";
-
+import { useNavigate } from "react-router-dom";
 const Register = () => {
+  const navigate = useNavigate();
   let { registerUser, loading } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     username: "",
@@ -39,8 +40,11 @@ const Register = () => {
 
     if (response.ok) {
       // Handle successful registration (e.g., redirect to login)
-      
-      console.log("Registration successful:", data);
+      // console.log("Registration successful:", data);
+      if(response.status === 200) {
+        console.log("Registration successful:", data);
+        navigate("/otp"); 
+      }
     } else {
       // Handle message response
       console.log("Registration failed:", data);
