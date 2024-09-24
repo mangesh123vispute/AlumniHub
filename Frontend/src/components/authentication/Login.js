@@ -4,6 +4,7 @@ import AuthContext from "../../context/AuthContext.js";
 
 const Login = () => {
   let { loginUser } = useContext(AuthContext);
+
   return (
     <>
       <div className="hold-transition login-page">

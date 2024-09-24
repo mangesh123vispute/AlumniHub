@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import AuthContext from "../context/AuthContext.js";
+import AuthContext from "../../context/AuthContext.js";
 
 const Header = () => {
   console.log("i am user", useContext(AuthContext));

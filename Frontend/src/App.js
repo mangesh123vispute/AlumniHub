@@ -1,4 +1,4 @@
-import Home from "./components/Home.js";
+import Home from "./components/Dashboard/Home.js";
 import { AuthProvider } from "./context/AuthContext";
 import Login from "./components/authentication/Login.js";
 import Register from "./components/authentication/Register.js";

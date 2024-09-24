@@ -1,10 +1,14 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "../Loading/Loading.js";
+
 const Otp = () => {
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
+  const [Loading, setLoading] = useState(false);
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true)
     const otp = event.target.otp.value;
 
     const response = await fetch("http://127.0.0.1:8000/otp/", {
@@ -19,6 +23,7 @@ const Otp = () => {
     const data = await response.json();
 
     if (response.ok) {
+      setLoading(false)
       // Handle successful registration (e.g., redirect to login)
       // console.log("Registration successful:", data);
       if (response.status === 200) {
@@ -29,10 +34,12 @@ const Otp = () => {
     } else {
       // Handle message response
       setMessage(data.detail || "Something went wrong.");
+      setLoading(false)
     }
   };
   return (
     <div className="hold-transition login-page">
+      <LoadingSpinner isLoading={Loading} />
       <meta charSet="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <title>AlumniHub | Forgot Password</title>
