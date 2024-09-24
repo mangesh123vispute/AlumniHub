@@ -9,6 +9,7 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import LandingPage from "./components/LandingPage.js";
 import Reset_password from "./components/authentication/Reset_password.js";
 import Otp from "./components/authentication/Otp.js";
+import LoadingSpinner from "./components/Loading/Loading.js";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/forgot_password" element={<Reset_password />} />
           <Route path="/otp" element={<Otp />} />
+          <Route path="/loading" element={<LoadingSpinner />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
