@@ -2,7 +2,7 @@
 import React, { useState, useContext } from "react";
 import AuthContext from "../../context/AuthContext.js";
 import LoadingSpinner from "../Loading/Loading.js";
-
+import { useNavigate } from "react-router-dom";
 const Register = () => {
   const navigate = useNavigate();
   let { registerUser, loading } = useContext(AuthContext);
@@ -44,9 +44,9 @@ const Register = () => {
     if (response.ok) {
       // Handle successful registration (e.g., redirect to login)
       // console.log("Registration successful:", data);
-      if(response.status === 200) {
+      if (response.status === 200) {
+        setLoading(false);
         console.log("Registration successful:", data);
-      setLoading(false)
         navigate("/otp"); 
       }
     } else {
