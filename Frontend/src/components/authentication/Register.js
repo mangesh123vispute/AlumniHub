@@ -44,8 +44,8 @@ const Register = () => {
     if (response.ok) {
       // Handle successful registration (e.g., redirect to login)
       // console.log("Registration successful:", data);
-      if (response.status === 200) {
-        setLoading(false);
+      setLoading(false);
+      if (response.status === 201) {
         console.log("Registration successful:", data);
         navigate("/otp"); 
       }
