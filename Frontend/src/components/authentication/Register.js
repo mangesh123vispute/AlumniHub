@@ -1,9 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useContext } from "react";
 import AuthContext from "../../context/AuthContext.js";
+import LoadingSpinner from "../Loading/Loading.js";
 
 const Register = () => {
   let { registerUser, loading } = useContext(AuthContext);
+  const [Loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -17,6 +19,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
 
     if (formData.password !== formData.confirmPassword) {
       setMessage("Passwords do not match!");
@@ -41,6 +44,7 @@ const Register = () => {
       // Handle successful registration (e.g., redirect to login)
       
       console.log("Registration successful:", data);
+      setLoading(false)
     } else {
       // Handle message response
       console.log("Registration failed:", data);
@@ -51,11 +55,13 @@ const Register = () => {
        } else {
          setMessage(data.detail || "Something went wrong.");
        }
+       setLoading(false)
     }
   };
 
   return (
     <div className="hold-transition register-page">
+      <LoadingSpinner isLoading={Loading} />
       <meta charSet="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <title>AlumniHub | Registration Page</title>

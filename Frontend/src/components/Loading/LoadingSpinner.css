@@ -1,0 +1,21 @@
+/* LoadingSpinner.css */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent background */
+    backdrop-filter: blur(0.1px); /* Blur effect */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1000; /* Ensure it appears above other content */
+  }
+  
+  .loading-spinner {
+    width: 100px; /* Adjust size as needed */
+    height: 100px;
+  }
+  
