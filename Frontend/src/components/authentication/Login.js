@@ -3,10 +3,11 @@ import React, { useContext ,useState } from "react";
 import AuthContext from "../../context/AuthContext.js";
 import LoadingSpinner from "../Loading/Loading.js";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
-  let { loginUser } = useContext(AuthContext);
-  let { registerUser, loading } = useContext(AuthContext);
+  let { setAuthTokens, setUser } = useContext(AuthContext);
+  
    const navigate = useNavigate();
    const [Loading, setLoading] = useState(false);
    const [formData, setFormData] = useState({
@@ -17,38 +18,46 @@ const Login = () => {
    const handleChange = (e) => {
      setFormData({ ...formData, [e.target.name]: e.target.value });
    };
-   const handleSubmit = async (e) => {
-     e.preventDefault();
-     setLoading(true);
-     console.log(formData);
-     const response = await fetch("http://127.0.0.1:8000/loginuser/", {
-       method: "POST",
-       headers: {
-         "Content-Type": "application/json",
-       },
-       body: JSON.stringify({
-         username: formData.username,
-         password: formData.password,
-       }),
-     });
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
 
-     const data = await response.json();
+  try {
+    console.log(formData);
 
-     if (response.ok) {
-       // Handle successful registration (e.g., redirect to login)
-       // console.log("Registration successful:", data);
-       setLoading(false);
-       if (response.status === 200) {
-         console.log("Login successful:", data);
-         navigate("/home");
-       }
-     } else {
-       // Handle message response
-       console.log("Login failed:", data);
-       setMessage(data.detail || "Something went wrong.");
-       setLoading(false);
-     }
-   };
+    const response = await fetch("http://127.0.0.1:8000/login/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: formData.username,
+        password: formData.password,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      setLoading(false);
+      if (response.status === 200) {
+        setAuthTokens(data.token);
+        setUser(jwtDecode(data.access));
+        localStorage.setItem("authTokens", JSON.stringify(data));
+        alert("Login successful!");
+        navigate("/home");
+      }
+    } else {
+      console.log("Login failed:", data);
+      setMessage(data.detail || "Something went wrong.");
+      setLoading(false);
+    }
+  } catch (error) {
+    console.error("Error during login:", error);
+    setMessage("An error occurred during login. Please try again.", error);
+    setLoading(false);
+  }
+};
 
   return (
     <>

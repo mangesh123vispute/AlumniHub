@@ -36,45 +36,15 @@ export const AuthProvider = ({ children }) => {
       ? jwtDecode(localStorage.getItem("authTokens"))
       : null
   );
-  let [loading, setLoading] = useState(false);
-
+  const [Loading, setLoading] = useState(false);
+  
   //* login
-  let loginUser = async (e) => {
-    console.log("logging in", e.target.username.value, e.target.password.value);
+  // let loginUser = async (e) => {
+  //   console.log("logging in", e.target.username.value, e.target.password.value);
 
-    e.preventDefault();
-    try {
-      let response = await fetch("http://127.0.0.1:8000/api/accounts/login2", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: e.target.username.value,
-          password: e.target.password.value,
-        }),
-      });
-
-      let data = await response.json();
-
-      if (response.status === 200) {
-        setAuthTokens(data.token);
-        setUser(jwtDecode(data.token.access));
-        localStorage.setItem("authTokens", JSON.stringify(data.token));
-        alert("Login successful!");
-        navigate("/home");
-      } else {
-        alert(data.data.message);
-      }
-    } catch (error) {
-      console.error("An error occurred while logging in:", error);
-      // Handle the error here, e.g., show a message to the user
-    }
-  };
-  //Profile
-  // let  viewProfile = async()=>{
+  //   e.preventDefault();
   //   try {
-  //     let response = await fetch("http://127.0.0.1:8000/api/settings2", {
+  //     let response = await fetch("http://127.0.0.1:8000/loginuser/", {
   //       method: "POST",
   //       headers: {
   //         "Content-Type": "application/json",
@@ -87,12 +57,21 @@ export const AuthProvider = ({ children }) => {
 
   //     let data = await response.json();
 
-  
+  //     if (response.ok) {
+  //       setAuthTokens(data.token);
+  //       setUser(jwtDecode(data.token.access));
+  //       localStorage.setItem("authTokens", JSON.stringify(data.token));
+  //       alert("Login successful!");
+  //       navigate("/home");
+  //     } else {
+  //       alert(data.data.message);
+  //     }
   //   } catch (error) {
   //     console.error("An error occurred while logging in:", error);
   //     // Handle the error here, e.g., show a message to the user
   //   }
-  // }
+  // };
+  
   //* logout
   let logoutUser = () => {
     console.log("logging out");
@@ -114,7 +93,7 @@ export const AuthProvider = ({ children }) => {
       if (!authTokens) {
         return;
       }
-      let response = await fetch("http://127.0.0.1:8000/api/token/refresh/", {
+      let response = await fetch("http://127.0.0.1:8000/token/refresh/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -246,11 +225,12 @@ export const AuthProvider = ({ children }) => {
   //* context data and functions
   let contextData = {
     user: user,
+    setUser: setUser,
     authTokens: authTokens,
-    loginUser: loginUser,
+    setAuthTokens: setAuthTokens,
     logoutUser: logoutUser,
     registerUser: registerUser,
-    loading: loading,
+    Loading: Loading,
     setLoading: setLoading,
     setIsOpen:setIsOpen,
     setMessage: setMessage,
@@ -267,6 +247,7 @@ export const AuthProvider = ({ children }) => {
 
   //* useEffect
   useEffect(() => {
+   
     verifyTokensAndUpdate();
   }, []);
 

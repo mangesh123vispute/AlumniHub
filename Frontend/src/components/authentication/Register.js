@@ -19,9 +19,9 @@ const Register = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true)
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
 
     if (formData.password !== formData.confirmPassword) {
       // setMessage("Passwords do not match!");
@@ -31,9 +31,9 @@ const Register = () => {
     }
    
 
-    const response = await fetch("http://127.0.0.1:8000/registeruser/", {
+  try {
+    const response = await fetch("http://127.0.0.1:8000/register/", {
       method: "POST",
-      
       headers: {
         "Content-Type": "application/json",
       },
@@ -47,13 +47,11 @@ const Register = () => {
     const data = await response.json();
 
     if (response.ok) {
-      // Handle successful registration (e.g., redirect to login)
-      // console.log("Registration successful:", data);
       setLoading(false);
       if (response.status === 201) {
         // console.log("Registration successful:", data);
         showNotification('Registration successful:', 'success', 'Success')
-        navigate("/otp"); 
+        navigate("/login"); 
       }
     } else {
       // Handle message response
@@ -72,7 +70,14 @@ const Register = () => {
        }
        setLoading(false)
     }
-  };
+
+  }catch (error) {
+    // console.error("Error during registration:", error);
+    // setMessage("An error occurred during registration. Please try again.");
+    showNotification(`Error during registration: ${error}`, 'error', 'Error')
+
+    setLoading(false);
+  } };
 
   return (
     <>
