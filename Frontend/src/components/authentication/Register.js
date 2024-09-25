@@ -5,7 +5,7 @@ import LoadingSpinner from "../Loading/Loading.js";
 import { useNavigate } from "react-router-dom";
 const Register = () => {
   const navigate = useNavigate();
-  let { registerUser, loading } = useContext(AuthContext);
+  let { loading } = useContext(AuthContext);
   const [Loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
@@ -18,18 +18,19 @@ const Register = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true)
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
 
-    if (formData.password !== formData.confirmPassword) {
-      setMessage("Passwords do not match!");
-      return;
-    }
+  if (formData.password !== formData.confirmPassword) {
+    setMessage("Passwords do not match!");
+    setLoading(false);
+    return;
+  }
 
-    const response = await fetch("http://127.0.0.1:8000/registeruser/", {
+  try {
+    const response = await fetch("http://127.0.0.1:8000/register/", {
       method: "POST",
-      
       headers: {
         "Content-Type": "application/json",
       },
@@ -43,26 +44,29 @@ const Register = () => {
     const data = await response.json();
 
     if (response.ok) {
-      // Handle successful registration (e.g., redirect to login)
-      // console.log("Registration successful:", data);
       setLoading(false);
       if (response.status === 201) {
         console.log("Registration successful:", data);
-        navigate("/otp"); 
+        navigate("/login");
       }
     } else {
-      // Handle message response
       console.log("Registration failed:", data);
-       if (data.email) {
-         setMessage(`Email: ${data.email[0]}`); 
-       } else if (data.username) {
-         setMessage(`Username: ${data.username[0]}`);
-       } else {
-         setMessage(data.detail || "Something went wrong.");
-       }
-       setLoading(false)
+      if (data.email) {
+        setMessage(`Email: ${data.email[0]}`);
+      } else if (data.username) {
+        setMessage(`Username: ${data.username[0]}`);
+      } else {
+        setMessage(data.detail || "Something went wrong.");
+      }
+      setLoading(false);
     }
-  };
+  } catch (error) {
+    console.error("Error during registration:", error);
+    setMessage("An error occurred during registration. Please try again.");
+    setLoading(false);
+  }
+};
+
 
   return (
     <>
