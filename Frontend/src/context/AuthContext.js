@@ -7,6 +7,23 @@ const AuthContext = createContext();
 export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const [icon, setIcon] = useState('success');
+  const [title, setTitle] = useState('Notification');
+
+  const showNotification = (msg, iconType, titleText) => {
+    
+    setMessage(msg);
+    setIcon(iconType);
+    setTitle(titleText);
+    setIsOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false); // This closes the notification
+  };
+
   const navigate = useNavigate();
   //* initial values and states
   let [authTokens, setAuthTokens] = useState(() =>
@@ -215,6 +232,17 @@ export const AuthProvider = ({ children }) => {
     registerUser: registerUser,
     Loading: Loading,
     setLoading: setLoading,
+    setIsOpen:setIsOpen,
+    setMessage: setMessage,
+    setIcon: setIcon,
+    setTitle: setTitle,
+    isOpen: isOpen,
+    message: message,
+    icon: icon,
+    title: title,
+    showNotification: showNotification,
+    handleClose:handleClose
+
   };
 
   //* useEffect
