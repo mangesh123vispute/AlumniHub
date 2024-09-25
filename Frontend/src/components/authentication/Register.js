@@ -3,9 +3,10 @@ import React, { useState, useContext } from "react";
 import AuthContext from "../../context/AuthContext.js";
 import LoadingSpinner from "../Loading/Loading.js";
 import { useNavigate } from "react-router-dom";
+import Notification from "../Notification/Notification.js"
 const Register = () => {
   const navigate = useNavigate();
-  let { registerUser, loading } = useContext(AuthContext);
+  let { setIsOpen, setMessage, setIcon, setTitle, isOpen, message, icon, title, showNotification,handleClose } = useContext(AuthContext);
   const [Loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
@@ -13,7 +14,7 @@ const Register = () => {
     password: "",
     confirmPassword: "",
   });
-  const [message, setMessage] = useState("");
+  // const [message, setMessage] = useState("");
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -23,9 +24,12 @@ const Register = () => {
     setLoading(true)
 
     if (formData.password !== formData.confirmPassword) {
-      setMessage("Passwords do not match!");
+      // setMessage("Passwords do not match!");
+      setLoading(false)
+      showNotification('Passwords do not match!', 'warning', 'Warning')
       return;
     }
+   
 
     const response = await fetch("http://127.0.0.1:8000/registeruser/", {
       method: "POST",
@@ -47,18 +51,24 @@ const Register = () => {
       // console.log("Registration successful:", data);
       setLoading(false);
       if (response.status === 201) {
-        console.log("Registration successful:", data);
+        // console.log("Registration successful:", data);
+        showNotification('Registration successful:', 'success', 'Success')
         navigate("/otp"); 
       }
     } else {
       // Handle message response
-      console.log("Registration failed:", data);
+      // console.log("Registration failed:", data);
        if (data.email) {
-         setMessage(`Email: ${data.email[0]}`); 
+        //  setMessage(`Email: ${data.email[0]}`); 
+         showNotification(`Email: ${data.email[0]}`, 'error', 'Error')
+
        } else if (data.username) {
-         setMessage(`Username: ${data.username[0]}`);
+        //  setMessage(`Username: ${data.username[0]}`);
+         showNotification(`Username: ${data.username[0]}`, 'error', 'Error')
        } else {
-         setMessage(data.detail || "Something went wrong.");
+        //  setMessage(data.detail || "Something went wrong.");
+         showNotification(`${data.detail} || "Something went wrong."`, 'error', 'Error')
+
        }
        setLoading(false)
     }
@@ -67,6 +77,7 @@ const Register = () => {
   return (
     <>
       <LoadingSpinner isLoading={Loading} />
+      <Notification message={message} isOpen={isOpen} onClose={handleClose} icon={icon} title={title} />
       <div className="hold-transition register-page">
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -98,7 +109,7 @@ const Register = () => {
             <div className="card-body register-card-body">
               <p className="login-box-msg">Register a new membership</p>
 
-              {message && <p style={{ color: "red" }}>{message}</p>}
+              {/* {message && <p style={{ color: "red" }}>{message}</p>} */}
 
               <form onSubmit={handleSubmit}>
                 <div className="input-group mb-3">
@@ -179,9 +190,9 @@ const Register = () => {
                     <button
                       type="submit"
                       className="btn btn-primary btn-block"
-                      disabled={loading}
+                     
                     >
-                      {loading ? "Loading..." : "Register"}
+                      Register
                     </button>
                   </div>
                 </div>
