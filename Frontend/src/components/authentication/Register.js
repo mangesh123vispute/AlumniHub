@@ -82,7 +82,13 @@ const handleSubmit = async (e) => {
   return (
     <>
       <LoadingSpinner isLoading={Loading} />
-      <Notification message={message} isOpen={isOpen} onClose={handleClose} icon={icon} title={title} />
+      <Notification
+        message={message}
+        isOpen={isOpen}
+        onClose={handleClose}
+        icon={icon}
+        title={title}
+      />
       <div className="hold-transition register-page">
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -183,31 +189,54 @@ const handleSubmit = async (e) => {
                 </div>
                 <div className="row">
                   <div className="col-8">
-                    {/* <button
-                    type="submit"
-                    className="btn btn-primary btn-block"
-                    disabled={loading}
-                  >
-                    {loading ? "Loading..." : "Register"}
-                  </button> */}
+                    <div
+                      class="btn-group btn-group-toggle"
+                      data-toggle="buttons"
+                    >
+                      {/* <label class="btn bg-olive active">
+                    <input type="radio" name="options" id="option_b1" autocomplete="off" checked/> Active
+                  </label> */}
+                      <label class="btn bg-olive">
+                        <input
+                          type="radio"
+                          name="options"
+                          id="option_b2"
+                          autocomplete="off"
+                        />{" "}
+                        Student
+                      </label>
+                      <label class="btn bg-olive">
+                        <input
+                          type="radio"
+                          name="options"
+                          id="option_b3"
+                          autocomplete="off"
+                        />{" "}
+                        Alumni
+                      </label>
+                    </div>
                   </div>
                   <div className="col-4">
-                    <button
-                      type="submit"
-                      className="btn btn-primary btn-block"
-                     
-                    >
+                    <button type="submit" className="btn btn-primary btn-block">
                       Register
                     </button>
                   </div>
                 </div>
               </form>
-              <p>
-                {" "}
-                <a href="/login" className="text-center mt-3">
-                  I already have a membership
-                </a>
-              </p>
+
+              <hr style={{ marginTop: "1em" }} />
+              <div style={{ marginTop: "1em", fontSize: "0.9em" }}>
+                <p >
+                  <a href="/login" className="text-center mt-3">
+                    I already have a membership
+                  </a>
+                  <br />
+                  <a href="/login" className="text-center mt-3">
+                    Register as New College
+                  </a>
+                </p>
+               
+              </div>
             </div>
           </div>
         </div>
