@@ -2,13 +2,28 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import AuthContext from "../../context/AuthContext.js";
+import Notification from "../Notification/Notification.js";
 
 const Header = () => {
   console.log("i am user", useContext(AuthContext));
-  let { user, logoutUser } = useContext(AuthContext);
+  let {
+    user,
+    logoutUser,
+    isOpen,
+    message,
+    icon,
+    title,
+    handleClose,
+  } = useContext(AuthContext);
   return (
-    <div className="wrapper" >
-      {" "}
+    <div className="wrapper">
+      <Notification
+        message={message}
+        isOpen={isOpen}
+        onClose={handleClose}
+        icon={icon}
+        title={title}
+      />{" "}
       {/* Navbar */}
       <nav className="main-header navbar navbar-expand navbar-white navbar-light">
         {/* Left navbar links */}
@@ -31,8 +46,11 @@ const Header = () => {
           </li>
           {user ? (
             <li className="nav-item d-none d-sm-inline-block">
-              
-              <a onClick={logoutUser} className="nav-link" style={{cursor:"pointer"}}>
+              <a
+                onClick={logoutUser}
+                className="nav-link"
+                style={{ cursor: "pointer" }}
+              >
                 Logout
               </a>
             </li>

@@ -20,11 +20,17 @@ export const AuthProvider = ({ children }) => {
     setIsOpen(true);
   };
 
-  const handleClose = () => {
-    setIsOpen(false); // This closes the notification
-  };
+  
 
   const navigate = useNavigate();
+  const handleClose = (url) => {
+    alert("3. I am getting called");
+    setIsOpen(false); 
+
+    if (url) {
+      navigate(url); 
+    }
+  };
   //* initial values and states
   let [authTokens, setAuthTokens] = useState(() =>
     localStorage.getItem("authTokens")
@@ -79,8 +85,9 @@ export const AuthProvider = ({ children }) => {
       setAuthTokens(null);
       setUser(null);
       localStorage.removeItem("authTokens");
-      alert("Logout successful!");
-      navigate("/login");
+      // alert("Logout successful!");
+      showNotification("Logout successful!", "success", "Success");
+      navigate("/");
     } catch (error) {
       console.error("An error occurred while logging out:", error);
       // Handle the error here, e.g., show a message to the user

@@ -4,17 +4,34 @@ import AuthContext from "../../context/AuthContext.js";
 import LoadingSpinner from "../Loading/Loading.js";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import Notification from "../Notification/Notification.js";
 
 const Login = () => {
-  let { setAuthTokens, setUser } = useContext(AuthContext);
-  
+  async function pauseForTwoSeconds() {
+    await new Promise((resolve) => setTimeout(resolve, 2000)); // 2000 milliseconds = 2 seconds
+    console.log("Paused for 2 seconds");
+  }
+  let {
+    setIsOpen,
+    setMessage,
+    setIcon,
+    setTitle,
+    isOpen,
+    message,
+    icon,
+    title,
+    showNotification,
+    handleClose,
+    setAuthTokens,
+    setUser,
+  } = useContext(AuthContext);
    const navigate = useNavigate();
    const [Loading, setLoading] = useState(false);
    const [formData, setFormData] = useState({
      username: "",
      password: "",
    });
-   const [message, setMessage] = useState("");
+  
    const handleChange = (e) => {
      setFormData({ ...formData, [e.target.name]: e.target.value });
    };
@@ -44,17 +61,30 @@ const handleSubmit = async (e) => {
         setAuthTokens(data.token);
         setUser(jwtDecode(data.access));
         localStorage.setItem("authTokens", JSON.stringify(data));
-        alert("Login successful!");
+        showNotification("Login successful", "success", "Success");
+        pauseForTwoSeconds();
         navigate("/home");
       }
     } else {
       console.log("Login failed:", data);
-      setMessage(data.detail || "Something went wrong.");
+      // setMessage(data.detail || "Something went wrong.");
+      showNotification(
+        data.detail || "Something went wrong.",
+        "warning",
+        "Warning"
+      );
+
       setLoading(false);
     }
   } catch (error) {
     console.error("Error during login:", error);
     setMessage("An error occurred during login. Please try again.", error);
+    showNotification(
+      error || "Something went wrong.",
+      "error",
+      "Error"
+    );
+
     setLoading(false);
   }
 };
@@ -62,6 +92,13 @@ const handleSubmit = async (e) => {
   return (
     <>
       <LoadingSpinner isLoading={Loading} />
+      <Notification
+        message={message}
+        isOpen={isOpen}
+        onClose={handleClose}
+        icon={icon}
+        title={title}
+      />
       <div className="hold-transition login-page">
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -92,7 +129,6 @@ const handleSubmit = async (e) => {
           {/* /.login-logo */}
           <div className="card">
             <div className="card-body login-card-body">
-              {message && <p style={{ color: "red" }}>{message}</p>}
               <p className="login-box-msg">Sign in to start your session</p>
               <form onSubmit={handleSubmit}>
                 <div className="input-group mb-3">
