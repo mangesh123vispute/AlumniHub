@@ -26,7 +26,7 @@ const handleSubmit = async (e) => {
     if (formData.password !== formData.confirmPassword) {
       // setMessage("Passwords do not match!");
       setLoading(false)
-      showNotification('Passwords do not match!', 'warning', 'Warning')
+     await showNotification('Passwords do not match!', 'warning', 'Warning')
       return;
     }
    
@@ -50,7 +50,7 @@ const handleSubmit = async (e) => {
       setLoading(false);
       if (response.status === 201) {
         // console.log("Registration successful:", data);
-        showNotification('Registration successful:', 'success', 'Success')
+        await showNotification('Registration successful:', 'success', 'Success')
         navigate("/login"); 
       }
     } else {
@@ -58,14 +58,14 @@ const handleSubmit = async (e) => {
       // console.log("Registration failed:", data);
        if (data.email) {
         //  setMessage(`Email: ${data.email[0]}`); 
-         showNotification(`Email: ${data.email[0]}`, 'error', 'Error')
+        await showNotification(`Email: ${data.email[0]}`, 'error', 'Error')
 
        } else if (data.username) {
         //  setMessage(`Username: ${data.username[0]}`);
-         showNotification(`Username: ${data.username[0]}`, 'error', 'Error')
+         await showNotification(`Username: ${data.username[0]}`, 'error', 'Error')
        } else {
         //  setMessage(data.detail || "Something went wrong.");
-         showNotification(`${data.detail} || "Something went wrong."`, 'error', 'Error')
+        await showNotification(`${data.detail} || "Something went wrong."`, 'error', 'Error')
 
        }
        setLoading(false)
@@ -74,7 +74,7 @@ const handleSubmit = async (e) => {
   }catch (error) {
     // console.error("Error during registration:", error);
     // setMessage("An error occurred during registration. Please try again.");
-    showNotification(`Error during registration: ${error}`, 'error', 'Error')
+    await showNotification(`Error during registration: ${error}`, 'error', 'Error')
 
     setLoading(false);
   } };

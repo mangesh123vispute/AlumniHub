@@ -7,11 +7,7 @@ import { jwtDecode } from "jwt-decode";
 import Notification from "../Notification/Notification.js";
 
 const Login = () => {
-  async function pauseForTwoSeconds() {
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // 2000 milliseconds = 2 seconds
-    console.log("Paused for 2 seconds");
-  }
-  let {
+  const {
     setIsOpen,
     setMessage,
     setIcon,
@@ -61,14 +57,13 @@ const handleSubmit = async (e) => {
         setAuthTokens(data.token);
         setUser(jwtDecode(data.access));
         localStorage.setItem("authTokens", JSON.stringify(data));
-        showNotification("Login successful", "success", "Success");
-        pauseForTwoSeconds();
+        await showNotification("Login successful", "success", "Success");
         navigate("/home");
       }
     } else {
       console.log("Login failed:", data);
       // setMessage(data.detail || "Something went wrong.");
-      showNotification(
+     await showNotification(
         data.detail || "Something went wrong.",
         "warning",
         "Warning"
@@ -79,7 +74,7 @@ const handleSubmit = async (e) => {
   } catch (error) {
     console.error("Error during login:", error);
     setMessage("An error occurred during login. Please try again.", error);
-    showNotification(
+   await showNotification(
       error || "Something went wrong.",
       "error",
       "Error"

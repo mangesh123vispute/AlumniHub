@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
   const [icon, setIcon] = useState('success');
   const [title, setTitle] = useState('Notification');
 
-  const showNotification = (msg, iconType, titleText) => {
+  const showNotification = async (msg, iconType, titleText) => {
     
     setMessage(msg);
     setIcon(iconType);
@@ -20,16 +20,10 @@ export const AuthProvider = ({ children }) => {
     setIsOpen(true);
   };
 
-  
 
   const navigate = useNavigate();
-  const handleClose = (url) => {
-    alert("3. I am getting called");
-    setIsOpen(false); 
-
-    if (url) {
-      navigate(url); 
-    }
+  const handleClose = () => {
+    setIsOpen(false);
   };
   //* initial values and states
   let [authTokens, setAuthTokens] = useState(() =>
@@ -79,14 +73,14 @@ export const AuthProvider = ({ children }) => {
   // };
   
   //* logout
-  let logoutUser = () => {
+  let logoutUser = async () => {
     console.log("logging out");
     try {
       setAuthTokens(null);
       setUser(null);
       localStorage.removeItem("authTokens");
       // alert("Logout successful!");
-      showNotification("Logout successful!", "success", "Success");
+      await showNotification("Logout successful!", "success", "Success");
       navigate("/");
     } catch (error) {
       console.error("An error occurred while logging out:", error);
