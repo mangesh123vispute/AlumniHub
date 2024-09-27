@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
-import Notification from "../Notification/Notification.js";
+import AuthContext from "../context/AuthContext";
 
 const isAuthenticated = () => {
   const token = localStorage.getItem("authTokens");
@@ -8,7 +8,15 @@ const isAuthenticated = () => {
 };
 
 const ProtectedRoute = ({ element: Component }) => {
-  return isAuthenticated() ? Component : <Navigate to="/login" replace />;
+  const { showNotification } = useContext(AuthContext); 
+
+  if (!isAuthenticated()) {
+    
+    showNotification("Please login first", "warning", "Warning");
+    return <Navigate to="/login" replace />;
+  }
+
+  return Component;
 };
 
 export default ProtectedRoute;
