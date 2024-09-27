@@ -1,5 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
+import Notification from "../Notification/Notification.js";
 
 const isAuthenticated = () => {
   const token = localStorage.getItem("authTokens");

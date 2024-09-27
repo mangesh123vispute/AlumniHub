@@ -52,7 +52,7 @@ function LandingPage() {
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
           crossOrigin="anonymous"
         />
-        {/* <div
+        <div
           style={{
             position: "absolute",
             top: "50px",
@@ -61,27 +61,15 @@ function LandingPage() {
           }}
         >
           <NavLink
-            to="/"
+            to="/home"
             className="text-white me-3 p-2 font-weight-bold"
             activeClassName="underline"
+            
           >
-            Home
+            Go to DashBoard
           </NavLink>
-          <NavLink
-            to="/login"
-            className="text-white me-3 p-2 font-weight-bold"
-            activeClassName="underline"
-          >
-            Login
-          </NavLink>
-          <NavLink
-            to="/register"
-            className="text-white p-2 font-weight-bold"
-            activeClassName="underline"
-          >
-            Register
-          </NavLink>
-        </div> */}
+          
+        </div>
 
         <header>
           <div className="header-content" style={{ fontSize: "1.2em" }}>
