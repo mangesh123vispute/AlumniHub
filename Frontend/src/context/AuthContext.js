@@ -122,23 +122,6 @@ export const AuthProvider = ({ children }) => {
       if (!authTokens) {
         return;
       }
-
-      // Verify access token
-      let response = await fetch("http://127.0.0.1:8000/api/token/verify/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token: authTokens?.access }),
-      });
-
-      console.log("verifyAccessTokenAndUpdate", response.status, response.ok);
-      if (!response.ok) {
-        // If access token is not valid, update tokens
-        await updateTokens();
-        return;
-      }
-
       // Check if refresh token needs refreshing
       response = await fetch("http://127.0.0.1:8000/api/token/verify/", {
         method: "POST",
@@ -154,6 +137,24 @@ export const AuthProvider = ({ children }) => {
         await logoutUser();
         return;
       }
+
+
+      // Verify access token
+      let response = await fetch("http://127.0.0.1:8000/api/token/verify/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token: authTokens?.access }),
+      });
+
+     
+      console.log("verifyAccessTokenAndUpdate", response.status, response.ok);
+      if (!response.ok) {
+        // If access token is not valid, update tokens
+        await updateTokens();
+        return;
+      }  
     } catch (error) {
       console.error(
         "An error occurred while verifying and updating tokens:",

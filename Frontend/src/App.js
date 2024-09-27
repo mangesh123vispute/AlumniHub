@@ -18,7 +18,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<ProtectedRoute element={<Home />} />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/forgot_password" element={<Reset_password />} />
+          <Route path="/forgot_password" element={<ProtectedRoute element={<Reset_password />} />} />
     
         </Routes>
       </AuthProvider>
