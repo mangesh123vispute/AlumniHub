@@ -2,8 +2,8 @@ import React from 'react'
 
 const Reset_password = () => {
   return (
-    <div>
-      
+    <div style={{color:'white'}}>
+      hello world
     </div>
   )
 }
