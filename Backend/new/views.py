@@ -32,7 +32,8 @@ class UserRegisterAPIView(APIView):
         if serializer.is_valid():
             username = serializer.validated_data['username']
             email = serializer.validated_data['email']
-
+            role=request.data['role']
+            
             try:
                
                 new_user = User(
@@ -40,6 +41,16 @@ class UserRegisterAPIView(APIView):
                     email=email,
                 )
                 new_user.set_password(serializer.validated_data['password'])
+
+                if(role=="Alumni"):
+                    new_user.is_alumni=True
+                elif(role=="Student"):
+                    new_user.is_student=True
+                else:
+                    return Response(
+                    {"detail": "Please select your role"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
                 new_user.save()
 
                 return Response(

@@ -13,20 +13,31 @@ const Register = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    role: "Student",
   });
   // const [message, setMessage] = useState("");
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
+ const handleRadioChange = (e) => {
+   setFormData({ ...formData, role: e.target.value });
+ };
 const handleSubmit = async (e) => {
   e.preventDefault();
   setLoading(true);
-
+  if (
+    !(formData.username &&
+    formData.password &&
+    formData.confirmPassword &&
+    formData.email && formData.role )
+  ) {
+    await showNotification("All fields are required", "warning", "Warning");
+    return;
+  }
     if (formData.password !== formData.confirmPassword) {
       // setMessage("Passwords do not match!");
-      setLoading(false)
-     await showNotification('Passwords do not match!', 'warning', 'Warning')
+      setLoading(false);
+      await showNotification("Passwords do not match!", "warning", "Warning");
       return;
     }
    
@@ -41,6 +52,7 @@ const handleSubmit = async (e) => {
         username: formData.username,
         email: formData.email,
         password: formData.password,
+        role: formData.role,
       }),
     });
 
@@ -199,18 +211,20 @@ const handleSubmit = async (e) => {
                       <label class="btn bg-olive">
                         <input
                           type="radio"
-                          name="options"
-                          id="option_b2"
-                          autocomplete="off"
+                          name="role"
+                          value="Student"
+                          checked={formData.role === "Student"}
+                          onChange={handleRadioChange}
                         />{" "}
                         Student
                       </label>
                       <label class="btn bg-olive">
                         <input
                           type="radio"
-                          name="options"
-                          id="option_b3"
-                          autocomplete="off"
+                          name="role"
+                          value="Alumni"
+                          checked={formData.role === "Alumni"}
+                          onChange={handleRadioChange}
                         />{" "}
                         Alumni
                       </label>
@@ -226,7 +240,7 @@ const handleSubmit = async (e) => {
 
               <hr style={{ marginTop: "1em" }} />
               <div style={{ marginTop: "1em", fontSize: "0.9em" }}>
-                <p >
+                <p>
                   <a href="/login" className="text-center mt-3">
                     I already have a membership
                   </a>
@@ -235,7 +249,6 @@ const handleSubmit = async (e) => {
                     Register as New College
                   </a>
                 </p>
-               
               </div>
             </div>
           </div>
