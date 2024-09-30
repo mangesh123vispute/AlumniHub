@@ -34,6 +34,11 @@ const Login = () => {
 const handleSubmit = async (e) => {
   e.preventDefault();
   setLoading(true);
+  
+  if (!(formData.username && formData.password)) {
+    await showNotification("All fields are required", "warning", "Warning");
+    return;
+  }
 
   try {
     console.log(formData);

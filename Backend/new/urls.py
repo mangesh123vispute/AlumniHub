@@ -10,7 +10,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from rest_framework_simplejwt.views import TokenVerifyView
-from .views import UserRegisterAPIView
+from .views import UserRegisterAPIView, ForgotPasswordAPIView, ResetPasswordConfirmAPIView
 
 urlpatterns = [
     path(
@@ -52,7 +52,8 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
  
-    path('forgot-password/', views.forgot_password),
+    path('api/forgot-password/', ForgotPasswordAPIView.as_view(), name='forgot_password'),
+    path('api/reset-password-confirm/<uidb64>/<token>/', ResetPasswordConfirmAPIView.as_view(), name='reset_password_confirm'),
 
         
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
