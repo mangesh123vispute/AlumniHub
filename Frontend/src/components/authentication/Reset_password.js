@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; // useNavigate instead of useHistory
 
 const ResetPassword = () => {
   const { uidb64, token } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate(); // useNavigate instead of useHistory
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -25,7 +25,7 @@ const ResetPassword = () => {
         }
       );
       setMessage(response.data.detail);
-      history.push("/login");
+      navigate("/login"); // use navigate instead of history.push
     } catch (error) {
       setMessage(error.response.data.detail || "An error occurred.");
     }
