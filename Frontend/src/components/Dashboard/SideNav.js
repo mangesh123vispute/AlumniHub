@@ -32,7 +32,7 @@ const SideNav = () => {
             </div>
             <div className="info">
               <a href="/profile" className="d-block">
-                {`Welcome!! ${userData.username}`}
+                {`Welcome!! ${userData ? userData.username:"User"}`}
               </a>
             </div>
           </div>
