@@ -61,7 +61,14 @@ const handleSubmit = async (e) => {
       if (response.status === 200) {
         setAuthTokens(data.token);
         setUser(jwtDecode(data.access));
-        localStorage.setItem("authTokens", JSON.stringify(data));
+        // localStorage.setItem("authTokens", JSON.stringify(data));
+        localStorage.setItem(
+          "authTokens",
+          JSON.stringify({
+            access: data.access, // response is the API login response
+            refresh: data.refresh,
+          })
+        );
         await showNotification("Login successful", "success", "Success");
         navigate("/home");
       }

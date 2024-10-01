@@ -1,9 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import AuthContext from "../../context/AuthContext.js";
 
 const SideNav = () => {
+  let { userData } = useContext(AuthContext);
+  // console.log("userData", userData.username);
   return (
     <div>
       <aside className="main-sidebar sidebar-dark-primary elevation-4">
@@ -30,7 +32,7 @@ const SideNav = () => {
             </div>
             <div className="info">
               <a href="#" className="d-block">
-                Alexander Pierce
+                {`Welcome!! ${userData.username}`}
               </a>
             </div>
           </div>

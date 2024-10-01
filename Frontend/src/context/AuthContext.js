@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
   const [message, setMessage] = useState('');
   const [icon, setIcon] = useState('success');
   const [title, setTitle] = useState('Notification');
+  const [userData, setUserData] = useState(null);
 
   const showNotification = async (msg, iconType, titleText) => {
     
@@ -123,7 +124,7 @@ export const AuthProvider = ({ children }) => {
         return;
       }
       // Check if refresh token needs refreshing
-      response = await fetch("http://127.0.0.1:8000/api/token/verify/", {
+      let response = await fetch("http://127.0.0.1:8000/api/token/verify/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -131,7 +132,7 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify({ token: authTokens?.refresh }),
       });
 
-      console.log("verifyRefreshTokenAndUpdate", response.status, response.ok);
+      // console.log("verifyRefreshTokenAndUpdate", response.status, response.ok);
       if (!response.ok) {
         // If refresh token is not valid, log out the user
         await logoutUser();
@@ -140,7 +141,7 @@ export const AuthProvider = ({ children }) => {
 
 
       // Verify access token
-      let response = await fetch("http://127.0.0.1:8000/api/token/verify/", {
+      response = await fetch("http://127.0.0.1:8000/api/token/verify/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -224,6 +225,30 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+   //* useEffect
+  useEffect(() => {
+   
+       const tokenData = JSON.parse(localStorage.getItem("authTokens")); 
+        // console.log("tokenData", tokenData.accessToken);
+       if (tokenData && tokenData.access) {
+        
+         const decodedToken = jwtDecode(tokenData.access);
+        //  console.log("Decoded Token:", decodedToken);
+        //  console.log("Username:", decodedToken.username);
+        //  console.log("Email:", decodedToken.email);
+        //  console.log("College:", decodedToken.College);
+        //  console.log("Is Student:", decodedToken.is_student);
+        //  console.log("Mobile:", decodedToken.mobile);
+        //  console.log("LinkedIn:", decodedToken.linkedin);
+         
+         console.log(decodedToken);
+
+         
+         setUserData(decodedToken);
+       }
+    verifyTokensAndUpdate();
+  }, []);
+
   //* context data and functions
   let contextData = {
     user: user,
@@ -243,15 +268,13 @@ export const AuthProvider = ({ children }) => {
     icon: icon,
     title: title,
     showNotification: showNotification,
-    handleClose:handleClose
+    handleClose: handleClose,
+    userData: userData,
+    setUserData: setUserData
 
   };
 
-  //* useEffect
-  useEffect(() => {
-   
-    verifyTokensAndUpdate();
-  }, []);
+ 
 
   return (
     <AuthContext.Provider value={contextData}>{children}</AuthContext.Provider>

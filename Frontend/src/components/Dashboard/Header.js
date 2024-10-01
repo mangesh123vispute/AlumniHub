@@ -5,7 +5,7 @@ import AuthContext from "../../context/AuthContext.js";
 import Notification from "../Notification/Notification.js";
 
 const Header = () => {
-  console.log("i am user", useContext(AuthContext));
+  // console.log("i am user", useContext(AuthContext));
   let {
     user,
     logoutUser,
@@ -14,6 +14,7 @@ const Header = () => {
     icon,
     title,
     handleClose,
+    
   } = useContext(AuthContext);
   return (
     <div className="wrapper">
