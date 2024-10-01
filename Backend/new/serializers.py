@@ -34,6 +34,9 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['skills'] = user.skills
         token['followers'] = user.followers
         token['following'] = user.following
+        token['first_name'] = user.first_name
+        token['last_name'] = user.last_name
+
         print(token)
 
         # Add any other fields that you want to include in the token payload

@@ -1,8 +1,10 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+import React, { useContext } from "react";
 import Home from "../Dashboard/Home.js";
+import AuthContext from "../../context/AuthContext.js";
 const ProfileContent = () => {
+   let { userData } = useContext(AuthContext);
   return (
     <>
       <div>
@@ -24,7 +26,7 @@ const ProfileContent = () => {
                       />
                     </div>
                     <h3 className="profile-username text-center">
-                      Nina Mcintire
+                      {userData ? ((userData.fistname  && userData.lastname) ? `${userData.fistname} ${userData.lastname}` : "User") : "User"}
                     </h3>
                     <p className="text-muted text-center">Software Engineer</p>
                     <ul className="list-group list-group-unbordered mb-3">

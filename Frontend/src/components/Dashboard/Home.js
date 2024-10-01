@@ -3,7 +3,7 @@ import Footer from "./Footer";
 import Header from "./Header";
 import SideNav from "./SideNav";
 
-const Home = ({ DynamicContent ,url}) => {
+const Home = ({ DynamicContent ,url,heading="Dashboard"}) => {
   return (
     <div className="bg-white">
       <Header />
@@ -15,7 +15,7 @@ const Home = ({ DynamicContent ,url}) => {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1 className="m-0">Dashboard</h1>
+                <h1 className="m-0">{heading}</h1>
               </div>
               {/* /.col */}
               <div className="col-sm-6">

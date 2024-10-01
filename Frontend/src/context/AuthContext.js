@@ -233,7 +233,7 @@ export const AuthProvider = ({ children }) => {
        if (tokenData && tokenData.access) {
         
          const decodedToken = jwtDecode(tokenData.access);
-        //  console.log("Decoded Token:", decodedToken);
+         console.log("Decoded Token:", decodedToken);
         //  console.log("Username:", decodedToken.username);
         //  console.log("Email:", decodedToken.email);
         //  console.log("College:", decodedToken.College);
