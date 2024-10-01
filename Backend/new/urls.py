@@ -11,7 +11,13 @@ from rest_framework_simplejwt.views import (
 )
 from rest_framework_simplejwt.views import TokenVerifyView
 from .views import UserRegisterAPIView, ForgotPasswordAPIView, ResetPasswordConfirmAPIView
+from .serializers import CustomTokenObtainPairSerializer
 
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
+
+    
 urlpatterns = [
     path(
         'admin/',
@@ -48,7 +54,7 @@ urlpatterns = [
 
     # & rest_framework_simple jwt authentication 
     path('register/', UserRegisterAPIView.as_view(), name='registeruser'),
-    path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('login/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
  
