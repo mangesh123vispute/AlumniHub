@@ -3,7 +3,7 @@ import Footer from "./Footer";
 import Header from "./Header";
 import SideNav from "./SideNav";
 
-const Home = ({ DynamicContent }) => {
+const Home = ({ DynamicContent ,url}) => {
   return (
     <div className="bg-white">
       <Header />
@@ -23,7 +23,7 @@ const Home = ({ DynamicContent }) => {
                   <li className="breadcrumb-item">
                     <a href="/home">Home</a>
                   </li>
-                  <li className="breadcrumb-item active">Dashboard v1</li>
+                  <li className="breadcrumb-item active">{url ? url : "Home"}</li>
                 </ol>
               </div>
               {/* /.col */}

@@ -31,7 +31,7 @@ const SideNav = () => {
               />
             </div>
             <div className="info">
-              <a href="#" className="d-block">
+              <a href="/profile" className="d-block">
                 {`Welcome!! ${userData.username}`}
               </a>
             </div>
