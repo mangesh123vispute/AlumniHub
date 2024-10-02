@@ -542,7 +542,7 @@ const ProfileContent = () => {
         </section>
         {/* /.content */}
       </div>
-      {/* /.content-wrapper */}
+    
     </>
   );
 };
@@ -550,7 +550,7 @@ const ProfileContent = () => {
 const Profile = () => {
   return (
     
-    <Home DynamicContent={ProfileContent} url="profile" />
+    <Home DynamicContent={ProfileContent} url="profile" heading="Profile" />
   );
 };
 

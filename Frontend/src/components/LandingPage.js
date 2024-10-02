@@ -61,7 +61,7 @@ function LandingPage() {
           }}
         >
           <NavLink
-            to="/home"
+            to="/home2"
             className="text-white me-3 p-2 font-weight-bold"
             activeClassName="underline"
             

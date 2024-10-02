@@ -23,7 +23,9 @@ const Home = ({ DynamicContent ,url,heading="Dashboard"}) => {
                   <li className="breadcrumb-item">
                     <a href="/home">Home</a>
                   </li>
-                  <li className="breadcrumb-item active">{url ? url : "Home"}</li>
+                  <li className="breadcrumb-item active">
+                    {url ? url : "Home"}
+                  </li>
                 </ol>
               </div>
               {/* /.col */}
@@ -36,8 +38,10 @@ const Home = ({ DynamicContent ,url,heading="Dashboard"}) => {
         {/* Main content */}
         <section className="content">
           <div className="container-fluid">
+            <hr style={{ marginBottom: "10px", borderWidth: "2px" }}></hr>
             {/* Render the dynamic content passed as a prop */}
             {DynamicContent ? <DynamicContent /> : null}
+            <hr style={{ marginBottom: "10px",marginTop: "10px", borderWidth: "2px" }}></hr>
           </div>
         </section>
       </div>

@@ -3,6 +3,7 @@ import { AuthProvider } from "./context/AuthContext";
 import Login from "./components/authentication/Login.js";
 import Register from "./components/authentication/Register.js";
 import Profile from "./components/Pages/Profile.js";
+import Home2 from "./components/Pages/Home2.js";
 import Error from "./components/Pages/Error.js";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import LandingPage from "./components/LandingPage.js";
@@ -20,6 +21,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<ProtectedRoute element={<Home />} />} />
+          <Route path="/home2" element={<ProtectedRoute element={<Home2 />} />} />
           <Route
             path="/profile"
             element={<ProtectedRoute element={<Profile />} />}

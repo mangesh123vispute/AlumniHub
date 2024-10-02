@@ -41,7 +41,7 @@ const Header = () => {
           </li>
           <li className="nav-item d-none d-sm-inline-block">
             {" "}
-            <Link to="/home" className="nav-link">
+            <Link to="/home2" className="nav-link">
               Home
             </Link>
           </li>
