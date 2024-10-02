@@ -4,19 +4,25 @@ import React, { useContext } from "react";
 import Home from "../Dashboard/Home.js";
 import AuthContext from "../../context/AuthContext.js";
 const ProfileContent = () => {
-   let { userData } = useContext(AuthContext);
+  let { userData } = useContext(AuthContext);
+  console.log("userData", userData);
   return (
     <>
       <div>
         {/* Content Header (Page header) */}
-        
+
         {/* Main content */}
         <section className="content">
           <div className="container-fluid">
             <div className="row">
               <div className="col-md-3">
                 {/* Profile Image */}
-                <div className="card card-primary card-outline">
+                <div className="card card-primary card-outline position-relative">
+                  {/* Ribbon */}
+                  <div className="ribbon-wrapper ribbon-lg">
+                    <div className="ribbon bg-primary">{ userData? (userData.is_alumni ? "Alumni":userData.is_student ? "Student":"College") : "User"}</div>
+                  </div>
+
                   <div className="card-body box-profile">
                     <div className="text-center">
                       <img
@@ -26,7 +32,11 @@ const ProfileContent = () => {
                       />
                     </div>
                     <h3 className="profile-username text-center">
-                      {userData ? ((userData.fistname  && userData.lastname) ? `${userData.fistname} ${userData.lastname}` : "User") : "User"}
+                      {userData
+                        ? userData.fistname && userData.lastname
+                          ? `${userData.fistname} ${userData.lastname}`
+                          : userData.username
+                        : "User"}
                     </h3>
                     <p className="text-muted text-center">Software Engineer</p>
                     <ul className="list-group list-group-unbordered mb-3">
@@ -47,6 +57,7 @@ const ProfileContent = () => {
                   {/* /.card-body */}
                 </div>
                 {/* /.card */}
+
                 {/* About Me Box */}
                 <div className="card card-primary">
                   <div className="card-header">
@@ -90,6 +101,7 @@ const ProfileContent = () => {
                 </div>
                 {/* /.card */}
               </div>
+
               {/* /.col */}
               <div className="col-md-9">
                 <div className="card">
@@ -542,7 +554,6 @@ const ProfileContent = () => {
         </section>
         {/* /.content */}
       </div>
-    
     </>
   );
 };
