@@ -70,7 +70,7 @@ const handleSubmit = async (e) => {
           })
         );
         await showNotification("Login successful", "success", "Success");
-        navigate("/home");
+        navigate("/home2");
       }
     } else {
       console.log("Login failed:", data);

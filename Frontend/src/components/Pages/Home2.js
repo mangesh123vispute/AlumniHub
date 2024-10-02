@@ -36,7 +36,7 @@ const Home2Content = () => {
               <img
                 src="./alumni2.jpeg"
                 className="d-block w-100"
-                alt="..."
+                alt="alumni"
                 style={{ height: "80vh", borderRadius: "10px" }}
               />
               <div className="carousel-caption d-none d-md-block">
@@ -59,7 +59,7 @@ const Home2Content = () => {
               </div>
             </div>
             <div className="carousel-item">
-              <img src="..." className="d-block w-100" alt="..." />
+              <img src="./stu.jpg" className="d-block w-100" alt="..." />
               <div className="carousel-caption d-none d-md-block">
                 <h5>Third slide label</h5>
                 <p>
