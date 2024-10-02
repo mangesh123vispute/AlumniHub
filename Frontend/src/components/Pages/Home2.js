@@ -7,7 +7,6 @@ const Home2Content = () => {
   return (
     <div>
       <section classname="content">
-        
         <div id="carouselExampleCaptions" className="carousel slide">
           <div className="carousel-indicators">
             <button
@@ -33,38 +32,139 @@ const Home2Content = () => {
           </div>
           <div className="carousel-inner">
             <div className="carousel-item active">
+              <p
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "1.5em",
+                }}
+              >
+                Welcome to the AlumniHub !!
+              </p>
+              <i style={{ fontSize: "1em" }}>
+                Welcome to our platform!{" "}
+                <span style={{ fontWeight: "bold" }}>
+                  We bridge the gap between students, alumni, and college
+                  administration,{" "}
+                </span>
+                offering an interactive experience centered on networking,
+                career development, and alumni engagement. Thank you for being a
+                part of this vibrant community!
+              </i>
+              <img
+                src="./Home.jpg"
+                className="d-block w-100"
+                alt="alumni"
+                style={{
+                  height: "80vh",
+                  borderRadius: "10px",
+                  marginTop: "1em",
+                }}
+              />
+              <div className="carousel-caption d-none d-md-block">
+                <i>
+                  Welcome to our platform! We connect students, alumni, and
+                  college administration through an interactive experience,
+                  focusing on networking, career development, and alumni
+                  engagement. Thank you for joining us!
+                </i>
+              </div>
+            </div>
+            <div className="carousel-item">
+              <p style={{ fontWeight: "bold", fontSize: "1.5em" }}>
+                User: Students
+              </p>
+              <i style={{ fontSize: "1em" }}>
+                Follow the guidelines below to{" "}
+                <span style={{ fontWeight: "bold" }}>
+                  accelerate your career growth and become a part of this
+                  thriving network.{" "}
+                </span>{" "}
+                Take advantage of the opportunities to{" "}
+                <span style={{ fontWeight: "bold" }}>
+                  connect, learn, and succeed alongside your peers and mentors!
+                </span>
+              </i>
+              <img
+                src="./coding2.webp"
+                className="d-block w-100"
+                alt="..."
+                style={{
+                  height: "80vh",
+                  borderRadius: "10px",
+                  marginTop: "1em",
+                }}
+              />
+              <div
+                className="carousel-caption d-none d-md-block"
+                style={{ textAlign: "left" }}
+              >
+                <i>
+                  1. Register as a student and join the community.
+                  <br />
+                  2. Update your profile with your resume and relevant details.
+                  <br />
+                  3. Connect with alumni on the alumni portal and explore career
+                  opportunities.
+                  <br />
+                  <span style={{ fontWeight: "bold", color: "red" }}>
+                    4. Reach out to alumni for referrals and guidance in your
+                    career journey.
+                  </span>
+                  <br />
+                  5. Seek mentorship from experienced alumni to help shape your
+                  career path.
+                </i>
+              </div>
+            </div>
+            <div className="carousel-item">
+              <p style={{ fontWeight: "bold", fontSize: "1.5em" }}>
+                User: Alumnis
+              </p>
+              <i style={{ fontSize: "1em", marginTop: "0%" }}>
+                {" "}
+                We invite you to follow the guidelines below and connect with us
+                <span style={{ fontWeight: "bold", marginLeft: "0.2em" }}>
+                  to support your alma mater's juniors
+                </span>{" "}
+                . Your involvement can make a significant impact on their
+                journey, and as a token of our appreciation,{" "}
+                <span style={{ fontWeight: "bold" }}>
+                  we are pleased to offer rewards for your contributions.
+                </span>{" "}
+                Join us in fostering a strong alumni network that empowers the
+                next generation of students!
+              </i>
               <img
                 src="./alumni2.jpeg"
                 className="d-block w-100"
-                alt="alumni"
-                style={{ height: "80vh", borderRadius: "10px" }}
+                alt="..."
+                style={{
+                  height: "80vh",
+                  borderRadius: "10px",
+                  marginTop: "1em",
+                }}
               />
-              <div className="carousel-caption d-none d-md-block">
-                <p style={{ fontWeight: "bold", fontSize: "2em" }}>Welcome to the AlumniHub</p>
-                <p style={{ fontSize: "1.5em" }}>
-                  Join our Alumni Network to connect with fellow graduates,
-                  explore diverse posts, and discover valuable opportunities,
-                  including jobs, mentorship, and engaging meetups. Elevate your
-                  alumni experience today!
-                </p>
-              </div>
-            </div>
-            <div className="carousel-item">
-              <img src="..." className="d-block w-100" alt="..." />
-              <div className="carousel-caption d-none d-md-block">
-                <h5>Second slide label</h5>
-                <p>
-                  Some representative placeholder content for the second slide.
-                </p>
-              </div>
-            </div>
-            <div className="carousel-item">
-              <img src="./stu.jpg" className="d-block w-100" alt="..." />
-              <div className="carousel-caption d-none d-md-block">
-                <h5>Third slide label</h5>
-                <p>
-                  Some representative placeholder content for the third slide.
-                </p>
+              <div
+                className="carousel-caption d-none d-md-block"
+                style={{ textAlign: "left" }}
+              >
+                <i>
+                  1.Register yourself as an alumnus.
+                  <br />
+                  2. Update your profile with your resume and relevant details
+                  <br />
+                  3. Connect with students through the student portal and review
+                  their requests for referrals and guidance.
+                  <br />
+                  <span style={{ fontWeight: "bold", color: "red" }}>
+                    4.Provide referrals if you come across any opportunities.
+                  </span>
+                  <br />
+                  <span style={{ fontWeight: "bold", color: "red" }}>
+                    5.Earn 5% from student first salary once they are
+                    successfully placed.
+                  </span>
+                </i>
               </div>
             </div>
           </div>

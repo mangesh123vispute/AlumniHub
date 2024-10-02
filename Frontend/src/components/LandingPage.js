@@ -6,9 +6,9 @@ import { useNavigate } from "react-router-dom";
 function LandingPage() {
 const navigate = useNavigate();
   const { userData } = useContext(AuthContext);
-  if (userData) {
-    navigate("/home2");
-  }
+
+ 
+
    
   return (
     <>
