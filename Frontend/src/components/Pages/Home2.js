@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import Home from "../Dashboard/Home.js";
 import AuthContext from "../../context/AuthContext.js";
 
+
 const Home2Content = () => {
   let { userData } = useContext(AuthContext);
   return (
@@ -60,7 +61,7 @@ const Home2Content = () => {
                   marginTop: "1em",
                 }}
               />
-              <div className="carousel-caption d-none d-md-block">
+              <div className="carousel-caption  d-md-block">
                 <i>
                   Welcome to our platform! We connect students, alumni, and
                   college administration through an interactive experience,
@@ -95,7 +96,7 @@ const Home2Content = () => {
                 }}
               />
               <div
-                className="carousel-caption d-none d-md-block"
+                className="carousel-caption d-md-block "
                 style={{ textAlign: "left" }}
               >
                 <i>
@@ -145,7 +146,7 @@ const Home2Content = () => {
                 }}
               />
               <div
-                className="carousel-caption d-none d-md-block"
+                className="carousel-caption  d-md-block"
                 style={{ textAlign: "left" }}
               >
                 <i>
