@@ -10,7 +10,7 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import LandingPage from "./components/LandingPage.js";
 import Reset_password from "./components/authentication/Reset_password.js";
 import ProtectedRoute from "./components/ProtectedRoute.js";
- 
+ import Addpost from "./components/Pages/Addpost.js";
 
 
 function App() {
@@ -27,6 +27,10 @@ function App() {
             path="/profile"
             element={<ProtectedRoute element={<Profile />} />}
           />
+          <Route 
+          path="/add-post"
+          element={<ProtectedRoute element={<Addpost/>} />}
+           />
           <Route path="/register" element={<Register />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="*" element={<Error />} />
