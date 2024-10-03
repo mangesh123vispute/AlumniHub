@@ -31,15 +31,11 @@ const SideNav = () => {
                 alt="User Image"
               />
             </div>
-            <div className="info"  >
+            <div className="info">
               <Link to="/profile" className="d-block">
-                {`Welcome!! ${userData ? userData.username:"User"}`}
+                {`Welcome!! ${userData ? userData.username : "User"}`}
               </Link>
-              
             </div>
-
-          
-            
           </div>
           {/* SidebarSearch Form */}
           <div className="form-inline">
@@ -65,71 +61,43 @@ const SideNav = () => {
               role="menu"
               data-accordion="false"
             >
+              {userData?.is_alumni && (
+                <li
+                  className="nav-item"
+                  style={{ borderBottom: "1px solid grey" }}
+                >
+                  <Link to="/add-post" className="nav-link">
+                   
+                    <p>
+                      <i
+                        class="far fa-circle nav-icon"
+                        style={{ fontSize: "1em" }}
+                      ></i>
+                      Add Post
+                     
+                    </p>
+                  </Link>
+                </li>
+              )}
 
-            { userData?.is_alumni &&  <li className="nav-item menu-open">
-          <Link to="/add-post" className="nav-link active d-block">
-            {/* <i className="nav-icon fas fa-tachometer-alt" /> */}
-            <p>
-              Add Post
-              {/* <i className="right fas fa-angle-left" /> */}
-            </p>
-          </Link>
-        </li>}
+              {(userData?.is_superuser ||
+                (!userData?.is_alumni && !userData?.is_student)) && (
+                <li
+                  className="nav-item"
+                  style={{ borderBottom: "1px solid grey" }}
+                >
+                  <Link to="http://127.0.0.1:8000/admin/" className="nav-link">
+                    <p style={{ fontSize: "1em" }}>
+                      <i
+                        class="far fa-circle nav-icon"
+                        style={{ fontSize: "1em" }}
+                      ></i>
+                      Admin Dashboard
+                    </p>
+                  </Link>
+                </li>
+              )}
 
-        { userData.is_staff && 
-          <li className="nav-item menu-open">
-          <Link to="http://127.0.0.1:8000/admin/" className="nav-link active d-block">
-            {/* <i className="nav-icon fas fa-tachometer-alt" /> */}
-            <p>
-              Admin Dashboard
-              {/* <i className="right fas fa-angle-left" /> */}
-            </p>
-          </Link>
-        </li>
-         
-            
-            }
-
-              {/* Add icons to the links using the .nav-icon class
-         with font-awesome or any other icon font library */}
-              {/* <li className="nav-item menu-open">
-          <a href="#" className="nav-link active">
-            <i className="nav-icon fas fa-tachometer-alt" />
-            <p>
-              Dashboard
-              <i className="right fas fa-angle-left" />
-            </p>
-          </a>
-          <ul className="nav nav-treeview">
-            <li className="nav-item">
-              <a href="./index.html" className="nav-link active">
-                <i className="far fa-circle nav-icon" />
-                <p>Dashboard v1</p>
-              </a>
-            </li>
-            <li className="nav-item">
-              <a href="./index2.html" className="nav-link">
-                <i className="far fa-circle nav-icon" />
-                <p>Dashboard v2</p>
-              </a>
-            </li>
-            <li className="nav-item">
-              <a href="./index3.html" className="nav-link">
-                <i className="far fa-circle nav-icon" />
-                <p>Dashboard v3</p>
-              </a>
-            </li>
-          </ul>
-        </li> */}
-              {/* <li className="nav-item">
-          <a href="pages/widgets.html" className="nav-link">
-            <i className="nav-icon fas fa-th" />
-            <p>
-              Widgets
-              <span className="right badge badge-danger">New</span>
-            </p>
-          </a>
-        </li> */}
               {/* <li className="nav-item">
           <a href="#" className="nav-link">
             <i className="nav-icon fas fa-copy" />
