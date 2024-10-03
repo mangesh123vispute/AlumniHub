@@ -190,6 +190,7 @@ class StudentProfile(models.Model):
         return f"{self.user.full_name} - Student"
 
 
+
 class HODPrincipalProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # New fields
@@ -197,8 +198,9 @@ class HODPrincipalProfile(models.Model):
     designation = models.CharField(max_length=100, blank=True, null=True)  # e.g., 'HOD', 'Principal'
     years_of_experience = models.IntegerField(blank=True, null=True)  # Number of years in academia/industry
     qualifications = models.TextField(blank=True, null=True)  # e.g., 'PhD in Computer Science, MTech in AI'
-    # publications = models.TextField(blank=True, null=True)  # List of published research papers or articles
+    publications = models.TextField(blank=True, null=True)  # List of published research papers or articles
     responsibilities = models.TextField(blank=True, null=True)  # Main responsibilities or administrative duties
+    # added 
     def __str__(self):
         return f"{self.user.full_name} - {self.designation}"
 
