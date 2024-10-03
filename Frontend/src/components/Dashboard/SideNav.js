@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useContext } from "react";
 import AuthContext from "../../context/AuthContext.js";
+import { Link } from "react-router-dom";
 
 const SideNav = () => {
   let { userData } = useContext(AuthContext);
@@ -31,9 +32,9 @@ const SideNav = () => {
               />
             </div>
             <div className="info">
-              <a href="/profile" className="d-block">
+              <Link to="/profile" className="d-block">
                 {`Welcome!! ${userData ? userData.username:"User"}`}
-              </a>
+              </Link>
             </div>
           </div>
           {/* SidebarSearch Form */}
@@ -60,6 +61,17 @@ const SideNav = () => {
               role="menu"
               data-accordion="false"
             >
+
+              <li className="nav-item menu-open">
+          <Link to="/add-post" className="nav-link active d-block">
+            {/* <i className="nav-icon fas fa-tachometer-alt" /> */}
+            <p>
+              Add Post
+              {/* <i className="right fas fa-angle-left" /> */}
+            </p>
+          </Link>
+        </li>
+
               {/* Add icons to the links using the .nav-icon class
          with font-awesome or any other icon font library */}
               {/* <li className="nav-item menu-open">
