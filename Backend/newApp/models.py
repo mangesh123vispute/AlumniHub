@@ -153,22 +153,55 @@ class AlumniProfile(models.Model):
     def __str__(self):
         return f"{self.user.full_name} - {self.company_name}"
 
+class AlumniExperience(models.Model):
+    alumni_profile = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE, related_name="experiences")
+    company_name = models.CharField(max_length=255)
+    job_title = models.CharField(max_length=255)
+    start_date = models.DateField()
+    end_date = models.DateField(blank=True, null=True)  
+    description = models.TextField(blank=True)
+    CurrentlyWorking = models.BooleanField(default=False)
+    responsibilities = models.TextField(blank=True)  
+    location_city = models.CharField(max_length=100, blank=True)
+    location_country = models.CharField(max_length=100, blank=True)
+
+    def __str__(self):
+        return f"{self.job_title} at {self.company_name} ({self.start_date} - {self.end_date or 'Present'})"
 
 
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    resume = models.FileField(upload_to='resumes/', blank=True)
-    internships_applied = models.ManyToManyField('JobPost', related_name='applied_students', blank=True)
-    alumni_following = models.ManyToManyField('AlumniProfile', related_name='followers', blank=True)
+    resume_url = models.URLField(max_length=500, blank=True, null=True)
+   
+    # New fields
+    graduation_year = models.IntegerField(blank=True, null=True)
+    current_year_of_study = models.CharField(max_length=50, blank=True, null=True)  # e.g. '3rd Year'
+    department = models.CharField(max_length=100, blank=True, null=True)  # e.g. 'Computer Science'
+    cgpa = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)  # e.g. 8.23
+    # projects = models.TextField(blank=True, null=True)  # A list or description of notable projects
+    # extracurricular_activities = models.TextField(blank=True, null=True)  # Clubs, sports, etc.
+    # achievements = models.TextField(blank=True, null=True)  # Awards, scholarships, etc.
+    # interests = models.TextField(blank=True, null=True)  # Personal or professional interests
+    # linkedin_profile_url = models.URLField(max_length=500, blank=True, null=True)
+    # github_profile_url = models.URLField(max_length=500, blank=True, null=True)
+    is_available_for_internship = models.BooleanField(default=False)  # Availability for internships
 
     def __str__(self):
         return f"{self.user.full_name} - Student"
 
+
 class HODPrincipalProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    
+    # New fields
+    department = models.CharField(max_length=100, blank=True, null=True)  # e.g., 'Computer Science'
+    designation = models.CharField(max_length=100, blank=True, null=True)  # e.g., 'HOD', 'Principal'
+    years_of_experience = models.IntegerField(blank=True, null=True)  # Number of years in academia/industry
+    qualifications = models.TextField(blank=True, null=True)  # e.g., 'PhD in Computer Science, MTech in AI'
+    # publications = models.TextField(blank=True, null=True)  # List of published research papers or articles
+    responsibilities = models.TextField(blank=True, null=True)  # Main responsibilities or administrative duties
     def __str__(self):
-        return self.user.full_name
+        return f"{self.user.full_name} - {self.designation}"
+
 
 
 class JobPost(models.Model):
