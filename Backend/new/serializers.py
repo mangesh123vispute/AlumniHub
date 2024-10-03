@@ -24,16 +24,17 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Add custom fields from your User model to the token payload
         token['username'] = user.username
         token['email'] = user.email
+        token['full_name'] = user.full_name
         token['is_alumni'] = user.is_alumni
         token['is_student'] = user.is_student
+        token['is_student'] = user.is_student
+        token['is_staff'] = user.is_staff
         token['College'] = user.College
         token['mobile'] = user.mobile
         token['linkedin'] = user.linkedin
         token['Github'] = user.Github
         token['instagram'] = user.instagram
         token['skills'] = user.skills
-        token['followers'] = user.followers
-        token['following'] = user.following
         token['first_name'] = user.first_name
         token['last_name'] = user.last_name
 
