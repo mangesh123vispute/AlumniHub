@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 const SideNav = () => {
   let { userData } = useContext(AuthContext);
-  // console.log("userData", userData.username);
+  console.log("userData", userData);
   return (
     <div>
       <aside className="main-sidebar sidebar-dark-primary elevation-4">
@@ -36,6 +36,7 @@ const SideNav = () => {
                 {`Welcome!! ${userData ? userData.username:"User"}`}
               </Link>
             </div>
+            
           </div>
           {/* SidebarSearch Form */}
           <div className="form-inline">
@@ -62,7 +63,7 @@ const SideNav = () => {
               data-accordion="false"
             >
 
-              <li className="nav-item menu-open">
+            { userData?.is_alumni &&  <li className="nav-item menu-open">
           <Link to="/add-post" className="nav-link active d-block">
             {/* <i className="nav-icon fas fa-tachometer-alt" /> */}
             <p>
@@ -70,7 +71,7 @@ const SideNav = () => {
               {/* <i className="right fas fa-angle-left" /> */}
             </p>
           </Link>
-        </li>
+        </li>}
 
               {/* Add icons to the links using the .nav-icon class
          with font-awesome or any other icon font library */}
