@@ -27,8 +27,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['full_name'] = user.full_name
         token['is_alumni'] = user.is_alumni
         token['is_student'] = user.is_student
-        token['is_student'] = user.is_student
-        token['is_staff'] = user.is_staff
+        token['is_superuser'] = user.is_superuser
         token['College'] = user.College
         token['mobile'] = user.mobile
         token['linkedin'] = user.linkedin
