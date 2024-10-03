@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }) => {
   const [icon, setIcon] = useState('success');
   const [title, setTitle] = useState('Notification');
   const [userData, setUserData] = useState(null);
+  const [Login, setLogin] = useState(false);
 
   const showNotification = async (msg, iconType, titleText) => {
     
@@ -82,6 +83,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem("authTokens");
       // alert("Logout successful!");
       await showNotification("Logout successful!", "success", "Success");
+      setLogin(false);
       navigate("/");
     } catch (error) {
       console.error("An error occurred while logging out:", error);
@@ -250,6 +252,14 @@ export const AuthProvider = ({ children }) => {
        }
   }, []);
 
+   useEffect(() => {
+     const tokenData = JSON.parse(localStorage.getItem("authTokens"));
+     if (tokenData && tokenData.access) {
+       const decodedToken = jwtDecode(tokenData.access);
+       setUserData(decodedToken);
+     }
+   }, [Login]);
+
   //* context data and functions
   let contextData = {
     user: user,
@@ -260,7 +270,7 @@ export const AuthProvider = ({ children }) => {
     registerUser: registerUser,
     Loading: Loading,
     setLoading: setLoading,
-    setIsOpen:setIsOpen,
+    setIsOpen: setIsOpen,
     setMessage: setMessage,
     setIcon: setIcon,
     setTitle: setTitle,
@@ -271,8 +281,8 @@ export const AuthProvider = ({ children }) => {
     showNotification: showNotification,
     handleClose: handleClose,
     userData: userData,
-    setUserData: setUserData
-
+    setUserData: setUserData,
+    setLogin: setLogin,
   };
 
  

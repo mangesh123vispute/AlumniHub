@@ -20,6 +20,7 @@ const Login = () => {
     handleClose,
     setAuthTokens,
     setUser,
+    setLogin,
   } = useContext(AuthContext);
    const navigate = useNavigate();
    const [Loading, setLoading] = useState(false);
@@ -70,6 +71,7 @@ const handleSubmit = async (e) => {
           })
         );
         await showNotification("Login successful", "success", "Success");
+        setLogin(true);
         navigate("/home2");
       }
     } else {
