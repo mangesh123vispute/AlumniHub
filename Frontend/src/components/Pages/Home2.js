@@ -7,8 +7,8 @@ const Home2Content = () => {
   let { userData } = useContext(AuthContext);
   return (
     <div>
-      <section classname="content">
-        <div id="carouselExampleCaptions" className="carousel slide">
+      <section className="content">
+        <div id="carouselExampleCaptions" className="carousel slide" >
           <div className="carousel-indicators">
             <button
               type="button"

@@ -121,6 +121,7 @@ export const AuthProvider = ({ children }) => {
   const verifyTokensAndUpdate = async () => {
     try {
       if (!authTokens) {
+        //!add notification here
         return;
       }
       // Check if refresh token needs refreshing
@@ -161,6 +162,7 @@ export const AuthProvider = ({ children }) => {
         "An error occurred while verifying and updating tokens:",
         error
       );
+      
       // Handle the error here, e.g., show a message to the user
     }
   };
@@ -227,7 +229,7 @@ export const AuthProvider = ({ children }) => {
 
    //* useEffect
   useEffect(() => {
-   
+   verifyTokensAndUpdate();
        const tokenData = JSON.parse(localStorage.getItem("authTokens")); 
         // console.log("tokenData", tokenData.accessToken);
        if (tokenData && tokenData.access) {
@@ -246,7 +248,6 @@ export const AuthProvider = ({ children }) => {
          
          setUserData(decodedToken);
        }
-    verifyTokensAndUpdate();
   }, []);
 
   //* context data and functions
