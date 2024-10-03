@@ -19,16 +19,22 @@ COLLEGE_CHOICES = [
 ]   
 class User(AbstractUser):
     username = models.CharField(max_length=150, unique=True, blank=True, default="")
-    is_alumni = models.BooleanField(default=False, blank=True)
-    is_student = models.BooleanField(default=False, blank=True)
+    full_name = models.CharField(max_length=255,blank=True, default="")
+    first_name = models.CharField(max_length=30, blank=True, default='')  
+    last_name = models.CharField(max_length=150, blank=True, default='')
     email = models.EmailField(unique=True, blank=True)
-    
     College = models.CharField(
         max_length=80,
         choices=COLLEGE_CHOICES, 
         default="SSBT COET",
         blank=True
     )
+
+    is_alumni = models.BooleanField(default=False, blank=True)
+    is_student = models.BooleanField(default=False, blank=True)
+
+
+#    Other info
     About = models.TextField(max_length=800, blank=True, default='')        
     Work = models.TextField(max_length=800, blank=True, default='')
     Year_Joined = models.CharField(max_length=4, blank=True, default='')
@@ -38,13 +44,15 @@ class User(AbstractUser):
         default='default/def.jpeg',
         blank=True
     )
+
+    # contact infromation
     mobile = models.CharField(max_length=10, default='', blank=True)
     linkedin = models.CharField(max_length=100, default='', blank=True)
     Github = models.CharField(max_length=100, default='', blank=True)
     instagram = models.CharField(max_length=100, default='', blank=True)
     skills = models.TextField(default='', blank=True) 
-    first_name = models.CharField(max_length=30, blank=True, default='')  
-    last_name = models.CharField(max_length=150, blank=True, default='')
+    
+    # followings and followers 
     followers = models.TextField(default='[]', blank=True)  
     following = models.TextField(default='[]', blank=True)
 
@@ -121,30 +129,85 @@ class User(AbstractUser):
             
 
 
-class Command(createsuperuser.Command):
-    help = 'Custom createsuperuser command'
+class AlumniProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    current_company_name = models.CharField(max_length=255, blank=True,default='')
+    job_title = models.CharField(max_length=255, blank=True,default='')
+    graduation_year = models.IntegerField(blank=True, null=True, default=0)
+    Education = models.CharField(max_length=255, blank=True,default='')
+    current_city = models.CharField(max_length=100, blank=True,default='')
+    current_country = models.CharField(max_length=100, blank=True,default='')
+    years_of_experience = models.IntegerField(blank=True, null=True,default=0)
+    industry = models.CharField(max_length=100, blank=True,default='')
+    skills = models.TextField(blank=True,default='')
+    profile_picture_url = models.URLField(max_length=500, blank=True, null=True)
+    is_available_for_mentorship = models.BooleanField(default=False)
+    achievements = models.TextField(blank=True)
+    publications = models.TextField(blank=True)
+    projects = models.TextField(blank=True)
+    previous_companies = models.TextField(blank=True)
+    successful_referrals = models.IntegerField(default=0)
+    preferred_contact_method = models.CharField(max_length=50, choices=[('email', 'Email'), ('phone', 'Phone'), ('linkedin', 'LinkedIn')], default='email')
+    resume_url = models.URLField(max_length=500, blank=True, null=True)
 
-    def handle(self, *args, **options):
-       
-        self.stdout.write(self.style.SUCCESS('Custom logic before createsuperuser'))
-
-        
-        super().handle(*args, **options)
+    def __str__(self):
+        return f"{self.user.full_name} - {self.company_name}"
 
 
-        self.stdout.write(self.style.SUCCESS('Custom logic after createsuperuser'))
 
-        username = options.get('username', None)
-        if username:
-            try:
-                user = self.UserModel._default_manager.get_by_natural_key(username)
-                user.admin = True
-                user.save()
-                self.stdout.write(self.style.SUCCESS(f'Set admin=True for user {username}'))
-            except self.UserModel.DoesNotExist:
-                raise CommandError("The user doesn't exist.")
+class StudentProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    resume = models.FileField(upload_to='resumes/', blank=True)
+    internships_applied = models.ManyToManyField('JobPost', related_name='applied_students', blank=True)
+    alumni_following = models.ManyToManyField('AlumniProfile', related_name='followers', blank=True)
+
+    def __str__(self):
+        return f"{self.user.full_name} - Student"
+
+class HODPrincipalProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.user.full_name
 
 
+class JobPost(models.Model):
+    alumni = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    location = models.CharField(max_length=255, blank=True)
+    salary = models.CharField(max_length=100, blank=True)
+    date_posted = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+class Event(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    event_date = models.DateTimeField()
+    location = models.CharField(max_length=255)
+    created_by = models.ForeignKey(HODPrincipalProfile, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
+
+class Feedback(models.Model):
+    alumni = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE)
+    feedback_text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Feedback by {self.alumni.user.full_name}"
+
+class Donation(models.Model):
+    alumni = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    date_donated = models.DateTimeField(auto_now_add=True)
+    purpose = models.CharField(max_length=255, blank=True)
+
+    def __str__(self):
+        return f"{self.alumni.user.full_name} - {self.amount}"
 
 
 class AlumniPost(models.Model):
@@ -169,4 +232,26 @@ class AlumniPost(models.Model):
             output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.Image.path)
+
+class Command(createsuperuser.Command):
+    help = 'Custom createsuperuser command'
+
+    def handle(self, *args, **options):
+       
+        self.stdout.write(self.style.SUCCESS('Custom logic before createsuperuser'))
+
         
+        super().handle(*args, **options)
+
+
+        self.stdout.write(self.style.SUCCESS('Custom logic after createsuperuser'))
+
+        username = options.get('username', None)
+        if username:
+            try:
+                user = self.UserModel._default_manager.get_by_natural_key(username)
+                user.admin = True
+                user.save()
+                self.stdout.write(self.style.SUCCESS(f'Set admin=True for user {username}'))
+            except self.UserModel.DoesNotExist:
+                raise CommandError("The user doesn't exist.")
