@@ -71,7 +71,6 @@ const navigate = useNavigate();
             to="/home2"
             className="text-white me-3 p-2 font-weight-bold"
             activeClassName="underline"
-            
           >
             Go to DashBoard
           </NavLink>
@@ -88,29 +87,17 @@ const navigate = useNavigate();
               <NavLink to="/login">
                 <button
                   type="button"
-                  className="btn btn-light"
-                  style={{
-                    fontSize: "1.5em",
-                    borderRadius: "10px",
-                    border: "1px solid  ",
-                    fontFamily: "cursive",
-                    fontWeight: "bold",
-                    
-                  }}
+                  class="btn btn-success btn-lg"
+                  style={{ fontSize: "1.2em" }}
                 >
-                  LogIn
+                  login
                 </button>
               </NavLink>
               <NavLink to="/register">
                 <button
                   type="button"
-                  className="btn btn-light"
-                  style={{
-                    fontSize: "1.5em",
-                    borderRadius: "10px",
-                    fontFamily: "cursive",
-                    fontWeight: "bold",
-                  }}
+                  class="btn btn-success btn-lg"
+                  style={{ fontSize: "1.2em" }}
                 >
                   Register
                 </button>

@@ -12,7 +12,7 @@ import uuid
 from django.conf import settings
 from django.urls import reverse
 from django.core.mail import send_mail
-
+from django.utils import timezone
 COLLEGE_CHOICES = [
     ('SSBT COET, Jalgaon', 'SSBT COET, Jalgaon'),
      
@@ -242,20 +242,62 @@ class Donation(models.Model):
         return f"{self.alumni.user.full_name} - {self.amount}"
 
 
+# class AlumniPost(models.Model):
+#     author=models.ForeignKey(User, on_delete=models.CASCADE,default=0)
+#     tag = models.CharField(max_length=255,default='')
+#     content = models.TextField(default='')
+#     title = models.CharField(max_length=255,default='')
+#     Image = models.ImageField(
+#         upload_to='images',
+#         default='default/def.jpeg',
+#         blank=True
+#     )
+#     likes = models.IntegerField(default=0, blank=True)
+  
+#     def __str__(self):
+#         return self.title
+
+#     def save(self, *args, **kwargs):
+#         super().save(*args, **kwargs)
+#         img = Image.open(self.Image.path)
+#         if img.height > 500 or img.width > 500:
+#             output_size = (300, 300)
+#             img.thumbnail(output_size)
+#             img.save(self.Image.path)
+
+
 class AlumniPost(models.Model):
-    author=models.ForeignKey(User, on_delete=models.CASCADE,default=0)
-    tag = models.CharField(max_length=255,default='')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
+    
+    # Title and content fields
+    title = models.CharField(max_length=255, default='')
     content = models.TextField(default='')
-    title = models.CharField(max_length=255,default='')
+    
+    # Tags for post categorization (e.g., event, achievement)
+    tag = models.CharField(max_length=255, default='')
     Image = models.ImageField(
         upload_to='images',
         default='default/def.jpeg',
         blank=True
     )
+    # Image URL stored from Firebase
+    image_url = models.URLField(max_length=500, blank=True, null=True)  # URL for image stored in Firebase
+    
+    # Docurl
+    DocUrl = models.URLField(max_length=500, blank=True, null=True)  # URL for image stored in Firebase
+   
+    # Engagement fields
     likes = models.IntegerField(default=0, blank=True)
-  
-    def __str__(self):
-        return self.title
+    dislikes = models.IntegerField(default=0, blank=True)
+
+    # Metadata
+    created_at = models.DateTimeField(default=timezone.now, blank=True)  # Timestamp for post creation
+    updated_at = models.DateTimeField(auto_now=True, blank=True)  # Timestamp for when the post was last updated
+    
+    # Visibility settings
+    is_visible_to_students = models.BooleanField(default=True)  # Whether post is visible to students
+    is_visible_to_alumni = models.BooleanField(default=True)  # Whether post is visible to alumni
+    is_visible_to_public = models.BooleanField(default=False)  # Whether the post is public (outside the platform)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -264,6 +306,10 @@ class AlumniPost(models.Model):
             output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.Image.path)
+
+    def __str__(self):
+        return f"{self.title} by {self.author.full_name}"
+
 
 class Command(createsuperuser.Command):
     help = 'Custom createsuperuser command'
