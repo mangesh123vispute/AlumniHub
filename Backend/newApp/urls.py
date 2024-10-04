@@ -3,7 +3,7 @@ import newApp
 from . import views, alumniView, collegeView
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import role_selection_view,role_selection_success
+from .views import role_selection_view,role_selection_success,HodPrincipalPostAPIView
 
 urlpatterns = [
     path(
@@ -61,10 +61,13 @@ urlpatterns = [
     path('following/<int:id>/', views.Following, name='following'),
     path('select-role/<int:user_id>/', role_selection_view, name='role_selection'),
     path('role-selection-success/', role_selection_success, name='role_selection_success'),
+  
+    # DRF Routes
+    
+    
+    path('hodposts/', HodPrincipalPostAPIView.as_view(), name='hod-posts'),  
+    path('hodposts/<int:pk>/', HodPrincipalPostAPIView.as_view(), name='hod-post-detail'),
 
-    # urls using amdinlte
-    path('base', views.base, name='base'),
-    path('profile/', views.profile, name='profile'),
   
    
 ]+static(settings.MEDIA_URL, document_root=settings. MEDIA_ROOT)    

@@ -49,7 +49,7 @@ urlpatterns = [
         name='college_signup'
         ),
 
-#^ Authentication
+#^ DRF Authentication
 
 
     # & rest_framework_simple jwt authentication 

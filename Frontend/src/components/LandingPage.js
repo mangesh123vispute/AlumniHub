@@ -74,7 +74,6 @@ const navigate = useNavigate();
           >
             Go to DashBoard
           </NavLink>
-          
         </div>
 
         <header>

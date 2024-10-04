@@ -1,6 +1,10 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.shortcuts import get_object_or_404
-from .models import User,AlumniPost
+from .models import User,AlumniPost,HodPrincipalPost
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import status
 from django.views.generic import View
 from .filters import AlumniFilter
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger    
@@ -13,7 +17,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 import json
-
+from .serializers import HodPrincipalPostSerializer
 
 @check_profile_completion
 def home(request):
@@ -264,9 +268,50 @@ def role_selection_success(request):
 
 
 
-# views using amdinlte 
-def base(request):
-    return render(request, 'website/base.html')
+class HodPrincipalPostAPIView(APIView):
+    permission_classes = [IsAuthenticated]  # Ensure the user is authenticated
 
-def profile(request):
-    return render(request, 'website/pages/profile.html')
+    def post(self, request):
+        # Check if the user is a superuser
+        if not request.user.is_superuser:
+            return Response({"detail": "You do not have permission to create a post."}, status=status.HTTP_403_FORBIDDEN)
+
+        serializer = HodPrincipalPostSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(author=request.user)  # Set the author to the current user
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request):
+        posts = HodPrincipalPost.objects.filter(is_visible_to_public=True)  # Fetch only public posts
+        serializer = HodPrincipalPostSerializer(posts, many=True)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        try:
+            post = HodPrincipalPost.objects.get(pk=pk)
+        except HodPrincipalPost.DoesNotExist:
+            return Response({"detail": "Post not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Check if the user is the author (HOD) of the post
+        if post.author != request.user:
+            return Response({"detail": "You do not have permission to update this post."}, status=status.HTTP_403_FORBIDDEN)
+
+        serializer = HodPrincipalPostSerializer(post, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        try:
+            post = HodPrincipalPost.objects.get(pk=pk)
+        except HodPrincipalPost.DoesNotExist:
+            return Response({"detail": "Post not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Check if the user is the author (HOD) of the post
+        if post.author != request.user:
+            return Response({"detail": "You do not have permission to delete this post."}, status=status.HTTP_403_FORBIDDEN)
+
+        post.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
