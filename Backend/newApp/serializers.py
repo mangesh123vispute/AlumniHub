@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import HodPrincipalPost ,AlumniProfile
+from .models import HodPrincipalPost ,AlumniProfile,AlumniExperience
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -31,9 +31,15 @@ class AlumniProfileSerializer(serializers.ModelSerializer):
         model = AlumniProfile
         fields = '__all__'
 
+class AlumniExperienceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AlumniExperience
+        fields = '__all__'
+
 # User Serializer with nested AlumniProfile
 class UserAlumniSerializer(serializers.ModelSerializer):
     alumni_profile = AlumniProfileSerializer(source='alumniprofile', read_only=True)
+    alumni_experience=AlumniExperienceSerializer(source='alumniexperience', read_only=True, many=True)
 
     class Meta:
         model = User
@@ -41,5 +47,5 @@ class UserAlumniSerializer(serializers.ModelSerializer):
             'id', 'username', 'full_name', 'email',
             'College', 'is_alumni', 'is_student', 'About', 'Work', 'Year_Joined', 
             'Branch',  'mobile', 'linkedin', 'Github', 'instagram', 
-            'alumni_profile'  
+            'alumni_profile'  ,'alumni_experience'
         ]

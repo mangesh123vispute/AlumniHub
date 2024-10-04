@@ -32,8 +32,12 @@ const SideNav = () => {
               />
             </div>
             <div className="info">
-              <Link to="/profile" className="d-block">
-                {`Welcome!! ${userData ? userData.username : "User"}`}
+              <Link
+                to="/profile"
+                className="d-block"
+                style={{ textTransform: "uppercase" }}
+              >
+                {`Welcome ${userData ? userData.username : "User"}`}
               </Link>
             </div>
           </div>
@@ -67,14 +71,12 @@ const SideNav = () => {
                   style={{ borderBottom: "1px solid grey" }}
                 >
                   <Link to="/add-post" className="nav-link">
-                   
                     <p>
                       <i
                         class="far fa-circle nav-icon"
                         style={{ fontSize: "1em" }}
                       ></i>
                       Add Post
-                     
                     </p>
                   </Link>
                 </li>
@@ -82,20 +84,86 @@ const SideNav = () => {
 
               {(userData?.is_superuser ||
                 (!userData?.is_alumni && !userData?.is_student)) && (
-                <li
-                  className="nav-item"
-                  style={{ borderBottom: "1px solid grey" }}
-                >
-                  <Link to="http://127.0.0.1:8000/admin/" className="nav-link">
-                    <p style={{ fontSize: "1em" }}>
+                <>
+                  <li
+                    className="nav-item"
+                    style={{ borderBottom: "1px solid grey" }}
+                  >
+                    <Link
+                      to="http://127.0.0.1:8000/admin/"
+                      className="nav-link"
+                    >
+                      <p style={{ fontSize: "1em" }}>
+                        <i
+                          className="fas fa-user-shield nav-icon"
+                          style={{ fontSize: "1em" }}
+                        ></i>
+                        Admin Panel
+                      </p>
+                    </Link>
+                  </li>
+                  <li
+                    className="nav-item"
+                    style={{ borderBottom: "1px solid grey" }}
+                  >
+                    <Link to="#" className="nav-link">
+                      <p style={{ fontSize: "1em" }}>
+                        <i
+                          className="fas fa-pencil-alt nav-icon"
+                          style={{ fontSize: "1em" }}
+                        ></i>
+                        POST
+                      </p>
+                    </Link>
+                  </li>
+                  <li
+                    className="nav-item"
+                    style={{ borderBottom: "1px solid grey" }}
+                  >
+                    <Link to="#" className="nav-link">
                       <i
-                        class="far fa-circle nav-icon"
+                        className="nav-icon fas fa-user"
                         style={{ fontSize: "1em" }}
-                      ></i>
-                      Admin Panel
-                    </p>
-                  </Link>
-                </li>
+                      />
+                      <p style={{ fontSize: "1em" }}>
+                        All Users
+                        <i className="right fas fa-angle-left" />
+                      </p>
+                    </Link>
+                    <ul
+                      className="nav nav-treeview"
+                      style={{ marginLeft: "1em" }}
+                    >
+                      <li className="nav-item">
+                        <Link to="/dashboard/v1" className="nav-link">
+                          <i
+                            className="far fa-circle nav-icon"
+                            style={{ fontSize: "1em" }}
+                          />
+                          <p style={{ fontSize: "1em" }}>Superusers</p>
+                        </Link>
+                      </li>
+                      <li className="nav-item">
+                        <Link to="/dashboard/v2" className="nav-link">
+                          <i
+                            className="far fa-circle nav-icon"
+                            style={{ fontSize: "1em" }}
+                          />
+                          <p style={{ fontSize: "1em" }}>Alumnies</p>
+                        </Link>
+                      </li>
+                      <li className="nav-item">
+                        <Link to="/dashboard/v3" className="nav-link">
+                          <i
+                            className="far fa-circle nav-icon"
+                            style={{ fontSize: "1em" }}
+                          />
+                          <p style={{ fontSize: "1em" }}>Students</p>
+                        </Link>
+                      </li>
+                    </ul>
+                  </li>
+                </>
               )}
 
               {/* <li className="nav-item">
