@@ -63,8 +63,7 @@ urlpatterns = [
     path('role-selection-success/', role_selection_success, name='role_selection_success'),
   
     # DRF Routes
-    
-    
+
     path('hodposts/', HodPrincipalPostAPIView.as_view(), name='hod-posts'),  
     path('hodposts/<int:pk>/', HodPrincipalPostAPIView.as_view(), name='hod-post-detail'),
 

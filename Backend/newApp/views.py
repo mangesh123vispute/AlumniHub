@@ -269,7 +269,7 @@ def role_selection_success(request):
 
 
 class HodPrincipalPostAPIView(APIView):
-    permission_classes = [IsAuthenticated]  # Ensure the user is authenticated
+    permission_classes = [IsAuthenticated]  
 
     def post(self, request):
         # Check if the user is a superuser
