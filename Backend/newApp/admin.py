@@ -6,9 +6,10 @@ from import_export.admin import ImportExportModelAdmin
 from .models import User, AlumniPost,AlumniProfile,AlumniExperience,StudentProfile,HODPrincipalProfile,JobPost, Event, Feedback, Donation, AlumniPost,HodPrincipalPost
 from .resources import UserResource
 
-admin.site.site_header = "AlumniHub Admin"
-admin.site.site_title = "AlumniHub Admin Portal"
-admin.site.index_title = "Welcome to  AlumniHub Admin Portal"
+admin.site.site_header = "AlumniHub Settings"
+admin.site.site_title = "AlumniHub Configuration"
+admin.site.index_title = "Manage Your Settings Here"
+
 
 class UserAdmin(ImportExportModelAdmin):
     resource_class = UserResource

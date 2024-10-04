@@ -18,7 +18,7 @@ const ErrorContent = () => {
                 We could not find the page you were looking for. Meanwhile, you
                 may{" "}
                 <span className="text-primary">
-                  <a href="/home">return to dashboard</a>
+                  <a href="/home2">return to dashboard</a>
                 </span>{" "}
                 or try using the search form.
               </p>
