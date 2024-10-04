@@ -85,10 +85,7 @@ const SideNav = () => {
               {(userData?.is_superuser ||
                 (!userData?.is_alumni && !userData?.is_student)) && (
                 <>
-                  <li
-                    className="nav-item"
-                    style={{ borderBottom: "1px solid grey" }}
-                  >
+                  <li className="nav-item">
                     <Link
                       to="http://127.0.0.1:8000/admin/"
                       className="nav-link"
@@ -102,24 +99,7 @@ const SideNav = () => {
                       </p>
                     </Link>
                   </li>
-                  <li
-                    className="nav-item"
-                    style={{ borderBottom: "1px solid grey" }}
-                  >
-                    <Link to="#" className="nav-link">
-                      <p style={{ fontSize: "1em" }}>
-                        <i
-                          className="fas fa-pencil-alt nav-icon"
-                          style={{ fontSize: "1em" }}
-                        ></i>
-                        POST
-                      </p>
-                    </Link>
-                  </li>
-                  <li
-                    className="nav-item"
-                    style={{ borderBottom: "1px solid grey" }}
-                  >
+                  <li className="nav-item">
                     <Link to="#" className="nav-link">
                       <i
                         className="nav-icon fas fa-user"
@@ -162,6 +142,61 @@ const SideNav = () => {
                         </Link>
                       </li>
                     </ul>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="#" className="nav-link">
+                      <p style={{ fontSize: "1em" }}>
+                        <i
+                          className="fas fa-pencil-alt nav-icon"
+                          style={{ fontSize: "1em" }}
+                        ></i>
+                        POST
+                      </p>
+                    </Link>
+                  </li>
+
+                  <li className="nav-item">
+                    <Link
+                      to="http://127.0.0.1:8000/admin/"
+                      className="nav-link"
+                    >
+                      <p style={{ fontSize: "1em" }}>
+                        <i
+                          className="fas fa-comments nav-icon"
+                          style={{ fontSize: "1em" }}
+                        ></i>
+                        Feedbacks
+                      </p>
+                    </Link>
+                  </li>
+
+                  <li className="nav-item">
+                    <Link
+                      to="http://127.0.0.1:8000/admin/"
+                      className="nav-link"
+                    >
+                      <p style={{ fontSize: "1em" }}>
+                        <i
+                          className="fas fa-clipboard nav-icon"
+                          style={{ fontSize: "1em" }}
+                        ></i>
+                        Requests
+                      </p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
+                      to="http://127.0.0.1:8000/admin/"
+                      className="nav-link"
+                    >
+                      <p style={{ fontSize: "1em" }}>
+                        <i
+                          className="fas fa-chart-line nav-icon"
+                          style={{ fontSize: "1em" }}
+                        ></i>
+                        Analytics
+                      </p>
+                    </Link>
                   </li>
                 </>
               )}
