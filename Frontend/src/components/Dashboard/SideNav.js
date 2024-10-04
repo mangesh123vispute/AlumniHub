@@ -56,7 +56,9 @@ const SideNav = () => {
               </div>
             </div>
           </div>
+
           {/* Sidebar Menu */}
+
           <nav className="mt-2">
             <ul
               className="nav nav-pills nav-sidebar flex-column"
@@ -64,23 +66,177 @@ const SideNav = () => {
               role="menu"
               data-accordion="false"
             >
-              {userData?.is_alumni && (
-                <li
-                  className="nav-item"
-                  style={{ borderBottom: "1px solid grey" }}
-                >
-                  <Link to="/add-post" className="nav-link">
-                    <p>
+              {/* Students  */}
+              {userData?.is_student && (
+                <>
+                  <li
+                    className="nav-item"
+                    
+                  >
+                    <Link to="/view-assignments" className="nav-link">
                       <i
-                        class="far fa-circle nav-icon"
+                        className="fas fa-book nav-icon"
                         style={{ fontSize: "1em" }}
-                      ></i>
-                      Add Post
-                    </p>
-                  </Link>
-                </li>
+                      />
+                      <p style={{ fontSize: "1em" }}>View Assignments</p>
+                    </Link>
+                  </li>
+
+                  <li
+                    className="nav-item"
+                    
+                  >
+                    <Link to="/submit-assignments" className="nav-link">
+                      <i
+                        className="fas fa-upload nav-icon"
+                        style={{ fontSize: "1em" }}
+                      />
+                      <p style={{ fontSize: "1em" }}>Submit Assignments</p>
+                    </Link>
+                  </li>
+
+                  <li
+                    className="nav-item"
+                    
+                  >
+                    <Link to="/view-grades" className="nav-link">
+                      <i
+                        className="fas fa-graduation-cap nav-icon"
+                        style={{ fontSize: "1em" }}
+                      />
+                      <p style={{ fontSize: "1em" }}>View Grades</p>
+                    </Link>
+                  </li>
+
+                  <li
+                    className="nav-item"
+                  
+                  >
+                    <Link to="/my-courses" className="nav-link">
+                      <i
+                        className="fas fa-chalkboard nav-icon"
+                        style={{ fontSize: "1em" }}
+                      />
+                      <p style={{ fontSize: "1em" }}>My Courses</p>
+                    </Link>
+                  </li>
+
+                  <li
+                    className="nav-item"
+                    
+                  >
+                    <Link to="/events" className="nav-link">
+                      <i
+                        className="fas fa-calendar-alt nav-icon"
+                        style={{ fontSize: "1em" }}
+                      />
+                      <p style={{ fontSize: "1em" }}>Events</p>
+                    </Link>
+                  </li>
+
+                  <li
+                    className="nav-item"
+                   
+                  >
+                    <Link to="/feedback" className="nav-link">
+                      <i
+                        className="fas fa-comments nav-icon"
+                        style={{ fontSize: "1em" }}
+                      />
+                      <p style={{ fontSize: "1em" }}>Feedback</p>
+                    </Link>
+                  </li>
+
+                
+                </>
               )}
 
+              {/* Alumni  */}
+              {userData?.is_alumni && (
+                <>
+                  <li className="nav-item">
+                    <Link to="/add-post" className="nav-link">
+                      <i
+                        className="far fa-circle nav-icon"
+                        style={{ fontSize: "1em" }}
+                      />
+                      <p style={{ fontSize: "1em" }}>Add Post</p>
+                    </Link>
+                  </li>
+
+                  <li className="nav-item">
+                    <Link to="/view-jobs" className="nav-link">
+                      <i
+                        className="fas fa-briefcase nav-icon"
+                        style={{ fontSize: "1em" }}
+                      />
+                      <p style={{ fontSize: "1em" }}>View Job Openings</p>
+                    </Link>
+                  </li>
+
+                  <li className="nav-item">
+                    <Link to="/my-network" className="nav-link">
+                      <i
+                        className="fas fa-users nav-icon"
+                        style={{ fontSize: "1em" }}
+                      />
+                      <p style={{ fontSize: "1em" }}>My Network</p>
+                    </Link>
+                  </li>
+
+                  <li className="nav-item">
+                    <Link to="/success-stories" className="nav-link">
+                      <i
+                        className="fas fa-trophy nav-icon"
+                        style={{ fontSize: "1em" }}
+                      />
+                      <p style={{ fontSize: "1em" }}>Success Stories</p>
+                    </Link>
+                  </li>
+
+                  <li className="nav-item">
+                    <Link to="/events" className="nav-link">
+                      <i
+                        className="fas fa-calendar-alt nav-icon"
+                        style={{ fontSize: "1em" }}
+                      />
+                      <p style={{ fontSize: "1em" }}>Events</p>
+                    </Link>
+                  </li>
+
+                  <li className="nav-item">
+                    <Link to="/donations" className="nav-link">
+                      <i
+                        className="fas fa-donate nav-icon"
+                        style={{ fontSize: "1em" }}
+                      />
+                      <p style={{ fontSize: "1em" }}>Donations</p>
+                    </Link>
+                  </li>
+
+                  <li className="nav-item">
+                    <Link to="/feedback" className="nav-link">
+                      <i
+                        className="fas fa-comments nav-icon"
+                        style={{ fontSize: "1em" }}
+                      />
+                      <p style={{ fontSize: "1em" }}>Feedback</p>
+                    </Link>
+                  </li>
+
+                  <li className="nav-item">
+                    <Link to="/profile" className="nav-link">
+                      <i
+                        className="fas fa-user nav-icon"
+                        style={{ fontSize: "1em" }}
+                      />
+                      <p style={{ fontSize: "1em" }}>My Profile</p>
+                    </Link>
+                  </li>
+                </>
+              )}
+
+              {/* HOD  */}
               {(userData?.is_superuser ||
                 (!userData?.is_alumni && !userData?.is_student)) && (
                 <>
@@ -192,7 +348,7 @@ const SideNav = () => {
                         className="fas fa-briefcase nav-icon"
                         style={{ fontSize: "1em" }}
                       ></i>
-                      <p style={{ fontSize: "1em" }}>Resources Library</p>
+                      <p style={{ fontSize: "1em" }}>Resources</p>
                     </Link>
                   </li>
                   <li className="nav-item">
@@ -208,6 +364,8 @@ const SideNav = () => {
                     <Link
                       to="http://127.0.0.1:8000/admin/"
                       className="nav-link"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       <p style={{ fontSize: "1em" }}>
                         <i
