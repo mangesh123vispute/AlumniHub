@@ -87,16 +87,25 @@ const navigate = useNavigate();
                 <button
                   type="button"
                   class="btn btn-success btn-lg"
-                  style={{ fontSize: "1.2em" }}
+                  style={{
+                    fontSize: "1.2em",
+                    borderRadius: "10px",
+                    border: "1px solid white",
+                    
+                  }}
                 >
-                  login
+                  Login
                 </button>
               </NavLink>
               <NavLink to="/register">
                 <button
                   type="button"
                   class="btn btn-success btn-lg"
-                  style={{ fontSize: "1.2em" }}
+                  style={{
+                    fontSize: "1.2em",
+                    borderRadius: "10px",
+                    border: "1px solid white",
+                  }}
                 >
                   Register
                 </button>

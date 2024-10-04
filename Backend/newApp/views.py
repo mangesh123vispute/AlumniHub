@@ -17,7 +17,10 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 import json
-from .serializers import HodPrincipalPostSerializer
+from .serializers import HodPrincipalPostSerializer,UserAlumniSerializer
+from rest_framework.pagination import PageNumberPagination
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import DatabaseError
 
 @check_profile_completion
 def home(request):
@@ -315,3 +318,38 @@ class HodPrincipalPostAPIView(APIView):
 
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class GetAllAlumni(APIView):
+    permission_classes = [IsAuthenticated]
+
+    class AlumniPagination(PageNumberPagination):
+        page_size = 10  
+        page_size_query_param = 'page_size'
+        max_page_size = 100
+
+    def get(self, request, *args, **kwargs):
+        try:
+            alumni_users = User.objects.filter(is_alumni=True)
+            paginator = self.AlumniPagination()
+            paginated_alumni = paginator.paginate_queryset(alumni_users, request)
+            serializer = UserAlumniSerializer(paginated_alumni, many=True)
+            return paginator.get_paginated_response(serializer.data)
+
+        except ObjectDoesNotExist:
+            return Response(
+                {"error": "No alumni data found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except DatabaseError:
+            
+            return Response(
+                {"error": "Database error occurred."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        except Exception as e:
+            
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_400_BAD_REQUEST
+            )

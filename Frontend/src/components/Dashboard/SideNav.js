@@ -92,7 +92,7 @@ const SideNav = () => {
                         class="far fa-circle nav-icon"
                         style={{ fontSize: "1em" }}
                       ></i>
-                      Admin Dashboard
+                      Admin Panel
                     </p>
                   </Link>
                 </li>

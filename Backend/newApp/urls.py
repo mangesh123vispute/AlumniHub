@@ -3,9 +3,11 @@ import newApp
 from . import views, alumniView, collegeView
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import role_selection_view,role_selection_success,HodPrincipalPostAPIView
+from .views import role_selection_view,role_selection_success,HodPrincipalPostAPIView,GetAllAlumni
 
 urlpatterns = [
+
+    # DJ routes 
     path(
         '',
         views.home,
@@ -63,9 +65,12 @@ urlpatterns = [
     path('role-selection-success/', role_selection_success, name='role_selection_success'),
   
     # DRF Routes
-
+    # 1.HOD 
     path('hodposts/', HodPrincipalPostAPIView.as_view(), name='hod-posts'),  
     path('hodposts/<int:pk>/', HodPrincipalPostAPIView.as_view(), name='hod-post-detail'),
+    path('getallalumni/', GetAllAlumni.as_view(), name='alumni-list'), 
+
+
 
   
    
