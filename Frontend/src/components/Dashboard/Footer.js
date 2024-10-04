@@ -3,7 +3,7 @@ import React from "react";
 const Footer = () => {
   return (
     <>
-      <footer className="wrapper">
+      <footer className="wrapper" style={{ fontSize: "1vw", textAlign: "center"}}>
         <strong>
           © 2014-2021 <a href="/">AlumniHub</a>.
           <span style={{ color: "rgba(0, 255, 255, 0.7)",marginLeft: "1rem" }}>

@@ -32,12 +32,11 @@ const SideNav = () => {
               />
             </div>
             <div className="info">
-              <Link
-                to="/profile"
-                className="d-block"
-                style={{ textTransform: "uppercase" }}
-              >
-                {`Welcome ${userData ? userData.username : "User"}`}
+              <Link to="/profile" className="d-block">
+                Welcome!!
+                <span style={{ textTransform: "uppercase" }}>{` ${
+                  userData ? userData.username : "User"
+                }`}</span>{" "}
               </Link>
             </div>
           </div>
@@ -86,20 +85,6 @@ const SideNav = () => {
                 (!userData?.is_alumni && !userData?.is_student)) && (
                 <>
                   <li className="nav-item">
-                    <Link
-                      to="http://127.0.0.1:8000/admin/"
-                      className="nav-link"
-                    >
-                      <p style={{ fontSize: "1em" }}>
-                        <i
-                          className="fas fa-user-shield nav-icon"
-                          style={{ fontSize: "1em" }}
-                        ></i>
-                        Admin Panel
-                      </p>
-                    </Link>
-                  </li>
-                  <li className="nav-item">
                     <Link to="#" className="nav-link">
                       <i
                         className="nav-icon fas fa-user"
@@ -117,27 +102,30 @@ const SideNav = () => {
                       <li className="nav-item">
                         <Link to="/dashboard/v1" className="nav-link">
                           <i
-                            className="far fa-circle nav-icon"
+                            className="fas fa-user-tie nav-icon"
                             style={{ fontSize: "1em" }}
-                          />
-                          <p style={{ fontSize: "1em" }}>Superusers</p>
+                          ></i>
+
+                          <p style={{ fontSize: "1em" }}>Hods</p>
                         </Link>
                       </li>
                       <li className="nav-item">
                         <Link to="/dashboard/v2" className="nav-link">
                           <i
-                            className="far fa-circle nav-icon"
+                            className="fas fa-users nav-icon"
                             style={{ fontSize: "1em" }}
-                          />
+                          ></i>
+
                           <p style={{ fontSize: "1em" }}>Alumnies</p>
                         </Link>
                       </li>
                       <li className="nav-item">
                         <Link to="/dashboard/v3" className="nav-link">
                           <i
-                            className="far fa-circle nav-icon"
+                            className="fas fa-user-graduate nav-icon"
                             style={{ fontSize: "1em" }}
-                          />
+                          ></i>
+
                           <p style={{ fontSize: "1em" }}>Students</p>
                         </Link>
                       </li>
@@ -195,6 +183,38 @@ const SideNav = () => {
                           style={{ fontSize: "1em" }}
                         ></i>
                         Analytics
+                      </p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/dashboard/career-resources" className="nav-link">
+                      <i
+                        className="fas fa-briefcase nav-icon"
+                        style={{ fontSize: "1em" }}
+                      ></i>
+                      <p style={{ fontSize: "1em" }}>Resources Library</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/dashboard/user-roles" className="nav-link">
+                      <i
+                        className="fas fa-user-lock nav-icon"
+                        style={{ fontSize: "1em" }}
+                      ></i>
+                      <p style={{ fontSize: "1em" }}>User Roles</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
+                      to="http://127.0.0.1:8000/admin/"
+                      className="nav-link"
+                    >
+                      <p style={{ fontSize: "1em" }}>
+                        <i
+                          className="fas fa-cog nav-icon"
+                          style={{ fontSize: "1em" }}
+                        ></i>
+                        Settings
                       </p>
                     </Link>
                   </li>

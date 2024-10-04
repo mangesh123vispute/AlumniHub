@@ -45,11 +45,7 @@ const Home = ({ DynamicContent ,url,heading="Dashboard"}) => {
           </div>
         </section>
       </div>
-
-      <div className="bg-light text-center py-3 mt-auto">
       <Footer />
-      </div>
-      
     </div>
   );
 };
