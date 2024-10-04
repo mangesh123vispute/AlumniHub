@@ -311,6 +311,40 @@ class AlumniPost(models.Model):
         return f"{self.title} by {self.author.full_name}"
 
 
+
+class HodPrincipalPost(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
+    
+    # Title and content fields
+    title = models.CharField(max_length=255, default='')
+    content = models.TextField(default='')
+    
+    # Tags for post categorization (e.g., event, achievement)
+    tag = models.CharField(max_length=255, default='')
+
+    # Image URL stored from Firebase
+    image_url = models.URLField(max_length=500, blank=True, null=True)  # URL for image stored in Firebase
+    
+    # Docurl
+    DocUrl = models.URLField(max_length=500, blank=True, null=True)  # URL for image stored in Firebase
+   
+    # Engagement fields
+    likes = models.IntegerField(default=0, blank=True)
+    dislikes = models.IntegerField(default=0, blank=True)
+
+    # Metadata
+    created_at = models.DateTimeField(default=timezone.now, blank=True)  # Timestamp for post creation
+    updated_at = models.DateTimeField(auto_now=True, blank=True)  # Timestamp for when the post was last updated
+    
+    # Visibility settings
+    is_visible_to_students = models.BooleanField(default=True)  # Whether post is visible to students
+    is_visible_to_alumni = models.BooleanField(default=True)  # Whether post is visible to alumni
+    is_visible_to_public = models.BooleanField(default=False)  # Whether the post is public (outside the platform)
+
+
+    def __str__(self):
+        return f"{self.title} by {self.author.full_name}"
+
 class Command(createsuperuser.Command):
     help = 'Custom createsuperuser command'
 

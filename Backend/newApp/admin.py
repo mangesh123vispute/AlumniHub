@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.core.mail import send_mail
 from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportExportModelAdmin
-from .models import User, AlumniPost,AlumniProfile,AlumniExperience,StudentProfile,HODPrincipalProfile,JobPost, Event, Feedback, Donation, AlumniPost
+from .models import User, AlumniPost,AlumniProfile,AlumniExperience,StudentProfile,HODPrincipalProfile,JobPost, Event, Feedback, Donation, AlumniPost,HodPrincipalPost
 from .resources import UserResource
 
 admin.site.site_header = "AlumniHub Admin"
@@ -238,7 +238,37 @@ class DonationAdmin(ImportExportModelAdmin):
     ordering = ['date_donated']
 
 
+class HodPrincipalPostAdmin(admin.ModelAdmin):
+    # Display these fields in the list view
+    list_display = ('title', 'author', 'tag', 'created_at', 'is_visible_to_students', 'is_visible_to_alumni', 'is_visible_to_public')
 
+    # Enable filtering by visibility and tags
+    list_filter = ('tag', 'is_visible_to_students', 'is_visible_to_alumni', 'is_visible_to_public', 'created_at')
+
+    # Enable search functionality for title, content, and author
+    search_fields = ('title', 'content', 'author__full_name')
+
+    # Order by creation date
+    ordering = ('-created_at',)
+
+    # Fields to show when creating or editing an instance
+    fieldsets = (
+        (None, {
+            'fields': ('author', 'title', 'content', 'tag', 'image_url', 'DocUrl')
+        }),
+        ('Visibility Settings', {
+            'fields': ('is_visible_to_students', 'is_visible_to_alumni', 'is_visible_to_public')
+        }),
+        ('Engagement', {
+            'fields': ('likes', 'dislikes')
+        }),
+        ('Metadata', {
+            'fields': ('created_at', 'updated_at')
+        }),
+    )
+
+    # Read-only fields (automatically set by Django)
+    readonly_fields = ('created_at', 'updated_at')
 
 
 
@@ -252,3 +282,4 @@ admin.site.register(Donation, DonationAdmin)
 admin.site.register(Feedback, FeedbackAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(JobPost, JobPostAdmin)
+admin.site.register(HodPrincipalPost, HodPrincipalPostAdmin)
