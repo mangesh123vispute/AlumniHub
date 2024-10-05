@@ -15,13 +15,8 @@ class HodPrincipalPostSerializer(serializers.ModelSerializer):
             'tag',
             'image_url',
             'DocUrl',
-            'likes',
-            'dislikes',
             'created_at',
             'updated_at',
-            'is_visible_to_students',
-            'is_visible_to_alumni',
-            'is_visible_to_public'
         ]
         read_only_fields = ['created_at', 'updated_at']  
 
