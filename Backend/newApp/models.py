@@ -155,7 +155,7 @@ class AlumniProfile(models.Model):
 
 
     def __str__(self):
-        return f"{self.user.full_name} - {self.company_name}"
+        return f"{self.user.full_name} - {self.current_company_name}"
 
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
