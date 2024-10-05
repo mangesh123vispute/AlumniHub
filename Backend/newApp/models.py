@@ -17,6 +17,11 @@ COLLEGE_CHOICES = [
     ('SSBT COET, Jalgaon', 'SSBT COET, Jalgaon'),
      
 ]   
+USER_TYPE_CHOICES = (
+        ('student', 'Student'),
+        ('alumni', 'Alumni'),
+        ('hod', 'HOD'),
+    )
 class User(AbstractUser):
     username = models.CharField(max_length=150, unique=True, blank=True, default="")
     full_name = models.CharField(max_length=255,blank=True, default="")
@@ -32,6 +37,12 @@ class User(AbstractUser):
 
     is_alumni = models.BooleanField(default=False, blank=True)
     is_student = models.BooleanField(default=False, blank=True)
+    user_type = models.CharField(
+        max_length=10,
+        choices=USER_TYPE_CHOICES,
+        default='student',
+        blank=True
+    )
 
 
 #    Other info
@@ -126,8 +137,6 @@ class User(AbstractUser):
         if (self.email) and (not self.is_alumni and not self.is_student and not self.is_superuser ):
             self.send_role_query_email()
             
-            
-
 
 class AlumniProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -139,107 +148,138 @@ class AlumniProfile(models.Model):
     current_country = models.CharField(max_length=100, blank=True,default='')
     years_of_experience = models.IntegerField(blank=True, null=True,default=0)
     industry = models.CharField(max_length=100, blank=True,default='')
-    skills = models.TextField(blank=True,default='')
     profile_picture_url = models.URLField(max_length=500, blank=True, null=True)
-    is_available_for_mentorship = models.BooleanField(default=False)
     achievements = models.TextField(blank=True)
-    publications = models.TextField(blank=True)
-    projects = models.TextField(blank=True)
     previous_companies = models.TextField(blank=True)
-    successful_referrals = models.IntegerField(default=0)
     preferred_contact_method = models.CharField(max_length=50, choices=[('email', 'Email'), ('phone', 'Phone'), ('linkedin', 'LinkedIn')], default='email')
-    resume_url = models.URLField(max_length=500, blank=True, null=True)
+
 
     def __str__(self):
         return f"{self.user.full_name} - {self.company_name}"
 
-class AlumniExperience(models.Model):
-    alumni_profile = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE, related_name="experiences")
-    company_name = models.CharField(max_length=255)
-    job_title = models.CharField(max_length=255)
-    start_date = models.DateField()
-    end_date = models.DateField(blank=True, null=True)  
-    description = models.TextField(blank=True)
-    CurrentlyWorking = models.BooleanField(default=False)
-    responsibilities = models.TextField(blank=True)  
-    location_city = models.CharField(max_length=100, blank=True)
-    location_country = models.CharField(max_length=100, blank=True)
-
-    def __str__(self):
-        return f"{self.job_title} at {self.company_name} ({self.start_date} - {self.end_date or 'Present'})"
-
-
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    resume_url = models.URLField(max_length=500, blank=True, null=True)
-   
-    # New fields
     graduation_year = models.IntegerField(blank=True, null=True)
-    current_year_of_study = models.CharField(max_length=50, blank=True, null=True)  # e.g. '3rd Year'
-    department = models.CharField(max_length=100, blank=True, null=True)  # e.g. 'Computer Science'
-    cgpa = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)  # e.g. 8.23
-    # projects = models.TextField(blank=True, null=True)  # A list or description of notable projects
-    # extracurricular_activities = models.TextField(blank=True, null=True)  # Clubs, sports, etc.
-    # achievements = models.TextField(blank=True, null=True)  # Awards, scholarships, etc.
-    # interests = models.TextField(blank=True, null=True)  # Personal or professional interests
-    # linkedin_profile_url = models.URLField(max_length=500, blank=True, null=True)
-    # github_profile_url = models.URLField(max_length=500, blank=True, null=True)
-    is_available_for_internship = models.BooleanField(default=False)  # Availability for internships
-
+    current_year_of_study = models.CharField(max_length=50, blank=True, null=True)  
+    department = models.CharField(max_length=100, blank=True, null=True) 
     def __str__(self):
         return f"{self.user.full_name} - Student"
 
 
-
 class HODPrincipalProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # New fields
-    department = models.CharField(max_length=100, blank=True, null=True)  # e.g., 'Computer Science'
-    designation = models.CharField(max_length=100, blank=True, null=True)  # e.g., 'HOD', 'Principal'
+    department = models.CharField(max_length=100, blank=True, null=True)  
+    designation = models.CharField(max_length=100, blank=True, null=True)  
    
-    # added 
     def __str__(self):
         return f"{self.user.full_name} - {self.designation}"
 
-
-
-class JobPost(models.Model):
-    alumni = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE)
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    location = models.CharField(max_length=255, blank=True)
-    salary = models.CharField(max_length=100, blank=True)
-    date_posted = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.title
-
-class Event(models.Model):
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    event_date = models.DateTimeField()
-    location = models.CharField(max_length=255)
-    created_by = models.ForeignKey(HODPrincipalProfile, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.title
-
-class Feedback(models.Model):
-    alumni = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE)
-    feedback_text = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
+class AlumniPost(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
+    tag = models.CharField(max_length=255, default='')
+    title = models.CharField(max_length=255, default='')
+    content = models.TextField(default='')
+    Image = models.ImageField(
+        upload_to='images',
+        default='default/def.jpeg',
+        blank=True
+    )
+    image_url = models.URLField(max_length=500, blank=True, null=True)  
+    DocUrl = models.URLField(max_length=500, blank=True, null=True)  
+    created_at = models.DateTimeField(default=timezone.now, blank=True)  
+    updated_at = models.DateTimeField(auto_now=True, blank=True)  
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        img = Image.open(self.Image.path)
+        if img.height > 500 or img.width > 500:
+            output_size = (300, 300)
+            img.thumbnail(output_size)
+            img.save(self.Image.path)
 
     def __str__(self):
-        return f"Feedback by {self.alumni.user.full_name}"
+        return f"{self.title} by {self.author.full_name}"
 
-class Donation(models.Model):
-    alumni = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    date_donated = models.DateTimeField(auto_now_add=True)
-    purpose = models.CharField(max_length=255, blank=True)
 
+class HodPrincipalPost(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
+    title = models.CharField(max_length=255, default='')
+    content = models.TextField(default='')
+    tag = models.CharField(max_length=255, default='')
+    image_url = models.URLField(max_length=500, blank=True, null=True)  
+    DocUrl = models.URLField(max_length=500, blank=True, null=True)  
+    created_at = models.DateTimeField(default=timezone.now, blank=True)  
+    updated_at = models.DateTimeField(auto_now=True, blank=True) 
+    
     def __str__(self):
-        return f"{self.alumni.user.full_name} - {self.amount}"
+        return f"{self.title} by {self.author.full_name}"
+
+class Command(createsuperuser.Command):
+    help = 'Custom createsuperuser command'
+
+    def handle(self, *args, **options):
+       
+        self.stdout.write(self.style.SUCCESS('Custom logic before createsuperuser'))
+
+        
+        super().handle(*args, **options)
+
+
+        self.stdout.write(self.style.SUCCESS('Custom logic after createsuperuser'))
+
+        username = options.get('username', None)
+        if username:
+            try:
+                user = self.UserModel._default_manager.get_by_natural_key(username)
+                user.admin = True
+                user.save()
+                self.stdout.write(self.style.SUCCESS(f'Set admin=True for user {username}'))
+            except self.UserModel.DoesNotExist:
+                raise CommandError("The user doesn't exist.")
+
+
+
+# class AlumniExperience(models.Model):
+#     alumni_profile = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE, related_name="experiences")
+#     company_name = models.CharField(max_length=255)
+#     job_title = models.CharField(max_length=255)
+#     start_date = models.DateField()
+#     end_date = models.DateField(blank=True, null=True)  
+#     description = models.TextField(blank=True)
+#     CurrentlyWorking = models.BooleanField(default=False)
+#     responsibilities = models.TextField(blank=True)  
+#     location_city = models.CharField(max_length=100, blank=True)
+#     location_country = models.CharField(max_length=100, blank=True)
+
+#     def __str__(self):
+#         return f"{self.job_title} at {self.company_name} ({self.start_date} - {self.end_date or 'Present'})"
+
+# class Event(models.Model):
+#     title = models.CharField(max_length=255)
+#     description = models.TextField()
+#     event_date = models.DateTimeField()
+#     location = models.CharField(max_length=255)
+#     created_by = models.ForeignKey(HODPrincipalProfile, on_delete=models.CASCADE)
+
+#     def __str__(self):
+#         return self.title
+
+# class Feedback(models.Model):
+#     alumni = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE)
+#     feedback_text = models.TextField()
+#     created_at = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return f"Feedback by {self.alumni.user.full_name}"
+
+# class Donation(models.Model):
+#     alumni = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE)
+#     amount = models.DecimalField(max_digits=10, decimal_places=2)
+#     date_donated = models.DateTimeField(auto_now_add=True)
+#     purpose = models.CharField(max_length=255, blank=True)
+
+#     def __str__(self):
+#         return f"{self.alumni.user.full_name} - {self.amount}"
 
 
 # class AlumniPost(models.Model):
@@ -266,104 +306,3 @@ class Donation(models.Model):
 #             img.save(self.Image.path)
 
 
-class AlumniPost(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
-    
-    # Title and content fields
-    title = models.CharField(max_length=255, default='')
-    content = models.TextField(default='')
-    
-    # Tags for post categorization (e.g., event, achievement)
-    tag = models.CharField(max_length=255, default='')
-    Image = models.ImageField(
-        upload_to='images',
-        default='default/def.jpeg',
-        blank=True
-    )
-    # Image URL stored from Firebase
-    image_url = models.URLField(max_length=500, blank=True, null=True)  # URL for image stored in Firebase
-    
-    # Docurl
-    DocUrl = models.URLField(max_length=500, blank=True, null=True)  # URL for image stored in Firebase
-   
-    # Engagement fields
-    likes = models.IntegerField(default=0, blank=True)
-    dislikes = models.IntegerField(default=0, blank=True)
-
-    # Metadata
-    created_at = models.DateTimeField(default=timezone.now, blank=True)  # Timestamp for post creation
-    updated_at = models.DateTimeField(auto_now=True, blank=True)  # Timestamp for when the post was last updated
-    
-    # Visibility settings
-    is_visible_to_students = models.BooleanField(default=True)  # Whether post is visible to students
-    is_visible_to_alumni = models.BooleanField(default=True)  # Whether post is visible to alumni
-    is_visible_to_public = models.BooleanField(default=False)  # Whether the post is public (outside the platform)
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        img = Image.open(self.Image.path)
-        if img.height > 500 or img.width > 500:
-            output_size = (300, 300)
-            img.thumbnail(output_size)
-            img.save(self.Image.path)
-
-    def __str__(self):
-        return f"{self.title} by {self.author.full_name}"
-
-
-
-class HodPrincipalPost(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
-    
-    # Title and content fields
-    title = models.CharField(max_length=255, default='')
-    content = models.TextField(default='')
-    
-    # Tags for post categorization (e.g., event, achievement)
-    tag = models.CharField(max_length=255, default='')
-
-    # Image URL stored from Firebase
-    image_url = models.URLField(max_length=500, blank=True, null=True)  # URL for image stored in Firebase
-    
-    # Docurl
-    DocUrl = models.URLField(max_length=500, blank=True, null=True)  # URL for image stored in Firebase
-   
-    # Engagement fields
-    likes = models.IntegerField(default=0, blank=True)
-    dislikes = models.IntegerField(default=0, blank=True)
-
-    # Metadata
-    created_at = models.DateTimeField(default=timezone.now, blank=True)  # Timestamp for post creation
-    updated_at = models.DateTimeField(auto_now=True, blank=True)  # Timestamp for when the post was last updated
-    
-    # Visibility settings
-    is_visible_to_students = models.BooleanField(default=True)  # Whether post is visible to students
-    is_visible_to_alumni = models.BooleanField(default=True)  # Whether post is visible to alumni
-    is_visible_to_public = models.BooleanField(default=False)  # Whether the post is public (outside the platform)
-
-
-    def __str__(self):
-        return f"{self.title} by {self.author.full_name}"
-
-class Command(createsuperuser.Command):
-    help = 'Custom createsuperuser command'
-
-    def handle(self, *args, **options):
-       
-        self.stdout.write(self.style.SUCCESS('Custom logic before createsuperuser'))
-
-        
-        super().handle(*args, **options)
-
-
-        self.stdout.write(self.style.SUCCESS('Custom logic after createsuperuser'))
-
-        username = options.get('username', None)
-        if username:
-            try:
-                user = self.UserModel._default_manager.get_by_natural_key(username)
-                user.admin = True
-                user.save()
-                self.stdout.write(self.style.SUCCESS(f'Set admin=True for user {username}'))
-            except self.UserModel.DoesNotExist:
-                raise CommandError("The user doesn't exist.")

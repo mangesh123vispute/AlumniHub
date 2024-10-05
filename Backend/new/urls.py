@@ -49,6 +49,7 @@ urlpatterns = [
         name='college_signup'
         ),
 
+
 #^ DRF Authentication
 
 

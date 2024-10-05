@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.core.mail import send_mail
 from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportExportModelAdmin
-from .models import User, AlumniPost,AlumniProfile,AlumniExperience,StudentProfile,HODPrincipalProfile,JobPost, Event, Feedback, Donation, AlumniPost,HodPrincipalPost
+from .models import User, AlumniPost,AlumniProfile,StudentProfile,HODPrincipalProfile,HodPrincipalPost
 from .resources import UserResource
 
 admin.site.site_header = "AlumniHub Settings"
@@ -75,17 +75,10 @@ class AlumniProfileAdmin(ImportExportModelAdmin):
         'current_city', 
         'current_country', 
         'years_of_experience', 
-        'industry', 
-        'skills', 
+        'industry',  
         'profile_picture_url', 
-        'is_available_for_mentorship', 
         'achievements', 
-        'publications', 
-        'projects', 
-        'previous_companies', 
-        'successful_referrals', 
         'preferred_contact_method', 
-        'resume_url'
     ]
     
     list_filter = [
@@ -95,7 +88,6 @@ class AlumniProfileAdmin(ImportExportModelAdmin):
         'current_city', 
         'current_country', 
         'industry', 
-        'is_available_for_mentorship', 
         'preferred_contact_method'
     ]
 
@@ -103,61 +95,24 @@ class AlumniProfileAdmin(ImportExportModelAdmin):
 
     ordering = ['graduation_year']
 
-class AlumniExperienceAdmin(ImportExportModelAdmin):
-    list_display = [
-        'id',
-        'alumni_profile', 
-        'company_name', 
-        'job_title', 
-        'start_date', 
-        'end_date', 
-        'description', 
-        'CurrentlyWorking', 
-        'responsibilities', 
-        'location_city', 
-        'location_country'
-    ]
-    
-    list_filter = [
-        'alumni_profile', 
-        'company_name', 
-        'job_title', 
-        'start_date', 
-        'CurrentlyWorking', 
-        'location_city', 
-        'location_country'
-    ]
-
-    search_fields = ['alumni_profile__user__username', 'company_name', 'job_title', 'location_city', 'location_country']  # Add searchable fields
-
-    ordering = ['start_date']
-
 class StudentProfileAdmin(ImportExportModelAdmin):
     list_display = [
         'id',
         'user',
-        'resume_url',
         'graduation_year',
         'current_year_of_study',
         'department',
-        'cgpa',
-        'is_available_for_internship',
     ]
 
     list_filter = [
         'graduation_year',
         'current_year_of_study',
-        'department',
-        'is_available_for_internship',
+        'department', 
     ]
 
     search_fields = ['user__username', 'user__full_name', 'department']  # Add searchable fields
 
     ordering = ['graduation_year'] 
-
-class AlumniAdmin(ImportExportModelAdmin):
-    list_display = ['id', 'author', 'tag', 'content', 'title', 'Image']
-    list_filter = ['author','tag', 'title']
 
 class HODPrincipalProfileAdmin(ImportExportModelAdmin):
     list_display = [
@@ -176,111 +131,31 @@ class HODPrincipalProfileAdmin(ImportExportModelAdmin):
 
     ordering = ['designation'] 
 
-class JobPostAdmin(ImportExportModelAdmin):
+class AluminiPostAdmin(ImportExportModelAdmin):
     list_display = [
         'id',
-        'alumni',
+        'author',
+        'tag',
         'title',
-        'description',
-        'location',
-        'salary',
-        'date_posted',
-    ]
-    list_filter = ['alumni', 'location', 'salary', 'date_posted']
-    search_fields = ['title', 'description', 'alumni__user__full_name']
-    ordering = ['date_posted']
-
-
-
-
-# Event Admin
-class EventAdmin(ImportExportModelAdmin):
-    list_display = [
-        'id',
-        'title',
-        'description',
-        'event_date',
-        'location',
-        'created_by',
-    ]
-    list_filter = ['event_date', 'created_by']
-    search_fields = ['title', 'description', 'created_by__user__full_name']
-    ordering = ['event_date']
-
-
-
-
-# Feedback Admin
-class FeedbackAdmin(ImportExportModelAdmin):
-    list_display = [
-        'id',
-        'alumni',
-        'feedback_text',
+        "content",
+        'image_url',
+        'DocUrl',
         'created_at',
+        'updated_at',
     ]
-    list_filter = ['alumni', 'created_at']
-    search_fields = ['feedback_text', 'alumni__user__full_name']
-    ordering = ['created_at']
-
-
-
-
-# Donation Admin
-class DonationAdmin(ImportExportModelAdmin):
-    list_display = [
-        'id',
-        'alumni',
-        'amount',
-        'date_donated',
-        'purpose',
-    ]
-    list_filter = ['alumni', 'date_donated', 'purpose']
-    search_fields = ['alumni__user__full_name', 'purpose']
-    ordering = ['date_donated']
+    ordering = ['created_at', 'updated_at']
 
 
 class HodPrincipalPostAdmin(admin.ModelAdmin):
-    # Display these fields in the list view
-    list_display = ('title', 'author', 'tag', 'created_at', 'is_visible_to_students', 'is_visible_to_alumni', 'is_visible_to_public')
-
-    # Enable filtering by visibility and tags
-    list_filter = ('tag', 'is_visible_to_students', 'is_visible_to_alumni', 'is_visible_to_public', 'created_at')
-
-    # Enable search functionality for title, content, and author
-    search_fields = ('title', 'content', 'author__full_name')
-
-    # Order by creation date
-    ordering = ('-created_at',)
-
-    # Fields to show when creating or editing an instance
-    fieldsets = (
-        (None, {
-            'fields': ('author', 'title', 'content', 'tag', 'image_url', 'DocUrl')
-        }),
-        ('Visibility Settings', {
-            'fields': ('is_visible_to_students', 'is_visible_to_alumni', 'is_visible_to_public')
-        }),
-        ('Engagement', {
-            'fields': ('likes', 'dislikes')
-        }),
-        ('Metadata', {
-            'fields': ('created_at', 'updated_at')
-        }),
-    )
-
-    # Read-only fields (automatically set by Django)
-    readonly_fields = ('created_at', 'updated_at')
+    list_display = ('title', 'author', 'created_at', 'updated_at')
+    search_fields = ('title', 'author__full_name', 'tag')
+    list_filter = ('created_at', 'updated_at')
 
 
 
 admin.site.register(User, UserAdmin)
 admin.site.register(AlumniProfile, AlumniProfileAdmin)
-admin.site.register(AlumniPost, AlumniAdmin)
-admin.site.register(AlumniExperience, AlumniExperienceAdmin)
 admin.site.register(StudentProfile, StudentProfileAdmin)
 admin.site.register(HODPrincipalProfile, HODPrincipalProfileAdmin)
-admin.site.register(Donation, DonationAdmin)
-admin.site.register(Feedback, FeedbackAdmin)
-admin.site.register(Event, EventAdmin)
-admin.site.register(JobPost, JobPostAdmin)
 admin.site.register(HodPrincipalPost, HodPrincipalPostAdmin)
+admin.site.register(AlumniPost, AluminiPostAdmin)
