@@ -21,6 +21,7 @@ from .serializers import HodPrincipalPostSerializer,UserAlumniSerializer
 from rest_framework.pagination import PageNumberPagination
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import DatabaseError
+from rest_framework.exceptions import NotFound
 
 @check_profile_completion
 def home(request):
@@ -272,8 +273,9 @@ def role_selection_success(request):
 
 
 class HodPrincipalPostAPIView(APIView):
-    permission_classes = [IsAuthenticated]  
+    permission_classes = [IsAuthenticated]  # Require authentication for all actions
 
+    # POST method: Create a new post
     def post(self, request):
         # Check if the user is a superuser
         if not request.user.is_superuser:
@@ -285,11 +287,20 @@ class HodPrincipalPostAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def get(self, request):
-        posts = HodPrincipalPost.objects.filter(is_visible_to_public=True)  # Fetch only public posts
-        serializer = HodPrincipalPostSerializer(posts, many=True)
-        return Response(serializer.data)
+    # GET method: Retrieve a single post if pk is given, else list all posts
+    def get(self, request, pk=None):
+        if pk is not None:
+            # Get the specific post by pk
+            post = get_object_or_404(HodPrincipalPost, pk=pk)
+            serializer = HodPrincipalPostSerializer(post)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
+        # If pk is not provided, return all posts
+        posts = HodPrincipalPost.objects.all()  # Fetch all posts
+        serializer = HodPrincipalPostSerializer(posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # PUT method: Update an existing post
     def put(self, request, pk):
         try:
             post = HodPrincipalPost.objects.get(pk=pk)
@@ -306,6 +317,7 @@ class HodPrincipalPostAPIView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    # DELETE method: Delete an existing post
     def delete(self, request, pk):
         try:
             post = HodPrincipalPost.objects.get(pk=pk)
@@ -320,7 +332,44 @@ class HodPrincipalPostAPIView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class GetAllAlumni(APIView):
+# class GetAllAlumni(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     class AlumniPagination(PageNumberPagination):
+#         page_size = 10  
+#         page_size_query_param = 'page_size'
+#         max_page_size = 100
+
+#     def get(self, request, *args, **kwargs):
+#         try:
+#             alumni_users = User.objects.filter(is_alumni=True)
+#             paginator = self.AlumniPagination()
+#             paginated_alumni = paginator.paginate_queryset(alumni_users, request)
+#             serializer = UserAlumniSerializer(paginated_alumni, many=True)
+#             return paginator.get_paginated_response(serializer.data)
+
+#         except ObjectDoesNotExist:
+#             return Response(
+#                 {"error": "No alumni data found."},
+#                 status=status.HTTP_404_NOT_FOUND
+#             )
+#         except DatabaseError:
+            
+#             return Response(
+#                 {"error": "Database error occurred."},
+#                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
+#             )
+#         except Exception as e:
+            
+#             return Response(
+#                 {"error": str(e)},
+#                 status=status.HTTP_400_BAD_REQUEST
+#             )
+
+
+
+
+class GETAlumni(APIView):
     permission_classes = [IsAuthenticated]
 
     class AlumniPagination(PageNumberPagination):
@@ -329,27 +378,29 @@ class GetAllAlumni(APIView):
         max_page_size = 100
 
     def get(self, request, *args, **kwargs):
+        """
+        Handle GET requests for retrieving all alumni or a specific instance by 'id'.
+        """
         try:
-            alumni_users = User.objects.filter(is_alumni=True)
-            paginator = self.AlumniPagination()
-            paginated_alumni = paginator.paginate_queryset(alumni_users, request)
-            serializer = UserAlumniSerializer(paginated_alumni, many=True)
-            return paginator.get_paginated_response(serializer.data)
+            alumni_id = kwargs.get('pk', None)
+            if alumni_id:
+                # If 'pk' is provided in the URL, return specific alumni instance
+                alumni_user = User.objects.get(id=alumni_id, is_alumni=True)
+                serializer = UserAlumniSerializer(alumni_user)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                # If no 'pk' is provided, return a paginated list of alumni
+                alumni_users = User.objects.filter(is_alumni=True)
+                paginator = self.AlumniPagination()
+                paginated_alumni = paginator.paginate_queryset(alumni_users, request)
+                serializer = UserAlumniSerializer(paginated_alumni, many=True)
+                return paginator.get_paginated_response(serializer.data)
 
         except ObjectDoesNotExist:
-            return Response(
-                {"error": "No alumni data found."},
-                status=status.HTTP_404_NOT_FOUND
-            )
+            raise NotFound("Alumni not found.")
         except DatabaseError:
-            
-            return Response(
-                {"error": "Database error occurred."},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+            return Response({"error": "Database error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
-            
-            return Response(
-                {"error": str(e)},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+  
