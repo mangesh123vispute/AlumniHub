@@ -11,6 +11,7 @@ import LandingPage from "./components/LandingPage.js";
 import Reset_password from "./components/authentication/Reset_password.js";
 import ProtectedRoute from "./components/ProtectedRoute.js";
  import Addpost from "./components/Pages/Addpost.js";
+import ImageUpload from "./components/Dashboard/Imageupload.js";
 
 
 function App() {
@@ -30,6 +31,11 @@ function App() {
           <Route 
           path="/add-post"
           element={<ProtectedRoute element={<Addpost/>} />}
+          
+           />
+            <Route 
+          path="/add"
+          element={<ProtectedRoute element={<ImageUpload/>} />}        
            />
           <Route path="/register" element={<Register />} />
           <Route path="/about" element={<AboutUs />} />

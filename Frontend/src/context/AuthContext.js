@@ -231,7 +231,7 @@ export const AuthProvider = ({ children }) => {
 
    //* useEffect
   useEffect(() => {
-   verifyTokensAndUpdate();
+       verifyTokensAndUpdate();
        const tokenData = JSON.parse(localStorage.getItem("authTokens")); 
         // console.log("tokenData", tokenData.accessToken);
        if (tokenData && tokenData.access) {
