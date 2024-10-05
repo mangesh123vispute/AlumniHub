@@ -288,7 +288,7 @@ const SideNav = () => {
                     </ul>
                   </li>
                   <li className="nav-item">
-                    <Link to="#" className="nav-link">
+                    <Link to="/add" className="nav-link">
                       <p style={{ fontSize: "1em" }}>
                         <i
                           className="fas fa-pencil-alt nav-icon"
