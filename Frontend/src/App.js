@@ -10,8 +10,7 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import LandingPage from "./components/LandingPage.js";
 import Reset_password from "./components/authentication/Reset_password.js";
 import ProtectedRoute from "./components/ProtectedRoute.js";
- import Addpost from "./components/Pages/Addpost.js";
-import ImageUpload from "./components/Dashboard/Imageupload.js";
+import AddHodPost from "./components/Pages/AddHodPost.js";
 
 
 function App() {
@@ -23,20 +22,18 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<ProtectedRoute element={<Home />} />} />
-          <Route path="/home2" element={<ProtectedRoute element={<Home2 />} />} />
+          <Route
+            path="/home2"
+            element={<ProtectedRoute element={<Home2 />} />}
+          />
           <Route
             path="/profile"
             element={<ProtectedRoute element={<Profile />} />}
           />
-          <Route 
-          path="/add-post"
-          element={<ProtectedRoute element={<Addpost/>} />}
-          
-           />
-            <Route 
-          path="/add"
-          element={<ProtectedRoute element={<ImageUpload/>} />}        
-           />
+          <Route
+            path="/add"
+            element={<ProtectedRoute element={<AddHodPost />} />}
+          />
           <Route path="/register" element={<Register />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="*" element={<Error />} />

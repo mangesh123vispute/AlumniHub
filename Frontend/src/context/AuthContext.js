@@ -61,20 +61,19 @@ export const AuthProvider = ({ children }) => {
 
   //* verify access tokens 
   const verifyaccessToken = async () => {
-    
+    const token = localStorage.getItem("authTokens") ? JSON.parse(localStorage.getItem("authTokens")) : null;
     try {
-      if (!authTokens) {
+      if (!token) {
         navigate("/login");
-        return;
+        return -1;
       }
-     
       // Verify access token
       const response = await fetch("http://127.0.0.1:8000/api/token/verify/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ token: authTokens?.access }),
+        body: JSON.stringify({ token: token?.access }),
       });
 
      
@@ -84,15 +83,17 @@ export const AuthProvider = ({ children }) => {
         setAuthTokens(null);
         setUser(null);
         navigate("/login");
-        return;
+        return -1;
       }  
+      else {
+        return 1;
+      }
     } catch (error) {
       console.error(
         "An error occurred while verifying access token",
         error
       );
-      
-      
+      return -1;
     }
   };
 
