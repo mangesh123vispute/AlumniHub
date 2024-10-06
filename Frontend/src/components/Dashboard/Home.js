@@ -3,7 +3,10 @@ import Footer from "./Footer";
 import Header from "./Header";
 import SideNav from "./SideNav";
 
-const Home = ({ DynamicContent ,url,heading="Dashboard"}) => {
+
+const Home = ({ DynamicContent, url, heading = "Dashboard" }) => {
+  
+
   return (
     <div className="bg-white">
       <Header />

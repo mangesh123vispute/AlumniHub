@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useContext ,useState } from "react";
+import React, { useContext, useState } from "react";
 import AuthContext from "../../context/AuthContext.js";
 import LoadingSpinner from "../Loading/Loading.js";
 import { useNavigate } from "react-router-dom";
@@ -7,11 +7,9 @@ import { jwtDecode } from "jwt-decode";
 import Notification from "../Notification/Notification.js";
 
 const Login = () => {
+  
   const {
-    setIsOpen,
     setMessage,
-    setIcon,
-    setTitle,
     isOpen,
     message,
     icon,
@@ -21,7 +19,11 @@ const Login = () => {
     setAuthTokens,
     setUser,
     setLogin,
+  
   } = useContext(AuthContext);
+
+
+
    const navigate = useNavigate();
    const [Loading, setLoading] = useState(false);
    const [formData, setFormData] = useState({

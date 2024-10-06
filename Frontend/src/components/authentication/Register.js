@@ -6,7 +6,16 @@ import { useNavigate } from "react-router-dom";
 import Notification from "../Notification/Notification.js"
 const Register = () => {
   const navigate = useNavigate();
-  let { isOpen, message, icon, title, showNotification,handleClose } = useContext(AuthContext);
+  let {
+    isOpen,
+    message,
+    icon,
+    title,
+    showNotification,
+    handleClose,
+    
+  } = useContext(AuthContext);
+ 
   const [Loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
