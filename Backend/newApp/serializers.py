@@ -5,11 +5,15 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class HodPrincipalPostSerializer(serializers.ModelSerializer):
+    author_name = serializers.SerializerMethodField()
+    author_username = serializers.SerializerMethodField()
+
     class Meta:
         model = HodPrincipalPost
         fields = [
-            'id',  
-            'author',
+            'id',
+            'author_name',  
+            'author_username',  
             'title',
             'content',
             'tag',
@@ -18,8 +22,13 @@ class HodPrincipalPostSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
         ]
-        read_only_fields = ['created_at', 'updated_at']  
+        read_only_fields = ['created_at', 'updated_at']
 
+    def get_author_name(self, obj):
+        return obj.author.full_name  
+
+    def get_author_username(self, obj):
+        return obj.author.username  
 
 class AlumniProfileSerializer(serializers.ModelSerializer):
     class Meta:

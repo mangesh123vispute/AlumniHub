@@ -1,11 +1,11 @@
 import React, { useState, useContext } from "react";
-import { storage } from "../../utils/firebase"; // Firebase config
+import { storage } from "../../../utils/firebase"; // Firebase config
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import Home from "../Dashboard/Home";
+import Home from "../../Dashboard/Home";
 import axios from "axios";
-import AuthContext from "../../context/AuthContext";
-import LoadingSpinner from "../Loading/Loading";
-import Notification from "../Notification/Notification";
+import AuthContext from "../../../context/AuthContext";
+import LoadingSpinner from "../../Loading/Loading";
+import Notification from "../../Notification/Notification";
 
 const accessToken = localStorage.getItem("authTokens")
   ? JSON.parse(localStorage.getItem("authTokens")).access

@@ -1,15 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext,useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import home_background from "../Images/home_background.webp"; // Import the background image
 import AuthContext from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-function LandingPage() {
+function  LandingPage() {
 const navigate = useNavigate();
   const { userData } = useContext(AuthContext);
 
- 
-
-   
   return (
     <>
       <div

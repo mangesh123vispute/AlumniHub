@@ -69,10 +69,7 @@ const SideNav = () => {
               {/* Students  */}
               {userData?.is_student && (
                 <>
-                  <li
-                    className="nav-item"
-                    
-                  >
+                  <li className="nav-item">
                     <Link to="/view-assignments" className="nav-link">
                       <i
                         className="fas fa-book nav-icon"
@@ -82,10 +79,7 @@ const SideNav = () => {
                     </Link>
                   </li>
 
-                  <li
-                    className="nav-item"
-                    
-                  >
+                  <li className="nav-item">
                     <Link to="/submit-assignments" className="nav-link">
                       <i
                         className="fas fa-upload nav-icon"
@@ -95,10 +89,7 @@ const SideNav = () => {
                     </Link>
                   </li>
 
-                  <li
-                    className="nav-item"
-                    
-                  >
+                  <li className="nav-item">
                     <Link to="/view-grades" className="nav-link">
                       <i
                         className="fas fa-graduation-cap nav-icon"
@@ -108,10 +99,7 @@ const SideNav = () => {
                     </Link>
                   </li>
 
-                  <li
-                    className="nav-item"
-                  
-                  >
+                  <li className="nav-item">
                     <Link to="/my-courses" className="nav-link">
                       <i
                         className="fas fa-chalkboard nav-icon"
@@ -121,10 +109,7 @@ const SideNav = () => {
                     </Link>
                   </li>
 
-                  <li
-                    className="nav-item"
-                    
-                  >
+                  <li className="nav-item">
                     <Link to="/events" className="nav-link">
                       <i
                         className="fas fa-calendar-alt nav-icon"
@@ -134,10 +119,7 @@ const SideNav = () => {
                     </Link>
                   </li>
 
-                  <li
-                    className="nav-item"
-                   
-                  >
+                  <li className="nav-item">
                     <Link to="/feedback" className="nav-link">
                       <i
                         className="fas fa-comments nav-icon"
@@ -146,8 +128,6 @@ const SideNav = () => {
                       <p style={{ fontSize: "1em" }}>Feedback</p>
                     </Link>
                   </li>
-
-                
                 </>
               )}
 
@@ -247,7 +227,7 @@ const SideNav = () => {
                         style={{ fontSize: "1em" }}
                       />
                       <p style={{ fontSize: "1em" }}>
-                        All Users
+                         USER
                         <i className="right fas fa-angle-left" />
                       </p>
                     </Link>
@@ -288,17 +268,53 @@ const SideNav = () => {
                     </ul>
                   </li>
                   <li className="nav-item">
-                    <Link to="/add" className="nav-link">
+                    <Link to="#" className="nav-link">
+                      <i
+                        className="fas fa-pencil-alt nav-icon"
+                        style={{ fontSize: "1em" }}
+                      ></i>
                       <p style={{ fontSize: "1em" }}>
-                        <i
-                          className="fas fa-pencil-alt nav-icon"
-                          style={{ fontSize: "1em" }}
-                        ></i>
                         POST
+                        <i className="right fas fa-angle-left" />
                       </p>
                     </Link>
-                  </li>
+                    <ul
+                      className="nav nav-treeview"
+                      style={{ marginLeft: "1em" }}
+                    >
+                      <li className="nav-item">
+                        <Link to="/all_posts" className="nav-link">
+                          <i
+                            className="fas fa-list mr-2"
+                            style={{ fontSize: "1em" }}
+                          />
 
+                          <p style={{ fontSize: "1em" }}>All Posts</p>
+                        </Link>
+                      </li>
+                      <li className="nav-item">
+                        <Link to="/your_posts" className="nav-link">
+                          <i
+                            className="fas fa-newspaper mr-2"
+                            style={{ fontSize: "1em" }}
+                          />
+
+                          <p style={{ fontSize: "1em" }}>Your Posts</p>
+                        </Link>
+                      </li>
+                      <li className="nav-item">
+                        <Link to="/add_hod_post" className="nav-link">
+                          <i
+                            className="fas fa-plus mr-2"
+                            style={{ fontSize: "1em" }}
+                          />
+
+                          <p style={{ fontSize: "1em" }}>Add Post</p>
+                        </Link>
+                      </li>
+                    </ul>
+                  </li>
+{/* 
                   <li className="nav-item">
                     <Link
                       to="http://127.0.0.1:8000/admin/"
@@ -359,7 +375,7 @@ const SideNav = () => {
                       ></i>
                       <p style={{ fontSize: "1em" }}>User Roles</p>
                     </Link>
-                  </li>
+                  </li> */}
                   <li className="nav-item">
                     <Link
                       to="http://127.0.0.1:8000/admin/"
