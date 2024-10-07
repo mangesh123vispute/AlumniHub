@@ -5,7 +5,7 @@ import AuthContext from "../../context/AuthContext";
 import LoadingSpinner from "../Loading/Loading";
 import Notification from "../Notification/Notification";
 import moment from "moment"; // Optional library for better date formatting
-import "./AllPost.css"
+
 const AllPostContent = () => {
   const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState([]);
@@ -20,33 +20,32 @@ const AllPostContent = () => {
     showNotification,
   } = useContext(AuthContext);
 
-  const getAllPosts = async (e) => {
-    if (e) e.preventDefault();
-
-    const token = localStorage.getItem("authTokens")
-      ? JSON.parse(localStorage.getItem("authTokens"))
-      : null;
-
+  const getAllPosts = async () => {
+    const token = localStorage.getItem("authTokens") ? JSON.parse(localStorage.getItem("authTokens")) : null;
     setLoading(true);
-
-    if ((await verifyaccessToken()) === -1) {
-      setLoading(false);
-      return;
-    }
-
     try {
-      const response = await axios.get("http://127.0.0.1:8000/hodposts/", {
-        headers: {
-          Authorization: `Bearer ${token?.access}`,
-        },
-      });
-      setPosts(response.data);
+      const urls = [
+        "http://127.0.0.1:8000/hodposts/",
+        "http://127.0.0.1:8000/alumni/posts/",
+      ];
+
+      const responses = await Promise.all(
+        urls.map((url) =>
+          axios.get(url, {
+            headers: { Authorization: `Bearer ${token?.access}` },
+          })
+        )
+      );
+
+      const combinedData = responses.flatMap((response) => response.data);
+      setPosts(combinedData);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching posts:", error);
     } finally {
       setLoading(false);
     }
   };
+
 
   const getSinglePost = async (postId, e) => {
     if (e) e.preventDefault();

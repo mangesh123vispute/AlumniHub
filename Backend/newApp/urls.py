@@ -3,7 +3,7 @@ import newApp
 from . import views, alumniView, collegeView
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import role_selection_view,role_selection_success,HodPrincipalPostAPIView,GETAlumni
+from .views import role_selection_view,role_selection_success,HodPrincipalPostAPIView,GETAlumni,AuthorPostListView,AlumniPostAPIView
 
 urlpatterns = [
 
@@ -70,8 +70,9 @@ urlpatterns = [
     path('hodposts/<int:pk>/', HodPrincipalPostAPIView.as_view(), name='hod-post-detail'),
     path('getalumni/', GETAlumni.as_view()),  # For list or creation
     path('getalumni/<int:pk>/', GETAlumni.as_view()),  # For specific alumni operations (GET spefific user )
-
-
+    path('posts/author/<int:author_id>/', AuthorPostListView.as_view(), name='author-posts'),
+    path('alumni/posts/', AlumniPostAPIView.as_view(), name='alumni-post-list'),
+    path('alumni/posts/<int:pk>/', AlumniPostAPIView.as_view(), name='alumni-post-detail'),
   
    
 ]+static(settings.MEDIA_URL, document_root=settings. MEDIA_ROOT)    

@@ -17,11 +17,12 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 import json
-from .serializers import HodPrincipalPostSerializer,UserAlumniSerializer
+from .serializers import HodPrincipalPostSerializer,UserAlumniSerializer,AlumniPostSerializer
 from rest_framework.pagination import PageNumberPagination
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import DatabaseError
 from rest_framework.exceptions import NotFound
+from rest_framework import generics
 
 @check_profile_completion
 def home(request):
@@ -370,4 +371,69 @@ class GETAlumni(APIView):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-  
+class AuthorPostListView(generics.ListAPIView):
+    serializer_class = HodPrincipalPostSerializer
+
+    def get_queryset(self):
+        author_id = self.kwargs['author_id']
+        return HodPrincipalPost.objects.filter(author_id=author_id)
+    
+
+class AlumniPostAPIView(APIView):
+    permission_classes = [IsAuthenticated]  # Require authentication for all actions
+
+    # POST method: Create a new post
+    def post(self, request):
+        # Check if the user is a superuser
+        if not request.user.is_alumni:
+            return Response({"detail": "You do not have permission to create a post."}, status=status.HTTP_403_FORBIDDEN)
+
+        serializer = AlumniPostSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(author=request.user)  # Set the author to the current user
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # GET method: Retrieve a single post if pk is given, else list all posts
+    def get(self, request, pk=None):
+        if pk is not None:
+            # Get the specific post by pk
+            post = get_object_or_404(AlumniPost, pk=pk)
+            serializer = AlumniPostSerializer(post)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        # If pk is not provided, return all posts
+        posts = AlumniPost.objects.all()  # Fetch all posts
+        serializer = AlumniPostSerializer(posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # PUT method: Update an existing post
+    def put(self, request, pk):
+        try:
+            post = AlumniPost.objects.get(pk=pk)
+        except AlumniPost.DoesNotExist:
+            return Response({"detail": "Post not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Check if the user is the author (alumni) of the post
+        if post.author != request.user:
+            return Response({"detail": "You do not have permission to update this post."}, status=status.HTTP_403_FORBIDDEN)
+
+        serializer = AlumniPostSerializer(post, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # DELETE method: Delete an existing post
+    def delete(self, request, pk):
+        try:
+            post = AlumniPost.objects.get(pk=pk)
+        except AlumniPost.DoesNotExist:
+            return Response({"detail": "Post not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Check if the user is the author (alumni) of the post
+        if post.author != request.user:
+            return Response({"detail": "You do not have permission to delete this post."}, status=status.HTTP_403_FORBIDDEN)
+
+        post.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

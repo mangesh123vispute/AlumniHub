@@ -1,8 +1,9 @@
 from rest_framework import serializers
-from .models import HodPrincipalPost ,AlumniProfile
+from .models import HodPrincipalPost ,AlumniProfile,AlumniPost
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
+
 
 class HodPrincipalPostSerializer(serializers.ModelSerializer):
     author_name = serializers.SerializerMethodField()
@@ -30,6 +31,36 @@ class HodPrincipalPostSerializer(serializers.ModelSerializer):
     def get_author_username(self, obj):
         return obj.author.username  
 
+class AlumniPostSerializer(serializers.ModelSerializer):
+    author_name = serializers.SerializerMethodField()
+    author_username = serializers.SerializerMethodField()
+
+    class Meta:
+        model = AlumniPost
+        fields = [
+            'id',
+            'author_name',  
+            'author_username',  
+            'tag',
+            'title',
+            'content',
+            'Image',
+            'image_url',
+            'DocUrl',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = ['created_at', 'updated_at']
+
+    # Custom method to get author's full name
+    def get_author_name(self, obj):
+        return obj.author.full_name
+
+    # Custom method to get author's username
+    def get_author_username(self, obj):
+        return obj.author.username
+    
+    
 class AlumniProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = AlumniProfile
