@@ -142,10 +142,16 @@ const handleSubmit = async (e) => {
             <div className="card-body register-card-body">
               <p className="login-box-msg">
                 {" "}
-                Register as a <b>Alumni</b> or <b>Student</b>
+                Register as a <b>Alumni</b><b>/Student</b>
               </p>
 
-              {/* {message && <p style={{ color: "red" }}>{message}</p>} */}
+              <hr
+                style={{
+                  border: "1px solid #d2d6df",
+                  marginBottom: "20px",
+                  marginTop: "0px",
+                }}
+              />
 
               <form onSubmit={handleSubmit}>
                 <div className="input-group mb-3">

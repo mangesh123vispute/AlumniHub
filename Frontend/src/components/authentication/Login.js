@@ -141,7 +141,16 @@ const handleSubmit = async (e) => {
           {/* /.login-logo */}
           <div className="card">
             <div className="card-body login-card-body">
-              <p className="login-box-msg">Sign in to start your session</p>
+              <p className="login-box-msg">
+                <b>Login</b> to start your session
+              </p>
+              <hr
+                style={{
+                  border: "1px solid #d2d6df",
+                  marginBottom: "20px",
+                  marginTop: "0px",
+                }}
+              />
               <form onSubmit={handleSubmit}>
                 <div className="input-group mb-3">
                   <input
@@ -178,7 +187,7 @@ const handleSubmit = async (e) => {
                 <div className="row">
                   <div className="col-12">
                     <button type="submit" className="btn btn-primary btn-block">
-                      Sign In
+                      Login
                     </button>
                   </div>
                   {/* /.col */}
@@ -204,13 +213,11 @@ const handleSubmit = async (e) => {
               {/* /.social-auth-links */}
               <div className="row">
                 <div className="col-3">
-                  <Link
-                    to="/register"
-                    style={{ color: "#007bff", fontSize: "0.8em" }}
-                  >
-                    <i className="fas fa-user-plus"></i> Register
+                  <Link to="/" style={{ color: "#007bff", fontSize: "0.8em" }}>
+                    <i className="fas fa-home"></i> Home
                   </Link>
                 </div>
+
                 <div className="col-5">
                   <Link
                     to="/forgot_password"
@@ -220,8 +227,11 @@ const handleSubmit = async (e) => {
                   </Link>
                 </div>
                 <div className="col-3">
-                  <Link  to="/" style={{ color: "#007bff", fontSize: "0.8em" }}>
-                    <i className="fas fa-home"></i> Home
+                  <Link
+                    to="/register"
+                    style={{ color: "#007bff", fontSize: "0.8em" }}
+                  >
+                    <i className="fas fa-user-plus"></i> Register
                   </Link>
                 </div>
               </div>
