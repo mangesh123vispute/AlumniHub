@@ -4,6 +4,7 @@ import AuthContext from "../../context/AuthContext.js";
 import LoadingSpinner from "../Loading/Loading.js";
 import { useNavigate } from "react-router-dom";
 import Notification from "../Notification/Notification.js"
+import { Link } from "react-router-dom";
 const Register = () => {
   const navigate = useNavigate();
   let {
@@ -139,7 +140,10 @@ const handleSubmit = async (e) => {
           </div>
           <div className="card">
             <div className="card-body register-card-body">
-              <p className="login-box-msg">Register a new membership</p>
+              <p className="login-box-msg">
+                {" "}
+                Register as a <b>Alumni</b> or <b>Student</b>
+              </p>
 
               {/* {message && <p style={{ color: "red" }}>{message}</p>} */}
 
@@ -225,9 +229,10 @@ const handleSubmit = async (e) => {
                           checked={formData.role === "Student"}
                           onChange={handleRadioChange}
                         />{" "}
+                        <span className="fas fa-graduation-cap mr-1" />
                         Student
                       </label>
-                      <label class="btn bg-olive">
+                      <label class="btn bg-olive ">
                         <input
                           type="radio"
                           name="role"
@@ -235,7 +240,7 @@ const handleSubmit = async (e) => {
                           checked={formData.role === "Alumni"}
                           onChange={handleRadioChange}
                         />{" "}
-                        Alumni
+                        <span className="fas fa-users mr-1" /> Alumni
                       </label>
                     </div>
                   </div>
@@ -247,17 +252,31 @@ const handleSubmit = async (e) => {
                 </div>
               </form>
 
-              <hr style={{ marginTop: "1em" }} />
-              <div style={{ marginTop: "1em", fontSize: "0.9em" }}>
-                <p>
-                  <a href="/login" className="text-center mt-3">
-                    I already have a membership
-                  </a>
-                  <br />
-                  <a href="/login" className="text-center mt-3">
-                    Register as New College
-                  </a>
-                </p>
+              <hr
+                style={{
+                  border: "1px solid #d2d6df",
+                  marginTop: "20px",
+                  marginBottom: "20px",
+                }}
+              />
+
+              <div className="row">
+                <div className="col-4">
+                  <Link to="/" style={{ color: "#007bff" }}>
+                    <i className="fas fa-home"></i> Home
+                  </Link>
+                </div>
+                <div className="col-4">
+                  <Link to="/activate_email" style={{ color: "#007bff" }}>
+                    <i className="fas fa-check-circle"></i> Activate
+                  </Link>
+                </div>
+
+                <div className="col-3">
+                  <Link to="/login" style={{ color: "#007bff" }}>
+                    <i className="fas fa-sign-in-alt"></i> Login
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

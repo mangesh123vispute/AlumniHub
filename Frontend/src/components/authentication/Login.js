@@ -5,6 +5,7 @@ import LoadingSpinner from "../Loading/Loading.js";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import Notification from "../Notification/Notification.js";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   
@@ -175,14 +176,7 @@ const handleSubmit = async (e) => {
                   </div>
                 </div>
                 <div className="row">
-                  <div className="col-8">
-                    {/* <div className="icheck-primary">
-                      <input type="checkbox" id="remember" />
-                      <label htmlFor="remember">Remember Me</label>
-                    </div> */}
-                  </div>
-                  {/* /.col */}
-                  <div className="col-4">
+                  <div className="col-12">
                     <button type="submit" className="btn btn-primary btn-block">
                       Sign In
                     </button>
@@ -200,15 +194,37 @@ const handleSubmit = async (e) => {
                   Google+
                 </a>
               </div> */}
+              <hr
+                style={{
+                  border: "1px solid #d2d6df",
+                  marginTop: "20px",
+                  marginBottom: "20px",
+                }}
+              />
               {/* /.social-auth-links */}
-              <p className="mb-1">
-                <a href="/forgot_password">I forgot my password</a>
-              </p>
-              <p className="mb-0">
-                <a href="/register" className="text-center">
-                  Register a new membership
-                </a>
-              </p>
+              <div className="row">
+                <div className="col-3">
+                  <Link
+                    to="/register"
+                    style={{ color: "#007bff", fontSize: "0.8em" }}
+                  >
+                    <i className="fas fa-user-plus"></i> Register
+                  </Link>
+                </div>
+                <div className="col-5">
+                  <Link
+                    to="/forgot_password"
+                    style={{ color: "#007bff", fontSize: "0.8em" }}
+                  >
+                    <i className="fas fa-lock mr-1"></i> Forgot-Password
+                  </Link>
+                </div>
+                <div className="col-3">
+                  <Link  to="/" style={{ color: "#007bff", fontSize: "0.8em" }}>
+                    <i className="fas fa-home"></i> Home
+                  </Link>
+                </div>
+              </div>
             </div>
             {/* /.login-card-body */}
           </div>

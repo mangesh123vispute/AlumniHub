@@ -18,6 +18,7 @@ const YourPostContent = () => {
     title,
     handleClose,
     showNotification,
+    userData,
   } = useContext(AuthContext);
 
   const getAllPosts = async (e) => {
@@ -35,11 +36,16 @@ const YourPostContent = () => {
     }
 
     try {
-      const response = await axios.get("http://127.0.0.1:8000/hodposts/", {
-        headers: {
-          Authorization: `Bearer ${token?.access}`,
-        },
-      });
+      const authorId = userData.user_id;
+      const response = await axios.get(
+        // eslint-disable-next-line no-template-curly-in-string
+        `http://127.0.0.1:8000/posts/author/${authorId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token?.access}`,
+          },
+        }
+      );
       setPosts(response.data);
     } catch (error) {
       console.log(error);

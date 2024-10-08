@@ -1,30 +1,30 @@
-import pyotp 
+import urllib.parse
 from datetime import datetime,timedelta
 from django.conf import settings
 from django.core.mail import send_mail
-def send_otp(request,user):
-    totp=pyotp.TOTP(pyotp.random_base32(), interval=60)
-    otp=totp.now()
-    request.session['otp_secret_key']=totp.secret
+from django.urls import reverse
+
+
+def send_activation_email(user, uidb64, token, data):
+    subject = "Activate Your Account"
+    message = "Please activate your account using the link below:"
     
-    valid_date=datetime.now()+timedelta(minutes=1)
-    request.session['otp_valid_date']=str(valid_date)
+    # Serialize all validated data into URL query parameters
+    encoded_data = urllib.parse.urlencode(data)
 
-     # Print session data for verification
-    print("Stored OTP Secret Key:", request.session.get('otp_secret_key'))
-    print("Stored OTP Valid Date:", request.session.get('otp_valid_date'))
+    # Create activation link with serialized data
+    activation_link = f"{settings.SITE_URL}{reverse('activate_account', kwargs={'uidb64': uidb64, 'token': token})}?{encoded_data}"
 
-     # Email details
-    subject = 'Your OTP Code'
-    message = f'Your one-time password (OTP) is {otp}. It will expire in one minute.'
-    from_email = settings.EMAIL_HOST_USER  
-    to_email = user.email
-
-      # Send email
-    try:
-        send_mail(subject, message, from_email, [to_email])
-        print("Email sent successfully!")
-    except Exception as e:
-        print(f"Failed to send email: {e}")
-
-
+    html_message = f"""
+        <p>{message}</p>
+        <p><a href="{activation_link}">Activate your account</a></p>
+    """
+    
+    send_mail(
+        subject,
+        message,
+        settings.EMAIL_HOST_USER,
+        [user.email],
+        fail_silently=False,
+        html_message=html_message
+    )

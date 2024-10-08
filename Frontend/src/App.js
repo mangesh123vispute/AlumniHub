@@ -1,6 +1,7 @@
 import Home from "./components/Dashboard/Home.js";
 import { AuthProvider } from "./context/AuthContext";
 import Login from "./components/authentication/Login.js";
+import ActivateEmail from "./components/authentication/ActivateEmail.js";
 import Register from "./components/authentication/Register.js";
 import Profile from "./components/Pages/Profile.js";
 import AboutUs from "./components/Pages/Aboutus.js";
@@ -8,6 +9,7 @@ import Home2 from "./components/Pages/Home2.js";
 import Error from "./components/Pages/Error.js";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import LandingPage from "./components/LandingPage.js";
+
 import ProtectedRoute from "./components/ProtectedRoute.js";
 import AddHodPost from "./components/Pages/HOD/AddHodPost.js";
 import AllPost from "./components/Pages/AllPost.js";
@@ -20,7 +22,9 @@ function App() {
         <Routes>
           {/* <Route path="/" element={<Layout />}> */}
           <Route path="/" element={<LandingPage />} />
+          
           <Route path="/login" element={<Login />} />
+          <Route path="/activate_email" element={<ActivateEmail />} />
           <Route path="/home" element={<ProtectedRoute element={<Home />} />} />
           <Route
             path="/home2"

@@ -13,6 +13,8 @@ from django.conf import settings
 from django.urls import reverse
 from django.core.mail import send_mail
 from django.utils import timezone
+from django.core.exceptions import ValidationError
+
 COLLEGE_CHOICES = [
     ('SSBT COET, Jalgaon', 'SSBT COET, Jalgaon'),
      
@@ -27,7 +29,7 @@ class User(AbstractUser):
     full_name = models.CharField(max_length=255,blank=True, default="")
     first_name = models.CharField(max_length=30, blank=True, default='')  
     last_name = models.CharField(max_length=150, blank=True, default='')
-    email = models.EmailField(unique=True, blank=True)
+    email = models.EmailField( blank=True, default='')
     College = models.CharField(
         max_length=80,
         choices=COLLEGE_CHOICES, 
@@ -66,6 +68,8 @@ class User(AbstractUser):
     # followings and followers 
     followers = models.TextField(default='[]', blank=True)  
     following = models.TextField(default='[]', blank=True)
+
+    is_active = models.BooleanField(default=False)
 
     def string_to_list(self, string):
         """Converts a string representing a list to a Python list."""
