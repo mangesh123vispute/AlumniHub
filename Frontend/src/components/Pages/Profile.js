@@ -1,11 +1,41 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useContext } from "react";
+import React, { useContext ,useState , useEffect } from "react";
+import axios from 'axios'
 import Home from "../Dashboard/Home.js";
 import AuthContext from "../../context/AuthContext.js";
 const ProfileContent = () => {
   let { userData } = useContext(AuthContext);
   console.log("userData", userData);
+
+
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // Fetch alumni data when the component mounts
+    const token = localStorage.getItem("authTokens")
+    ? JSON.parse(localStorage.getItem("authTokens"))
+    : null;
+
+    axios
+      .get(`http://127.0.0.1:8000/getalumni/${userData?.user_id}`, {
+        headers: {
+          Authorization: `Bearer ${token?.access}`,
+        },
+      })
+      .then((response) => {
+        
+        setUser(response.data);
+        
+      })
+      .catch((error) => {
+        console.error('Error fetching alumni data:', error);
+      });
+  }, [userData?.user_id]);
+
+  console.log("user ",user);
+
+
   return (
     <>
       <div>
@@ -15,45 +45,53 @@ const ProfileContent = () => {
         <section className="content">
           <div className="container-fluid">
             <div className="row">
-              <div className="col-md-3">
-                {/* Profile Image */}
-                <div className="card card-primary card-outline position-relative">
-                  {/* Ribbon */}
-                  <div className="ribbon-wrapper ribbon-lg">
-                    <div className="ribbon bg-primary">{ userData? (userData.is_alumni ? "Alumni":userData.is_student ? "Student":"College") : "User"}</div>
+            <div className="col-md-3">
+              {/* Profile Image */}
+              <div className="card card-primary card-outline position-relative">
+                {/* Ribbon */}
+                <div className="ribbon-wrapper ribbon-lg">
+                  <div className="ribbon bg-primary">
+                    {user
+                      ? user.is_alumni
+                        ? "Alumni"
+                        : user.is_student
+                        ? "Student"
+                        : "College"
+                      : "User"}
                   </div>
+                </div>
 
-                  <div className="card-body box-profile">
-                    <div className="text-center">
-                      <img
-                        className="profile-user-img img-fluid img-circle"
-                        src="../../dist/img/user4-128x128.jpg"
-                        alt="User profile picture"
-                      />
-                    </div>
-                    <h3 className="profile-username text-center">
-                      {userData
-                        ? userData.fistname && userData.lastname
-                          ? `${userData.fistname} ${userData.lastname}`
-                          : userData.username
-                        : "User"}
-                    </h3>
-                    <p className="text-muted text-center">Software Engineer</p>
-                    <ul className="list-group list-group-unbordered mb-3">
-                      <li className="list-group-item">
-                        <b>Followers</b> <a className="float-right">1,322</a>
-                      </li>
-                      <li className="list-group-item">
-                        <b>Following</b> <a className="float-right">543</a>
-                      </li>
-                      <li className="list-group-item">
-                        <b>Friends</b> <a className="float-right">13,287</a>
-                      </li>
-                    </ul>
-                    <a href="#" className="btn btn-primary btn-block">
-                      <b>Follow</b>
-                    </a>
+                <div className="card-body box-profile">
+                  <div className="text-center">
+                    <img
+                      className="profile-user-img img-fluid img-circle"
+                      src={user?.alumni_profile?.profile_picture_url || "../../dist/img/user4-128x128.jpg"}
+                      alt="User profile picture"
+                    />
                   </div>
+                  <h3 className="profile-username text-center">
+                    {user
+                      ? user.full_name || user.username
+                      : "User"}
+                  </h3>
+                  <p className="text-muted text-center">
+                    {user?.alumni_profile?.job_title || "Not Specified"}
+                  </p>
+                  {/* <ul className="list-group list-group-unbordered mb-3">
+                    <li className="list-group-item">
+                      <b>Followers</b> <a className="float-right">1,322</a>
+                    </li>
+                    <li className="list-group-item">
+                      <b>Following</b> <a className="float-right">543</a>
+                    </li>
+                    <li className="list-group-item">
+                      <b>Friends</b> <a className="float-right">13,287</a>
+                    </li>
+                  </ul>
+                  <a href="#" className="btn btn-primary btn-block">
+                    <b>Follow</b>
+                  </a> */}
+                </div>
                   {/* /.card-body */}
                 </div>
                 {/* /.card */}
@@ -69,32 +107,102 @@ const ProfileContent = () => {
                       <i className="fas fa-book mr-1" /> Education
                     </strong>
                     <p className="text-muted">
-                      B.S. in Computer Science from the University of Tennessee
-                      at Knoxville
+                      {user?.alumni_profile?.Education || "Not Provided"}
                     </p>
+                    <hr/>
+                    <strong>
+                      <i className="fas fa-pencil-alt mr-1" /> Branch
+                    </strong>
+                    <p className="text-muted">
+                      {/* Assuming skills will be passed as tags (this can be expanded based on your data model) */}
+                      <span className="tag tag-danger">{user?.Branch || "Not Specified"}</span> <br/>
+                      
+                    </p>
+                    
                     <hr />
                     <strong>
                       <i className="fas fa-map-marker-alt mr-1" /> Location
                     </strong>
-                    <p className="text-muted">Malibu, California</p>
+                    <p className="text-muted">
+                      {user?.alumni_profile?.current_city || "Not Provided"}, 
+                      {user?.alumni_profile?.current_country || "Not Provided"}
+                    </p>
                     <hr />
                     <strong>
                       <i className="fas fa-pencil-alt mr-1" /> Skills
                     </strong>
                     <p className="text-muted">
-                      <span className="tag tag-danger">UI Design</span>
-                      <span className="tag tag-success">Coding</span>
-                      <span className="tag tag-info">Javascript</span>
-                      <span className="tag tag-warning">PHP</span>
-                      <span className="tag tag-primary">Node.js</span>
+                      {/* Assuming skills will be passed as tags (this can be expanded based on your data model) */}
+                      <span className="tag tag-danger">{user?.alumni_profile?.industry || "Not Specified"}</span> <br/>
+                      
                     </p>
-                    <hr />
+
+                    <hr/>
+
                     <strong>
-                      <i className="far fa-file-alt mr-1" /> Notes
+                      <i className="fas fa-pencil-alt mr-1" /> Industry
                     </strong>
                     <p className="text-muted">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Etiam fermentum enim neque.
+                      {/* Assuming skills will be passed as tags (this can be expanded based on your data model) */}
+                      <span className="tag tag-danger">{user?.alumni_profile?.industry || "Not Specified"}</span> <br/>
+                      
+                    </p>
+
+                    <hr/>
+
+                    <strong>
+                      <i className="fas fa-pencil-alt mr-1" /> About
+                    </strong>
+                    <p className="text-muted">
+                      {/* Assuming skills will be passed as tags (this can be expanded based on your data model) */}
+                      <span className="tag tag-danger">{user?.About || "Not Specified"}</span> <br/>
+                      
+                    </p>
+                    <hr/>
+                    <strong>
+                      <i className="fas fa-pencil-alt mr-1" /> Achievements
+                    </strong>
+                    <p className="text-muted">
+                    <span className="tag tag-success">{user?.alumni_profile?.achievements || "No Achievements"}</span>
+                    </p>
+                    <hr />
+                    
+                    <strong>
+                      <i className="fas fa-pencil-alt mr-1" /> Current Company
+                    </strong>
+                    <p className="text-muted">
+                      {/* Assuming skills will be passed as tags (this can be expanded based on your data model) */}
+                      <span className="tag tag-danger">{user?.alumni_profile?.current_company_name || "Not Specified"}</span> <br/>
+                      
+                    </p>
+                    <hr/>
+                    
+
+                      <strong>
+                      <i className="fas fa-pencil-alt mr-1" /> Graduation year
+                    </strong>
+                    <p className="text-muted">
+                      {/* Assuming skills will be passed as tags (this can be expanded based on your data model) */}
+                      <span className="tag tag-danger">{user?.alumni_profile?.graduation_year || "Not Specified"}</span> <br/>
+                      
+                    </p>
+                    <hr/>
+                    <strong>
+                      <i className="fas fa-pencil-alt mr-1" /> Year OF Experience
+                    </strong>
+                    <p className="text-muted">
+                      {/* Assuming skills will be passed as tags (this can be expanded based on your data model) */}
+                      <span className="tag tag-danger">{user?.alumni_profile?.years_of_experience || "Not Specified"}</span> <br/>
+                      
+                    </p>
+                    <hr/>
+                    <strong>
+                      <i className="far fa-file-alt mr-1" /> Previous Companies 
+
+
+                    </strong>
+                    <p className="text-muted">
+                      {user?.alumni_profile?.previous_companies || "No Notes Available"}
                     </p>
                   </div>
                   {/* /.card-body */}
@@ -550,6 +658,11 @@ const ProfileContent = () => {
             </div>
             {/* /.row */}
           </div>
+
+
+
+
+
           {/* /.container-fluid */}
         </section>
         {/* /.content */}
