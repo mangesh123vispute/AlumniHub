@@ -105,7 +105,7 @@ const AllAlumnisContent = () => {
                           <ul className="ml-4 mb-0 fa-ul text-muted">
                             <li className="small">
                               <span className="fa-li">
-                                <i className="fas fa-lg fa-briefcase" />
+                                <i className="fas fa-lg fa-building" />
                               </span>
                               Company:{" "}
                               {alumnus.alumni_profile?.current_company_name ||

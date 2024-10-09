@@ -20,7 +20,6 @@ class UserAdmin(ImportExportModelAdmin):
     search_fields = ['id', 'username', 'full_name', 'Branch', 'graduation_year', 'email', 'mobile', 'linkedin', 'instagram', 'Github', 'skills', 'About', 'Work', 'Year_Joined']
     list_display_links = ['id', 'username', 'full_name', 'email', 'mobile', 'linkedin', 'instagram', 'Github']
     ordering = ['username']  
-    readonly_fields = ['id', 'graduation_year']
     fieldsets = (
     (None, {
         'fields': ('username', 'full_name', 'email')
