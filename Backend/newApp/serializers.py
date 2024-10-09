@@ -76,10 +76,12 @@ class UserAlumniSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id', 'username', 'full_name', 'email','skills',
-            'College', 'is_alumni', 'is_student', 'About', 'Work', 'Year_Joined', 
+            'College', 'is_alumni', 'is_student', 'graduation_year','About', 'Work', 'Year_Joined', 
             'Branch',  'mobile', 'linkedin', 'Github', 'instagram', 
             'alumni_profile'  
         ]
+        
+
 
 class HODPrincipalProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -94,7 +96,7 @@ class UserHODSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id', 'username', 'full_name', 'email',
-            'About', 'Work', 'Year_Joined', "skills",
+            'About', 'Work', 'Year_Joined', "skills", 'graduation_year',
             'Branch', 'mobile', 'linkedin', 'Github', 'instagram', 'is_alumni', 'is_student',
             'hod_profile'  
         ]
@@ -112,7 +114,7 @@ class UserStudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'id', 'username', 'full_name', 'email',  'is_alumni', 'is_student', 
+            'id', 'username', 'full_name', 'email',  'is_alumni', 'is_student', 'graduation_year', 
             'About', 'Work', 'Year_Joined', 'Branch', 'mobile', 'linkedin', 'Github','skills' ,
             'instagram', 'student_profile'
         ]

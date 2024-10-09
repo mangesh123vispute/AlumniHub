@@ -4,6 +4,9 @@ import Login from "./components/authentication/Login.js";
 import ActivateEmail from "./components/authentication/ActivateEmail.js";
 import Register from "./components/authentication/Register.js";
 import Profile from "./components/Pages/Profile.js";
+import AllAlumnis from "./components/Pages/AllAlumnis.js";
+import AllHods from "./components/Pages/AllHods.js";
+import AllStudent from "./components/Pages/AllStudents.js";
 import AboutUs from "./components/Pages/Aboutus.js";
 import Home2 from "./components/Pages/Home2.js";
 import Error from "./components/Pages/Error.js";
@@ -40,6 +43,18 @@ function App() {
           <Route
             path="/profile"
             element={<ProtectedRoute element={<Profile />} />}
+          />
+          <Route
+            path="/all_alumnis"
+            element={<ProtectedRoute element={<AllAlumnis />} />}
+          />
+          <Route
+            path="/all_hods"
+            element={<ProtectedRoute element={<AllHods />} />}
+          />
+          <Route
+            path="/all_students"
+            element={<ProtectedRoute element={<AllStudent />} />}
           />
           <Route
             path="/add_hod_post"
