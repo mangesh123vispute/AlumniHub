@@ -26,7 +26,7 @@ class UserAdmin(ImportExportModelAdmin):
         'fields': ('username', 'full_name', 'email')
     }),
     ('Permissions', {
-        'fields': ('is_active', 'is_superuser')
+        'fields': ('is_active', 'is_superuser',"is_alumni", 'is_student', 'Branch', 'graduation_year', 'Year_Joined', 'skills', 'About', 'Work', 'linkedin', 'instagram', 'Github', 'mobile', 'Image'),
     }),
     )
     

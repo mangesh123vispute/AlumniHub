@@ -136,21 +136,55 @@ const AllAlumnisContent = () => {
                       />
                       {/* Additional Information Section */}
                       <div className="text-muted">
+                        <div className="text-muted mb-2">Contact Info:</div>
                         <ul className="ml-4 mb-0 fa-ul text-muted">
-                          <li className="small">
+                          <li className="small mt-1">
                             <span className="fa-li">
-                              <i className="fas fa-lg fa-mobile-alt" />
+                              <i className="fas fa-lg fa-envelope mr-1" />
                             </span>
-                            Mobile No:{" "}
-                            {alumnus.mobile
-                              ? isValidMobileNumber(alumnus.mobile)
-                                ? alumnus.mobile
-                                : "Invalid Mobile Number"
-                              : "N/A"}
+                            Email:{" "}
+                            {alumnus.email ? (
+                              isValidEmail(alumnus.email) ? (
+                                <a href={`mailto:${alumnus.email}`}>
+                                  {alumnus.email}
+                                </a>
+                              ) : (
+                                "Invalid Email"
+                              )
+                            ) : (
+                              "N/A"
+                            )}
                           </li>
                           <li className="small mt-1">
                             <span className="fa-li">
-                              <i className="fab fa-lg fa-linkedin" />
+                              <i className="fab fa-lg fa-github mr-1" />
+                            </span>
+                            GitHub:{" "}
+                            <a
+                              href={alumnus.Github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {alumnus.Github ? (
+                                isValidGitHubUrl(alumnus.Github) ? (
+                                  <a
+                                    href={alumnus.Github}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    {alumnus.Github}
+                                  </a>
+                                ) : (
+                                  "Invalid URL"
+                                )
+                              ) : (
+                                "N/A"
+                              )}
+                            </a>
+                          </li>
+                          <li className="small mt-1">
+                            <span className="fa-li">
+                              <i className="fab fa-lg fa-linkedin mr-1" />
                             </span>
                             LinkedIn:{" "}
                             <a
@@ -175,49 +209,16 @@ const AllAlumnisContent = () => {
                               )}
                             </a>
                           </li>
-                          <li className="small mt-1">
+                          <li className="small">
                             <span className="fa-li">
-                              <i className="fas fa-lg fa-envelope" />
+                              <i className="fas fa-lg fa-fax mr-1" />
                             </span>
-                            Email:{" "}
-                            {alumnus.email ? (
-                              isValidEmail(alumnus.email) ? (
-                                <a href={`mailto:${alumnus.email}`}>
-                                  {alumnus.email}
-                                </a>
-                              ) : (
-                                "Invalid Email"
-                              )
-                            ) : (
-                              "N/A"
-                            )}
-                          </li>
-                          <li className="small mt-1">
-                            <span className="fa-li">
-                              <i className="fab fa-lg fa-github" />
-                            </span>
-                            GitHub:{" "}
-                            <a
-                              href={alumnus.Github}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {alumnus.Github ? (
-                                isValidGitHubUrl(alumnus.Github) ? (
-                                  <a
-                                    href={alumnus.Github}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    {alumnus.Github}
-                                  </a>
-                                ) : (
-                                  "Invalid URL"
-                                )
-                              ) : (
-                                "N/A"
-                              )}
-                            </a>
+                            Mobile No:{" "}
+                            {alumnus.mobile
+                              ? isValidMobileNumber(alumnus.mobile)
+                                ? alumnus.mobile
+                                : "Invalid Mobile Number"
+                              : "N/A"}
                           </li>
                         </ul>
                       </div>
