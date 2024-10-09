@@ -5,7 +5,7 @@ from django.core.mail import send_mail
 from django.urls import reverse
 
 
-def send_activation_email(user, uidb64, token, data):
+def send_activation_email(user, uidb64, token, data={}):
     subject = "Activate Your Account"
     message = "Please activate your account using the link below:"
     

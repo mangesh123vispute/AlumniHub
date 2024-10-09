@@ -229,13 +229,13 @@ const SideNav = () => {
                       <p style={{ fontSize: "1em" }}>
                          USER
                         <i className="right fas fa-angle-left" />
-                      </p>
+                      </p>  
                     </Link>
                     <ul
                       className="nav nav-treeview"
                       style={{ marginLeft: "1em" }}
                     >
-                      <li className="nav-item">
+                      <li className="nav-item" >
                         <Link to="/dashboard/v1" className="nav-link">
                           <i
                             className="fas fa-user-tie nav-icon"

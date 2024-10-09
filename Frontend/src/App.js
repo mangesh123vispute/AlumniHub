@@ -14,6 +14,8 @@ import ProtectedRoute from "./components/ProtectedRoute.js";
 import AddHodPost from "./components/Pages/HOD/AddHodPost.js";
 import AllPost from "./components/Pages/AllPost.js";
 import YourPosts from "./components/Pages/YourPosts.js";
+import ForgotPassword from "./components/authentication/Forgot_password.js";
+import ResetPassword from "./components/authentication/Reset_password.js";
 
 function App() {
   return (
@@ -22,9 +24,14 @@ function App() {
         <Routes>
           {/* <Route path="/" element={<Layout />}> */}
           <Route path="/" element={<LandingPage />} />
-          
+
           <Route path="/login" element={<Login />} />
           <Route path="/activate_email" element={<ActivateEmail />} />
+          <Route path="/forgot_password" element={<ForgotPassword />} />
+          <Route
+            path="/reset-password/:uidb64/:token"
+            element={<ResetPassword />}
+          />
           <Route path="/home" element={<ProtectedRoute element={<Home />} />} />
           <Route
             path="/home2"

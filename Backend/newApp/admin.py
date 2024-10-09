@@ -14,12 +14,12 @@ admin.site.index_title = "Manage Your Settings Here"
 class UserAdmin(ImportExportModelAdmin):
     resource_class = UserResource
     list_display = ['id','username', 'full_name',  "is_active", 'is_alumni', 'is_student', "is_superuser", 'email', 'mobile', 'linkedin', 'instagram',
-                    'skills', 'College', 'About', 'Work', 'Year_Joined','following','followers', 'Branch', 'Image']
-    list_filter = ['is_alumni', 'is_student', 'College', "is_superuser", "Branch"]
+                    'skills', 'About', 'Work', 'Year_Joined', 'Branch', 'Image']
+    list_filter = ['is_alumni', 'is_student', "is_superuser", "Branch"]
     actions = ['send_email_action']
     search_fields = ['username', 'email','skills','About','Work','Branch','mobile','linkedin','Github','instagram']
     list_display_links = ['id','username',    'is_alumni', 'is_student', "is_superuser", 'email', 'mobile', 'linkedin', 'instagram',
-                    'skills', 'College', 'About', 'Work', 'Year_Joined','following','followers', 'Branch', 'Image']
+                    'skills', 'About', 'Work', 'Year_Joined', 'Branch', 'Image']
 
     def send_email_action(self, request, queryset):
         root = tk.Tk()

@@ -73,3 +73,5 @@ class ActivationEmailSerializer(serializers.Serializer):
     role=serializers.CharField()
 
 
+class ForgotPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()

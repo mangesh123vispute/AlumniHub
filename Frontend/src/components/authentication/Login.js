@@ -112,26 +112,6 @@ const handleSubmit = async (e) => {
         title={title}
       />
       <div className="hold-transition login-page">
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>AlumniHub| Log in</title>
-        {/* Google Font: Source Sans Pro */}
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
-        />
-        {/* Font Awesome */}
-        <link
-          rel="stylesheet"
-          href="../../plugins/fontawesome-free/css/all.min.css"
-        />
-        {/* icheck bootstrap */}
-        <link
-          rel="stylesheet"
-          href="../../plugins/icheck-bootstrap/icheck-bootstrap.min.css"
-        />
-        {/* Theme style */}
-        <link rel="stylesheet" href="../../dist/css/adminlte.min.css" />
         <div className="login-box">
           <div className="login-logo">
             <a href="/home">
@@ -193,16 +173,7 @@ const handleSubmit = async (e) => {
                   {/* /.col */}
                 </div>
               </form>
-              {/* <div className="social-auth-links text-center mb-3">
-                <p>- OR -</p>
-                <a href="#" className="btn btn-block btn-primary">
-                  <i className="fab fa-facebook mr-2" /> Sign in using Facebook
-                </a>
-                <a href="#" className="btn btn-block btn-danger">
-                  <i className="fab fa-google-plus mr-2" /> Sign in using
-                  Google+
-                </a>
-              </div> */}
+              
               <hr
                 style={{
                   border: "1px solid #d2d6df",
