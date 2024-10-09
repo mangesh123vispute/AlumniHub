@@ -17,7 +17,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 import json
-from .serializers import HodPrincipalPostSerializer,UserAlumniSerializer,AlumniPostSerializer,UserHODSerializer
+from .serializers import HodPrincipalPostSerializer,UserAlumniSerializer,AlumniPostSerializer,UserHODSerializer,UserStudentSerializer
 from rest_framework.pagination import PageNumberPagination
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import DatabaseError
@@ -471,3 +471,29 @@ class GETHODs(APIView):
             raise NotFound("HOD not found.")
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+class GETStudent(APIView):
+    permission_classes = [IsAuthenticated]
+
+    class StudentPagination(PageNumberPagination):
+        page_size = 10
+        page_size_query_param = 'page_size'
+        max_page_size = 100
+
+    def get(self, request, *args, **kwargs):
+        """
+        Handle GET requests for retrieving all students or a specific instance by 'id'.
+        """
+        student_id = kwargs.get('pk', None)
+        if student_id:
+            # If 'pk' is provided in the URL, return specific student instance
+            student_user = get_object_or_404(User, id=student_id, is_student=True)
+            serializer = UserStudentSerializer(student_user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            # If no 'pk' is provided, return a paginated list of students
+            student_users = User.objects.filter(is_student=True)
+            paginator = self.StudentPagination()
+            paginated_students = paginator.paginate_queryset(student_users, request)
+            serializer = UserStudentSerializer(paginated_students, many=True)
+            return paginator.get_paginated_response(serializer.data)

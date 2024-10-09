@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import HodPrincipalPost ,AlumniProfile,AlumniPost,HODPrincipalProfile
+from .models import HodPrincipalPost ,AlumniProfile,AlumniPost,HODPrincipalProfile,StudentProfile
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -75,20 +75,18 @@ class UserAlumniSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'id', 'username', 'full_name', 'email',
+            'id', 'username', 'full_name', 'email','skills',
             'College', 'is_alumni', 'is_student', 'About', 'Work', 'Year_Joined', 
             'Branch',  'mobile', 'linkedin', 'Github', 'instagram', 
             'alumni_profile'  
         ]
 
-
-# Serializer for HODPrincipalProfile
 class HODPrincipalProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = HODPrincipalProfile
         fields = '__all__'
 
-# User serializer with nested HODPrincipalProfile
+
 class UserHODSerializer(serializers.ModelSerializer):
     hod_profile = HODPrincipalProfileSerializer(source='hodprincipalprofile', read_only=True)
 
@@ -96,7 +94,25 @@ class UserHODSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id', 'username', 'full_name', 'email',
-            'College',  'About', 'Work', 'Year_Joined', 
-            'Branch', 'mobile', 'linkedin', 'Github', 'instagram', 
-            'hod_profile'  # Nested HODPrincipalProfile data
+            'About', 'Work', 'Year_Joined', "skills",
+            'Branch', 'mobile', 'linkedin', 'Github', 'instagram', 'is_alumni', 'is_student',
+            'hod_profile'  
+        ]
+
+
+class StudentProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentProfile
+        fields = '__all__'
+
+# User Serializer with nested StudentProfile
+class UserStudentSerializer(serializers.ModelSerializer):
+    student_profile = StudentProfileSerializer(source='studentprofile', read_only=True)
+
+    class Meta:
+        model = User
+        fields = [
+            'id', 'username', 'full_name', 'email',  'is_alumni', 'is_student', 
+            'About', 'Work', 'Year_Joined', 'Branch', 'mobile', 'linkedin', 'Github','skills' ,
+            'instagram', 'student_profile'
         ]
