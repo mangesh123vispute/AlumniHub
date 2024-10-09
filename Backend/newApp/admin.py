@@ -13,7 +13,7 @@ admin.site.index_title = "Manage Your Settings Here"
 
 class UserAdmin(ImportExportModelAdmin):
     resource_class = UserResource
-    list_display = ['id','username', 'full_name',  "is_active", 'is_alumni', 'is_student', "is_superuser", 'email', 'mobile', 'linkedin', 'instagram',
+    list_display = ['id','username', 'full_name',  "is_active", 'is_alumni', 'is_student','graduation_year', "is_superuser", 'email', 'mobile', 'linkedin', 'instagram',
                     'skills', 'About', 'Work', 'Year_Joined', 'Branch', 'Image']
     list_filter = ['is_alumni', 'is_student', "is_superuser", "Branch"]
     actions = ['send_email_action']
@@ -69,8 +69,7 @@ class AlumniProfileAdmin(ImportExportModelAdmin):
         'id', 
         'user', 
         'current_company_name', 
-        'job_title', 
-        'graduation_year', 
+        'job_title',  
         'Education', 
         'current_city', 
         'current_country', 
@@ -84,35 +83,31 @@ class AlumniProfileAdmin(ImportExportModelAdmin):
     list_filter = [
         'current_company_name', 
         'job_title', 
-        'graduation_year', 
         'current_city', 
         'current_country', 
         'industry', 
         'preferred_contact_method'
     ]
 
-    search_fields = ['user__username', 'current_company_name', 'job_title', 'skills', 'industry']  # Add searchable fields
+    search_fields = ['user__username', 'current_company_name', 'job_title', 'skills', 'industry']  
 
-    ordering = ['graduation_year']
 
 class StudentProfileAdmin(ImportExportModelAdmin):
     list_display = [
         'id',
         'user',
-        'graduation_year',
         'current_year_of_study',
         'department',
     ]
 
     list_filter = [
-        'graduation_year',
         'current_year_of_study',
         'department', 
     ]
 
     search_fields = ['user__username', 'user__full_name', 'department']  # Add searchable fields
 
-    ordering = ['graduation_year'] 
+
 
 class HODPrincipalProfileAdmin(ImportExportModelAdmin):
     list_display = [

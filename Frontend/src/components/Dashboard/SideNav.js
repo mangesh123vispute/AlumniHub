@@ -236,7 +236,7 @@ const SideNav = () => {
                       style={{ marginLeft: "1em" }}
                     >
                       <li className="nav-item" >
-                        <Link to="/dashboard/v1" className="nav-link">
+                        <Link to="/all_hods" className="nav-link">
                           <i
                             className="fas fa-user-tie nav-icon"
                             style={{ fontSize: "1em" }}
@@ -246,7 +246,7 @@ const SideNav = () => {
                         </Link>
                       </li>
                       <li className="nav-item">
-                        <Link to="/dashboard/v2" className="nav-link">
+                        <Link to="/all_alumnis" className="nav-link">
                           <i
                             className="fas fa-users nav-icon"
                             style={{ fontSize: "1em" }}
@@ -256,7 +256,7 @@ const SideNav = () => {
                         </Link>
                       </li>
                       <li className="nav-item">
-                        <Link to="/dashboard/v3" className="nav-link">
+                        <Link to="/all_students" className="nav-link">
                           <i
                             className="fas fa-user-graduate nav-icon"
                             style={{ fontSize: "1em" }}

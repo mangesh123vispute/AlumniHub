@@ -57,7 +57,7 @@ class User(AbstractUser):
         default='default/def.jpeg',
         blank=True
     )
-
+    graduation_year = models.IntegerField(blank=True, null=True)
     # contact infromation
     mobile = models.CharField(max_length=10, default='', blank=True)
     linkedin = models.CharField(max_length=100, default='', blank=True)
@@ -146,7 +146,6 @@ class AlumniProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     current_company_name = models.CharField(max_length=255, blank=True,default='')
     job_title = models.CharField(max_length=255, blank=True,default='')
-    graduation_year = models.IntegerField(blank=True, null=True, default=0)
     Education = models.CharField(max_length=255, blank=True,default='')
     current_city = models.CharField(max_length=100, blank=True,default='')
     current_country = models.CharField(max_length=100, blank=True,default='')
@@ -163,8 +162,8 @@ class AlumniProfile(models.Model):
 
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    graduation_year = models.IntegerField(blank=True, null=True)
-    current_year_of_study = models.CharField(max_length=50, blank=True, null=True)  
+    Education = models.CharField(max_length=255, blank=True,default='')
+    current_year_of_study = models.IntegerField(blank=True, null=True)
     department = models.CharField(max_length=100, blank=True, null=True) 
     def __str__(self):
         return f"{self.user.full_name} - Student"
