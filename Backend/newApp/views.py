@@ -17,7 +17,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 import json
-from .serializers import HodPrincipalPostSerializer,UserAlumniSerializer,AlumniPostSerializer
+from .serializers import HodPrincipalPostSerializer,UserAlumniSerializer,AlumniPostSerializer,UserHODSerializer
 from rest_framework.pagination import PageNumberPagination
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import DatabaseError
@@ -337,39 +337,6 @@ class HodPrincipalPostAPIView(APIView):
 
 
 
-class GETAlumni(APIView):
-    permission_classes = [IsAuthenticated]
-
-    class AlumniPagination(PageNumberPagination):
-        page_size = 10  
-        page_size_query_param = 'page_size'
-        max_page_size = 100
-
-    def get(self, request, *args, **kwargs):
-        """
-        Handle GET requests for retrieving all alumni or a specific instance by 'id'.
-        """
-        try:
-            alumni_id = kwargs.get('pk', None)
-            if alumni_id:
-                # If 'pk' is provided in the URL, return specific alumni instance
-                alumni_user = User.objects.get(id=alumni_id, is_alumni=True)
-                serializer = UserAlumniSerializer(alumni_user)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                # If no 'pk' is provided, return a paginated list of alumni
-                alumni_users = User.objects.filter(is_alumni=True)
-                paginator = self.AlumniPagination()
-                paginated_alumni = paginator.paginate_queryset(alumni_users, request)
-                serializer = UserAlumniSerializer(paginated_alumni, many=True)
-                return paginator.get_paginated_response(serializer.data)
-
-        except ObjectDoesNotExist:
-            raise NotFound("Alumni not found.")
-        except DatabaseError:
-            return Response({"error": "Database error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 class AuthorPostListView(generics.ListAPIView):
     serializer_class = HodPrincipalPostSerializer
@@ -437,3 +404,70 @@ class AlumniPostAPIView(APIView):
 
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+
+
+class GETAlumni(APIView):
+    permission_classes = [IsAuthenticated]
+
+    class AlumniPagination(PageNumberPagination):
+        page_size = 10  
+        page_size_query_param = 'page_size'
+        max_page_size = 100
+
+    def get(self, request, *args, **kwargs):
+        """
+        Handle GET requests for retrieving all alumni or a specific instance by 'id'.
+        """
+        try:
+            alumni_id = kwargs.get('pk', None)
+            if alumni_id:
+                # If 'pk' is provided in the URL, return specific alumni instance
+                alumni_user = User.objects.get(id=alumni_id, is_alumni=True)
+                serializer = UserAlumniSerializer(alumni_user)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                # If no 'pk' is provided, return a paginated list of alumni
+                alumni_users = User.objects.filter(is_alumni=True)
+                paginator = self.AlumniPagination()
+                paginated_alumni = paginator.paginate_queryset(alumni_users, request)
+                serializer = UserAlumniSerializer(paginated_alumni, many=True)
+                return paginator.get_paginated_response(serializer.data)
+
+        except ObjectDoesNotExist:
+            raise NotFound("Alumni not found.")
+        except DatabaseError:
+            return Response({"error": "Database error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class GETHODs(APIView):
+    permission_classes = [IsAuthenticated]
+
+    class HODPagination(PageNumberPagination):
+        page_size = 10
+        page_size_query_param = 'page_size'
+        max_page_size = 100
+
+    def get(self, request, *args, **kwargs):
+        try:
+            hod_id = kwargs.get('pk', None)
+            if hod_id:
+                # If 'pk' is provided, return a specific HOD
+                hod_user = User.objects.get(id=hod_id, hodprincipalprofile__isnull=False)
+                serializer = UserHODSerializer(hod_user)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                # Return a paginated list of all HODs
+                hod_users = User.objects.filter(hodprincipalprofile__isnull=False)
+                paginator = self.HODPagination()
+                paginated_hods = paginator.paginate_queryset(hod_users, request)
+                serializer = UserHODSerializer(paginated_hods, many=True)
+                return paginator.get_paginated_response(serializer.data)
+
+        except ObjectDoesNotExist:
+            raise NotFound("HOD not found.")
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
