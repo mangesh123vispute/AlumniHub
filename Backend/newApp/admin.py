@@ -13,13 +13,25 @@ admin.site.index_title = "Manage Your Settings Here"
 
 class UserAdmin(ImportExportModelAdmin):
     resource_class = UserResource
-    list_display = ['id','username', 'full_name',  "is_active", 'is_alumni', 'is_student','graduation_year', "is_superuser", 'email', 'mobile', 'linkedin', 'instagram',
-                    'skills', 'About', 'Work', 'Year_Joined', 'Branch', 'Image']
-    list_filter = ['is_alumni', 'is_student', "is_superuser", "Branch"]
+    list_display = ['id','username', 'full_name', 'Branch', "is_active", 'is_alumni', 'is_student',"is_superuser",'graduation_year',  'email', 'mobile', 'linkedin', 'instagram',"Github",
+                    'skills', 'About', 'Work', 'Year_Joined',  'Image']
+    list_filter = ['is_active', 'is_alumni', 'is_student', 'is_superuser', 'Branch', 'graduation_year', 'Year_Joined']
     actions = ['send_email_action']
-    search_fields = ['username', 'email','skills','About','Work','Branch','mobile','linkedin','Github','instagram']
-    list_display_links = ['id','username',    'is_alumni', 'is_student', "is_superuser", 'email', 'mobile', 'linkedin', 'instagram',
-                    'skills', 'About', 'Work', 'Year_Joined', 'Branch', 'Image']
+    search_fields = ['id', 'username', 'full_name', 'Branch', 'graduation_year', 'email', 'mobile', 'linkedin', 'instagram', 'Github', 'skills', 'About', 'Work', 'Year_Joined']
+    list_display_links = ['id', 'username', 'full_name', 'email', 'mobile', 'linkedin', 'instagram', 'Github']
+    ordering = ['username']  
+    readonly_fields = ['id', 'graduation_year']
+    fieldsets = (
+    (None, {
+        'fields': ('username', 'full_name', 'email')
+    }),
+    ('Permissions', {
+        'fields': ('is_active', 'is_superuser')
+    }),
+    )
+    
+    list_per_page = 25 
+    save_on_top = True
 
     def send_email_action(self, request, queryset):
         root = tk.Tk()
@@ -68,44 +80,74 @@ class AlumniProfileAdmin(ImportExportModelAdmin):
     list_display = [
         'id', 
         'user', 
+        "Heading",
         'current_company_name', 
         'job_title',  
         'Education', 
         'current_city', 
         'current_country', 
         'years_of_experience', 
-        'industry',  
-        'profile_picture_url', 
+        'industry',   
         'achievements', 
+        'previous_companies',
         'preferred_contact_method', 
     ]
     
     list_filter = [
-        'current_company_name', 
-        'job_title', 
-        'current_city', 
-        'current_country', 
-        'industry', 
-        'preferred_contact_method'
-    ]
+    'industry',                
+    'current_country',        
+    'current_city',            
+    'years_of_experience',     
+    'preferred_contact_method', 
+     ]
+
 
     search_fields = ['user__username', 'current_company_name', 'job_title', 'skills', 'industry']  
+    ordering = ['user'] 
+    readonly_fields = ['id', 'current_company_name']
+    fieldsets = (
+    (None, {
+        'fields': ('user', 'Heading', 'job_title', 'current_city', 'current_country')
+    }),
+    ('Career Information', {
+        'fields': ('current_company_name', 'years_of_experience', 'industry', 'achievements', 'previous_companies')
+    }),
+    ('Contact Information', {
+        'fields': ('preferred_contact_method',)
+    }),
+    )
+    
+    list_per_page = 20
+    
+    save_on_top = True
+   
 
 
 class StudentProfileAdmin(ImportExportModelAdmin):
     list_display = [
         'id',
         'user',
+        'Heading',
+        "Education",
         'current_year_of_study',
-        'department',
     ]
 
     list_filter = [
-        'current_year_of_study',
-        'department', 
+        'current_year_of_study',  
+        'user',                    
     ]
-
-    search_fields = ['user__username', 'user__full_name', 'department']  # Add searchable fields
+    search_fields = [
+        'user__username',          
+        'Heading',                 
+        'Education',              
+    ]
+    list_display_links = [
+        'id',                      
+        'user',                    
+        'Heading',                 
+    ]
+    ordering = ['user']          
+    readonly_fields = ['id']    
 
 
 
@@ -113,18 +155,22 @@ class HODPrincipalProfileAdmin(ImportExportModelAdmin):
     list_display = [
         'id',
         'user',
-        'department',
         'designation',
     ]
-
     list_filter = [
-        'department',
-        'designation',
+        'designation',  
+        'user',         
     ]
-
-    search_fields = ['user__username', 'user__full_name', 'department', 'designation']  # Add searchable fields
-
-    ordering = ['designation'] 
+    search_fields = [
+        'user__username',  
+        'designation',      
+    ]
+    list_display_links = [
+        'id',               
+        'user',             
+    ]
+    ordering = ['user']  
+    readonly_fields = ['id']  
 
 class AluminiPostAdmin(ImportExportModelAdmin):
     list_display = [
