@@ -404,12 +404,12 @@ const AlumniProfileContent = () => {
                          {/* timeline time label */}
                          <div className="time-label">
                              <span className="bg-danger">Contact Details</span>
-                              </div>
+                        </div>
                               {/* / Contact-label */}
                               {/* Contact Details Item */}
                               <div>
                                 <i className="fas fa-address-book bg-primary" />
-                                <div className="timeline-item">
+                              <div className="timeline-item">
                                  
                                  
 
@@ -449,43 +449,8 @@ const AlumniProfileContent = () => {
                                  
                                 </div>
                               </div>
-                              {/* END Contact Details Item */}
-                          {/* END timeline item */}
-                          {/* timeline item */}
-                         
-                          <div>
-                            <i className="fas fa-camera bg-purple" />
-                            <div className="timeline-item">
-                              <span className="time">
-                                <i className="far fa-clock" /> 2 days ago
-                              </span>
-                              <h3 className="timeline-header">
-                                <a href="#">Mina Lee</a> uploaded new photos
-                              </h3>
-                              <div className="timeline-body">
-                                <img
-                                  src="https://placehold.it/150x100"
-                                  alt="..."
-                                />
-                                <img
-                                  src="https://placehold.it/150x100"
-                                  alt="..."
-                                />
-                                <img
-                                  src="https://placehold.it/150x100"
-                                  alt="..."
-                                />
-                                <img
-                                  src="https://placehold.it/150x100"
-                                  alt="..."
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          {/* END timeline item */}
-                          <div>
-                            <i className="far fa-clock bg-gray" />
-                          </div>
+                             
+
                         </div>
                       </div>
                       {/* /.tab-pane */}
@@ -781,7 +746,7 @@ const StudentProfileContent = () => {
                 <div className="card">
                   <div className="card-header p-2">
                     <ul className="nav nav-pills">
-                      <li className="nav-item">
+                      {/* <li className="nav-item">
                         <a
                           className="nav-link active"
                           href="#activity"
@@ -789,7 +754,7 @@ const StudentProfileContent = () => {
                         >
                           Your Posts
                         </a>
-                      </li>
+                      </li> */}
                       <li className="nav-item">
                         <a
                           className="nav-link"
@@ -1047,9 +1012,7 @@ const StudentProfileContent = () => {
 
                          
                          
-                          <div>
-                            <i className="far fa-clock bg-gray" />
-                          </div>
+                          
                         </div>
                       </div>
                       {/* /.tab-pane */}
@@ -1183,6 +1146,40 @@ const SuperUserProfileContent = () => {
   let { userData } = useContext(AuthContext);
   console.log("userData", userData);
 
+  const getAllPosts = async (e) => {
+    if (e) e.preventDefault();
+
+    const token = localStorage.getItem("authTokens")
+      ? JSON.parse(localStorage.getItem("authTokens"))
+      : null;
+
+    // setLoading(true);
+
+    // if ((await verifyaccessToken()) === -1) {
+    //   // setLoading(false);
+    //   return;
+    // }
+
+    try {
+      const authorId = userData?.user_id;
+      const response = await axios.get(
+        // eslint-disable-next-line no-template-curly-in-string
+        `http://127.0.0.1:8000/posts/author/${authorId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token?.access}`,
+          },
+        }
+      );
+      // setPosts(response.data);
+      console.log("postsss "+ response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      // setLoading(false);
+    }
+  };
+
 
   const [user, setUser] = useState(null);
 
@@ -1192,8 +1189,7 @@ const SuperUserProfileContent = () => {
     ? JSON.parse(localStorage.getItem("authTokens"))
     : null;
 
-    axios
-      .get(`http://127.0.0.1:8000/hods/${userData?.user_id}`, {
+    axios.get(`http://127.0.0.1:8000/hods/${userData?.user_id}`, {
         headers: {
           Authorization: `Bearer ${token?.access}`,
         },
@@ -1206,6 +1202,8 @@ const SuperUserProfileContent = () => {
       .catch((error) => {
         console.error('Error fetching alumni data:', error);
       });
+
+      getAllPosts()
   }, [userData?.user_id]);
 
   console.log("user ",user);
@@ -1217,7 +1215,7 @@ const SuperUserProfileContent = () => {
         {/* Content Header (Page header) */}
 
         {/* Main content */}
-        <section className="content">
+        <section className="content"  >
           <div className="container-fluid">
             <div className="row">
             <div className="col-md-3" style={{ fontSize: '0.9em' }}>
@@ -1538,7 +1536,7 @@ const SuperUserProfileContent = () => {
                           />
                         </div>
                         {/* /.post */}
-                      </div>
+                    </div>
                       {/* /.tab-pane */}
                       <div className="tab-pane" id="timeline">
                         {/* The timeline */}
@@ -1594,39 +1592,8 @@ const SuperUserProfileContent = () => {
                               </div>
                               {/* END Contact Details Item */}
                          
-                          <div>
-                            <i className="fas fa-camera bg-purple" />
-                            <div className="timeline-item">
-                              <span className="time">
-                                <i className="far fa-clock" /> 2 days ago
-                              </span>
-                              <h3 className="timeline-header">
-                                <a href="#">Mina Lee</a> uploaded new photos
-                              </h3>
-                              <div className="timeline-body">
-                                <img
-                                  src="https://placehold.it/150x100"
-                                  alt="..."
-                                />
-                                <img
-                                  src="https://placehold.it/150x100"
-                                  alt="..."
-                                />
-                                <img
-                                  src="https://placehold.it/150x100"
-                                  alt="..."
-                                />
-                                <img
-                                  src="https://placehold.it/150x100"
-                                  alt="..."
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          {/* END timeline item */}
-                          <div>
-                            <i className="far fa-clock bg-gray" />
-                          </div>
+                        
+                         
                         </div>
                       </div>
                       {/* /.tab-pane */}
