@@ -140,6 +140,54 @@ const AllAlumnisContent = () => {
                           marginTop: "20px",
                         }}
                       />
+                      <div className="text-muted">
+                        <div className="text-muted mb-2">
+                          Portfolio and Resume
+                        </div>
+                        <ul className="ml-4 mb-0 fa-ul text-muted">
+                          <li className="small mt-1">
+                            <span className="fa-li">
+                              <i className="fas fa-lg fa-folder mr-1" />
+                            </span>
+                            Portfolio:{" "}
+                            {alumnus?.portfolio_link ? (
+                              <a
+                                href={alumnus.portfolio_link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                Click here
+                              </a>
+                            ) : (
+                              "N/A"
+                            )}
+                          </li>
+                          <li className="small mt-1">
+                            <span className="fa-li">
+                              <i className="fas fa-lg fa-file-alt mr-1" />
+                            </span>
+                            Resume:{" "}
+                            {alumnus?.resume_link ? (
+                              <a
+                                href={alumnus.resume_link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                Click here
+                              </a>
+                            ) : (
+                              "N/A"
+                            )}
+                          </li>
+                        </ul>
+                      </div>
+                      <hr
+                        style={{
+                          border: "1px solid #d2d6df",
+                          marginBottom: "10px",
+                          marginTop: "10px",
+                        }}
+                      />
                       {/* Additional Information Section */}
                       <div className="text-muted">
                         <div className="text-muted mb-2">Contact Info:</div>
@@ -234,7 +282,7 @@ const AllAlumnisContent = () => {
                         <button
                           onClick={() => handleViewProfile(alumnus)}
                           className="btn btn-sm btn-primary"
-                          aria-label={`View profile of ${alumnus.name}`} 
+                          aria-label={`View profile of ${alumnus.name}`}
                         >
                           <i className="fas fa-user" /> View Profile
                         </button>

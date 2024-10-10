@@ -51,7 +51,8 @@ class User(AbstractUser):
     linkedin = models.CharField(max_length=100, default='', blank=True)
     Github = models.CharField(max_length=100, default='', blank=True)
     instagram = models.CharField(max_length=100, default='', blank=True)
-    
+    portfolio_link=models.URLField(max_length=500, blank=True, null=True)
+    resume_link=models.URLField(max_length=500, blank=True, null=True)
     skills = models.TextField(default='', blank=True) 
 
     # followings and followers 

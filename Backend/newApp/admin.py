@@ -13,8 +13,13 @@ admin.site.index_title = "Manage Your Settings Here"
 
 class UserAdmin(ImportExportModelAdmin):
     resource_class = UserResource
-    list_display = ['id','username', 'full_name', 'Branch', "is_active", 'is_alumni', 'is_student',"is_superuser",'graduation_year',  'email', 'mobile', 'linkedin', 'instagram',"Github",
-                    'skills', 'About', 'Work', 'Year_Joined',  'Image']
+    readonly_fields = ['id']
+    list_display = [
+    'id', 'username', 'full_name', 'Branch', 'is_active', 
+    'is_alumni', 'is_student', 'is_superuser', 'graduation_year', 
+    'email', 'portfolio_link', 'resume_link', 'mobile', 
+    'linkedin', 'instagram', 'Github', 'skills', 
+    'About', 'Work', 'Year_Joined', 'Image']
     list_filter = ['is_active', 'is_alumni', 'is_student', 'is_superuser', 'Branch', 'graduation_year', 'Year_Joined']
     actions = ['send_email_action']
     search_fields = ['id', 'username', 'full_name', 'Branch', 'graduation_year', 'email', 'mobile', 'linkedin', 'instagram', 'Github', 'skills', 'About', 'Work', 'Year_Joined']
@@ -22,13 +27,21 @@ class UserAdmin(ImportExportModelAdmin):
     ordering = ['username']  
     fieldsets = (
     (None, {
-        'fields': ('username', 'full_name', 'email')
+        'fields': ('username', 'full_name', 'Branch', 'skills', 'About', 'Work', 'Image')
     }),
     ('Permissions', {
-        'fields': ('is_active', 'is_superuser',"is_alumni", 'is_student', 'Branch', 'graduation_year', 'Year_Joined', 'skills', 'About', 'Work', 'linkedin', 'instagram', 'Github', 'mobile', 'Image'),
+        'fields': ('is_active', 'is_superuser', 'is_alumni', 'is_student'),
     }),
-    )
-    
+    ('Important dates', {
+        'fields': ('graduation_year', 'Year_Joined'),
+    }),
+    ('Links', {
+        'fields': ('portfolio_link', 'resume_link', 'linkedin', 'instagram', 'Github'),
+    }),
+    ('Contacts', {
+        'fields': ('email', 'mobile'),
+    }),)
+
     list_per_page = 25 
     save_on_top = True
 

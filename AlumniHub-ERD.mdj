@@ -398,20 +398,50 @@
 													"top": 495,
 													"width": 220.82080078125,
 													"height": 13
+												},
+												{
+													"_type": "ERDColumnView",
+													"_id": "AAAAAAGSdQ00hG1MNTk=",
+													"_parent": {
+														"$ref": "AAAAAAGSW2+oXTXztE0="
+													},
+													"model": {
+														"$ref": "AAAAAAGSdQ00fW1Ju+Y="
+													},
+													"font": "Arial;13;0",
+													"left": 381,
+													"top": 510,
+													"width": 220.82080078125,
+													"height": 13
+												},
+												{
+													"_type": "ERDColumnView",
+													"_id": "AAAAAAGSdQ2YIW1U9qM=",
+													"_parent": {
+														"$ref": "AAAAAAGSW2+oXTXztE0="
+													},
+													"model": {
+														"$ref": "AAAAAAGSdQ2YGW1RhOA="
+													},
+													"font": "Arial;13;0",
+													"left": 381,
+													"top": 525,
+													"width": 220.82080078125,
+													"height": 13
 												}
 											],
 											"font": "Arial;13;0",
 											"left": 376,
 											"top": 175,
 											"width": 230.82080078125,
-											"height": 338
+											"height": 368
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 376,
 									"top": 152,
 									"width": 230.82080078125,
-									"height": 376,
+									"height": 391,
 									"nameLabel": {
 										"$ref": "AAAAAAGSW2+oXTXyXAs="
 									},
@@ -1300,7 +1330,7 @@
 											"visible": false,
 											"font": "Arial;13;0",
 											"left": 390,
-											"top": 581,
+											"top": 588,
 											"height": 13,
 											"alpha": 1.5707963267948966,
 											"distance": 15,
@@ -1317,7 +1347,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 391,
-											"top": 547,
+											"top": 562,
 											"height": 13,
 											"alpha": 0.5235987755982988,
 											"distance": 30,
@@ -1351,7 +1381,7 @@
 										"$ref": "AAAAAAGSW2+oXTXx9sU="
 									},
 									"lineStyle": 2,
-									"points": "376:528;376:648",
+									"points": "376:543;376:648",
 									"nameLabel": {
 										"$ref": "AAAAAAGSW8vNcD1iMIk="
 									},
@@ -1381,7 +1411,7 @@
 											"visible": false,
 											"font": "Arial;13;0",
 											"left": 564,
-											"top": 577,
+											"top": 584,
 											"height": 13,
 											"alpha": 1.5707963267948966,
 											"distance": 15,
@@ -1398,7 +1428,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 565,
-											"top": 547,
+											"top": 562,
 											"height": 13,
 											"alpha": 0.5235987755982988,
 											"distance": 30,
@@ -1432,7 +1462,7 @@
 										"$ref": "AAAAAAGSW2+oXTXx9sU="
 									},
 									"lineStyle": 2,
-									"points": "550:528;550:640",
+									"points": "550:543;550:640",
 									"nameLabel": {
 										"$ref": "AAAAAAGSW8wYyD2rr3M="
 									},
@@ -1641,7 +1671,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 597,
-											"top": 547,
+											"top": 562,
 											"height": 13,
 											"alpha": 0.5235987755982988,
 											"distance": 30,
@@ -1675,7 +1705,7 @@
 										"$ref": "AAAAAAGSW2+oXTXx9sU="
 									},
 									"lineStyle": 2,
-									"points": "582:528;582:592;680:592",
+									"points": "582:543;582:592;680:592",
 									"nameLabel": {
 										"$ref": "AAAAAAGSW8z+gT4TbTc="
 									},
@@ -2164,6 +2194,26 @@
 									},
 									"name": "graduation_year",
 									"type": "IntegerField",
+									"length": 0
+								},
+								{
+									"_type": "ERDColumn",
+									"_id": "AAAAAAGSdQ00fW1Ju+Y=",
+									"_parent": {
+										"$ref": "AAAAAAGSW2+oXTXvFC0="
+									},
+									"name": "portfolio_link",
+									"type": "URLField",
+									"length": 0
+								},
+								{
+									"_type": "ERDColumn",
+									"_id": "AAAAAAGSdQ2YGW1RhOA=",
+									"_parent": {
+										"$ref": "AAAAAAGSW2+oXTXvFC0="
+									},
+									"name": "resume_link",
+									"type": "URLField",
 									"length": 0
 								}
 							]
