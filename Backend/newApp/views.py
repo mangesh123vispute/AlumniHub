@@ -338,7 +338,7 @@ class HodPrincipalPostAPIView(APIView):
 
 
 
-class AuthorPostListView(generics.ListAPIView):
+class HodAuthorPostListView(generics.ListAPIView):
     serializer_class = HodPrincipalPostSerializer
 
     def get_queryset(self):
