@@ -34,6 +34,10 @@ const AllAlumnisContent = () => {
     return emailPattern.test(email);
   };
 
+   const handleViewProfile = (userData) => {
+     navigate("/profile", { state: userData });
+   };
+
   const fetchAlumni = async () => {
     setLoading(true); 
     const token = localStorage.getItem("authTokens")
@@ -225,7 +229,10 @@ const AllAlumnisContent = () => {
                     </div>
                     <div className="card-footer">
                       <div className="text-center">
-                        <a href="#" className="btn btn-sm btn-primary">
+                        <a
+                        onClick={() => handleViewProfile(alumnus)}
+                          className="btn btn-sm btn-primary"
+                        >
                           <i className="fas fa-user" /> View Profile
                         </a>
                       </div>

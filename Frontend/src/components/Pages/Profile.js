@@ -4,37 +4,34 @@ import React, { useContext ,useState , useEffect } from "react";
 import axios from 'axios'
 import Home from "../Dashboard/Home.js";
 import AuthContext from "../../context/AuthContext.js";
+import { useLocation } from "react-router-dom";
 const AlumniProfileContent = () => {
   let { userData } = useContext(AuthContext);
   console.log("userData", userData);
-
-
   const [user, setUser] = useState(null);
-
+  const id = localStorage.getItem("id") ? JSON.parse(localStorage.getItem("id")) : null
+  
   useEffect(() => {
-    // Fetch alumni data when the component mounts
     const token = localStorage.getItem("authTokens")
-    ? JSON.parse(localStorage.getItem("authTokens"))
-    : null;
-
+      ? JSON.parse(localStorage.getItem("authTokens"))
+      : null;
+    
     axios
-      .get(`http://127.0.0.1:8000/getalumni/${userData?.user_id}`, {
+      .get(`http://127.0.0.1:8000/getalumni/${ id || userData?.user_id}`, {
         headers: {
           Authorization: `Bearer ${token?.access}`,
         },
       })
       .then((response) => {
-        
         setUser(response.data);
-        
       })
       .catch((error) => {
-        console.error('Error fetching alumni data:', error);
+        console.error("Error fetching alumni data:", error);
       });
+      localStorage.getItem("id") && localStorage.removeItem("id") 
   }, [userData?.user_id]);
 
-  console.log("user ",user);
-
+  console.log("user ", user);
 
   return (
     <>
@@ -45,141 +42,172 @@ const AlumniProfileContent = () => {
         <section className="content">
           <div className="container-fluid">
             <div className="row">
-            <div className="col-md-3 " style={{fontSize:'0.9em'}}>
-                  {/* Profile Image */}
-                  <div className="card card-primary card-outline position-relative">
-                    {/* Ribbon */}
-                    <div className="ribbon-wrapper ribbon-lg">
-                      <div className="ribbon bg-primary">
-                        {user
-                          ? user.is_alumni
-                            ? "Alumni"
-                            : user.is_student
-                            ? "Student"
-                            : "College"
-                          : "User"}
-                      </div>
+              <div className="col-md-3 " style={{ fontSize: "0.9em" }}>
+                {/* Profile Image */}
+                <div className="card card-primary card-outline position-relative">
+                  {/* Ribbon */}
+                  <div className="ribbon-wrapper ribbon-lg">
+                    <div className="ribbon bg-primary">
+                      {user
+                        ? user.is_alumni
+                          ? "Alumni"
+                          : user.is_student
+                          ? "Student"
+                          : "College"
+                        : "User"}
                     </div>
-
-                    <div className="card-body box-profile">
-                      <div className="text-center">
-                        <img
-                          className="profile-user-img img-fluid img-circle"
-                          src={user?.alumni_profile?.profile_picture_url || "../../dist/img/user4-128x128.jpg"}
-                          alt="User profile picture"
-                        />
-                      </div>
-                      <h3 className="profile-username text-center">
-                        {user ? user.full_name || user.username : "User"}
-                      </h3>
-                      <p className="text-muted text-center">
-                        {user?.alumni_profile?.job_title || "Not Specified"}
-                      </p>
-                    </div>
-                    {/* /.card-body */}
                   </div>
-                  {/* /.card */}
 
-                  {/* About Me Box */}
-                  <div className="card card-primary">
-                    <div className="card-header">
-                      <h3 className="card-title">About Me</h3>
+                  <div className="card-body box-profile">
+                    <div className="text-center">
+                      <img
+                        className="profile-user-img img-fluid img-circle"
+                        src={
+                          user?.alumni_profile?.profile_picture_url ||
+                          "../../dist/img/user4-128x128.jpg"
+                        }
+                        alt="User profile picture"
+                      />
                     </div>
-                    {/* /.card-header */}
-                    <div className="card-body">
-                      <strong>
-                        <i className="fas fa-graduation-cap mr-1" /> Education
-                      </strong>
-                      <p className="text-muted">
-                        {user?.alumni_profile?.Education || "Not Provided"}
-                      </p>
-                      <hr />
-                      
-                      <strong>
-                        <i className="fas fa-code-branch mr-1" /> Branch
-                      </strong>
-                      <p className="text-muted">
-                        <span className="tag tag-danger">{user?.Branch || "Not Specified"}</span> <br />
-                      </p>
-                      <hr />
-                      
-                      <strong>
-                        <i className="fas fa-map-marker-alt mr-1" /> Location
-                      </strong>
-                      <p className="text-muted">
-                        {user?.alumni_profile?.current_city || "Not Provided"}, 
-                        {user?.alumni_profile?.current_country || "Not Provided"}
-                      </p>
-                      <hr />
-                      
-                      <strong>
-                        <i className="fas fa-laptop-code mr-1" /> Skills
-                      </strong>
-                      <p className="text-muted">
-                        <span className="tag tag-danger">{user?.skills || "Not Specified"}</span> <br />
-                      </p>
-                      <hr />
-                      
-                      <strong>
-                        <i className="fas fa-industry mr-1" /> Industry
-                      </strong>
-                      <p className="text-muted">
-                        <span className="tag tag-danger">{user?.alumni_profile?.industry || "Not Specified"}</span> <br />
-                      </p>
-                      <hr />
-                      
-                      <strong>
-                        <i className="fas fa-info-circle mr-1" /> About
-                      </strong>
-                      <p className="text-muted">
-                        <span className="tag tag-danger">{user?.About || "Not Specified"}</span> <br />
-                      </p>
-                      <hr />
-                      
-                      <strong>
-                        <i className="fas fa-trophy mr-1" /> Achievements
-                      </strong>
-                      <p className="text-muted">
-                        <span className="tag tag-success">{user?.alumni_profile?.achievements || "No Achievements"}</span>
-                      </p>
-                      <hr />
-                      
-                      <strong>
-                        <i className="fas fa-building mr-1" /> Current Company
-                      </strong>
-                      <p className="text-muted">
-                        <span className="tag tag-danger">{user?.alumni_profile?.current_company_name || "Not Specified"}</span> <br />
-                      </p>
-                      <hr />
-                      
-                      <strong>
-                        <i className="fas fa-calendar-alt mr-1" /> Graduation Year
-                      </strong>
-                      <p className="text-muted">
-                        <span className="tag tag-danger">{user?.alumni_profile?.graduation_year || "Not Specified"}</span> <br />
-                      </p>
-                      <hr />
-                      
-                      <strong>
-                        <i className="fas fa-briefcase mr-1" /> Years of Experience
-                      </strong>
-                      <p className="text-muted">
-                        <span className="tag tag-danger">{user?.alumni_profile?.years_of_experience || "Not Specified"}</span> <br />
-                      </p>
-                      <hr />
-                      
-                      <strong>
-                        <i className="fas fa-building mr-1" /> Previous Companies
-                      </strong>
-                      <p className="text-muted">
-                        {user?.alumni_profile?.previous_companies || "No Notes Available"}
-                      </p>
-                    </div>
-                    {/* /.card-body */}
+                    <h3 className="profile-username text-center">
+                      {user ? user.full_name || user.username : "User"}
+                    </h3>
+                    <p className="text-muted text-center">
+                      {user?.alumni_profile?.job_title || "Not Specified"}
+                    </p>
                   </div>
-                  {/* /.card */}
+                  {/* /.card-body */}
                 </div>
+                {/* /.card */}
 
+                {/* About Me Box */}
+                <div className="card card-primary">
+                  <div className="card-header">
+                    <h3 className="card-title">About Me</h3>
+                  </div>
+                  {/* /.card-header */}
+                  <div className="card-body">
+                    <strong>
+                      <i className="fas fa-graduation-cap mr-1" /> Education
+                    </strong>
+                    <p className="text-muted">
+                      {user?.alumni_profile?.Education || "Not Provided"}
+                    </p>
+                    <hr />
+
+                    <strong>
+                      <i className="fas fa-code-branch mr-1" /> Branch
+                    </strong>
+                    <p className="text-muted">
+                      <span className="tag tag-danger">
+                        {user?.Branch || "Not Specified"}
+                      </span>{" "}
+                      <br />
+                    </p>
+                    <hr />
+
+                    <strong>
+                      <i className="fas fa-map-marker-alt mr-1" /> Location
+                    </strong>
+                    <p className="text-muted">
+                      {user?.alumni_profile?.current_city || "Not Provided"},
+                      {user?.alumni_profile?.current_country || "Not Provided"}
+                    </p>
+                    <hr />
+
+                    <strong>
+                      <i className="fas fa-laptop-code mr-1" /> Skills
+                    </strong>
+                    <p className="text-muted">
+                      <span className="tag tag-danger">
+                        {user?.skills || "Not Specified"}
+                      </span>{" "}
+                      <br />
+                    </p>
+                    <hr />
+
+                    <strong>
+                      <i className="fas fa-industry mr-1" /> Industry
+                    </strong>
+                    <p className="text-muted">
+                      <span className="tag tag-danger">
+                        {user?.alumni_profile?.industry || "Not Specified"}
+                      </span>{" "}
+                      <br />
+                    </p>
+                    <hr />
+
+                    <strong>
+                      <i className="fas fa-info-circle mr-1" /> About
+                    </strong>
+                    <p className="text-muted">
+                      <span className="tag tag-danger">
+                        {user?.About || "Not Specified"}
+                      </span>{" "}
+                      <br />
+                    </p>
+                    <hr />
+
+                    <strong>
+                      <i className="fas fa-trophy mr-1" /> Achievements
+                    </strong>
+                    <p className="text-muted">
+                      <span className="tag tag-success">
+                        {user?.alumni_profile?.achievements ||
+                          "No Achievements"}
+                      </span>
+                    </p>
+                    <hr />
+
+                    <strong>
+                      <i className="fas fa-building mr-1" /> Current Company
+                    </strong>
+                    <p className="text-muted">
+                      <span className="tag tag-danger">
+                        {user?.alumni_profile?.current_company_name ||
+                          "Not Specified"}
+                      </span>{" "}
+                      <br />
+                    </p>
+                    <hr />
+
+                    <strong>
+                      <i className="fas fa-calendar-alt mr-1" /> Graduation Year
+                    </strong>
+                    <p className="text-muted">
+                      <span className="tag tag-danger">
+                        {user?.alumni_profile?.graduation_year ||
+                          "Not Specified"}
+                      </span>{" "}
+                      <br />
+                    </p>
+                    <hr />
+
+                    <strong>
+                      <i className="fas fa-briefcase mr-1" /> Years of
+                      Experience
+                    </strong>
+                    <p className="text-muted">
+                      <span className="tag tag-danger">
+                        {user?.alumni_profile?.years_of_experience ||
+                          "Not Specified"}
+                      </span>{" "}
+                      <br />
+                    </p>
+                    <hr />
+
+                    <strong>
+                      <i className="fas fa-building mr-1" /> Previous Companies
+                    </strong>
+                    <p className="text-muted">
+                      {user?.alumni_profile?.previous_companies ||
+                        "No Notes Available"}
+                    </p>
+                  </div>
+                  {/* /.card-body */}
+                </div>
+                {/* /.card */}
+              </div>
 
               {/* /.col */}
               <div className="col-md-9">
@@ -401,58 +429,71 @@ const AlumniProfileContent = () => {
                         {/* The timeline */}
                         <div className="timeline timeline-inverse">
                           {/* timeline time label */}
-                         {/* timeline time label */}
-                         <div className="time-label">
-                             <span className="bg-danger">Contact Details</span>
+                          {/* timeline time label */}
+                          <div className="time-label">
+                            <span className="bg-danger">Contact Details</span>
+                          </div>
+                          {/* / Contact-label */}
+                          {/* Contact Details Item */}
+                          <div>
+                            <i className="fas fa-address-book bg-primary" />
+                            <div className="timeline-item">
+                              <div className="timeline-body">
+                                <strong>Email:</strong>
+                                <p>{user?.email || "Not Provided"}</p>
+                                <hr />
+
+                                <strong>Mobile:</strong>
+                                <p>{user?.mobile || "Not Provided"}</p>
+                                <hr />
+
+                                <strong>LinkedIn:</strong>
+                                <p>
+                                  <a
+                                    href={user?.linkedin || "#"}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    {user?.linkedin
+                                      ? user.linkedin
+                                      : "Not Provided"}
+                                  </a>
+                                </p>
+                                <hr />
+
+                                <strong>GitHub:</strong>
+                                <p>
+                                  <a
+                                    href={user?.Github || "#"}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    {user?.Github
+                                      ? user.Github
+                                      : "Not Provided"}
+                                  </a>
+                                </p>
+                                <hr />
+
+                                <strong>Instagram:</strong>
+                                <p>
+                                  <a
+                                    href={user?.instagram || "#"}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    {user?.instagram
+                                      ? user.instagram
+                                      : "Not Provided"}
+                                  </a>
+                                </p>
                               </div>
-                              {/* / Contact-label */}
-                              {/* Contact Details Item */}
-                              <div>
-                                <i className="fas fa-address-book bg-primary" />
-                                <div className="timeline-item">
-                                 
-                                 
-
-                                  <div className="timeline-body">
-                                    <strong>Email:</strong>
-                                    <p>{user?.email || "Not Provided"}</p>
-                                    <hr />
-
-                                    <strong>Mobile:</strong>
-                                    <p>{user?.mobile || "Not Provided"}</p>
-                                    <hr />
-
-                                    <strong>LinkedIn:</strong>
-                                    <p>
-                                      <a href={user?.linkedin || "#"} target="_blank" rel="noopener noreferrer">
-                                        {user?.linkedin ? user.linkedin : "Not Provided"}
-                                      </a>
-                                    </p>
-                                    <hr />
-
-                                    <strong>GitHub:</strong>
-                                    <p>
-                                      <a href={user?.Github || "#"} target="_blank" rel="noopener noreferrer">
-                                        {user?.Github ? user.Github : "Not Provided"}
-                                      </a>
-                                    </p>
-                                    <hr />
-
-                                    <strong>Instagram:</strong>
-                                    <p>
-                                      <a href={user?.instagram || "#"} target="_blank" rel="noopener noreferrer">
-                                        {user?.instagram ? user.instagram : "Not Provided"}
-                                      </a>
-                                    </p>
-                                  </div>
-
-                                 
-                                </div>
-                              </div>
-                              {/* END Contact Details Item */}
+                            </div>
+                          </div>
+                          {/* END Contact Details Item */}
                           {/* END timeline item */}
                           {/* timeline item */}
-                         
+
                           <div>
                             <i className="fas fa-camera bg-purple" />
                             <div className="timeline-item">
@@ -603,10 +644,6 @@ const AlumniProfileContent = () => {
             {/* /.row */}
           </div>
 
-
-
-
-
           {/* /.container-fluid */}
         </section>
         {/* /.content */}
@@ -618,34 +655,32 @@ const AlumniProfileContent = () => {
 const StudentProfileContent = () => {
   let { userData } = useContext(AuthContext);
   console.log("userData", userData);
-
-
+  const id = localStorage.getItem("id")
+    ? JSON.parse(localStorage.getItem("id"))
+    : null;
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     // Fetch alumni data when the component mounts
     const token = localStorage.getItem("authTokens")
-    ? JSON.parse(localStorage.getItem("authTokens"))
-    : null;
+      ? JSON.parse(localStorage.getItem("authTokens"))
+      : null;
 
     axios
-      .get(`http://127.0.0.1:8000/students/${userData?.user_id}`, {
+      .get(`http://127.0.0.1:8000/students/${id || userData?.user_id}`, {
         headers: {
           Authorization: `Bearer ${token?.access}`,
         },
       })
       .then((response) => {
-        
         setUser(response.data);
-        
       })
       .catch((error) => {
-        console.error('Error fetching alumni data:', error);
+        console.error("Error fetching alumni data:", error);
       });
   }, [userData?.user_id]);
 
-  console.log("user ",user);
-
+  console.log("user ", user);
 
   return (
     <>
@@ -656,49 +691,49 @@ const StudentProfileContent = () => {
         <section className="content">
           <div className="container-fluid">
             <div className="row">
-            <div className="col-md-3" style={{ fontSize: '0.9em' }}>
-                  {/* Profile Image */}
-                  <div className="card card-primary card-outline position-relative">
-                    {/* Ribbon */}
-                    <div className="ribbon-wrapper ribbon-lg">
-                      <div className="ribbon bg-primary">
-                        {user
-                          ? user.is_alumni
-                            ? "Alumni"
-                            : user.is_student
-                            ? "Student"
-                            : "College"
-                          : "User"}
-                      </div>
+              <div className="col-md-3" style={{ fontSize: "0.9em" }}>
+                {/* Profile Image */}
+                <div className="card card-primary card-outline position-relative">
+                  {/* Ribbon */}
+                  <div className="ribbon-wrapper ribbon-lg">
+                    <div className="ribbon bg-primary">
+                      {user
+                        ? user.is_alumni
+                          ? "Alumni"
+                          : user.is_student
+                          ? "Student"
+                          : "College"
+                        : "User"}
                     </div>
-
-                    <div className="card-body box-profile">
-                      <div className="text-center">
-                        <img
-                          className="profile-user-img img-fluid img-circle"
-                          src={"../../dist/img/user4-128x128.jpg"} 
-                          alt="User profile picture"
-                        />
-                      </div>
-                      <h3 className="profile-username text-center">
-                        {user ? user.full_name || user.username : "User"}
-                      </h3>
-                      <p className="text-muted text-center">
-                        {user?.Work || "Not Specified"}
-                      </p>
-                    </div>
-                    {/* /.card-body */}
                   </div>
-                  {/* /.card */}
 
-                  {/* About Me Box */}
-                  <div className="card card-primary">
-                    <div className="card-header">
-                      <h3 className="card-title">About Me</h3>
+                  <div className="card-body box-profile">
+                    <div className="text-center">
+                      <img
+                        className="profile-user-img img-fluid img-circle"
+                        src={"../../dist/img/user4-128x128.jpg"}
+                        alt="User profile picture"
+                      />
                     </div>
-                    {/* /.card-header */}
-                    <div className="card-body">
-                      {/* <strong>
+                    <h3 className="profile-username text-center">
+                      {user ? user.full_name || user.username : "User"}
+                    </h3>
+                    <p className="text-muted text-center">
+                      {user?.Work || "Not Specified"}
+                    </p>
+                  </div>
+                  {/* /.card-body */}
+                </div>
+                {/* /.card */}
+
+                {/* About Me Box */}
+                <div className="card card-primary">
+                  <div className="card-header">
+                    <h3 className="card-title">About Me</h3>
+                  </div>
+                  {/* /.card-header */}
+                  <div className="card-body">
+                    {/* <strong>
                         <i className="fas fa-graduation-cap mr-1" /> Education
                       </strong>
                       <p className="text-muted">
@@ -706,47 +741,55 @@ const StudentProfileContent = () => {
                       </p>
                       <hr /> */}
 
-                      <strong>
-                        <i className="fas fa-calendar-alt mr-1" /> Current Year of Study
-                      </strong>
-                      <p className="text-muted">
-                        {user?.student_profile?.current_year_of_study || "Not Specified"}
-                      </p>
-                      <hr />
+                    <strong>
+                      <i className="fas fa-calendar-alt mr-1" /> Current Year of
+                      Study
+                    </strong>
+                    <p className="text-muted">
+                      {user?.student_profile?.current_year_of_study ||
+                        "Not Specified"}
+                    </p>
+                    <hr />
 
-                      <strong>
-                        <i className="fas fa-code-branch mr-1" /> Branch
-                      </strong>
-                      <p className="text-muted">
-                        <span className="tag tag-danger">{user?.Branch || "Not Specified"}</span>
-                      </p>
-                      <hr />
+                    <strong>
+                      <i className="fas fa-code-branch mr-1" /> Branch
+                    </strong>
+                    <p className="text-muted">
+                      <span className="tag tag-danger">
+                        {user?.Branch || "Not Specified"}
+                      </span>
+                    </p>
+                    <hr />
 
-                      <strong>
-                        <i className="fas fa-info-circle mr-1" /> About
-                      </strong>
-                      <p className="text-muted">
-                        <span className="tag tag-danger">{user?.About || "Not Specified"}</span>
-                      </p>
-                      <hr />
+                    <strong>
+                      <i className="fas fa-info-circle mr-1" /> About
+                    </strong>
+                    <p className="text-muted">
+                      <span className="tag tag-danger">
+                        {user?.About || "Not Specified"}
+                      </span>
+                    </p>
+                    <hr />
 
-                      <strong>
-                        <i className="fas fa-laptop-code mr-1" /> Skills
-                      </strong>
-                      <p className="text-muted">
-                        <span className="tag tag-danger">{user?.skills || "Not Specified"}</span>
-                      </p>
-                      <hr />
+                    <strong>
+                      <i className="fas fa-laptop-code mr-1" /> Skills
+                    </strong>
+                    <p className="text-muted">
+                      <span className="tag tag-danger">
+                        {user?.skills || "Not Specified"}
+                      </span>
+                    </p>
+                    <hr />
 
-                      <strong>
-                        <i className="fas fa-building mr-1" /> Department
-                      </strong>
-                      <p className="text-muted">
-                        {user?.student_profile?.department || "Not Specified"}
-                      </p>
-                      <hr />
+                    <strong>
+                      <i className="fas fa-building mr-1" /> Department
+                    </strong>
+                    <p className="text-muted">
+                      {user?.student_profile?.department || "Not Specified"}
+                    </p>
+                    <hr />
 
-                      {/* <strong>
+                    {/* <strong>
                         <i className="fas fa-link mr-1" /> LinkedIn
                       </strong>
                       <p className="text-muted">
@@ -768,13 +811,11 @@ const StudentProfileContent = () => {
                       <p className="text-muted">
                         <a href={user?.instagram || "#"}>{user?.instagram || "Not Provided"}</a>
                       </p> */}
-                    </div>
-                    {/* /.card-body */}
                   </div>
-                  {/* /.card */}
+                  {/* /.card-body */}
                 </div>
-
-
+                {/* /.card */}
+              </div>
 
               {/* /.col */}
               <div className="col-md-9">
@@ -796,7 +837,7 @@ const StudentProfileContent = () => {
                           href="#timeline"
                           data-toggle="tab"
                         >
-                         Contacts
+                          Contacts
                         </a>
                       </li>
                       <li className="nav-item">
@@ -997,56 +1038,67 @@ const StudentProfileContent = () => {
                         <div className="timeline timeline-inverse">
                           {/* timeline time label */}
                           <div className="time-label">
-                             <span className="bg-danger">Contact Details</span>
+                            <span className="bg-danger">Contact Details</span>
+                          </div>
+                          {/* / Contact-label */}
+                          {/* Contact Details Item */}
+                          <div>
+                            <i className="fas fa-address-book bg-primary" />
+                            <div className="timeline-item">
+                              <div className="timeline-body">
+                                <strong>Email:</strong>
+                                <p>{user?.email || "Not Provided"}</p>
+                                <hr />
+
+                                <strong>Mobile:</strong>
+                                <p>{user?.mobile || "Not Provided"}</p>
+                                <hr />
+
+                                <strong>LinkedIn:</strong>
+                                <p>
+                                  <a
+                                    href={user?.linkedin || "#"}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    {user?.linkedin
+                                      ? user.linkedin
+                                      : "Not Provided"}
+                                  </a>
+                                </p>
+                                <hr />
+
+                                <strong>GitHub:</strong>
+                                <p>
+                                  <a
+                                    href={user?.Github || "#"}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    {user?.Github
+                                      ? user.Github
+                                      : "Not Provided"}
+                                  </a>
+                                </p>
+                                <hr />
+
+                                <strong>Instagram:</strong>
+                                <p>
+                                  <a
+                                    href={user?.instagram || "#"}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    {user?.instagram
+                                      ? user.instagram
+                                      : "Not Provided"}
+                                  </a>
+                                </p>
                               </div>
-                              {/* / Contact-label */}
-                              {/* Contact Details Item */}
-                              <div>
-                                <i className="fas fa-address-book bg-primary" />
-                                <div className="timeline-item">
-                                 
-                                 
+                            </div>
+                          </div>
+                          {/* END Contact Details Item */}
 
-                                  <div className="timeline-body">
-                                    <strong>Email:</strong>
-                                    <p>{user?.email || "Not Provided"}</p>
-                                    <hr />
-
-                                    <strong>Mobile:</strong>
-                                    <p>{user?.mobile || "Not Provided"}</p>
-                                    <hr />
-
-                                    <strong>LinkedIn:</strong>
-                                    <p>
-                                      <a href={user?.linkedin || "#"} target="_blank" rel="noopener noreferrer">
-                                        {user?.linkedin ? user.linkedin : "Not Provided"}
-                                      </a>
-                                    </p>
-                                    <hr />
-
-                                    <strong>GitHub:</strong>
-                                    <p>
-                                      <a href={user?.Github || "#"} target="_blank" rel="noopener noreferrer">
-                                        {user?.Github ? user.Github : "Not Provided"}
-                                      </a>
-                                    </p>
-                                    <hr />
-
-                                    <strong>Instagram:</strong>
-                                    <p>
-                                      <a href={user?.instagram || "#"} target="_blank" rel="noopener noreferrer">
-                                        {user?.instagram ? user.instagram : "Not Provided"}
-                                      </a>
-                                    </p>
-                                  </div>
-
-                                 
-                                </div>
-                              </div>
-                              {/* END Contact Details Item */}
-
-                         
-                         
                           <div>
                             <i className="far fa-clock bg-gray" />
                           </div>
@@ -1167,10 +1219,6 @@ const StudentProfileContent = () => {
             {/* /.row */}
           </div>
 
-
-
-
-
           {/* /.container-fluid */}
         </section>
         {/* /.content */}
@@ -1182,34 +1230,33 @@ const StudentProfileContent = () => {
 const SuperUserProfileContent = () => {
   let { userData } = useContext(AuthContext);
   console.log("userData", userData);
-
+  const id = localStorage.getItem("id")
+    ? JSON.parse(localStorage.getItem("id"))
+    : null;
 
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     // Fetch alumni data when the component mounts
     const token = localStorage.getItem("authTokens")
-    ? JSON.parse(localStorage.getItem("authTokens"))
-    : null;
+      ? JSON.parse(localStorage.getItem("authTokens"))
+      : null;
 
     axios
-      .get(`http://127.0.0.1:8000/hods/${userData?.user_id}`, {
+      .get(`http://127.0.0.1:8000/hods/${id || userData?.user_id}`, {
         headers: {
           Authorization: `Bearer ${token?.access}`,
         },
       })
       .then((response) => {
-        
         setUser(response.data);
-        
       })
       .catch((error) => {
-        console.error('Error fetching alumni data:', error);
+        console.error("Error fetching alumni data:", error);
       });
   }, [userData?.user_id]);
 
-  console.log("user ",user);
-
+  console.log("user ", user);
 
   return (
     <>
@@ -1220,109 +1267,116 @@ const SuperUserProfileContent = () => {
         <section className="content">
           <div className="container-fluid">
             <div className="row">
-            <div className="col-md-3" style={{ fontSize: '0.9em' }}>
-                    {/* Profile Image */}
-                    <div className="card card-primary card-outline position-relative">
-                      {/* Ribbon */}
-                      <div className="ribbon-wrapper ribbon-lg">
-                        <div className="ribbon bg-primary">
-                          {user
-                            ? user.is_alumni
-                              ? "Alumni"
-                              : user.is_student
-                              ? "Student"
-                              : "College"
-                            : "User"}
-                        </div>
-                      </div>
-
-                      <div className="card-body box-profile">
-                        <div className="text-center">
-                          <img
-                            className="profile-user-img img-fluid img-circle"
-                            src={user?.hod_profile?.profile_picture_url || "../../dist/img/user4-128x128.jpg"}
-                            alt="User profile picture"
-                          />
-                        </div>
-                        <h3 className="profile-username text-center">
-                          {user ? user.full_name || user.username : "User"}
-                        </h3>
-                        <p className="text-muted text-center">
-                          {user?.hod_profile?.designation || "Not Specified"}
-                        </p>
-                      </div>
-                      {/* /.card-body */}
+              <div className="col-md-3" style={{ fontSize: "0.9em" }}>
+                {/* Profile Image */}
+                <div className="card card-primary card-outline position-relative">
+                  {/* Ribbon */}
+                  <div className="ribbon-wrapper ribbon-lg">
+                    <div className="ribbon bg-primary">
+                      {user
+                        ? user.is_alumni
+                          ? "Alumni"
+                          : user.is_student
+                          ? "Student"
+                          : "College"
+                        : "User"}
                     </div>
-                    {/* /.card */}
+                  </div>
 
-                    {/* About Me Box */}
-                    <div className="card card-primary">
-                      <div className="card-header">
-                        <h3 className="card-title">About Me</h3>
-                      </div>
-                      {/* /.card-header */}
-                      <div className="card-body">
-                        <strong>
-                          <i className="fas fa-university mr-1" /> Department
-                        </strong>
-                        <p className="text-muted">
-                          {user?.hod_profile?.department || "Not Specified"}
-                        </p>
-                        <hr />
-                        
-                        <strong>
-                          <i className="fas fa-phone mr-1" /> Mobile
-                        </strong>
-                        <p className="text-muted">
-                          {user?.mobile || "Not Provided"}
-                        </p>
-                        <hr />
+                  <div className="card-body box-profile">
+                    <div className="text-center">
+                      <img
+                        className="profile-user-img img-fluid img-circle"
+                        src={
+                          user?.hod_profile?.profile_picture_url ||
+                          "../../dist/img/user4-128x128.jpg"
+                        }
+                        alt="User profile picture"
+                      />
+                    </div>
+                    <h3 className="profile-username text-center">
+                      {user ? user.full_name || user.username : "User"}
+                    </h3>
+                    <p className="text-muted text-center">
+                      {user?.hod_profile?.designation || "Not Specified"}
+                    </p>
+                  </div>
+                  {/* /.card-body */}
+                </div>
+                {/* /.card */}
 
-                        {/* <strong>
+                {/* About Me Box */}
+                <div className="card card-primary">
+                  <div className="card-header">
+                    <h3 className="card-title">About Me</h3>
+                  </div>
+                  {/* /.card-header */}
+                  <div className="card-body">
+                    <strong>
+                      <i className="fas fa-university mr-1" /> Department
+                    </strong>
+                    <p className="text-muted">
+                      {user?.hod_profile?.department || "Not Specified"}
+                    </p>
+                    <hr />
+
+                    <strong>
+                      <i className="fas fa-phone mr-1" /> Mobile
+                    </strong>
+                    <p className="text-muted">
+                      {user?.mobile || "Not Provided"}
+                    </p>
+                    <hr />
+
+                    {/* <strong>
                           <i className="fas fa-code-branch mr-1" /> Branch
                         </strong>
                         <p className="text-muted">
                           <span className="tag tag-danger">{user?.Branch || "Not Specified"}</span> <br />
                         </p>
                         <hr /> */}
-                        
-                        <strong>
-                          <i className="fas fa-envelope mr-1" /> Email
-                        </strong>
-                        <p className="text-muted">
-                          {user?.email || "Not Provided"}
-                        </p>
-                        <hr />
 
-                        <strong>
-                          <i className="fas fa-info-circle mr-1" /> About
-                        </strong>
-                        <p className="text-muted">
-                          <span className="tag tag-danger">{user?.About || "Not Specified"}</span> <br />
-                        </p>
-                        <hr />
-                        
-                        <strong>
-                          <i className="fas fa-laptop-code mr-1" /> Year Joined
-                        </strong>
-                        <p className="text-muted">
-                          <span className="tag tag-danger">{user?.Year_Joined || "Not Specified"}</span> <br />
-                        </p>
-                        <hr />
-                        
-                        <strong>
-                          <i className="fas fa-building mr-1" /> Designation
-                        </strong>
-                        <p className="text-muted">
-                          {user?.hod_profile?.designation || "Not Specified"}
-                        </p>
-                      </div>
-                      {/* /.card-body */}
-                    </div>
-                    {/* /.card */}
+                    <strong>
+                      <i className="fas fa-envelope mr-1" /> Email
+                    </strong>
+                    <p className="text-muted">
+                      {user?.email || "Not Provided"}
+                    </p>
+                    <hr />
+
+                    <strong>
+                      <i className="fas fa-info-circle mr-1" /> About
+                    </strong>
+                    <p className="text-muted">
+                      <span className="tag tag-danger">
+                        {user?.About || "Not Specified"}
+                      </span>{" "}
+                      <br />
+                    </p>
+                    <hr />
+
+                    <strong>
+                      <i className="fas fa-laptop-code mr-1" /> Year Joined
+                    </strong>
+                    <p className="text-muted">
+                      <span className="tag tag-danger">
+                        {user?.Year_Joined || "Not Specified"}
+                      </span>{" "}
+                      <br />
+                    </p>
+                    <hr />
+
+                    <strong>
+                      <i className="fas fa-building mr-1" /> Designation
+                    </strong>
+                    <p className="text-muted">
+                      {user?.hod_profile?.designation || "Not Specified"}
+                    </p>
                   </div>
-
-
+                  {/* /.card-body */}
+                </div>
+                {/* /.card */}
+              </div>
 
               {/* /.col */}
               <div className="col-md-9">
@@ -1544,56 +1598,69 @@ const SuperUserProfileContent = () => {
                         {/* The timeline */}
                         <div className="timeline timeline-inverse">
                           {/* timeline time label */}
-                         {/* timeline time label */}
-                         <div className="time-label">
-                             <span className="bg-danger">Contact Details</span>
+                          {/* timeline time label */}
+                          <div className="time-label">
+                            <span className="bg-danger">Contact Details</span>
+                          </div>
+                          {/* / Contact-label */}
+                          {/* Contact Details Item */}
+                          <div>
+                            <i className="fas fa-address-book bg-primary" />
+                            <div className="timeline-item">
+                              <div className="timeline-body">
+                                <strong>Email:</strong>
+                                <p>{user?.email || "Not Provided"}</p>
+                                <hr />
+
+                                <strong>Mobile:</strong>
+                                <p>{user?.mobile || "Not Provided"}</p>
+                                <hr />
+
+                                <strong>LinkedIn:</strong>
+                                <p>
+                                  <a
+                                    href={user?.linkedin || "#"}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    {user?.linkedin
+                                      ? user.linkedin
+                                      : "Not Provided"}
+                                  </a>
+                                </p>
+                                <hr />
+
+                                <strong>GitHub:</strong>
+                                <p>
+                                  <a
+                                    href={user?.Github || "#"}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    {user?.Github
+                                      ? user.Github
+                                      : "Not Provided"}
+                                  </a>
+                                </p>
+                                <hr />
+
+                                <strong>Instagram:</strong>
+                                <p>
+                                  <a
+                                    href={user?.instagram || "#"}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    {user?.instagram
+                                      ? user.instagram
+                                      : "Not Provided"}
+                                  </a>
+                                </p>
                               </div>
-                              {/* / Contact-label */}
-                              {/* Contact Details Item */}
-                              <div>
-                                <i className="fas fa-address-book bg-primary" />
-                                <div className="timeline-item">
-                                 
-                                 
+                            </div>
+                          </div>
+                          {/* END Contact Details Item */}
 
-                                  <div className="timeline-body">
-                                    <strong>Email:</strong>
-                                    <p>{user?.email || "Not Provided"}</p>
-                                    <hr />
-
-                                    <strong>Mobile:</strong>
-                                    <p>{user?.mobile || "Not Provided"}</p>
-                                    <hr />
-
-                                    <strong>LinkedIn:</strong>
-                                    <p>
-                                      <a href={user?.linkedin || "#"} target="_blank" rel="noopener noreferrer">
-                                        {user?.linkedin ? user.linkedin : "Not Provided"}
-                                      </a>
-                                    </p>
-                                    <hr />
-
-                                    <strong>GitHub:</strong>
-                                    <p>
-                                      <a href={user?.Github || "#"} target="_blank" rel="noopener noreferrer">
-                                        {user?.Github ? user.Github : "Not Provided"}
-                                      </a>
-                                    </p>
-                                    <hr />
-
-                                    <strong>Instagram:</strong>
-                                    <p>
-                                      <a href={user?.instagram || "#"} target="_blank" rel="noopener noreferrer">
-                                        {user?.instagram ? user.instagram : "Not Provided"}
-                                      </a>
-                                    </p>
-                                  </div>
-
-                                 
-                                </div>
-                              </div>
-                              {/* END Contact Details Item */}
-                         
                           <div>
                             <i className="fas fa-camera bg-purple" />
                             <div className="timeline-item">
@@ -1744,10 +1811,6 @@ const SuperUserProfileContent = () => {
             {/* /.row */}
           </div>
 
-
-
-
-
           {/* /.container-fluid */}
         </section>
         {/* /.content */}
@@ -1757,7 +1820,15 @@ const SuperUserProfileContent = () => {
 };
 
 const Profile = () => {
+  const location = useLocation();
+  const { state } = location;
   let { userData } = useContext(AuthContext);
+  
+  if (state) {
+    userData = state;
+    localStorage.setItem("id", JSON.stringify(state?.id));
+  }
+  console.log(" userData", userData);
   const getProfileContent = () => {
     if (userData.is_student) {
       return StudentProfileContent;
@@ -1768,8 +1839,11 @@ const Profile = () => {
     }
   };
   return (
-     
-    <Home DynamicContent={getProfileContent()} url="profile" heading="Profile" />
+    <Home
+      DynamicContent={getProfileContent()}
+      url="profile"
+      heading="Profile"
+    />
   );
 };
 
