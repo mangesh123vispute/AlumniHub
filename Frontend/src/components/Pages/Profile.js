@@ -822,7 +822,7 @@ const StudentProfileContent = () => {
                 <div className="card">
                   <div className="card-header p-2">
                     <ul className="nav nav-pills">
-                      <li className="nav-item">
+                      {/* <li className="nav-item">
                         <a
                           className="nav-link active"
                           href="#activity"
@@ -830,7 +830,7 @@ const StudentProfileContent = () => {
                         >
                           Your Posts
                         </a>
-                      </li>
+                      </li> */}
                       <li className="nav-item">
                         <a
                           className="nav-link"
@@ -1254,6 +1254,8 @@ const SuperUserProfileContent = () => {
       .catch((error) => {
         console.error("Error fetching alumni data:", error);
       });
+
+      getAllPosts()
   }, [userData?.user_id]);
 
   console.log("user ", user);
@@ -1264,7 +1266,7 @@ const SuperUserProfileContent = () => {
         {/* Content Header (Page header) */}
 
         {/* Main content */}
-        <section className="content">
+        <section className="content"  >
           <div className="container-fluid">
             <div className="row">
               <div className="col-md-3" style={{ fontSize: "0.9em" }}>
@@ -1592,7 +1594,7 @@ const SuperUserProfileContent = () => {
                           />
                         </div>
                         {/* /.post */}
-                      </div>
+                    </div>
                       {/* /.tab-pane */}
                       <div className="tab-pane" id="timeline">
                         {/* The timeline */}
