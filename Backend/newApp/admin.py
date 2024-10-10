@@ -103,7 +103,7 @@ class AlumniProfileAdmin(ImportExportModelAdmin):
 
     search_fields = ['user__username', 'current_company_name', 'job_title', 'skills', 'industry']  
     ordering = ['user'] 
-    readonly_fields = ['id', 'current_company_name']
+    readonly_fields = ['id']
     fieldsets = (
     (None, {
         'fields': ('user', 'Heading', 'job_title', 'current_city', 'current_country')

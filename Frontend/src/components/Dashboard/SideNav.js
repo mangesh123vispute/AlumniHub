@@ -11,7 +11,7 @@ const SideNav = () => {
     <div>
       <aside className="main-sidebar sidebar-dark-primary elevation-4">
         {/* Brand Logo */}
-        <a href="index3.html" className="brand-link">
+        <Link to="/" className="brand-link">
           <img
             src="dist/img/AdminLTELogo.png"
             alt="AdminLTE Logo"
@@ -19,7 +19,7 @@ const SideNav = () => {
             style={{ opacity: ".8" }}
           />
           <span className="brand-text font-weight-light">AlumniHub</span>
-        </a>
+        </Link>
         {/* Sidebar */}
         <div className="sidebar">
           {/* Sidebar user panel (optional) */}

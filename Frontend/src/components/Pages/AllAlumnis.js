@@ -85,9 +85,12 @@ const AllAlumnisContent = () => {
                 >
                   <div className="card bg-light d-flex flex-fill">
                     <div className="card-header text-muted border-bottom-0">
-                      {alumnus.alumni_profile?.Heading ||
-                        alumnus.alumni_profile?.job_title}
+                      <b>{alumnus?.full_name || "N/A"} </b>
+                      <small className="text-muted float-right">
+                        Grad Year: {alumnus.graduation_year || "N/A"}
+                      </small>
                     </div>
+
                     <hr
                       style={{
                         border: "1px solid #d2d6df",
@@ -97,15 +100,14 @@ const AllAlumnisContent = () => {
                     <div className="card-body pt-0">
                       <div className="row">
                         <div className="col-7">
-                          <h2
-                            className="lead"
-                            style={{ fontSize: "1rem", fontWeight: "bold" }}
-                          >
-                            {alumnus.full_name}
-                          </h2>
                           <p className="text-muted text-sm">
-                            <b>Grad Year:</b> {alumnus.graduation_year || "N/A"}
+                            {alumnus?.alumni_profile?.Heading
+                              ? alumnus.alumni_profile.Heading
+                              : alumnus?.alumni_profile?.job_title
+                              ? alumnus.alumni_profile.job_title
+                              : "N/A"}
                           </p>
+
                           <ul className="ml-4 mb-0 fa-ul text-muted">
                             <li className="small">
                               <span className="fa-li">
@@ -229,12 +231,13 @@ const AllAlumnisContent = () => {
                     </div>
                     <div className="card-footer">
                       <div className="text-center">
-                        <a
-                        onClick={() => handleViewProfile(alumnus)}
+                        <button
+                          onClick={() => handleViewProfile(alumnus)}
                           className="btn btn-sm btn-primary"
+                          aria-label={`View profile of ${alumnus.name}`} 
                         >
                           <i className="fas fa-user" /> View Profile
-                        </a>
+                        </button>
                       </div>
                     </div>
                   </div>
