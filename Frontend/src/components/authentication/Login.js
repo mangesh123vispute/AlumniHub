@@ -20,10 +20,10 @@ const Login = () => {
     setAuthTokens,
     setUser,
     setLogin,
-  
+    setFilter,
   } = useContext(AuthContext);
 
-
+ setFilter(false);
 
    const navigate = useNavigate();
    const [Loading, setLoading] = useState(false);

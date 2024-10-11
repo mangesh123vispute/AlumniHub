@@ -10,9 +10,6 @@ const AllAlumnisContent = () => {
   const [alumniData, setAlumniData] = useState(null); // Changed to hold the entire data object
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const pageSize = 10;
   const {
     isOpen,
     message,
@@ -48,25 +45,20 @@ const AllAlumnisContent = () => {
      navigate("/profile", { state: userData });
    };
 
-  const fetchAlumni = async (pageNumber) => {
-    setLoading(true);
+  const fetchAlumni = async () => {
+    setLoading(true); 
     const token = localStorage.getItem("authTokens")
       ? JSON.parse(localStorage.getItem("authTokens"))
       : null;
     try {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/getalumni/?page=${pageNumber}&page_size=${pageSize}`,
-        {
-          headers: { Authorization: `Bearer ${token?.access}` },
-        }
-      );
+      const response = await axios.get("http://127.0.0.1:8000/getalumni/", {
+        headers: { Authorization: Bearer ${token?.access} },
+      });
       if (response.status === 200) {
         setAlumniData(response.data);
-        const totalItems = response.data.count;
-        setTotalPages(Math.ceil(totalItems / pageSize));
-        console.log("This is the totalItems:", totalPages);
         setLoading(false);
       }
+     
     } catch (err) {
       console.error("Error fetching alumni: ", err);
       setLoading(false);
@@ -75,8 +67,8 @@ const AllAlumnisContent = () => {
 
   // Fetch alumni on component mount
   useEffect(() => {
-    fetchAlumni(pageNumber);
-  }, [  pageNumber ]);
+    fetchAlumni();
+  }, []);
 
   return (
     <div>
@@ -214,7 +206,7 @@ const AllAlumnisContent = () => {
                             Email:{" "}
                             {alumnus.email ? (
                               isValidEmail(alumnus.email) ? (
-                                <a href={`mailto:${alumnus.email}`}>
+                                <a href={mailto:${alumnus.email}}>
                                   {alumnus.email}
                                 </a>
                               ) : (
@@ -297,7 +289,7 @@ const AllAlumnisContent = () => {
                         <button
                           onClick={() => handleViewProfile(alumnus)}
                           className="btn btn-sm btn-primary"
-                          aria-label={`View profile of ${alumnus.name}`}
+                          aria-label={View profile of ${alumnus.name}}
                         >
                           <i className="fas fa-user" /> View Profile
                         </button>
@@ -310,58 +302,17 @@ const AllAlumnisContent = () => {
           </div>
           {/* /.card-body */}
           <div className="card-footer">
-            <nav aria-label="Page Navigation">
+            <nav aria-label="Contacts Page Navigation">
               <ul className="pagination justify-content-center m-0">
-                {/* Previous button */}
-                <li
-                  className={`page-item ${pageNumber === 1 ? "disabled" : ""}`}
-                >
-                  <button
-                    className={`page-link ${
-                      pageNumber === 1 ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
-                    onClick={() => setPageNumber(pageNumber - 1)}
-                    disabled={pageNumber === 1}
-                  >
-                    <i
-                      className="fas fa-arrow-left"
-                      style={{ fontSize: "1em" }}
-                    />
-                  </button>
-                </li>
-
-                {/* Current page */}
                 <li className="page-item active">
-                  <button className="page-link" disabled>
-                    {pageNumber}
-                  </button>
+                  <a className="page-link" href="#">
+                    1
+                  </a>
                 </li>
-
-                {/* Next button */}
-                <li
-                  className={`page-item ${
-                    pageNumber === totalPages ? "disabled" : ""
-                  }`}
-                >
-                  <button
-                    className={`page-link ${
-                      pageNumber === totalPages
-                        ? "opacity-50 cursor-not-allowed"
-                        : ""
-                    }`}
-                    onClick={() => setPageNumber(pageNumber + 1)}
-                    disabled={pageNumber === totalPages}
-                  >
-                    <i
-                      className="fas fa-arrow-right"
-                      style={{ fontSize: "1em" }}
-                    />
-                  </button>
-                </li>
+                {/* Pagination items can be generated dynamically as needed */}
               </ul>
             </nav>
           </div>
-
           {/* /.card-footer */}
         </div>
         {/* /.card */}
@@ -381,3 +332,5 @@ const AllAlumnis = () => {
 };
 
 export default AllAlumnis;
+
+

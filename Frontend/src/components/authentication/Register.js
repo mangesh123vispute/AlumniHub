@@ -14,16 +14,16 @@ const Register = () => {
     title,
     showNotification,
     handleClose,
-    
+    setFilter
   } = useContext(AuthContext);
- 
+ setFilter(false);
   const [Loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
     confirmPassword: "",
-    role: "Student",
+    role: "",
   });
   // const [message, setMessage] = useState("");
   const handleChange = (e) => {

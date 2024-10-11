@@ -13,6 +13,7 @@ export const AuthProvider = ({ children }) => {
   const [title, setTitle] = useState('Notification');
   const [userData, setUserData] = useState(null);
   const [Login, setLogin] = useState(false);
+  const [filter, setFilter] = useState(false);
    
   const showNotification = async (msg, iconType, titleText) => {
     
@@ -139,6 +140,8 @@ export const AuthProvider = ({ children }) => {
     setUserData: setUserData,
     setLogin: setLogin,
     verifyaccessToken: verifyaccessToken,
+    setFilter: setFilter,
+    filter: filter,
   };
 
  

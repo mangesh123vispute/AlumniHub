@@ -10,9 +10,16 @@ const AllStudentsContent = () => {
   const [studentData, setStudentData] = useState(null); // Changed to hold the entire data object
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const { isOpen, message, icon, title, showNotification, handleClose } =
-    useContext(AuthContext);
-
+  const {
+    isOpen,
+    message,
+    icon,
+    title,
+    showNotification,
+    handleClose,
+    setFilter,
+  } = useContext(AuthContext);
+  setFilter(true);
   const isValidGitHubUrl = (url) => {
     const githubUrlPattern =
       /^(https?:\/\/)?(www\.)?github\.com\/[A-Za-z0-9_-]+\/?$/;
@@ -260,7 +267,7 @@ const AllStudentsContent = () => {
                       </div>
                     </div>
                     <div className="card-footer">
-                      <div className="text-center">
+                      <div className="text-right">
                         <button
                           onClick={() => handleViewProfile(students)}
                           className="btn btn-sm btn-primary"
