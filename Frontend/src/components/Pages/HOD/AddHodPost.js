@@ -221,7 +221,7 @@ const AddHodPostContent = () => {
                     type="text"
                     className="form-control"
                     placeholder="Enter title"
-                    value={Title}
+                    value={title}
                     onChange={(e) => setTitle(e.target.value)}
                   />
                 </div>
