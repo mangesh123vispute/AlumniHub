@@ -77,5 +77,8 @@ urlpatterns = [
     path('hods/<int:pk>/', GETHODs.as_view(), name='single_hod'),  # For retrieving a specific HOD
     path('students/', GETStudent.as_view(), name='get_all_students'),
     path('students/<int:pk>/', GETStudent.as_view(), name='get_student_by_id'),
+    path('edit-hod-profile/<int:pk>/', views.update_hod_profile, name='edit_hod_profile'),
+    path('edit-student-profile/<int:pk>/', views.update_student_profile, name='edit_student_profile'),
+    path('edit-alumni-profile/<int:pk>/', views.update_alumni_profile, name='edit_alumni_profile'),
    
 ]+static(settings.MEDIA_URL, document_root=settings. MEDIA_ROOT)    
