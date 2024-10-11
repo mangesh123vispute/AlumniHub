@@ -10,10 +10,17 @@ const ResetPassword = () => {
   const { uidb64, token } = useParams();
   const [newPassword, setNewPassword] = useState("");
  
-   let { isOpen, message, icon, title, showNotification, handleClose } =
-     useContext(AuthContext);
+   let {
+     isOpen,
+     message,
+     icon,
+     title,
+     showNotification,
+     handleClose,
+     setFilter,
+   } = useContext(AuthContext);
    const [Loading, setLoading] = useState(false);
-
+setFilter(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
 

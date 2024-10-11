@@ -18,12 +18,13 @@ const Home = ({ DynamicContent, url, heading = "Dashboard" }) => {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1 className="m-0" >{heading}</h1>
+                <h1 className="m-0">{heading}</h1>
               </div>
               {/* /.col */}
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
+                    
                     <a href="/home2">Home</a>
                   </li>
                   <li className="breadcrumb-item active">
@@ -44,7 +45,13 @@ const Home = ({ DynamicContent, url, heading = "Dashboard" }) => {
             <hr style={{ marginBottom: "10px", borderWidth: "2px" }}></hr>
             {/* Render the dynamic content passed as a prop */}
             {DynamicContent ? <DynamicContent /> : null}
-            <hr style={{ marginBottom: "10px",marginTop: "10px", borderWidth: "2px" }}></hr>
+            <hr
+              style={{
+                marginBottom: "10px",
+                marginTop: "10px",
+                borderWidth: "2px",
+              }}
+            ></hr>
           </div>
         </section>
       </div>

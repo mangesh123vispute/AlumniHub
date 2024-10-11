@@ -7,8 +7,16 @@ import Notification from "../Notification/Notification.js";
 import LoadingSpinner from "../Loading/Loading.js";
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
-  let { isOpen, message, icon, title, showNotification, handleClose } =
-      useContext(AuthContext);
+  let {
+    isOpen,
+    message,
+    icon,
+    title,
+    showNotification,
+    handleClose,
+    setFilter,
+  } = useContext(AuthContext);
+  setFilter(false);
   const [Loading, setLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();

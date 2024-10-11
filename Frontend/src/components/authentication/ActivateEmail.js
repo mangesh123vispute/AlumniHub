@@ -11,9 +11,16 @@ const ActivateEmail = () => {
   const [confirmPassword, setConfirmPassword] = useState(""); // State for confirm password
   const [role, setRole] = useState(""); // State for role
   const navigate = useNavigate();
-  const { isOpen, message, icon, title, showNotification, handleClose } =
-    useContext(AuthContext);
-
+  const {
+    isOpen,
+    message,
+    icon,
+    title,
+    showNotification,
+    handleClose,
+    setFilter,
+  } = useContext(AuthContext);
+  setFilter(false);
   const [Loading, setLoading] = useState(false);
 
   const handleSubmit = async (event) => {

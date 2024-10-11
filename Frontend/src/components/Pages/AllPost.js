@@ -18,8 +18,9 @@ const AllPostContent = () => {
     title,
     handleClose,
     showNotification,
+    setFilter,
   } = useContext(AuthContext);
-
+setFilter(true);
   const getAllPosts = async () => {
     const token = localStorage.getItem("authTokens") ? JSON.parse(localStorage.getItem("authTokens")) : null;
     setLoading(true);

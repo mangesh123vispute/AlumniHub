@@ -19,8 +19,9 @@ const YourPostContent = () => {
     handleClose,
     showNotification,
     userData,
+    setFilter,
   } = useContext(AuthContext);
-
+setFilter(true);
   const getAllPosts = async (e) => {
     if (e) e.preventDefault();
 

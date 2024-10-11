@@ -4,7 +4,8 @@ import AuthContext from "../../context/AuthContext.js";
 
 
 const Home2Content = () => {
-  let { userData } = useContext(AuthContext);
+  let { userData, setFilter } = useContext(AuthContext);
+  setFilter(false);
   return (
     <div>
       <section className="content">

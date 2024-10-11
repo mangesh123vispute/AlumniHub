@@ -30,6 +30,7 @@ const AddHodPostContent = () => {
     title,
     handleClose,
     showNotification,
+    setFilter,
   } = useContext(AuthContext);
 
   // Handle file change for image
@@ -38,6 +39,7 @@ const AddHodPostContent = () => {
       setFile(e.target.files[0]);
     }
   };
+  setFilter(false);
 
   // Handle file change for document (if needed)
   const handleDocChange = (e) => {

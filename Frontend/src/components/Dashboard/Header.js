@@ -6,16 +6,8 @@ import Notification from "../Notification/Notification.js";
 
 const Header = () => {
   // console.log("i am user", useContext(AuthContext));
-  let {
-    user,
-    logoutUser,
-    isOpen,
-    message,
-    icon,
-    title,
-    handleClose,
-    
-  } = useContext(AuthContext);
+  let { user, logoutUser, isOpen, message, icon, title, handleClose, filter } =
+    useContext(AuthContext);
   return (
     <div className="wrapper">
       <Notification
@@ -109,9 +101,22 @@ const Header = () => {
             </div>
           </li> */}
           {/* Messages Dropdown Menu */}
-         
-          {/* Notifications Dropdown Menu */}
-          
+
+          {filter ? (
+            <>
+              <li className="nav-item">
+                <a className="nav-link" href="#" role="button">
+                  <i class="fas fa-filter  text-sm"></i>
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="#" role="button">
+                  <i className="fas fa-search" />
+                </a>
+              </li>
+            </>
+          ) : null}
+
           <li className="nav-item">
             <a
               className="nav-link"
@@ -122,7 +127,6 @@ const Header = () => {
               <i className="fas fa-expand-arrows-alt" />
             </a>
           </li>
-          
         </ul>
       </nav>
       {/* /.navbar */}

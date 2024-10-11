@@ -1868,8 +1868,8 @@ const SuperUserProfileContent = () => {
 const Profile = () => {
   const location = useLocation();
   const { state } = location;
-  let { userData } = useContext(AuthContext);
-  
+  let { userData, setFilter } = useContext(AuthContext);
+  setFilter(false);
   if (state) {
     userData = state;
     localStorage.setItem("id", JSON.stringify(state?.id));
