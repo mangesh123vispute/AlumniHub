@@ -7,7 +7,7 @@ import Notification from "../Notification/Notification.js";
 import { useNavigate } from "react-router-dom";
 
 const AllAlumnisContent = () => {
-  const [alumniData, setAlumniData] = useState(null); // Changed to hold the entire data object
+  const [adminData, setAdminData] = useState(null); // Changed to hold the entire data object
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const {
@@ -19,7 +19,10 @@ const AllAlumnisContent = () => {
     handleClose,
     setFilter,
   } = useContext(AuthContext);
-  setFilter(true);
+  
+  const [pageNumber, setPageNumber] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const pageSize = 10;
   const isValidGitHubUrl = (url) => {
     const githubUrlPattern =
       /^(https?:\/\/)?(www\.)?github\.com\/[A-Za-z0-9_-]+\/?$/;
@@ -45,17 +48,22 @@ const AllAlumnisContent = () => {
     navigate("/profile", { state: userData });
   };
 
-  const fetchAlumni = async () => {
+  const fetchAdmins = async (pageNumber) => {
     setLoading(true);
     const token = localStorage.getItem("authTokens")
       ? JSON.parse(localStorage.getItem("authTokens"))
       : null;
     try {
-      const response = await axios.get("http://127.0.0.1:8000/getalumni/", {
-        headers: { Authorization: `Bearer ${token?.access}` },
-      });
+      const response = await axios.get(
+        `http://127.0.0.1:8000/hods/?page=${pageNumber}&page_size=${pageSize}`,
+        {
+          headers: { Authorization: `Bearer ${token?.access}` },
+        }
+      );
       if (response.status === 200) {
-        setAlumniData(response.data);
+        setAdminData(response.data);
+        const totalItems = response.data.count;
+        setTotalPages(Math.ceil(totalItems / pageSize));
         setLoading(false);
       }
     } catch (err) {
@@ -66,8 +74,8 @@ const AllAlumnisContent = () => {
 
   // Fetch alumni on component mount
   useEffect(() => {
-    fetchAlumni();
-  }, []);
+    fetchAdmins(pageNumber);
+  }, [pageNumber]);
 
   return (
     <div>
@@ -80,218 +88,57 @@ const AllAlumnisContent = () => {
         title={title}
       />
       <section className="content">
-        {/* Default box */}
         <div className="card card-solid">
           <div className="card-body pb-0">
             <div className="row">
-              {alumniData?.results?.map((alumnus) => (
+              {adminData?.results?.map((admins) => (
                 <div
-                  key={alumnus.id}
+                  key={admins.id}
                   className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column"
                 >
-                  <div className="card bg-light d-flex flex-fill">
-                    <div className="card-header text-muted border-bottom-0">
-                      <b>{alumnus?.full_name || "N/A"} </b>
-                      <small className="text-muted float-right">
-                        Grad Year: {alumnus.graduation_year || "N/A"}
-                      </small>
+                  <div className="card card-widget widget-user">
+                    {/* Add the bg color to the header using any of the bg-* classes */}
+                    <div className="widget-user-header bg-info">
+                      <h3
+                        className="widget-user-username mb-1"
+                        style={{ fontSize: "1rem" }}
+                      >
+                        {admins.full_name || admins.username}
+                      </h3>
+                      <h5 className="widget-user-desc">
+                        <b style={{ marginRight: "0.1rem" }}>{`${
+                          admins?.hod_profile?.designation
+                            ? admins.hod_profile?.designation
+                            : "Senior Faculty"
+                        } `}</b>
+                        at SSBT COET ,Jalgaon ,Maharashtra.
+                        <div className="mt-1" style={{ fontWeight: "bold" }}>
+                          Branch : {admins?.Branch || "N/A"}
+                        </div>
+                      </h5>
+                    </div>
+                    <div
+                      className="widget-user-image"
+                      style={{ marginTop: "1.5rem" }}
+                    >
+                      <img
+                        className="img-circle elevation-2"
+                        src="../dist/img/user1-128x128.jpg"
+                        alt="User Avatar"
+                      />
                     </div>
 
-                    <hr
-                      style={{
-                        border: "1px solid #d2d6df",
-                        marginBottom: "10px",
-                      }}
-                    />
-                    <div className="card-body pt-0">
-                      <div className="row">
-                        <div className="col-7">
-                          <p className="text-muted text-sm">
-                            {alumnus?.alumni_profile?.Heading
-                              ? alumnus.alumni_profile.Heading
-                              : alumnus?.alumni_profile?.job_title
-                              ? alumnus.alumni_profile.job_title
-                              : "N/A"}
-                          </p>
-
-                          <ul className="ml-4 mb-0 fa-ul text-muted">
-                            <li className="small">
-                              <span className="fa-li">
-                                <i className="fas fa-lg fa-building" />
-                              </span>
-                              Company:{" "}
-                              {alumnus.alumni_profile?.current_company_name ||
-                                "N/A"}
-                            </li>
-                            <li className="small mt-1">
-                              <span className="fa-li">
-                                <i className="fas fa-lg fa-id-badge" />
-                              </span>
-                              Role: {alumnus.alumni_profile?.job_title || "N/A"}
-                            </li>
-                          </ul>
+                    <div className="card-footer" style={{ marginTop: "1.5rem" }}>
+                      <div style={{ display: "flex", justifyContent: "right" }}>
+                        <div >
+                          <button
+                            onClick={() => handleViewProfile(admins)}
+                            className="btn btn-sm btn-primary"
+                            aria-label={`View profile of ${admins.full_name}`}
+                          >
+                            <i className="fas fa-user" /> View Profile
+                          </button>
                         </div>
-                        <div className="col-5 text-center">
-                          <img
-                            src="../../dist/img/user1-128x128.jpg" // Replace with dynamic image path if needed
-                            alt="user-avatar"
-                            className="img-circle img-fluid"
-                          />
-                        </div>
-                      </div>
-                      <hr
-                        style={{
-                          border: "1px solid #d2d6df",
-                          marginBottom: "10px",
-                          marginTop: "20px",
-                        }}
-                      />
-                      <div className="text-muted">
-                        <div className="text-muted mb-2">
-                          Portfolio and Resume
-                        </div>
-                        <ul className="ml-4 mb-0 fa-ul text-muted">
-                          <li className="small mt-1">
-                            <span className="fa-li">
-                              <i className="fas fa-lg fa-folder mr-1" />
-                            </span>
-                            Portfolio:{" "}
-                            {alumnus?.portfolio_link ? (
-                              <a
-                                href={alumnus.portfolio_link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                Click here
-                              </a>
-                            ) : (
-                              "N/A"
-                            )}
-                          </li>
-                          <li className="small mt-1">
-                            <span className="fa-li">
-                              <i className="fas fa-lg fa-file-alt mr-1" />
-                            </span>
-                            Resume:{" "}
-                            {alumnus?.resume_link ? (
-                              <a
-                                href={alumnus.resume_link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                Click here
-                              </a>
-                            ) : (
-                              "N/A"
-                            )}
-                          </li>
-                        </ul>
-                      </div>
-                      <hr
-                        style={{
-                          border: "1px solid #d2d6df",
-                          marginBottom: "10px",
-                          marginTop: "10px",
-                        }}
-                      />
-                      {/* Additional Information Section */}
-                      <div className="text-muted">
-                        <div className="text-muted mb-2">Contact Info:</div>
-                        <ul className="ml-4 mb-0 fa-ul text-muted">
-                          <li className="small mt-1">
-                            <span className="fa-li">
-                              <i className="fas fa-lg fa-envelope mr-1" />
-                            </span>
-                            Email:{" "}
-                            {alumnus.email ? (
-                              isValidEmail(alumnus.email) ? (
-                                <a href={`mailto:${alumnus.email}`}>
-                                  {alumnus.email}
-                                </a>
-                              ) : (
-                                "Invalid Email"
-                              )
-                            ) : (
-                              "N/A"
-                            )}
-                          </li>
-                          <li className="small mt-1">
-                            <span className="fa-li">
-                              <i className="fab fa-lg fa-github mr-1" />
-                            </span>
-                            GitHub:{" "}
-                            <a
-                              href={alumnus.Github}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {alumnus.Github ? (
-                                isValidGitHubUrl(alumnus.Github) ? (
-                                  <a
-                                    href={alumnus.Github}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    {alumnus.Github}
-                                  </a>
-                                ) : (
-                                  "Invalid URL"
-                                )
-                              ) : (
-                                "N/A"
-                              )}
-                            </a>
-                          </li>
-                          <li className="small mt-1">
-                            <span className="fa-li">
-                              <i className="fab fa-lg fa-linkedin mr-1" />
-                            </span>
-                            LinkedIn:{" "}
-                            <a
-                              href={alumnus.linkedin}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {alumnus.linkedin ? (
-                                isValidLinkedInUrl(alumnus.linkedin) ? (
-                                  <a
-                                    href={alumnus.linkedin}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    {alumnus.linkedin}
-                                  </a>
-                                ) : (
-                                  "Invalid URL"
-                                )
-                              ) : (
-                                "N/A"
-                              )}
-                            </a>
-                          </li>
-                          <li className="small">
-                            <span className="fa-li">
-                              <i className="fas fa-lg fa-fax mr-1" />
-                            </span>
-                            Mobile No:{" "}
-                            {alumnus.mobile
-                              ? isValidMobileNumber(alumnus.mobile)
-                                ? alumnus.mobile
-                                : "Invalid Mobile Number"
-                              : "N/A"}
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                    <div className="card-footer">
-                      <div className="text-right">
-                        <button
-                          onClick={() => handleViewProfile(alumnus)}
-                          className="btn btn-sm btn-primary"
-                          aria-label={`View profile of ${alumnus.name}`}
-                        >
-                          <i className="fas fa-user" /> View Profile
-                        </button>
                       </div>
                     </div>
                   </div>
@@ -301,14 +148,54 @@ const AllAlumnisContent = () => {
           </div>
           {/* /.card-body */}
           <div className="card-footer">
-            <nav aria-label="Contacts Page Navigation">
+            <nav aria-label="Page Navigation">
               <ul className="pagination justify-content-center m-0">
-                <li className="page-item active">
-                  <a className="page-link" href="#">
-                    1
-                  </a>
+                {/* Previous button */}
+                <li
+                  className={`page-item ${pageNumber === 1 ? "disabled" : ""}`}
+                >
+                  <button
+                    className={`page-link ${
+                      pageNumber === 1 ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                    onClick={() => setPageNumber(pageNumber - 1)}
+                    disabled={pageNumber === 1}
+                  >
+                    <i
+                      className="fas fa-arrow-left"
+                      style={{ fontSize: "1em" }}
+                    />
+                  </button>
                 </li>
-                {/* Pagination items can be generated dynamically as needed */}
+
+                {/* Current page */}
+                <li className="page-item active">
+                  <button className="page-link" disabled>
+                    {pageNumber}
+                  </button>
+                </li>
+
+                {/* Next button */}
+                <li
+                  className={`page-item ${
+                    pageNumber === totalPages ? "disabled" : ""
+                  }`}
+                >
+                  <button
+                    className={`page-link ${
+                      pageNumber === totalPages
+                        ? "opacity-50 cursor-not-allowed"
+                        : ""
+                    }`}
+                    onClick={() => setPageNumber(pageNumber + 1)}
+                    disabled={pageNumber === totalPages}
+                  >
+                    <i
+                      className="fas fa-arrow-right"
+                      style={{ fontSize: "1em" }}
+                    />
+                  </button>
+                </li>
               </ul>
             </nav>
           </div>
@@ -324,8 +211,8 @@ const AllAlumnis = () => {
   return (
     <Home
       DynamicContent={AllAlumnisContent}
-      url="all_alumnis"
-      heading="All Alumnis"
+      url="all_hods"
+      heading="All Admin"
     />
   );
 };

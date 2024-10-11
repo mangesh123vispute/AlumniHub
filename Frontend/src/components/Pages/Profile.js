@@ -1826,6 +1826,7 @@ const Profile = () => {
   const { state } = location;
   let { userData, setFilter } = useContext(AuthContext);
   setFilter(false);
+  console.log("state", state);
   if (state) {
     userData = state;
     localStorage.setItem("id", JSON.stringify(state?.id));
@@ -1836,7 +1837,7 @@ const Profile = () => {
       return StudentProfileContent;
     } else if (userData.is_alumni) {
       return AlumniProfileContent;
-    } else if (userData.is_superuser) {
+    } else if (userData.is_superuser || (!userData.is_student && !userData.is_alumni)) {
       return SuperUserProfileContent;
     }
   };

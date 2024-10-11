@@ -10,6 +10,9 @@ const AllStudentsContent = () => {
   const [studentData, setStudentData] = useState(null); // Changed to hold the entire data object
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const pageSize = 10;
   const {
     isOpen,
     message,
@@ -45,29 +48,35 @@ const AllStudentsContent = () => {
     navigate("/profile", { state: userData });
   };
 
-  const fetchStudents = async () => {
+  const fetchStudents = async ( pageNumber) => {
     setLoading(true);
     const token = localStorage.getItem("authTokens")
       ? JSON.parse(localStorage.getItem("authTokens"))
       : null;
     try {
-      const response = await axios.get("http://127.0.0.1:8000/students/", {
-        headers: { Authorization: `Bearer ${token?.access}` },
-      });
+      const response = await axios.get(
+        `http://127.0.0.1:8000/students/?page=${pageNumber}&page_size=${pageSize}`,
+        {
+          headers: { Authorization: `Bearer ${token?.access}` },
+        }
+      );
       if (response.status === 200) {
         setStudentData(response.data);
+        const totalItems = response.data.count;
+        setTotalPages(Math.ceil(totalItems / pageSize));
         setLoading(false);
       }
     } catch (err) {
       console.error("Error fetching alumni: ", err);
       setLoading(false);
+      
     }
   };
 
   // Fetch alumni on component mount
   useEffect(() => {
-    fetchStudents();
-  }, []);
+    fetchStudents(pageNumber);
+  }, [pageNumber]);
 
   return (
     <div>
@@ -284,14 +293,54 @@ const AllStudentsContent = () => {
           </div>
           {/* /.card-body */}
           <div className="card-footer">
-            <nav aria-label="Contacts Page Navigation">
+            <nav aria-label="Page Navigation">
               <ul className="pagination justify-content-center m-0">
-                <li className="page-item active">
-                  <a className="page-link" href="#">
-                    1
-                  </a>
+                {/* Previous button */}
+                <li
+                  className={`page-item ${pageNumber === 1 ? "disabled" : ""}`}
+                >
+                  <button
+                    className={`page-link ${
+                      pageNumber === 1 ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                    onClick={() => setPageNumber(pageNumber - 1)}
+                    disabled={pageNumber === 1}
+                  >
+                    <i
+                      className="fas fa-arrow-left"
+                      style={{ fontSize: "1em" }}
+                    />
+                  </button>
                 </li>
-                {/* Pagination items can be generated dynamically as needed */}
+
+                {/* Current page */}
+                <li className="page-item active">
+                  <button className="page-link" disabled>
+                    {pageNumber}
+                  </button>
+                </li>
+
+                {/* Next button */}
+                <li
+                  className={`page-item ${
+                    pageNumber === totalPages ? "disabled" : ""
+                  }`}
+                >
+                  <button
+                    className={`page-link ${
+                      pageNumber === totalPages
+                        ? "opacity-50 cursor-not-allowed"
+                        : ""
+                    }`}
+                    onClick={() => setPageNumber(pageNumber + 1)}
+                    disabled={pageNumber === totalPages}
+                  >
+                    <i
+                      className="fas fa-arrow-right"
+                      style={{ fontSize: "1em" }}
+                    />
+                  </button>
+                </li>
               </ul>
             </nav>
           </div>
