@@ -1255,7 +1255,7 @@ const SuperUserProfileContent = () => {
         console.error("Error fetching alumni data:", error);
       });
 
-      getAllPosts()
+      // getAllPosts()
   }, [userData?.user_id]);
 
   console.log("user ", user);
