@@ -5,6 +5,7 @@ import axios from 'axios'
 import Home from "../Dashboard/Home.js";
 import AuthContext from "../../context/AuthContext.js";
 import { useLocation } from "react-router-dom";
+import Modal from 'react-modal';
 const AlumniProfileContent = () => {
   let { userData } = useContext(AuthContext);
   console.log("userData", userData);
@@ -53,7 +54,7 @@ const AlumniProfileContent = () => {
                           ? "Alumni"
                           : user.is_student
                           ? "Student"
-                          : "College"
+                          : "Admin"
                         : "User"}
                     </div>
                   </div>
@@ -1234,8 +1235,31 @@ const SuperUserProfileContent = () => {
     ? JSON.parse(localStorage.getItem("id"))
     : null;
 
+
+    Modal.setAppElement('#root');
+
   const [user, setUser] = useState(null);
 
+  const [posts, setPosts] = useState([]);
+  // const [modalIsOpen, setModalIsOpen] = useState(false);
+  // const [modalContent, setModalContent] = useState(null);
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalContent, setModalContent] = useState(null);
+
+  // Function to open the modal with content (image or document)
+  const openModal = (content) => {
+    setModalContent(content);
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setModalContent(null);
+  };
+
+
+  
   useEffect(() => {
     // Fetch alumni data when the component mounts
     const token = localStorage.getItem("authTokens")
@@ -1258,8 +1282,30 @@ const SuperUserProfileContent = () => {
      
   }, [userData?.user_id]);
 
-  console.log("user ", user);
+  useEffect(() => {
+    const token = localStorage.getItem("authTokens")
+    ? JSON.parse(localStorage.getItem("authTokens"))
+    : null;
+    axios
+      .get(`http://127.0.0.1:8000/hodposts/author/${userData?.user_id}`, {
+        headers: {
+          Authorization: `Bearer ${token?.access}`,
+        },
+      })
+      .then((response) => {
+        setPosts(response.data);
+        // console.log("ress "+JSON.stringify(response.data))
+      })
+      .catch((error) => {
+        console.error('Error fetching the posts:', error);
+      });
+  }, [userData?.user_id]);
 
+  console.log("user ", user);
+  // console.log("postsss "+ posts);
+
+  // username , full_name ,email, About,Year_joined,Branch , mobile , linkdin,instagram
+  // , github, designation
   return (
     <>
       <div>
@@ -1280,7 +1326,7 @@ const SuperUserProfileContent = () => {
                           ? "Alumni"
                           : user.is_student
                           ? "Student"
-                          : "College"
+                          : "Admin"
                         : "User"}
                     </div>
                   </div>
@@ -1297,8 +1343,9 @@ const SuperUserProfileContent = () => {
                       />
                     </div>
                     <h3 className="profile-username text-center">
-                      {user ? user.full_name || user.username : "User"}
+                      {user ? user?.full_name || user?.username : "User"}
                     </h3>
+                   
                     <p className="text-muted text-center">
                       {user?.hod_profile?.designation || "Not Specified"}
                     </p>
@@ -1318,7 +1365,7 @@ const SuperUserProfileContent = () => {
                       <i className="fas fa-university mr-1" /> Department
                     </strong>
                     <p className="text-muted">
-                      {user?.hod_profile?.department || "Not Specified"}
+                      {user?.Branch || "Not Specified"}
                     </p>
                     <hr />
 
@@ -1368,12 +1415,12 @@ const SuperUserProfileContent = () => {
                     </p>
                     <hr />
 
-                    <strong>
+                    {/* <strong>
                       <i className="fas fa-building mr-1" /> Designation
                     </strong>
                     <p className="text-muted">
                       {user?.hod_profile?.designation || "Not Specified"}
-                    </p>
+                    </p> */}
                   </div>
                   {/* /.card-body */}
                 </div>
@@ -1419,56 +1466,85 @@ const SuperUserProfileContent = () => {
                     <div className="tab-content">
                       <div className="active tab-pane" id="activity">
                         {/* Post */}
-                        <div className="post">
-                          <div className="user-block">
-                            <img
-                              className="img-circle img-bordered-sm"
-                              src="../../dist/img/user1-128x128.jpg"
-                              alt="user image"
-                            />
-                            <span className="username">
-                              <a href="#">Jonathan Burke Jr.</a>
-                              <a href="#" className="float-right btn-tool">
-                                <i className="fas fa-times" />
-                              </a>
-                            </span>
-                            <span className="description">
-                              Shared publicly - 7:30 PM today
-                            </span>
-                          </div>
-                          {/* /.user-block */}
-                          <p>
-                            Lorem ipsum represents a long-held tradition for
-                            designers, typographers and the like. Some people
-                            hate it and argue for its demise, but others ignore
-                            the hate as they create awesome tools to help create
-                            filler text for everyone from bacon lovers to
-                            Charlie Sheen fans.
-                          </p>
-                          <p>
-                            <a href="#" className="link-black text-sm mr-2">
-                              <i className="fas fa-share mr-1" /> Share
-                            </a>
-                            <a href="#" className="link-black text-sm">
-                              <i className="far fa-thumbs-up mr-1" /> Like
-                            </a>
-                            <span className="float-right">
-                              <a href="#" className="link-black text-sm">
-                                <i className="far fa-comments mr-1" /> Comments
-                                (5)
-                              </a>
-                            </span>
-                          </p>
-                          <input
-                            className="form-control form-control-sm"
-                            type="text"
-                            placeholder="Type a comment"
-                          />
-                        </div>
+                         <div>
+      {posts.length > 0 && posts.map((post) => (
+        <div key={post?.id} className="post" >
+          <div className="user-block">
+            <img
+              className="img-circle img-bordered-sm"
+              src="../../dist/img/user1-128x128.jpg"
+              alt="user image"
+            />
+            <span className="username">
+              <a href="#">{post?.author_name}</a>
+              <a href="#" className="float-right btn-tool">
+                <i className="fas fa-times" />
+              </a>
+            </span>
+            <span className="description">
+              Shared publicly - {new Date(post?.created_at).toLocaleString()}
+            </span>
+          </div>
+          {/* /.user-block */}
+          <p>{post?.content}</p>
+
+          {/* Button to show image in modal */}
+          {post?.image_url && (
+            <button
+              className="btn btn-primary"
+              onClick={() => openModal({ type: 'image', url: post.image_url })}
+            >
+              View Image
+            </button>
+          )}
+
+          {/* Button to show document in modal */}
+          {post?.DocUrl && (
+            <button
+              className="btn btn-secondary"
+              onClick={() => openModal({ type: 'document', url: post.DocUrl })}
+            >
+              View Document
+            </button>
+          )}
+        </div>
+      ))}
+
+      {/* Modal component */}
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Content Modal"
+        className="modal"
+        overlayClassName="modal-overlay"
+      >
+        <button onClick={closeModal} className="modal-close-btn">Close</button>
+        
+        {/* Display image or document based on modalContent */}
+        {modalContent?.type === 'image' ? (
+          <div>
+            <img
+              src={modalContent.url}
+              alt="Post image"
+              style={{ maxWidth: '100%' }}
+            />
+          </div>
+        ) : modalContent?.type === 'document' ? (
+          <div>
+            <iframe
+              src={modalContent.url}
+              style={{ width: '100%', height: '500px' }}
+              title="Document"
+            />
+          </div>
+        ) : null}
+      </Modal>
+    </div>
+
                         {/* /.post */}
                         {/* Post */}
-                        <div className="post clearfix">
-                          <div className="user-block">
+                         <div className="post clearfix">
+                          {/* <div className="user-block">
                             <img
                               className="img-circle img-bordered-sm"
                               src="../../dist/img/user7-128x128.jpg"
@@ -1483,17 +1559,17 @@ const SuperUserProfileContent = () => {
                             <span className="description">
                               Sent you a message - 3 days ago
                             </span>
-                          </div>
+                          </div> */}
                           {/* /.user-block */}
-                          <p>
+                           {/* <p>
                             Lorem ipsum represents a long-held tradition for
                             designers, typographers and the like. Some people
                             hate it and argue for its demise, but others ignore
                             the hate as they create awesome tools to help create
                             filler text for everyone from bacon lovers to
                             Charlie Sheen fans.
-                          </p>
-                          <form className="form-horizontal">
+                          </p> */}
+                          {/* <form className="form-horizontal">
                             <div className="input-group input-group-sm mb-0">
                               <input
                                 className="form-control form-control-sm"
@@ -1508,12 +1584,12 @@ const SuperUserProfileContent = () => {
                                 </button>
                               </div>
                             </div>
-                          </form>
-                        </div>
+                          </form> */}
+                        </div>  
                         {/* /.post */}
                         {/* Post */}
-                        <div className="post">
-                          <div className="user-block">
+                         <div className="post">
+                          {/* <div className="user-block">
                             <img
                               className="img-circle img-bordered-sm"
                               src="../../dist/img/user6-128x128.jpg"
@@ -1528,20 +1604,20 @@ const SuperUserProfileContent = () => {
                             <span className="description">
                               Posted 5 photos - 5 days ago
                             </span>
-                          </div>
+                          </div> */}
                           {/* /.user-block */}
-                          <div className="row mb-3">
-                            <div className="col-sm-6">
+                            <div className="row mb-3">
+                            {/* <div className="col-sm-6">
                               <img
                                 className="img-fluid"
                                 src="../../dist/img/photo1.png"
                                 alt="Photo"
                               />
-                            </div>
+                            </div>  */}
                             {/* /.col */}
-                            <div className="col-sm-6">
+                             <div className="col-sm-6">
                               <div className="row">
-                                <div className="col-sm-6">
+                                {/* <div className="col-sm-6">
                                   <img
                                     className="img-fluid mb-3"
                                     src="../../dist/img/photo2.png"
@@ -1552,9 +1628,9 @@ const SuperUserProfileContent = () => {
                                     src="../../dist/img/photo3.jpg"
                                     alt="Photo"
                                   />
-                                </div>
-                                {/* /.col */}
-                                <div className="col-sm-6">
+                                </div> */}
+                                
+                                {/* <div className="col-sm-6">
                                   <img
                                     className="img-fluid mb-3"
                                     src="../../dist/img/photo4.jpg"
@@ -1565,15 +1641,15 @@ const SuperUserProfileContent = () => {
                                     src="../../dist/img/photo1.png"
                                     alt="Photo"
                                   />
-                                </div>
+                                </div> */}
                                 {/* /.col */}
                               </div>
                               {/* /.row */}
-                            </div>
+                            </div> 
                             {/* /.col */}
-                          </div>
+                          </div> 
                           {/* /.row */}
-                          <p>
+                          {/* <p>
                             <a href="#" className="link-black text-sm mr-2">
                               <i className="fas fa-share mr-1" /> Share
                             </a>
@@ -1591,8 +1667,8 @@ const SuperUserProfileContent = () => {
                             className="form-control form-control-sm"
                             type="text"
                             placeholder="Type a comment"
-                          />
-                        </div>
+                          /> */}
+                        </div> 
                         {/* /.post */}
                     </div>
                       {/* /.tab-pane */}
@@ -1663,39 +1739,7 @@ const SuperUserProfileContent = () => {
                           </div>
                           {/* END Contact Details Item */}
 
-                          <div>
-                            <i className="fas fa-camera bg-purple" />
-                            <div className="timeline-item">
-                              <span className="time">
-                                <i className="far fa-clock" /> 2 days ago
-                              </span>
-                              <h3 className="timeline-header">
-                                <a href="#">Mina Lee</a> uploaded new photos
-                              </h3>
-                              <div className="timeline-body">
-                                <img
-                                  src="https://placehold.it/150x100"
-                                  alt="..."
-                                />
-                                <img
-                                  src="https://placehold.it/150x100"
-                                  alt="..."
-                                />
-                                <img
-                                  src="https://placehold.it/150x100"
-                                  alt="..."
-                                />
-                                <img
-                                  src="https://placehold.it/150x100"
-                                  alt="..."
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          {/* END timeline item */}
-                          <div>
-                            <i className="far fa-clock bg-gray" />
-                          </div>
+                          
                         </div>
                       </div>
                       {/* /.tab-pane */}
