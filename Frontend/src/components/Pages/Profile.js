@@ -34,6 +34,87 @@ const AlumniProfileContent = () => {
 
   console.log("user ", user);
 
+ 
+   // State variables for user and profile details
+   const [alumniData, setAlumniData] = useState({
+    user: {
+      username: user?.username,
+      full_name: user?.full_name,
+      About: user?.About,
+      Work: user?.Work,
+      Year_Joined: user?.Year_Joined,
+      graduation_year: user?.graduation_year,
+      Branch: user?.Branch,
+      email: user?.email,
+      mobile: user?.mobile,
+      linkedin: user?.linkedin,
+      Github: user?.Github,
+      instagram: user?.instagram,
+      portfolio_link: user?.portfolio_link,
+      resume_link: user?.resume_link,
+      skills: user?.skills
+    },
+    profile: {
+      user:user,
+      Heading: user?.alumni_profile?.Heading,
+      current_company_name: user?.alumni_profile?.current_company_name,
+      job_title: user?.alumni_profile?.job_title,
+      Education: user?.alumni_profile?.Education,
+      current_city: user?.alumni_profile?.current_city,
+      current_country: user?.alumni_profile?.current_country,
+      years_of_experience: user?.alumni_profile?.years_of_experience,
+      industry: user?.alumni_profile?.industry,
+      achievements: user?.alumni_profile?.achievements,
+      previous_companies: user?.alumni_profile?.previous_companies,
+      preferred_contact_method: user?.alumni_profile?.preferred_contact_method
+    }
+  });
+
+  // Function to handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("authTokens")
+      ? JSON.parse(localStorage.getItem("authTokens"))
+      : null;
+    try {
+      const response = await axios.put(`http://127.0.0.1:8000/edit-alumni-profile/${id || userData?.user_id}/`,{
+        headers: {
+          Authorization: `Bearer ${token?.access}`,
+        },
+      }, alumniData);
+      console.log('Profile updated successfully', response.data);
+    } catch (error) {
+      console.error('Error updating profile:', error.message);
+    }
+  };
+
+  // Handle input changes for user data
+  const handleUserChange = (e) => {
+    const { name, value } = e.target;
+    setAlumniData((prevState) => ({
+      ...prevState,
+      user: {
+        ...prevState.user,
+        [name]: value
+      }
+    }));
+  };
+
+  // Handle input changes for profile data
+  const handleProfileChange = (e) => {
+    const { name, value } = e.target;
+    setAlumniData((prevState) => ({
+      ...prevState,
+      profile: {
+        ...prevState.profile,
+        [name]: value
+      }
+    }));
+  };
+
+
+
+
   return (
     <>
       <div>
@@ -212,6 +293,9 @@ const AlumniProfileContent = () => {
                 </div>
                 {/* /.card */}
               </div>
+
+
+
 
               {/* /.col */}
               <div className="col-md-9">
@@ -534,105 +618,186 @@ const AlumniProfileContent = () => {
                       </div>
                       {/* /.tab-pane */}
                       <div className="tab-pane" id="settings">
-                        <form className="form-horizontal">
-                          <div className="form-group row">
-                            <label
-                              htmlFor="inputName"
-                              className="col-sm-2 col-form-label"
-                            >
-                              Name
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                type="email"
-                                className="form-control"
-                                id="inputName"
-                                placeholder="Name"
-                              />
-                            </div>
-                          </div>
-                          <div className="form-group row">
-                            <label
-                              htmlFor="inputEmail"
-                              className="col-sm-2 col-form-label"
-                            >
-                              Email
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                type="email"
-                                className="form-control"
-                                id="inputEmail"
-                                placeholder="Email"
-                              />
-                            </div>
-                          </div>
-                          <div className="form-group row">
-                            <label
-                              htmlFor="inputName2"
-                              className="col-sm-2 col-form-label"
-                            >
-                              Name
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                type="text"
-                                className="form-control"
-                                id="inputName2"
-                                placeholder="Name"
-                              />
-                            </div>
-                          </div>
-                          <div className="form-group row">
-                            <label
-                              htmlFor="inputExperience"
-                              className="col-sm-2 col-form-label"
-                            >
-                              Experience
-                            </label>
-                            <div className="col-sm-10">
-                              <textarea
-                                className="form-control"
-                                id="inputExperience"
-                                placeholder="Experience"
-                                defaultValue={""}
-                              />
-                            </div>
-                          </div>
-                          <div className="form-group row">
-                            <label
-                              htmlFor="inputSkills"
-                              className="col-sm-2 col-form-label"
-                            >
-                              Skills
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                type="text"
-                                className="form-control"
-                                id="inputSkills"
-                                placeholder="Skills"
-                              />
-                            </div>
-                          </div>
-                          <div className="form-group row">
-                            <div className="offset-sm-2 col-sm-10">
-                              <div className="checkbox">
-                                <label>
-                                  <input type="checkbox" /> I agree to the{" "}
-                                  <a href="#">terms and conditions</a>
-                                </label>
+                        <form className="form-horizontal" onSubmit={handleSubmit}>
+                            <div className="form-group row">
+                              <label htmlFor="inputName" className="col-sm-2 col-form-label">
+                                Username
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="username"
+                                  name="username"
+                                  value={alumniData?.user?.username}
+                                  onChange={handleUserChange}
+                                  placeholder="Username"
+                                />
                               </div>
                             </div>
-                          </div>
-                          <div className="form-group row">
-                            <div className="offset-sm-2 col-sm-10">
-                              <button type="submit" className="btn btn-danger">
-                                Submit
-                              </button>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputFullName" className="col-sm-2 col-form-label">
+                                Full Name
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="full_name"
+                                  name="full_name"
+                                  value={alumniData?.user?.full_name}
+                                  onChange={handleUserChange}
+                                  placeholder="Full Name"
+                                />
+                              </div>
                             </div>
-                          </div>
-                        </form>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputEmail" className="col-sm-2 col-form-label">
+                                Email
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="email"
+                                  className="form-control"
+                                  id="email"
+                                  name="email"
+                                  value={alumniData?.user?.email}
+                                  onChange={handleUserChange}
+                                  placeholder="Email"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputMobile" className="col-sm-2 col-form-label">
+                                Mobile
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="mobile"
+                                  name="mobile"
+                                  value={alumniData?.user?.mobile}
+                                  onChange={handleUserChange}
+                                  placeholder="Mobile"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
+                                LinkedIn
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="linkedin"
+                                  name="linkedin"
+                                  value={alumniData?.user?.linkedin}
+                                  onChange={handleUserChange}
+                                  placeholder="LinkedIn URL"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputGithub" className="col-sm-2 col-form-label">
+                                Github
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="Github"
+                                  name="Github"
+                                  value={alumniData?.user?.Github}
+                                  onChange={handleUserChange}
+                                  placeholder="Github URL"
+                                />
+                              </div>
+                            </div>
+
+                            {/* Profile Specific Fields */}
+                            <div className="form-group row">
+                              <label htmlFor="inputHeading" className="col-sm-2 col-form-label">
+                                Heading
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="Heading"
+                                  name="Heading"
+                                  value={alumniData?.profile?.Heading}
+                                  onChange={handleProfileChange}
+                                  placeholder="Profile Heading"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputCompany" className="col-sm-2 col-form-label">
+                                Current Company
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="current_company_name"
+                                  name="current_company_name"
+                                  value={alumniData?.profile?.current_company_name}
+                                  onChange={handleProfileChange}
+                                  placeholder="Current Company Name"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputCity" className="col-sm-2 col-form-label">
+                                Current City
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="current_city"
+                                  name="current_city"
+                                  value={alumniData?.profile?.current_city}
+                                  onChange={handleProfileChange}
+                                  placeholder="Current City"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputSkills" className="col-sm-2 col-form-label">
+                                Skills
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="skills"
+                                  name="skills"
+                                  value={alumniData?.user?.skills}
+                                  onChange={handleUserChange}
+                                  placeholder="Skills"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <div className="offset-sm-2 col-sm-10">
+                                <button type="submit" className="btn btn-danger">
+                                  Submit
+                                </button>
+                              </div>
+                            </div>
+                          </form>
                       </div>
                       {/* /.tab-pane */}
                     </div>
