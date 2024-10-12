@@ -335,18 +335,31 @@ class HodPrincipalPostAPIView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class AlumniPostPagination(PageNumberPagination):
+    page_size = 10  
+    page_size_query_param = 'page_size'
+    max_page_size = 50 
 
+class AlumniAuthorPostListView(generics.ListAPIView):
+    serializer_class = AlumniPostSerializer
+    pagination_class = AlumniPostPagination  
 
+    def get_queryset(self):
+        author_id = self.kwargs['author_id']
+        return AlumniPost.objects.filter(author_id=author_id)
 
-
+class HodPostPagination(PageNumberPagination):
+    page_size = 5  
+    page_size_query_param = 'page_size'
+    max_page_size = 50  
 
 class HodAuthorPostListView(generics.ListAPIView):
     serializer_class = HodPrincipalPostSerializer
+    pagination_class = HodPostPagination  
 
     def get_queryset(self):
         author_id = self.kwargs['author_id']
         return HodPrincipalPost.objects.filter(author_id=author_id)
-    
 
 class AlumniPostAPIView(APIView):
     permission_classes = [IsAuthenticated]  # Require authentication for all actions
