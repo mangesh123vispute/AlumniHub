@@ -502,6 +502,7 @@ class GETStudent(APIView):
 
 
 #^ Edit profile views
+
 @api_view(['PUT'])
 def update_hod_profile(request, pk):
     try:
@@ -522,7 +523,7 @@ def update_hod_profile(request, pk):
         user_serializer.save()
         profile_serializer.save()
         return Response({"detail": "HOD profile updated successfully"})
-    
+
     return Response({"user_errors": user_serializer.errors, "profile_errors": profile_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
@@ -547,38 +548,29 @@ def update_student_profile(request, pk):
     
     return Response({"user_errors": user_serializer.errors, "profile_errors": profile_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['PUT'])
-def update_hod_profile(request, pk):
-    try:
-        # Fetch the HOD profile based on the user ID
-        hod_profile = HODPrincipalProfile.objects.get(user__id=pk)
-    except HODPrincipalProfile.DoesNotExist:
-        return Response({"detail": "HOD profile not found"}, status=status.HTTP_404_NOT_FOUND)
 
-    # Get user and profile data from the request, defaulting to empty dictionaries
+@api_view(['PUT'])
+def update_alumni_profile(request, pk):
+    try:
+        alumni_profile = AlumniProfile.objects.get(user__id=pk)
+    except AlumniProfile.DoesNotExist:
+        return Response({"detail": "Alumni profile not found"}, status=status.HTTP_404_NOT_FOUND)
+
     user_data = request.data.get('user', {})
     profile_data = request.data.get('profile', {})
 
-    # Initialize serializers for user and HOD profile
-    user_serializer = UserSerializer(instance=hod_profile.user, data=user_data)
-    profile_serializer = HODPrincipalProfileSerializer(instance=hod_profile, data=profile_data)
+    user_serializer = UserSerializer(instance=alumni_profile.user, data=user_data)
+    profile_serializer = AlumniProfileSerializer(instance=alumni_profile, data=profile_data)
 
-    # Validate the serializers
     user_valid = user_serializer.is_valid()
     profile_valid = profile_serializer.is_valid()
 
-    # Check if both validations pass
     if user_valid and profile_valid:
         user_serializer.save()
         profile_serializer.save()
-        return Response({"detail": "HOD profile updated successfully"}, status=status.HTTP_200_OK)
-    
-    # Return errors if validation fails
-    return Response({
-        "user_errors": user_serializer.errors,
-        "profile_errors": profile_serializer.errors
-    }, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"detail": "Alumni profile updated successfully"})
 
+    return Response({"user_errors": user_serializer.errors, "profile_errors": profile_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 # ^edit image 
 
