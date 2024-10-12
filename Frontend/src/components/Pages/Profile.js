@@ -100,7 +100,14 @@ const AlumniProfileContent = () => {
                     <h3 className="card-title">About Me</h3>
                   </div>
                   {/* /.card-header */}
-                  <div className="card-body">
+                  <div
+                    className="card-body"
+                    style={{
+                      maxHeight: "80vh",
+                      overflowX: "auto",
+                      overflowY: "auto",
+                    }}
+                  >
                     <strong>
                       <i className="fas fa-info-circle mr-1" /> About
                     </strong>
@@ -784,7 +791,14 @@ const StudentProfileContent = () => {
                     <h3 className="card-title">About Me</h3>
                   </div>
                   {/* /.card-header */}
-                  <div className="card-body">
+                  <div
+                    className="card-body"
+                    style={{
+                      maxHeight: "80vh",
+                      overflowX: "auto",
+                      overflowY: "auto",
+                    }}
+                  >
                     <strong>
                       <i className="fas fa-info-circle mr-1" /> About
                     </strong>
@@ -1297,7 +1311,14 @@ const SuperUserProfileContent = () => {
                     <h3 className="card-title">About Me</h3>
                   </div>
                   {/* /.card-header */}
-                  <div className="card-body">
+                  <div
+                    className="card-body"
+                    style={{
+                      maxHeight: "80vh",
+                      overflowX: "auto",
+                      overflowY: "auto",
+                    }}
+                  >
                     <strong>
                       <i className="fas fa-university mr-1 " /> Department
                     </strong>
@@ -1631,38 +1652,47 @@ const SuperUserProfileContent = () => {
 
                                 <strong>LinkedIn:</strong>
                                 <p className="text-muted font">
-                                  { user?.linkedin ? (<a
-                                    href={user?.linkedin || "#"}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    {user?.linkedin ? user.linkedin : "N/A"}
-                                  </a>):("N/A")}
-                                  
+                                  {user?.linkedin ? (
+                                    <a
+                                      href={user?.linkedin || "#"}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      {user?.linkedin ? user.linkedin : "N/A"}
+                                    </a>
+                                  ) : (
+                                    "N/A"
+                                  )}
                                 </p>
 
                                 <strong>GitHub:</strong>
                                 <p className="text-muted font">
-                                  { user?.Github ? (<a
-                                    href={user?.Github || "#"}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    {user?.Github ? user.Github : "N/A"}
-                                  </a>) : ("N/A")}
-                                  
+                                  {user?.Github ? (
+                                    <a
+                                      href={user?.Github || "#"}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      {user?.Github ? user.Github : "N/A"}
+                                    </a>
+                                  ) : (
+                                    "N/A"
+                                  )}
                                 </p>
 
                                 <strong>Instagram:</strong>
                                 <p className="text-muted font">
-                                  { user?.instagram ? (<a
-                                    href={user?.instagram || "#"}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    {user?.instagram ? user.instagram : "N/A"}
-                                  </a>):("N/A")}
-                                  
+                                  {user?.instagram ? (
+                                    <a
+                                      href={user?.instagram || "#"}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      {user?.instagram ? user.instagram : "N/A"}
+                                    </a>
+                                  ) : (
+                                    "N/A"
+                                  )}
                                 </p>
                               </div>
                             </div>
