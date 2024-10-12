@@ -69,3 +69,16 @@ class AlumniProfileSerializer(serializers.ModelSerializer):
 
         return instance
 
+class UserImageUploadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['Image']  
+
+    def validate_image(self, value):
+        """Ensure the uploaded image does not exceed the maximum file size."""
+        max_size = 2 * 1024 * 1024  # 2 MB in bytes
+
+        if value.size > max_size:
+            raise serializers.ValidationError(f"The image file is too large. Maximum size allowed is 2 MB.")
+        
+        return value

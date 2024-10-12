@@ -24,7 +24,7 @@ from django.db import DatabaseError
 from rest_framework.exceptions import NotFound
 from rest_framework import generics
 from rest_framework.decorators import api_view
-from .editserialisers import HODPrincipalProfileSerializer, UserSerializer, AlumniProfileSerializer, StudentProfileSerializer
+from .editserialisers import HODPrincipalProfileSerializer, UserSerializer, AlumniProfileSerializer, StudentProfileSerializer,UserImageUploadSerializer
 
 @check_profile_completion
 def home(request):
@@ -562,3 +562,30 @@ def update_alumni_profile(request, pk):
         profile_serializer.save()
         return Response({"detail": "Alumni profile updated successfully"})
     return Response({"user_errors": user_serializer.errors, "profile_errors": profile_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# ^edit image 
+
+class UserImageUploadView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, user_id, *args, **kwargs):
+        user = get_object_or_404(User, id=user_id)
+
+        serializer = UserImageUploadSerializer(user, data=request.data, partial=True) 
+
+        if serializer.is_valid():
+            serializer.save() 
+            return Response({"detail": "Image updated successfully"}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    
+    def get(self, request, user_id, *args, **kwargs):
+        user = get_object_or_404(User, id=user_id)
+        
+        
+        if user.Image:
+            image_url = request.build_absolute_uri(user.Image.url)
+            return Response({"image_url": image_url}, status=status.HTTP_200_OK)
+        else:
+            return Response({"detail": "User has no image."}, status=status.HTTP_404_NOT_FOUND)
