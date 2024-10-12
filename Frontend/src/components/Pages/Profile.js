@@ -6,6 +6,7 @@ import Home from "../Dashboard/Home.js";
 import AuthContext from "../../context/AuthContext.js";
 import { useLocation } from "react-router-dom";
 import Modal from 'react-modal';
+import "./profile.css"
 const AlumniProfileContent = () => {
   let { userData } = useContext(AuthContext);
   console.log("userData", userData);
@@ -70,14 +71,18 @@ const AlumniProfileContent = () => {
                         alt="User profile picture"
                       />
                     </div>
-                    <h3 className="profile-username text-center">
+                    <h3 className="profile-username text-center ">
                       {user ? user.full_name || user.username : "User"}
                     </h3>
-                    <p className="text-muted text-center">
-                      {user?.alumni_profile?.job_title || "Not Specified"}
-                    </p>
-                    <p className="text-muted text-center">
-                      {user?.alumni_profile?.Heading || "Not Specified"}
+                    <hr
+                      style={{
+                        border: "1px solid #888888",
+                        marginBottom: "0.5em",
+                        marginTop: "0.5em",
+                      }}
+                    />
+                    <p className="text-muted text-center font ">
+                      {user?.alumni_profile?.Heading || "N/A"}
                     </p>
                   </div>
                   {/* /.card-body */}
@@ -92,123 +97,101 @@ const AlumniProfileContent = () => {
                   {/* /.card-header */}
                   <div className="card-body">
                     <strong>
-                      <i className="fas fa-graduation-cap mr-1" /> Education
+                      <i className="fas fa-info-circle mr-1" /> About
                     </strong>
-                    <p className="text-muted">
-                      {user?.alumni_profile?.Education || "Not Provided"}
-                    </p>
-                    <hr />
-
-                    <strong>
-                      <i className="fas fa-code-branch mr-1" /> Branch
-                    </strong>
-                    <p className="text-muted">
+                    <p className="text-muted aboutfont">
                       <span className="tag tag-danger">
-                        {user?.Branch || "Not Specified"}
+                        {user?.About || "N/A"}
                       </span>{" "}
                       <br />
                     </p>
-                    <hr />
+
+                    <strong>
+                      <i className="fas fa-graduation-cap mr-1" /> Education
+                    </strong>
+                    <p className="text-muted aboutfont">
+                      {user?.alumni_profile?.Education || "N/A"}, <br></br>
+                      Graduation Year: {user?.graduation_year || "N/A"}
+                    </p>
+
+                    <strong>
+                      <i className="fas fa-code-branch mr-1 " /> Branch
+                    </strong>
+                    <p className="text-muted aboutfont">
+                      <span className="tag tag-danger">
+                        {user?.Branch || "N/A"}
+                      </span>{" "}
+                      <br />
+                    </p>
 
                     <strong>
                       <i className="fas fa-map-marker-alt mr-1" /> Location
                     </strong>
-                    <p className="text-muted">
-                      {user?.alumni_profile?.current_city || "Not Provided"},
-                      {user?.alumni_profile?.current_country || "Not Provided"}
+                    <p className="text-muted aboutfont">
+                      {user?.alumni_profile?.current_city || "N/A"},
+                      {user?.alumni_profile?.current_country || "N/A"}
                     </p>
-                    <hr />
+
+                    <strong>
+                      <i className="fas fa-building mr-1" /> Current Company
+                    </strong>
+                    <p className="text-muted aboutfont">
+                      <span className="tag tag-danger">
+                        {user?.alumni_profile?.current_company_name || "N/A"}
+                        <br></br>
+                        Role: {user?.alumni_profile?.job_title || "N/A"}
+                      </span>{" "}
+                      <br />
+                    </p>
+
+                    <strong>
+                      <i className="fas fa-building mr-1" /> Previous Companies
+                    </strong>
+                    <p className="text-muted aboutfont">
+                      {user?.alumni_profile?.previous_companies ||
+                        "No Notes Available"}
+                    </p>
+                    <strong>
+                      <i className="fas fa-briefcase mr-1" /> Years of
+                      Experience
+                    </strong>
+                    <p className="text-muted aboutfont">
+                      <span className="tag tag-danger">
+                        {user?.alumni_profile?.years_of_experience || "N/A"}
+                      </span>{" "}
+                      <br />
+                    </p>
 
                     <strong>
                       <i className="fas fa-laptop-code mr-1" /> Skills
                     </strong>
-                    <p className="text-muted">
+                    <p className="text-muted aboutfont">
                       <span className="tag tag-danger">
-                        {user?.skills || "Not Specified"}
+                        {user?.skills || "N/A"}
                       </span>{" "}
                       <br />
                     </p>
-                    <hr />
 
                     <strong>
                       <i className="fas fa-industry mr-1" /> Industry
                     </strong>
-                    <p className="text-muted">
+                    <p className="text-muted aboutfont">
                       <span className="tag tag-danger">
-                        {user?.alumni_profile?.industry || "Not Specified"}
+                        {user?.alumni_profile?.industry || "N/A"}
                       </span>{" "}
                       <br />
                     </p>
-                    <hr />
-
-                    <strong>
-                      <i className="fas fa-info-circle mr-1" /> About
-                    </strong>
-                    <p className="text-muted">
-                      <span className="tag tag-danger">
-                        {user?.About || "Not Specified"}
-                      </span>{" "}
-                      <br />
-                    </p>
-                    <hr />
 
                     <strong>
                       <i className="fas fa-trophy mr-1" /> Achievements
                     </strong>
-                    <p className="text-muted">
+                    <p className="text-muted aboutfont">
                       <span className="tag tag-success">
                         {user?.alumni_profile?.achievements ||
                           "No Achievements"}
                       </span>
                     </p>
-                    <hr />
-
-                    <strong>
-                      <i className="fas fa-building mr-1" /> Current Company
-                    </strong>
-                    <p className="text-muted">
-                      <span className="tag tag-danger">
-                        {user?.alumni_profile?.current_company_name ||
-                          "Not Specified"}
-                      </span>{" "}
-                      <br />
-                    </p>
-                    <hr />
-
-                    <strong>
-                      <i className="fas fa-calendar-alt mr-1" /> Graduation Year
-                    </strong>
-                    <p className="text-muted">
-                      <span className="tag tag-danger">
-                        {user?.graduation_year ||
-                          "Not Specified"}
-                      </span>{" "}
-                      <br />
-                    </p>
-                    <hr />
-
-                    <strong>
-                      <i className="fas fa-briefcase mr-1" /> Years of
-                      Experience
-                    </strong>
-                    <p className="text-muted">
-                      <span className="tag tag-danger">
-                        {user?.alumni_profile?.years_of_experience ||
-                          "Not Specified"}
-                      </span>{" "}
-                      <br />
-                    </p>
-                    <hr />
-
-                    <strong>
-                      <i className="fas fa-building mr-1" /> Previous Companies
-                    </strong>
-                    <p className="text-muted">
-                      {user?.alumni_profile?.previous_companies ||
-                        "No Notes Available"}
-                    </p>
                   </div>
-                  {/* /.card-body */}
                 </div>
                 {/* /.card */}
               </div>
@@ -218,16 +201,17 @@ const AlumniProfileContent = () => {
                 <div className="card">
                   <div className="card-header p-2">
                     <ul className="nav nav-pills">
-                      <li className="nav-item">
+                      <li className="nav-item ">
                         <a
                           className="nav-link active"
                           href="#activity"
                           data-toggle="tab"
+                        
                         >
                           Your Posts
                         </a>
                       </li>
-                      <li className="nav-item">
+                      <li className="nav-item ">
                         <a
                           className="nav-link"
                           href="#timeline"
@@ -236,7 +220,7 @@ const AlumniProfileContent = () => {
                           Contacts
                         </a>
                       </li>
-                      <li className="nav-item">
+                      <li className="nav-item ">
                         <a
                           className="nav-link"
                           href="#settings"
@@ -270,7 +254,7 @@ const AlumniProfileContent = () => {
                             </span>
                           </div>
                           {/* /.user-block */}
-                          <p>
+                          <p className="postfont">
                             Lorem ipsum represents a long-held tradition for
                             designers, typographers and the like. Some people
                             hate it and argue for its demise, but others ignore
@@ -444,92 +428,99 @@ const AlumniProfileContent = () => {
                             <div className="timeline-item">
                               <div className="timeline-body">
                                 <strong>Email:</strong>
-                                <p>{user?.email || "Not Provided"}</p>
-                                <hr />
+                                <p className="text-muted font">
+                                  {user?.email || "N/A"}
+                                </p>
 
                                 <strong>Mobile:</strong>
-                                <p>{user?.mobile || "Not Provided"}</p>
-                                <hr />
+                                <p className="text-muted font">
+                                  {user?.mobile || "N/A"}
+                                </p>
 
                                 <strong>LinkedIn:</strong>
-                                <p>
-                                  <a
-                                    href={user?.linkedin || "#"}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    {user?.linkedin
-                                      ? user.linkedin
-                                      : "Not Provided"}
-                                  </a>
+                                <p className="text-muted font">
+                                  {user?.linkedin ? (
+                                    <a
+                                      href={user?.linkedin || "#"}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      {user?.linkedin ? user.linkedin : "N/A"}
+                                    </a>
+                                  ) : (
+                                    "N/A"
+                                  )}
                                 </p>
-                                <hr />
 
                                 <strong>GitHub:</strong>
-                                <p>
-                                  <a
-                                    href={user?.Github || "#"}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    {user?.Github
-                                      ? user.Github
-                                      : "Not Provided"}
-                                  </a>
+                                <p className="text-muted font">
+                                  {user?.Github ? (
+                                    <a
+                                      href={user?.Github || "#"}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      {user?.Github ? user.Github : "N/A"}
+                                    </a>
+                                  ) : (
+                                    "N/A"
+                                  )}
                                 </p>
-                                <hr />
 
                                 <strong>Instagram:</strong>
-                                <p>
-                                  <a
-                                    href={user?.instagram || "#"}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    {user?.instagram
-                                      ? user.instagram
-                                      : "Not Provided"}
-                                  </a>
+                                <p className="text-muted font">
+                                  {user?.instagram ? (
+                                    <a
+                                      href={user?.instagram || "#"}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      {user?.instagram ? user.instagram : "N/A"}
+                                    </a>
+                                  ) : (
+                                    "N/A"
+                                  )}
                                 </p>
 
                                 <strong>Portfolio:</strong>
-                                <p>
-                                  <a
-                                    href={user?.
-                                      portfolio_link || "#"}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    {user?.portfolio_link
-                                      ? user.portfolio_link
-                                      : "Not Provided"}
-                                  </a>
+                                <p className="text-muted font">
+                                  {user?.portfolio_link ? (
+                                    <a
+                                      href={user?.portfolio_link || "#"}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      {user?.portfolio_link
+                                        ? user.portfolio_link
+                                        : "N/A"}
+                                    </a>
+                                  ) : (
+                                    "N/A"
+                                  )}
                                 </p>
-                                <hr />
 
                                 <strong>Resume:</strong>
-                                <p>
-                                  <a
-                                    href={user?.resume_link                                       || "#"}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    {user?.resume_link
-
-                                      ? user.resume_link
-                                      
-                                      : "Not Provided"}
-                                  </a>
+                                <p className="text-muted font">
+                                  {user?.resume_link ? (
+                                    <a
+                                      href={user?.resume_link || "#"}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      {user?.resume_link
+                                        ? user.resume_link
+                                        : "N/A"}
+                                    </a>
+                                  ) : (
+                                    "N/A"
+                                  )}
                                 </p>
-                                <hr />
                               </div>
                             </div>
                           </div>
                           {/* END Contact Details Item */}
                           {/* END timeline item */}
                           {/* timeline item */}
-
-                          
                         </div>
                       </div>
                       {/* /.tab-pane */}
@@ -722,10 +713,10 @@ const StudentProfileContent = () => {
                       {user ? user.full_name || user.username : "User"}
                     </h3>
                     <p className="text-muted text-center">
-                      {user?.Work || "Not Specified"}
+                      {user?.Work || "N/A"}
                     </p>
                     <p className="text-muted text-center">
-                      {user?.student_profile?.Heading || "Not Specified"}
+                      {user?.student_profile?.Heading || "N/A"}
                     </p>
                   </div>
                   {/* /.card-body */}
@@ -743,9 +734,9 @@ const StudentProfileContent = () => {
                         <i className="fas fa-graduation-cap mr-1" /> Education
                       </strong>
                       <p className="text-muted">
-                        {user?.student_profile?.graduation_year ? `Graduation Year: ${user.student_profile.graduation_year}` : "Not Provided"}
+                        {user?.student_profile?.graduation_year ? `Graduation Year: ${user.student_profile.graduation_year}` : "N/A"}
                       </p>
-                      <hr /> */}
+                       */}
 
                     <strong>
                       <i className="fas fa-calendar-alt mr-1" /> Current Year of
@@ -753,95 +744,95 @@ const StudentProfileContent = () => {
                     </strong>
                     <p className="text-muted">
                       {user?.student_profile?.current_year_of_study ||
-                        "Not Specified"}
+                        "N/A"}
                     </p>
-                    <hr />
+                    
 
                     <strong>
                       <i className="fas fa-code-branch mr-1" /> Branch
                     </strong>
                     <p className="text-muted">
                       <span className="tag tag-danger">
-                        {user?.Branch || "Not Specified"}
+                        {user?.Branch || "N/A"}
                       </span>
                     </p>
-                    <hr />
+                    
 
                     <strong>
                       <i className="fas fa-info-circle mr-1" /> About
                     </strong>
                     <p className="text-muted">
                       <span className="tag tag-danger">
-                        {user?.About || "Not Specified"}
+                        {user?.About || "N/A"}
                       </span>
                     </p>
-                    <hr />
+                    
 
                     <strong>
                       <i className="fas fa-laptop-code mr-1" /> Skills
                     </strong>
                     <p className="text-muted">
                       <span className="tag tag-danger">
-                        {user?.skills || "Not Specified"}
+                        {user?.skills || "N/A"}
                       </span>
                     </p>
-                    <hr />
+                    
 
                     <strong>
                       <i className="fas fa-building mr-1" /> Department
                     </strong>
                     <p className="text-muted">
-                      {user?.student_profile?.department || "Not Specified"}
+                      {user?.student_profile?.department || "N/A"}
                     </p>
-                    <hr />
+                    
 
                     <strong>
                       <i className="fas fa-building mr-1" /> Year Joined
                     </strong>  
                    
                     <p className="text-muted">
-                      {user?.Year_Joined || "Not Specified"}
+                      {user?.Year_Joined || "N/A"}
                     </p>
-                    <hr />
+                    
 
                     <strong>
                       <i className="fas fa-building mr-1" /> Graduation Year
                     </strong>  
 
                     <p className="text-muted">
-                      {user?.graduation_year || "Not Specified"}
+                      {user?.graduation_year || "N/A"}
                     </p>
-                    <hr />
+                    
 
                     <strong>
                       <i className="fas fa-building mr-1" /> Current year of Study
                     </strong>  
                     <p className="text-muted">
-                      {user?.student_profile?.current_year_of_study || "Not Specified"}
+                      {user?.student_profile?.current_year_of_study || "N/A"}
                     </p>
-                    <hr />
+                    
 
                     {/* <strong>
                         <i className="fas fa-link mr-1" /> LinkedIn
                       </strong>
                       <p className="text-muted">
-                        <a href={user?.linkedin || "#"}>{user?.linkedin || "Not Provided"}</a>
+                        <a href={user?.linkedin || "#"}>{user?.linkedin || "N/A"}</a>
                       </p>
-                      <hr />
+                      
 
                       <strong>
                         <i className="fas fa-code-branch mr-1" /> Github
                       </strong>
                       <p className="text-muted">
-                        <a href={user?.Github || "#"}>{user?.Github || "Not Provided"}</a>
+                        <a href={user?.Github || "#"}>{user?.Github || "N/A"}</a>
                       </p>
-                      <hr />
+                      
 
                       <strong>
                         <i className="fas fa-camera mr-1" /> Instagram
                       </strong>
                       <p className="text-muted">
-                        <a href={user?.instagram || "#"}>{user?.instagram || "Not Provided"}</a>
+                        <a href={user?.instagram || "#"}>{user?.instagram || "N/A"}</a>
                       </p> */}
                   </div>
                   {/* /.card-body */}
@@ -902,12 +893,12 @@ const StudentProfileContent = () => {
                             <div className="timeline-item">
                               <div className="timeline-body">
                                 <strong>Email:</strong>
-                                <p>{user?.email || "Not Provided"}</p>
-                                <hr />
+                                <p className="text-muted font">{user?.email || "N/A"}</p>
+                                
 
                                 <strong>Mobile:</strong>
-                                <p>{user?.mobile || "Not Provided"}</p>
-                                <hr />
+                                <p>{user?.mobile || "N/A"}</p>
+                                
 
                                 <strong>LinkedIn:</strong>
                                 <p>
@@ -918,10 +909,10 @@ const StudentProfileContent = () => {
                                   >
                                     {user?.linkedin
                                       ? user.linkedin
-                                      : "Not Provided"}
+                                      : "N/A"}
                                   </a>
                                 </p>
-                                <hr />
+                                
 
                                 <strong>GitHub:</strong>
                                 <p>
@@ -932,10 +923,10 @@ const StudentProfileContent = () => {
                                   >
                                     {user?.Github
                                       ? user.Github
-                                      : "Not Provided"}
+                                      : "N/A"}
                                   </a>
                                 </p>
-                                <hr />
+                                
 
                                 <strong>Instagram:</strong>
                                 <p>
@@ -946,7 +937,7 @@ const StudentProfileContent = () => {
                                   >
                                     {user?.instagram
                                       ? user.instagram
-                                      : "Not Provided"}
+                                      : "N/A"}
                                   </a>
                                 </p>
                               </div>
@@ -1199,7 +1190,7 @@ const SuperUserProfileContent = () => {
                     </h3>
                    
                     <p className="text-muted text-center">
-                      {user?.hod_profile?.designation || "Not Specified"}
+                      {user?.hod_profile?.designation || "N/A"}
                     </p>
                   </div>
                   {/* /.card-body */}
@@ -1217,61 +1208,61 @@ const SuperUserProfileContent = () => {
                       <i className="fas fa-university mr-1" /> Department
                     </strong>
                     <p className="text-muted">
-                      {user?.Branch || "Not Specified"}
+                      {user?.Branch || "N/A"}
                     </p>
-                    <hr />
+                    
 
                     <strong>
                       <i className="fas fa-phone mr-1" /> Mobile
                     </strong>
                     <p className="text-muted">
-                      {user?.mobile || "Not Provided"}
+                      {user?.mobile || "N/A"}
                     </p>
-                    <hr />
+                    
 
                     {/* <strong>
                           <i className="fas fa-code-branch mr-1" /> Branch
                         </strong>
                         <p className="text-muted">
-                          <span className="tag tag-danger">{user?.Branch || "Not Specified"}</span> <br />
+                          <span className="tag tag-danger">{user?.Branch || "N/A"}</span> <br />
                         </p>
-                        <hr /> */}
+                         */}
 
                     <strong>
                       <i className="fas fa-envelope mr-1" /> Email
                     </strong>
                     <p className="text-muted">
-                      {user?.email || "Not Provided"}
+                      {user?.email || "N/A"}
                     </p>
-                    <hr />
+                    
 
                     <strong>
                       <i className="fas fa-info-circle mr-1" /> About
                     </strong>
                     <p className="text-muted">
                       <span className="tag tag-danger">
-                        {user?.About || "Not Specified"}
+                        {user?.About || "N/A"}
                       </span>{" "}
                       <br />
                     </p>
-                    <hr />
+                    
 
                     <strong>
                       <i className="fas fa-laptop-code mr-1" /> Year Joined
                     </strong>
                     <p className="text-muted">
                       <span className="tag tag-danger">
-                        {user?.Year_Joined || "Not Specified"}
+                        {user?.Year_Joined || "N/A"}
                       </span>{" "}
                       <br />
                     </p>
-                    <hr />
+                    
 
                     {/* <strong>
                       <i className="fas fa-building mr-1" /> Designation
                     </strong>
                     <p className="text-muted">
-                      {user?.hod_profile?.designation || "Not Specified"}
+                      {user?.hod_profile?.designation || "N/A"}
                     </p> */}
                   </div>
                   {/* /.card-body */}
@@ -1539,12 +1530,12 @@ const SuperUserProfileContent = () => {
                             <div className="timeline-item">
                               <div className="timeline-body">
                                 <strong>Email:</strong>
-                                <p>{user?.email || "Not Provided"}</p>
-                                <hr />
+                                <p>{user?.email || "N/A"}</p>
+                                
 
                                 <strong>Mobile:</strong>
-                                <p>{user?.mobile || "Not Provided"}</p>
-                                <hr />
+                                <p>{user?.mobile || "N/A"}</p>
+                                
 
                                 <strong>LinkedIn:</strong>
                                 <p>
@@ -1555,10 +1546,10 @@ const SuperUserProfileContent = () => {
                                   >
                                     {user?.linkedin
                                       ? user.linkedin
-                                      : "Not Provided"}
+                                      : "N/A"}
                                   </a>
                                 </p>
-                                <hr />
+                                
 
                                 <strong>GitHub:</strong>
                                 <p>
@@ -1569,10 +1560,10 @@ const SuperUserProfileContent = () => {
                                   >
                                     {user?.Github
                                       ? user.Github
-                                      : "Not Provided"}
+                                      : "N/A"}
                                   </a>
                                 </p>
-                                <hr />
+                                
 
                                 <strong>Instagram:</strong>
                                 <p>
@@ -1583,7 +1574,7 @@ const SuperUserProfileContent = () => {
                                   >
                                     {user?.instagram
                                       ? user.instagram
-                                      : "Not Provided"}
+                                      : "N/A"}
                                   </a>
                                 </p>
                               </div>
