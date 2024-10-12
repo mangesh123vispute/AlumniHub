@@ -3037,7 +3037,7 @@
 										"$ref": "AAAAAAGSW7klaDueWbA="
 									},
 									"name": "DocUrl",
-									"type": "FileField",
+									"type": "URLField",
 									"length": 0
 								},
 								{
@@ -3137,7 +3137,7 @@
 										"$ref": "AAAAAAGSW7yNrzwpGzk="
 									},
 									"name": "DocUrl",
-									"type": "FileField",
+									"type": "UrlField",
 									"length": 0
 								},
 								{
