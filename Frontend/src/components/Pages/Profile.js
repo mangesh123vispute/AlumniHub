@@ -13,6 +13,56 @@ const AlumniProfileContent = () => {
   console.log("userData", userData);
   const [user, setUser] = useState(null);
   const id = localStorage.getItem("id") ? JSON.parse(localStorage.getItem("id")) : null
+
+  const [alumniData, setAlumniData] = useState({
+    user: {
+      // username: '',
+      full_name: '',
+      About: '',
+      Work: '',
+      Year_Joined: '',
+      graduation_year: '',
+      Branch: '',
+      email: '',
+      mobile: '',
+      linkedin: '',
+      Github: '',
+      instagram: '',
+      portfolio_link: '',
+      resume_link: '',
+      skills: ''
+    },
+    profile: {
+      user:{
+        // username: user?.username,
+        full_name: user?.full_name,
+        About: user?.About,
+        Work: user?.Work,
+        Year_Joined: user?.Year_Joined,
+        graduation_year: user?.graduation_year,
+        Branch: user?.Branch,
+        email: user?.email,
+        mobile: user?.mobile,
+        linkedin: user?.linkedin,
+        Github: user?.Github,
+        instagram: user?.instagram,
+        portfolio_link: user?.portfolio_link,
+        resume_link: user?.resume_link,
+        skills: user?.skills
+      },
+      Heading: user?.alumni_profile?.Heading,
+      current_company_name: user?.alumni_profile?.current_company_name,
+      job_title: user?.alumni_profile?.job_title,
+      Education: user?.alumni_profile?.Education,
+      current_city: user?.alumni_profile?.current_city,
+      current_country: user?.alumni_profile?.current_country,
+      years_of_experience: user?.alumni_profile?.years_of_experience,
+      industry: user?.alumni_profile?.industry,
+      achievements: user?.alumni_profile?.achievements,
+      previous_companies: user?.alumni_profile?.previous_companies,
+      preferred_contact_method: user?.alumni_profile?.preferred_contact_method
+    }
+  });
   
   useEffect(() => {
     const token = localStorage.getItem("authTokens")
@@ -27,6 +77,57 @@ const AlumniProfileContent = () => {
       })
       .then((response) => {
         setUser(response.data);
+            if(response.data){
+              setAlumniData({
+                user: {
+                  // username: response.data.username,
+                  full_name: response.data.full_name,
+                  About: response.data.About,
+                  Work: response.data.Work,
+                  Year_Joined: response.data.Year_Joined,
+                  graduation_year: response.data.graduation_year,
+                  Branch: response.data.Branch,
+                  email: response.data.email,
+                  mobile: response.data.mobile,
+                  linkedin: response.data.linkedin,
+                  Github: response.data.Github,
+                  instagram: response.data.instagram,
+                  portfolio_link: response.data.portfolio_link,
+                  resume_link: response.data.resume_link,
+                  skills: response.data.skills,
+                },
+                profile: {
+                  user: {
+                    // username: response.data.username,
+                    full_name: response.data.full_name,
+                    About: response.data.About,
+                    Work: response.data.Work,
+                    Year_Joined: response.data.Year_Joined,
+                    graduation_year: response.data.graduation_year,
+                    Branch: response.data.Branch,
+                    email: response.data.email,
+                    mobile: response.data.mobile,
+                    linkedin: response.data.linkedin,
+                    Github: response.data.Github,
+                    instagram: response.data.instagram,
+                    portfolio_link: response.data.portfolio_link,
+                    resume_link: response.data.resume_link,
+                    skills: response.data.skills,
+                  },
+                  Heading: response.data.alumni_profile?.Heading,
+                  current_company_name: response.data.alumni_profile?.current_company_name,
+                  job_title: response.data.alumni_profile?.job_title,
+                  Education: response.data.alumni_profile?.Education,
+                  current_city: response.data.alumni_profile?.current_city,
+                  current_country: response.data.alumni_profile?.current_country,
+                  years_of_experience: response.data.alumni_profile?.years_of_experience,
+                  industry: response.data.alumni_profile?.industry,
+                  achievements: response.data.alumni_profile?.achievements,
+                  previous_companies: response.data.alumni_profile?.previous_companies,
+                  preferred_contact_method: response.data.alumni_profile?.preferred_contact_method,
+            }
+              })
+            }
       })
       .catch((error) => {
         console.error("Error fetching alumni data:", error);
@@ -35,6 +136,145 @@ const AlumniProfileContent = () => {
   }, [userData?.user_id]);
 
   console.log("user ", user);
+
+ 
+   // State variables for user and profile details
+   
+
+
+  // const removeEmptyFields = (obj) => {
+  //   const filteredObj = {};
+    
+  //   Object.keys(obj).forEach((key) => {
+  //     if (typeof obj[key] === 'object' && obj[key] !== null) {
+  //       // Recursively handle nested objects
+  //       const nestedObj = removeEmptyFields(obj[key]);
+  //       if (Object.keys(nestedObj).length > 0) {
+  //         filteredObj[key] = nestedObj;
+  //       }
+  //     } else if (obj[key] !== undefined && obj[key] !== null && obj[key] !== '') {
+  //       filteredObj[key] = obj[key];
+  //     }
+  //   });
+  
+  //   return filteredObj;
+  // };
+
+  // Function to handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("authTokens")
+      ? JSON.parse(localStorage.getItem("authTokens"))
+      : null;
+      // const filteredAlumniData = removeEmptyFields(alumniData);
+      // console.log("filter data ",filteredAlumniData);
+
+      // for (const key in alumniData) {
+      //   if (alumniData.hasOwnProperty(key)) {
+      //     console.log(`${key}:`, alumniData[key]);
+      //   }
+      // }
+     
+    try {
+      const response = await axios.put(`http://127.0.0.1:8000/edit-alumni-profile/${id || userData?.user_id}/`, alumniData,{
+        headers: {
+          Authorization: `Bearer ${token?.access}`,
+        },
+      });
+      console.log('Profile updated successfully', response.data);
+      // After successful update, reset alumniData and refresh the window
+
+      setAlumniData({
+        user: {
+          // username: "",
+          full_name: "",
+          About: "",
+          Work: "",
+          Year_Joined: "",
+          graduation_year: "",
+          Branch: "",
+          email: "",
+          mobile: "",
+          linkedin: "",
+          Github: "",
+          instagram: "",
+          portfolio_link: "",
+          resume_link: "",
+          skills: "",
+        },
+        profile: {
+          user: {
+            // username: "",
+            full_name: "",
+            About: "",
+            Work: "",
+            Year_Joined: "",
+            graduation_year: "",
+            Branch: "",
+            email: "",
+            mobile: "",
+            linkedin: "",
+            Github: "",
+            instagram: "",
+            portfolio_link: "",
+            resume_link: "",
+            skills: "",
+          },
+          Heading: "",
+          current_company_name: "",
+          job_title: "",
+          Education: "",
+          current_city: "",
+          current_country: "",
+          years_of_experience: "",
+          industry: "",
+          achievements: "",
+          previous_companies: "",
+          preferred_contact_method: "",
+        },
+      });
+      
+       
+    
+    // Optionally, you can refresh the page or redirect to another page
+         window.location.reload(); // This will refresh the page
+    } catch (error) {
+      console.error('Error updating profile:', error.message);
+    }
+  };
+
+  // Handle input changes for user data
+  const handleUserChange = (e) => {
+    const { name, value } = e.target;
+    setAlumniData((prevState) => ({
+      ...prevState,
+      user: {
+        ...prevState.user,
+        [name]: value // Update the correct field in user
+      },
+      profile: {
+        ...prevState.profile,
+        user: {
+          ...prevState.profile.user,
+          [name]: value // Update the same field in nested user object if needed
+        }
+      }
+    }));
+  };
+  
+  // Handle input changes for profile data
+  const handleProfileChange = (e) => {
+    const { name, value } = e.target;
+    setAlumniData((prevState) => ({
+      ...prevState,
+      profile: {
+        ...prevState.profile,
+        [name]: value // Update the correct field in profile
+      }
+    }));
+  };
+
+
   function capitalizeFirstLetter(str) {
     if (!str) return ""; // Handle empty or undefined strings
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -131,8 +371,14 @@ const AlumniProfileContent = () => {
                       <i className="fas fa-graduation-cap mr-1" /> Education
                     </strong>
                     <p className="text-muted aboutfont">
-                      {user?.alumni_profile?.Education || "N/A"}, <br></br>
-                      Graduation Year: {user?.graduation_year || "N/A"}
+                      {user?.alumni_profile?.Education || "N/A"}                   
+                    </p>
+
+                    <strong>
+                      <i className="fas fa-graduation-cap mr-1" /> Graduation Year:
+                    </strong>
+                    <p className="text-muted aboutfont">
+                       {user?.graduation_year || "N/A"}
                     </p>
 
                     <strong>
@@ -150,7 +396,7 @@ const AlumniProfileContent = () => {
                     </strong>
                     <p className="text-muted aboutfont">
                       {user?.alumni_profile?.current_city || "N/A"},
-                      {user?.alumni_profile?.current_country || "N/A"}
+                      
                     </p>
 
                     <strong>
@@ -159,9 +405,18 @@ const AlumniProfileContent = () => {
                     <p className="text-muted aboutfont">
                       <span className="tag tag-danger">
                         {user?.alumni_profile?.current_company_name || "N/A"}
-                        <br></br>
-                        Role: {user?.alumni_profile?.job_title || "N/A"}
+                        
                       </span>{" "}
+                      <br />
+                    </p>
+
+                    <strong>
+                      <i className="fas fa-building mr-1" /> Role:
+                    </strong>
+                    <p className="text-muted aboutfont">
+                      
+                      {user?.alumni_profile?.job_title || "N/A"}
+                      
                       <br />
                     </p>
 
@@ -224,6 +479,9 @@ const AlumniProfileContent = () => {
                 </div>
                 {/* /.card */}
               </div>
+
+
+
 
               {/* /.col */}
               <div className="col-md-9">
@@ -577,105 +835,452 @@ const AlumniProfileContent = () => {
                       </div>
                       {/* /.tab-pane */}
                       <div className="tab-pane" id="settings">
-                        <form className="form-horizontal">
-                          <div className="form-group row">
-                            <label
-                              htmlFor="inputName"
-                              className="col-sm-2 col-form-label"
-                            >
-                              Name
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                type="email"
-                                className="form-control"
-                                id="inputName"
-                                placeholder="Name"
-                              />
-                            </div>
-                          </div>
-                          <div className="form-group row">
-                            <label
-                              htmlFor="inputEmail"
-                              className="col-sm-2 col-form-label"
-                            >
-                              Email
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                type="email"
-                                className="form-control"
-                                id="inputEmail"
-                                placeholder="Email"
-                              />
-                            </div>
-                          </div>
-                          <div className="form-group row">
-                            <label
-                              htmlFor="inputName2"
-                              className="col-sm-2 col-form-label"
-                            >
-                              Name
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                type="text"
-                                className="form-control"
-                                id="inputName2"
-                                placeholder="Name"
-                              />
-                            </div>
-                          </div>
-                          <div className="form-group row">
-                            <label
-                              htmlFor="inputExperience"
-                              className="col-sm-2 col-form-label"
-                            >
-                              Experience
-                            </label>
-                            <div className="col-sm-10">
-                              <textarea
-                                className="form-control"
-                                id="inputExperience"
-                                placeholder="Experience"
-                                defaultValue={""}
-                              />
-                            </div>
-                          </div>
-                          <div className="form-group row">
-                            <label
-                              htmlFor="inputSkills"
-                              className="col-sm-2 col-form-label"
-                            >
-                              Skills
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                type="text"
-                                className="form-control"
-                                id="inputSkills"
-                                placeholder="Skills"
-                              />
-                            </div>
-                          </div>
-                          <div className="form-group row">
-                            <div className="offset-sm-2 col-sm-10">
-                              <div className="checkbox">
-                                <label>
-                                  <input type="checkbox" /> I agree to the{" "}
-                                  <a href="#">terms and conditions</a>
-                                </label>
+                        <form className="form-horizontal" onSubmit={handleSubmit}>
+                            {/* <div className="form-group row">
+                              <label htmlFor="inputName" className="col-sm-2 col-form-label">
+                                Username
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="username"
+                                  name="username"
+                                  value={alumniData?.user?.username}
+                                  onChange={handleUserChange}
+                                  placeholder="Username"
+                                />
+                              </div>
+                            </div> */}
+
+                            <div className="form-group row">
+                              <label htmlFor="inputFullName" className="col-sm-2 col-form-label">
+                                Full Name
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="full_name"
+                                  name="full_name"
+                                  value={alumniData?.user?.full_name}
+                                  onChange={handleUserChange}
+                                  placeholder="Full Name"
+                                />
                               </div>
                             </div>
-                          </div>
-                          <div className="form-group row">
-                            <div className="offset-sm-2 col-sm-10">
-                              <button type="submit" className="btn btn-danger">
-                                Submit
-                              </button>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputEmail" className="col-sm-2 col-form-label">
+                                Email
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="email"
+                                  className="form-control"
+                                  id="email"
+                                  name="email"
+                                  value={alumniData?.user?.email}
+                                  onChange={handleUserChange}
+                                  placeholder="Email"
+                                />
+                              </div>
                             </div>
-                          </div>
-                        </form>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputMobile" className="col-sm-2 col-form-label">
+                                Mobile
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="mobile"
+                                  name="mobile"
+                                  value={alumniData?.user?.mobile}
+                                  onChange={handleUserChange}
+                                  placeholder="Mobile"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputMobile" className="col-sm-2 col-form-label">
+                                Work
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="Work"
+                                  name="Work"
+                                  value={alumniData?.user?.Work}
+                                  onChange={handleUserChange}
+                                  placeholder="Your Work"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputMobile" className="col-sm-2 col-form-label">
+                                Year Joined
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="Year_Joined"
+                                  name="Year_Joined"
+                                  value={alumniData?.user?.Year_Joined}
+                                  onChange={handleUserChange}
+                                  placeholder="Year Joined"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
+                                LinkedIn
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="linkedin"
+                                  name="linkedin"
+                                  value={alumniData?.user?.linkedin}
+                                  onChange={handleUserChange}
+                                  placeholder="LinkedIn URL"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
+                                Instagram
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="instagram"
+                                  name="instagram"
+                                  value={alumniData?.user?.instagram}
+                                  onChange={handleUserChange}
+                                  placeholder="Instagram URL"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
+                                Portfolio
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="portfolio_link"
+                                  name="portfolio_link"
+                                  value={alumniData?.user?.portfolio_link}
+                                  onChange={handleUserChange}
+                                  placeholder="Portfolio URL"
+                                />
+                              </div>
+                            </div>
+
+
+                            <div className="form-group row">
+                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
+                                Resume
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="resume_link"
+                                  name="resume_link"
+                                  value={alumniData?.user?.resume_link}
+                                  onChange={handleUserChange}
+                                  placeholder="Resume URL"
+                                />
+                              </div>
+                            </div>
+
+
+
+                            <div className="form-group row">
+                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
+                                About
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="About"
+                                  name="About"
+                                  value={alumniData?.user?.About}
+                                  onChange={handleUserChange}
+                                  placeholder="About"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
+                                 Graduation Year 
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="graduation_year"
+                                  name="graduation_year"
+                                  value={alumniData?.user?.graduation_year}
+                                  onChange={handleUserChange}
+                                  placeholder="Graduation Year  "
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
+                                Branch
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="Branch"
+                                  name="Branch"
+                                  value={alumniData?.user?.Branch}
+                                  onChange={handleUserChange}
+                                  placeholder="Your Branch"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputGithub" className="col-sm-2 col-form-label">
+                                Github
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="Github"
+                                  name="Github"
+                                  value={alumniData?.user?.Github}
+                                  onChange={handleUserChange}
+                                  placeholder="Github URL"
+                                />
+                              </div>
+                            </div>
+
+                            {/* Profile Specific Fields */}
+                            <div className="form-group row">
+                              <label htmlFor="inputHeading" className="col-sm-2 col-form-label">
+                                Heading
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="Heading"
+                                  name="Heading"
+                                  value={alumniData?.profile?.Heading}
+                                  onChange={handleProfileChange}
+                                  placeholder="Profile Heading"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                                <label htmlFor="preferred_contact_method" className="col-sm-2 col-form-label">
+                                  Preferred Contact
+                                </label>
+                                <div className="col-sm-10">
+                                  <select
+                                    className="form-control"
+                                    id="preferred_contact_method"
+                                    name="preferred_contact_method"
+                                    value={alumniData?.profile?.preferred_contact_method}
+                                    onChange={handleProfileChange}
+                                  >
+                                    <option value="" disabled>Select Preferred Contact Method</option>
+                                    <option value="email">Email</option>
+                                    <option value="phone">Mobile</option>
+                                    <option value="linkedin">LinkedIn</option>
+                                  </select>
+                                </div>
+                              </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputHeading" className="col-sm-2 col-form-label">
+                                Education
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="Education"
+                                  name="Education"
+                                  value={alumniData?.profile?.Education}
+                                  onChange={handleProfileChange}
+                                  placeholder="Education"
+                                />
+                              </div>
+                            </div>
+
+                            
+
+                            <div className="form-group row">
+                              <label htmlFor="inputHeading" className="col-sm-2 col-form-label">
+                              Previous Companies
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="previous_companies"
+                                  name="previous_companies"
+                                  value={alumniData?.profile?.previous_companies}
+                                  onChange={handleProfileChange}
+                                  placeholder="Previous Companies"
+                                />
+                              </div>
+                            </div>
+                            
+
+                            <div className="form-group row">
+                              <label htmlFor="inputHeading" className="col-sm-2 col-form-label">
+                              Years Of Experience
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="years_of_experience"
+                                  name="years_of_experience"
+                                  value={alumniData?.profile?.years_of_experience}
+                                  onChange={handleProfileChange}
+                                  placeholder="Years Of Experience"
+                                />
+                              </div>
+                            </div>
+
+
+                            <div className="form-group row">
+                              <label htmlFor="inputHeading" className="col-sm-2 col-form-label">
+                              Achievements
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="achievements"
+                                  name="achievements"
+                                  value={alumniData?.profile?.achievements}
+                                  onChange={handleProfileChange}
+                                  placeholder="Your Achievements"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputHeading" className="col-sm-2 col-form-label">
+                              Job Title
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="job_title"
+                                  name="job_title"
+                                  value={alumniData?.profile?.job_title}
+                                  onChange={handleProfileChange}
+                                  placeholder="Your Job Title"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputHeading" className="col-sm-2 col-form-label">
+                              Industry
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="industry"
+                                  name="industry"
+                                  value={alumniData?.profile?.industry}
+                                  onChange={handleProfileChange}
+                                  placeholder="Your industry"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputCompany" className="col-sm-2 col-form-label">
+                                Current Company
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="current_company_name"
+                                  name="current_company_name"
+                                  value={alumniData?.profile?.current_company_name}
+                                  onChange={handleProfileChange}
+                                  placeholder="Current Company Name"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputCity" className="col-sm-2 col-form-label">
+                                Current City
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="current_city"
+                                  name="current_city"
+                                  value={alumniData?.profile?.current_city}
+                                  onChange={handleProfileChange}
+                                  placeholder="Current City"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputSkills" className="col-sm-2 col-form-label">
+                                Skills
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="skills"
+                                  name="skills"
+                                  value={alumniData?.user?.skills}
+                                  onChange={handleUserChange}
+                                  placeholder="Skills"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <div className="offset-sm-2 col-sm-10">
+                                <button type="submit" className="btn btn-danger">
+                                  Submit
+                                </button>
+                              </div>
+                            </div>
+                           
+                          </form>
                       </div>
                       {/* /.tab-pane */}
                     </div>
@@ -706,6 +1311,49 @@ const StudentProfileContent = () => {
     : null;
   const [user, setUser] = useState(null);
 
+  const [studentData, setStudentData] = useState({
+    user: {
+      username: "",
+      full_name: "",
+      About: "",
+      Work: "",
+      Year_Joined: "",
+      graduation_year: "",
+      Branch: "",
+      email: "",
+      mobile: "",
+      linkedin: "",
+      Github: "",
+      instagram: "",
+      portfolio_link: "",
+      resume_link: "",
+      skills: ""
+    },
+    profile: {
+      user: {
+        username: "",
+        full_name: "",
+        About: "",
+        Work: "",
+        Year_Joined: "",
+        graduation_year: "",
+        Branch: "",
+        email: "",
+        mobile: "",
+        linkedin: "",
+        Github: "",
+        instagram: "",
+        portfolio_link: "",
+        resume_link: "",
+        skills: ""
+      },
+      Heading: "",
+      Education: "",
+      current_year_of_study: ""
+    }
+  });
+  
+
   useEffect(() => {
     // Fetch alumni data when the component mounts
     const token = localStorage.getItem("authTokens")
@@ -720,6 +1368,50 @@ const StudentProfileContent = () => {
       })
       .then((response) => {
         setUser(response.data);
+          if(response.data){
+              setStudentData({
+                user: {
+                  // username: response.data.username,
+                  full_name: response.data.full_name,
+                  About: response.data.About,
+                  Work: response.data.Work,
+                  Year_Joined: response.data.Year_Joined,
+                  graduation_year: response.data.graduation_year,
+                  Branch: response.data.Branch,
+                  email: response.data.email,
+                  mobile: response.data.mobile,
+                  linkedin: response.data.linkedin,
+                  Github: response.data.Github,
+                  instagram: response.data.instagram,
+                  portfolio_link: response.data.portfolio_link,
+                  resume_link: response.data.resume_link,
+                  skills: response.data.skills,
+                },
+                profile: {
+                  user: {
+                    // username: response.data.username,
+                    full_name: response.data.full_name,
+                    About: response.data.About,
+                    Work: response.data.Work,
+                    Year_Joined: response.data.Year_Joined,
+                    graduation_year: response.data.graduation_year,
+                    Branch: response.data.Branch,
+                    email: response.data.email,
+                    mobile: response.data.mobile,
+                    linkedin: response.data.linkedin,
+                    Github: response.data.Github,
+                    instagram: response.data.instagram,
+                    portfolio_link: response.data.portfolio_link,
+                    resume_link: response.data.resume_link,
+                    skills: response.data.skills,
+                  },
+                  Heading: response.data.student_profile?.Heading,
+                  Education: response.data.student_profile?.Education,
+                  current_year_of_study: response.data.student_profile?.current_year_of_study,                
+                }
+
+              })
+          }
       })
       .catch((error) => {
         console.error("Error fetching alumni data:", error);
@@ -727,6 +1419,115 @@ const StudentProfileContent = () => {
   }, [userData?.user_id]);
 
   console.log("user ", user);
+
+
+    // Function to handle form submission
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      const token = localStorage.getItem("authTokens")
+        ? JSON.parse(localStorage.getItem("authTokens"))
+        : null;
+        // const filteredAlumniData = removeEmptyFields(alumniData);
+        // console.log("filter data ",filteredAlumniData);
+  
+        // for (const key in alumniData) {
+        //   if (alumniData.hasOwnProperty(key)) {
+        //     console.log(`${key}:`, alumniData[key]);
+        //   }
+        // }
+       
+      try {
+        const response = await axios.put(`http://127.0.0.1:8000/edit-student-profile/${id || userData?.user_id}/`, studentData,{
+          headers: {
+            Authorization: `Bearer ${token?.access}`,
+          },
+        });
+        console.log('Profile updated successfully', response.data);
+        // After successful update, reset alumniData and refresh the window
+  
+        setStudentData({
+          user: {
+            username: "",
+            full_name: "",
+            About: "",
+            Work: "",
+            Year_Joined: "",
+            graduation_year: "",
+            Branch: "",
+            email: "",
+            mobile: "",
+            linkedin: "",
+            Github: "",
+            instagram: "",
+            portfolio_link: "",
+            resume_link: "",
+            skills: ""
+          },
+          profile: {
+            user: {
+              username: "",
+              full_name: "",
+              About: "",
+              Work: "",
+              Year_Joined: "",
+              graduation_year: "",
+              Branch: "",
+              email: "",
+              mobile: "",
+              linkedin: "",
+              Github: "",
+              instagram: "",
+              portfolio_link: "",
+              resume_link: "",
+              skills: ""
+            },
+            Heading: "",
+            Education: "",
+            current_year_of_study: ""
+          }
+        });
+        
+         
+      
+      // Optionally, you can refresh the page or redirect to another page
+           window.location.reload(); // This will refresh the page
+      } catch (error) {
+        console.error('Error updating profile:', error.message);
+      }
+    };
+  
+    // Handle input changes for user data
+    const handleUserChange = (e) => {
+      const { name, value } = e.target;
+      setStudentData((prevState) => ({
+        ...prevState,
+        user: {
+          ...prevState.user,
+          [name]: value // Update the correct field in user
+        },
+        profile: {
+          ...prevState.profile,
+          user: {
+            ...prevState.profile.user,
+            [name]: value // Update the same field in nested user object if needed
+          }
+        }
+      }));
+    };
+    
+    // Handle input changes for profile data
+    const handleProfileChange = (e) => {
+      const { name, value } = e.target;
+      setStudentData((prevState) => ({
+        ...prevState,
+        profile: {
+          ...prevState.profile,
+          [name]: value // Update the correct field in profile
+        }
+      }));
+    };
+  
+
 
   return (
     <>
@@ -893,15 +1694,6 @@ const StudentProfileContent = () => {
                 <div className="card">
                   <div className="card-header p-2">
                     <ul className="nav nav-pills">
-                      {/* <li className="nav-item">
-                        <a
-                          className="nav-link active"
-                          href="#activity"
-                          data-toggle="tab"
-                        >
-                          Posts
-                        </a>
-                      </li> */}
                       <li className="nav-item">
                         <a
                           className="nav-link"
@@ -1046,105 +1838,280 @@ const StudentProfileContent = () => {
 
                       {/* /.tab-pane */}
                       <div className="tab-pane" id="edit">
-                        <form className="form-horizontal">
+                      <form className="form-horizontal" onSubmit={handleSubmit}>
+                          
+
+                             <div className="form-group row">
+                              <label htmlFor="inputFullName" className="col-sm-2 col-form-label">
+                                Full Name
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="full_name"
+                                  name="full_name"
+                                  value={studentData?.user?.full_name}
+                                  onChange={handleUserChange}
+                                  placeholder="Full Name"
+                                />
+                              </div>
+                            </div>
+
                           <div className="form-group row">
-                            <label
-                              htmlFor="inputName"
-                              className="col-sm-2 col-form-label"
-                            >
-                              Name
-                            </label>
+                            <label className="col-sm-2 col-form-label">About:</label>
                             <div className="col-sm-10">
                               <input
-                                type="email"
+                                type="text"
+                                id="About"
                                 className="form-control"
-                                id="inputName"
-                                placeholder="Name"
+                                name="About"
+                                value={studentData.user.About}
+                                onChange={handleUserChange}
+                                placeholder="About"
                               />
                             </div>
                           </div>
+
                           <div className="form-group row">
-                            <label
-                              htmlFor="inputEmail"
-                              className="col-sm-2 col-form-label"
-                            >
-                              Email
-                            </label>
+                            <label className="col-sm-2 col-form-label">Work:</label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                id="Work"
+                                className="form-control"
+                                name="Work"
+                                value={studentData.user.Work}
+                                onChange={handleUserChange}
+                                 placeholder="Your Work"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">Year Joined:</label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                id="Year_Joined"
+                                className="form-control"
+                                name="Year_Joined"
+                                value={studentData.user.Year_Joined}
+                                onChange={handleUserChange}
+                                placeholder="Year Joined"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">Graduation Year:</label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                id="graduation_year"
+                                className="form-control"
+                                name="graduation_year"
+                                value={studentData.user.graduation_year}
+                                onChange={handleUserChange}
+                                placeholder="Graduation Year"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">Branch:</label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                id="Branch"
+                                className="form-control"
+                                name="Branch"
+                                value={studentData.user.Branch}
+                                onChange={handleUserChange}
+                                placeholder="Branch"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">Email:</label>
                             <div className="col-sm-10">
                               <input
                                 type="email"
+                                id="email"
                                 className="form-control"
-                                id="inputEmail"
+                                name="email"
+                                value={studentData.user.email}
+                                onChange={handleUserChange}
                                 placeholder="Email"
+
                               />
                             </div>
                           </div>
+
                           <div className="form-group row">
-                            <label
-                              htmlFor="inputName2"
-                              className="col-sm-2 col-form-label"
-                            >
-                              Name
-                            </label>
+                            <label className="col-sm-2 col-form-label">Mobile:</label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                id="mobile"
+                                className="form-control"
+                                name="mobile"
+                                value={studentData.user.mobile}
+                                onChange={handleUserChange}
+                                placeholder="Mobile No"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">LinkedIn:</label>
+                            <div className="col-sm-10">
+                              <input
+                                type="url"
+                                id="linkedin"
+                                className="form-control"
+                                name="linkedin"
+                                value={studentData.user.linkedin}
+                                onChange={handleUserChange}
+                                placeholder="Linkedin URL"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">Github:</label>
+                            <div className="col-sm-10">
+                              <input
+                                type="url"
+                                id="Github"
+                                className="form-control"
+                                name="Github"
+                                value={studentData.user.Github}
+                                onChange={handleUserChange}
+                                placeholder="Github URL"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">Instagram:</label>
+                            <div className="col-sm-10">
+                              <input
+                                type="url"
+                                id="instagram"
+                                className="form-control"
+                                name="instagram"
+                                value={studentData.user.instagram}
+                                onChange={handleUserChange}
+                                placeholder="Instagram URL"
+                            
+                              />
+                            </div>
+                          </div>
+
+                          <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">Portfolio Link:</label>
+                            <div className="col-sm-10">
+                              <input
+                                type="url"
+                                id="portfolio_link"
+                                className="form-control"
+                                name="portfolio_link"
+                                value={studentData.user.portfolio_link}
+                                onChange={handleUserChange}
+                                placeholder="Portfolio URL"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">Resume Link:</label>
+                            <div className="col-sm-10">
+                              <input
+                                type="url"
+                                id="resume_link"
+                                className="form-control"
+                                name="resume_link"
+                                value={studentData.user.resume_link}
+                                onChange={handleUserChange}
+                                placeholder="Resume URL"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">Skills:</label>
                             <div className="col-sm-10">
                               <input
                                 type="text"
                                 className="form-control"
-                                id="inputName2"
-                                placeholder="Name"
-                              />
-                            </div>
-                          </div>
-                          <div className="form-group row">
-                            <label
-                              htmlFor="inputExperience"
-                              className="col-sm-2 col-form-label"
-                            >
-                              Experience
-                            </label>
-                            <div className="col-sm-10">
-                              <textarea
-                                className="form-control"
-                                id="inputExperience"
-                                placeholder="Experience"
-                                defaultValue={""}
-                              />
-                            </div>
-                          </div>
-                          <div className="form-group row">
-                            <label
-                              htmlFor="inputSkills"
-                              className="col-sm-2 col-form-label"
-                            >
-                              Skills
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                type="text"
-                                className="form-control"
-                                id="inputSkills"
+                                id="skills"
+                                name="skills"
+                                value={studentData.user.skills}
+                                onChange={handleUserChange}
                                 placeholder="Skills"
                               />
                             </div>
                           </div>
+
+                         
+
                           <div className="form-group row">
-                            <div className="offset-sm-2 col-sm-10">
-                              <div className="checkbox">
-                                <label>
-                                  <input type="checkbox" /> I agree to the{" "}
-                                  <a href="#">terms and conditions</a>
-                                </label>
+                            <label className="col-sm-2 col-form-label">Heading:</label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                id="Heading"
+                                className="form-control"
+                                name="Heading"
+                                value={studentData.profile.Heading}
+                                onChange={handleProfileChange}
+                                placeholder="Your Heading"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">Education:</label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                id="Education"
+                                className="form-control"
+                                name="Education"
+                                value={studentData.profile.Education}
+                                onChange={handleProfileChange}
+                                placeholder="Education"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">Current Year of Study:</label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                id="current_year_of_study"
+                                className="form-control"
+                                name="current_year_of_study"
+                                value={studentData.profile.current_year_of_study}
+                                onChange={handleProfileChange}
+                                placeholder="Current Year of Study"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="form-group row">
+                              <div className="offset-sm-2 col-sm-10">
+                                <button type="submit" className="btn btn-danger">
+                                  Submit
+                                </button>
                               </div>
-                            </div>
                           </div>
-                          <div className="form-group row">
-                            <div className="offset-sm-2 col-sm-10">
-                              <button type="submit" className="btn btn-danger">
-                                Submit
-                              </button>
-                            </div>
-                          </div>
+                           
                         </form>
+
                       </div>
                       {/* /.tab-pane */}
                     </div>
@@ -1178,6 +2145,47 @@ const SuperUserProfileContent = () => {
     Modal.setAppElement('#root');
 
   const [user, setUser] = useState(null);
+
+  const [superUserData, setSuperUserData] = useState({
+    user: {
+      // username: '',
+      full_name: '',
+      About: '',
+      Work: '',
+      Year_Joined: '',
+      graduation_year: '',
+      Branch: '',
+      email: '',
+      mobile: '',
+      linkedin: '',
+      Github: '',
+      instagram: '',
+      portfolio_link: '',
+      resume_link: '',
+      skills: '',
+    },
+    profile: {
+      user: {
+        // username: user?.username,
+        full_name: '',
+      About: '',
+      Work: '',
+      Year_Joined: '',
+      graduation_year: '',
+      Branch: '',
+      email: '',
+      mobile: '',
+      linkedin: '',
+      Github: '',
+      instagram: '',
+      portfolio_link: '',
+      resume_link: '',
+      skills: '',
+      },
+      designation:'', // Designation for the HOD
+    },
+  });
+  
 
   const [posts, setPosts] = useState([]);
   // const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -1213,6 +2221,47 @@ const SuperUserProfileContent = () => {
       })
       .then((response) => {
         setUser(response.data);
+          if(response.data){
+            setSuperUserData({
+              user: {
+                // username: response.data.username,
+                full_name: response.data.full_name,
+                About: response.data.About,
+                Work: response.data.Work,
+                Year_Joined: response.data.Year_Joined,
+                graduation_year: response.data.graduation_year,
+                Branch: response.data.Branch,
+                email: response.data.email,
+                mobile: response.data.mobile,
+                linkedin: response.data.linkedin,
+                Github: response.data.Github,
+                instagram: response.data.instagram,
+                portfolio_link: response.data.portfolio_link,
+                resume_link: response.data.resume_link,
+                skills: response.data.skills,
+              },
+              profile: {
+                user: {
+                  // username: response.data.username,
+                  full_name: response.data.full_name,
+                  About: response.data.About,
+                  Work: response.data.Work,
+                  Year_Joined: response.data.Year_Joined,
+                  graduation_year: response.data.graduation_year,
+                  Branch: response.data.Branch,
+                  email: response.data.email,
+                  mobile: response.data.mobile,
+                  linkedin: response.data.linkedin,
+                  Github: response.data.Github,
+                  instagram: response.data.instagram,
+                  portfolio_link: response.data.portfolio_link,
+                  resume_link: response.data.resume_link,
+                  skills: response.data.skills,
+                },
+                designation: response.data.hod_profile.designation
+          }
+            })
+          }
       })
       .catch((error) => {
         console.error("Error fetching alumni data:", error);
@@ -1243,8 +2292,114 @@ const SuperUserProfileContent = () => {
   console.log("user ", user);
   // console.log("postsss "+ posts);
 
-  // username , full_name ,email, About,Year_joined,Branch , mobile , linkdin,instagram
-  // , github, designation
+ 
+
+  // Function to handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("authTokens")
+      ? JSON.parse(localStorage.getItem("authTokens"))
+      : null;
+      // const filteredAlumniData = removeEmptyFields(alumniData);
+      // console.log("filter data ",filteredAlumniData);
+
+      // for (const key in alumniData) {
+      //   if (alumniData.hasOwnProperty(key)) {
+      //     console.log(`${key}:`, alumniData[key]);
+      //   }
+      // }
+     
+    try {
+      const response = await axios.put(`http://127.0.0.1:8000/edit-hod-profile/${id || userData?.user_id}/`, superUserData,{
+        headers: {
+          Authorization: `Bearer ${token?.access}`,
+        },
+      });
+      console.log('Profile updated successfully', response.data);
+      // After successful update, reset alumniData and refresh the window
+
+      setSuperUserData({
+        user: {
+          // username: "",
+          full_name: "",
+          About: "",
+          Work: "",
+          Year_Joined: "",
+          graduation_year: "",
+          Branch: "",
+          email: "",
+          mobile: "",
+          linkedin: "",
+          Github: "",
+          instagram: "",
+          portfolio_link: "",
+          resume_link: "",
+          skills: "",
+        },
+        profile: {
+          user: {
+            // username: "",
+            full_name: "",
+            About: "",
+            Work: "",
+            Year_Joined: "",
+            graduation_year: "",
+            Branch: "",
+            email: "",
+            mobile: "",
+            linkedin: "",
+            Github: "",
+            instagram: "",
+            portfolio_link: "",
+            resume_link: "",
+            skills: "",
+          },
+          designation:""
+        },
+      });
+      
+       
+    
+    // Optionally, you can refresh the page or redirect to another page
+         window.location.reload(); // This will refresh the page
+    } catch (error) {
+      console.error('Error updating profile:', error.message);
+    }
+  };
+
+  // Handle input changes for user data
+  const handleUserChange = (e) => {
+    const { name, value } = e.target;
+    setSuperUserData((prevState) => ({
+      ...prevState,
+      user: {
+        ...prevState.user,
+        [name]: value // Update the correct field in user
+      },
+      profile: {
+        ...prevState.profile,
+        user: {
+          ...prevState.profile.user,
+          [name]: value // Update the same field in nested user object if needed
+        }
+      }
+    }));
+  };
+  
+  // Handle input changes for profile data
+  const handleProfileChange = (e) => {
+    const { name, value } = e.target;
+    setSuperUserData((prevState) => ({
+      ...prevState,
+      profile: {
+        ...prevState.profile,
+        [name]: value // Update the correct field in profile
+      }
+    }));
+  };
+
+
+
   return (
     <>
       <div>
@@ -1647,105 +2802,262 @@ const SuperUserProfileContent = () => {
                       </div>
                       {/* /.tab-pane */}
                       <div className="tab-pane" id="settings">
-                        <form className="form-horizontal">
-                          <div className="form-group row">
-                            <label
-                              htmlFor="inputName"
-                              className="col-sm-2 col-form-label"
-                            >
-                              Name
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                type="email"
-                                className="form-control"
-                                id="inputName"
-                                placeholder="Name"
-                              />
-                            </div>
-                          </div>
-                          <div className="form-group row">
-                            <label
-                              htmlFor="inputEmail"
-                              className="col-sm-2 col-form-label"
-                            >
-                              Email
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                type="email"
-                                className="form-control"
-                                id="inputEmail"
-                                placeholder="Email"
-                              />
-                            </div>
-                          </div>
-                          <div className="form-group row">
-                            <label
-                              htmlFor="inputName2"
-                              className="col-sm-2 col-form-label"
-                            >
-                              Name
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                type="text"
-                                className="form-control"
-                                id="inputName2"
-                                placeholder="Name"
-                              />
-                            </div>
-                          </div>
-                          <div className="form-group row">
-                            <label
-                              htmlFor="inputExperience"
-                              className="col-sm-2 col-form-label"
-                            >
-                              Experience
-                            </label>
-                            <div className="col-sm-10">
-                              <textarea
-                                className="form-control"
-                                id="inputExperience"
-                                placeholder="Experience"
-                                defaultValue={""}
-                              />
-                            </div>
-                          </div>
-                          <div className="form-group row">
-                            <label
-                              htmlFor="inputSkills"
-                              className="col-sm-2 col-form-label"
-                            >
-                              Skills
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                type="text"
-                                className="form-control"
-                                id="inputSkills"
-                                placeholder="Skills"
-                              />
-                            </div>
-                          </div>
-                          <div className="form-group row">
-                            <div className="offset-sm-2 col-sm-10">
-                              <div className="checkbox">
-                                <label>
-                                  <input type="checkbox" /> I agree to the{" "}
-                                  <a href="#">terms and conditions</a>
-                                </label>
+                      <form className="form-horizontal" onSubmit={handleSubmit}>
+                           
+                            <div className="form-group row">
+                              <label htmlFor="inputFullName" className="col-sm-2 col-form-label">
+                                Full Name
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="full_name"
+                                  name="full_name"
+                                  value={superUserData?.user?.full_name}
+                                  onChange={handleUserChange}
+                                  placeholder="Full Name"
+                                />
                               </div>
                             </div>
-                          </div>
-                          <div className="form-group row">
-                            <div className="offset-sm-2 col-sm-10">
-                              <button type="submit" className="btn btn-danger">
-                                Submit
-                              </button>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputEmail" className="col-sm-2 col-form-label">
+                                Email
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="email"
+                                  className="form-control"
+                                  id="email"
+                                  name="email"
+                                  value={superUserData?.user?.email}
+                                  onChange={handleUserChange}
+                                  placeholder="Email"
+                                />
+                              </div>
                             </div>
-                          </div>
-                        </form>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputMobile" className="col-sm-2 col-form-label">
+                                Mobile
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="mobile"
+                                  name="mobile"
+                                  value={superUserData?.user?.mobile}
+                                  onChange={handleUserChange}
+                                  placeholder="Mobile"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
+                                LinkedIn
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="linkedin"
+                                  name="linkedin"
+                                  value={superUserData?.user?.linkedin}
+                                  onChange={handleUserChange}
+                                  placeholder="LinkedIn URL"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
+                                Instagram
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="instagram"
+                                  name="instagram"
+                                  value={superUserData?.user?.instagram}
+                                  onChange={handleUserChange}
+                                  placeholder="Instagram URL"
+                                />
+                              </div>
+                            </div>
+
+                            {/* <div className="form-group row">
+                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
+                                Portfolio
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="portfolio_link"
+                                  name="portfolio_link"
+                                  value={superUserData?.user?.portfolio_link}
+                                  onChange={handleUserChange}
+                                  placeholder="Portfolio URL"
+                                />
+                              </div>
+                            </div> */}
+
+                           <div className="form-group row">
+                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
+                                 Year Joined
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="Year_Joined"
+                                  name="Year_Joined"
+                                  value={superUserData?.user?.Year_Joined}
+                                  onChange={handleUserChange}
+                                  placeholder="Year Joined"
+                                />
+                              </div>
+                            </div>
+
+
+                            {/* <div className="form-group row">
+                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
+                                Resume
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="resume_link"
+                                  name="resume_link"
+                                  value={superUserData?.user?.resume_link}
+                                  onChange={handleUserChange}
+                                  placeholder="Resume URL"
+                                />
+                              </div>
+                            </div> */}
+
+
+
+                            <div className="form-group row">
+                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
+                                About
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="About"
+                                  name="About"
+                                  value={superUserData?.user?.About}
+                                  onChange={handleUserChange}
+                                  placeholder="About"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
+                                 Graduation Year 
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="graduation_year"
+                                  name="graduation_year"
+                                  value={superUserData?.user?.graduation_year}
+                                  onChange={handleUserChange}
+                                  placeholder="Graduation Year  "
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
+                                Branch
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="Branch"
+                                  name="Branch"
+                                  value={superUserData?.user?.Branch}
+                                  onChange={handleUserChange}
+                                  placeholder="Your Branch"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label htmlFor="inputGithub" className="col-sm-2 col-form-label">
+                                Github
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="Github"
+                                  name="Github"
+                                  value={superUserData?.user?.Github}
+                                  onChange={handleUserChange}
+                                  placeholder="Github URL"
+                                />
+                              </div>
+                            </div>
+
+                            
+                           
+                          
+                            {/* <div className="form-group row">
+                              <label htmlFor="inputSkills" className="col-sm-2 col-form-label">
+                                Skills
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="skills"
+                                  name="skills"
+                                  value={superUserData?.user?.skills}
+                                  onChange={handleUserChange}
+                                  placeholder="Skills"
+                                />
+                              </div>
+                            </div> */}
+
+                            {/* Profile Specific Fields */}
+                            <div className="form-group row">
+                              <label htmlFor="inputDesignation" className="col-sm-2 col-form-label">
+                                Designation
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="designation"
+                                  name="designation"
+                                  value={superUserData?.profile?.designation}
+                                  onChange={handleProfileChange}
+                                  placeholder="Designation"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <div className="offset-sm-2 col-sm-10">
+                                <button type="submit" className="btn btn-danger">
+                                  Submit
+                                </button>
+                              </div>
+                            </div>
+                           
+                          </form>
                       </div>
                       {/* /.tab-pane */}
                     </div>
