@@ -23,6 +23,7 @@ const AllAlumnisContent = () => {
     setFilter,
   } = useContext(AuthContext);
   setFilter(true);
+  
   const isValidGitHubUrl = (url) => {
     const githubUrlPattern =
       /^(https?:\/\/)?(www\.)?github\.com\/[A-Za-z0-9_-]+\/?$/;
@@ -64,7 +65,7 @@ const AllAlumnisContent = () => {
         setAlumniData(response.data);
         const totalItems = response.data.count;
         setTotalPages(Math.ceil(totalItems / pageSize));
-        console.log("This is the totalItems:", totalPages);
+        
         setLoading(false);
       }
     } catch (err) {
@@ -297,7 +298,7 @@ const AllAlumnisContent = () => {
                         <button
                           onClick={() => handleViewProfile(alumnus)}
                           className="btn btn-sm btn-primary"
-                          aria-label={`View profile of ${alumnus.name}`}
+                          aria-label={`View profile of ${alumnus.full_name}`}
                         >
                           <i className="fas fa-user" /> View Profile
                         </button>

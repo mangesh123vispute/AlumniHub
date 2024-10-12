@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.shortcuts import get_object_or_404
-from .models import User,AlumniPost,HodPrincipalPost
+from .models import User,AlumniPost,HodPrincipalPost,StudentProfile, AlumniProfile, HODPrincipalProfile 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -23,6 +23,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import DatabaseError
 from rest_framework.exceptions import NotFound
 from rest_framework import generics
+from rest_framework.decorators import api_view
+from .editserialisers import HODPrincipalProfileSerializer, UserSerializer, AlumniProfileSerializer, StudentProfileSerializer,UserImageUploadSerializer
 
 @check_profile_completion
 def home(request):
@@ -497,3 +499,93 @@ class GETStudent(APIView):
             paginated_students = paginator.paginate_queryset(student_users, request)
             serializer = UserStudentSerializer(paginated_students, many=True)
             return paginator.get_paginated_response(serializer.data)
+
+
+#^ Edit profile views
+
+@api_view(['PUT'])
+def update_hod_profile(request, pk):
+    try:
+        hod_profile = HODPrincipalProfile.objects.get(user__id=pk)
+    except HODPrincipalProfile.DoesNotExist:
+        return Response({"detail": "HOD profile not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    user_data = request.data.get('user')
+    profile_data = request.data.get('profile')
+
+    user_serializer = UserSerializer(instance=hod_profile.user, data=user_data)
+    profile_serializer = HODPrincipalProfileSerializer(instance=hod_profile, data=profile_data)
+
+    if user_serializer.is_valid() and profile_serializer.is_valid():
+        user_serializer.save()
+        profile_serializer.save()
+        return Response({"detail": "HOD profile updated successfully"})
+    return Response({"user_errors": user_serializer.errors, "profile_errors": profile_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT'])
+def update_student_profile(request, pk):
+    try:
+        student_profile = StudentProfile.objects.get(user__id=pk)
+    except StudentProfile.DoesNotExist:
+        return Response({"detail": "Student profile not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    user_data = request.data.get('user', {})
+    profile_data = request.data.get('profile', {})
+
+    user_serializer = UserSerializer(instance=student_profile.user, data=user_data)
+    profile_serializer = StudentProfileSerializer(instance=student_profile, data=profile_data)
+    user_valid = user_serializer.is_valid()
+    profile_valid = profile_serializer.is_valid()
+
+    if user_valid and profile_valid:
+        user_serializer.save()
+        profile_serializer.save()
+        return Response({"detail": "Student profile updated successfully"})
+    
+    return Response({"user_errors": user_serializer.errors, "profile_errors": profile_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT'])
+def update_alumni_profile(request, pk):
+    try:
+        alumni_profile = AlumniProfile.objects.get(user__id=pk)
+    except AlumniProfile.DoesNotExist:
+        return Response({"detail": "Alumni profile not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    user_data = request.data.get('user')
+    profile_data = request.data.get('profile')
+
+    user_serializer = UserSerializer(instance=alumni_profile.user, data=user_data)
+    profile_serializer = AlumniProfileSerializer(instance=alumni_profile, data=profile_data)
+
+    if user_serializer.is_valid() and profile_serializer.is_valid():
+        user_serializer.save()
+        profile_serializer.save()
+        return Response({"detail": "Alumni profile updated successfully"})
+    return Response({"user_errors": user_serializer.errors, "profile_errors": profile_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# ^edit image 
+
+class UserImageUploadView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, user_id, *args, **kwargs):
+        user = get_object_or_404(User, id=user_id)
+
+        serializer = UserImageUploadSerializer(user, data=request.data, partial=True) 
+
+        if serializer.is_valid():
+            serializer.save() 
+            return Response({"detail": "Image updated successfully"}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    
+    def get(self, request, user_id, *args, **kwargs):
+        user = get_object_or_404(User, id=user_id)
+        
+        
+        if user.Image:
+            image_url = request.build_absolute_uri(user.Image.url)
+            return Response({"image_url": image_url}, status=status.HTTP_200_OK)
+        else:
+            return Response({"detail": "User has no image."}, status=status.HTTP_404_NOT_FOUND)
