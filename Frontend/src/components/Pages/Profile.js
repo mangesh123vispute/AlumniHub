@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import Modal from 'react-modal';
 import "./profile.css"
 const AlumniProfileContent = () => {
+  
   let { userData } = useContext(AuthContext);
   console.log("userData", userData);
   const [user, setUser] = useState(null);
@@ -34,6 +35,10 @@ const AlumniProfileContent = () => {
   }, [userData?.user_id]);
 
   console.log("user ", user);
+  function capitalizeFirstLetter(str) {
+    if (!str) return ""; // Handle empty or undefined strings
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
 
   return (
     <>
@@ -104,6 +109,15 @@ const AlumniProfileContent = () => {
                         {user?.About || "N/A"}
                       </span>{" "}
                       <br />
+                    </p>
+
+                    <strong>
+                      <i className="fas fa-briefcase mr-1" /> Work
+                    </strong>
+                    <p className="text-muted workfont aboutfont">
+                      <span className="tag tag-success">
+                        {user?.Work || "N/A"}
+                      </span>
                     </p>
 
                     <strong>
@@ -191,6 +205,20 @@ const AlumniProfileContent = () => {
                           "No Achievements"}
                       </span>
                     </p>
+
+                    <strong>
+                      <i className="fas fa-calendar-alt mr-1" /> Year Joined
+                    </strong>
+                    <p className="text-muted aboutfont">
+                      {user?.Year_Joined || "N/A"}
+                    </p>
+
+                    <strong>
+                      <i className="fas fa-calendar-alt mr-1" /> Graduation Year
+                    </strong>
+                    <p className="text-muted aboutfont">
+                      {user?.graduation_year || "N/A"}
+                    </p>
                   </div>
                 </div>
                 {/* /.card */}
@@ -206,9 +234,8 @@ const AlumniProfileContent = () => {
                           className="nav-link active"
                           href="#activity"
                           data-toggle="tab"
-                        
                         >
-                          Your Posts
+                          Posts
                         </a>
                       </li>
                       <li className="nav-item ">
@@ -481,7 +508,34 @@ const AlumniProfileContent = () => {
                                     "N/A"
                                   )}
                                 </p>
-
+                                <hr
+                                  style={{
+                                    border: "1px solid #888888",
+                                    marginBottom: "0.5em",
+                                    marginTop: "0.5em",
+                                  }}
+                                />
+                                <strong>Preferred Contact:</strong>
+                                <p className="text-muted font">
+                                  {user?.alumni_profile.preferred_contact_method
+                                    ? capitalizeFirstLetter(
+                                        user.alumni_profile
+                                          .preferred_contact_method
+                                      )
+                                    : "N/A"}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="time-label">
+                            <span className="bg-danger">
+                              Portfolio & Resume
+                            </span>
+                          </div>
+                          <div>
+                            <i className="fas fa-address-book bg-primary" />
+                            <div className="timeline-item">
+                              <div className="timeline-body">
                                 <strong>Portfolio:</strong>
                                 <p className="text-muted font">
                                   {user?.portfolio_link ? (
@@ -518,9 +572,6 @@ const AlumniProfileContent = () => {
                               </div>
                             </div>
                           </div>
-                          {/* END Contact Details Item */}
-                          {/* END timeline item */}
-                          {/* timeline item */}
                         </div>
                       </div>
                       {/* /.tab-pane */}
@@ -712,10 +763,14 @@ const StudentProfileContent = () => {
                     <h3 className="profile-username text-center">
                       {user ? user.full_name || user.username : "User"}
                     </h3>
-                    <p className="text-muted text-center">
-                      {user?.Work || "N/A"}
-                    </p>
-                    <p className="text-muted text-center">
+                    <hr
+                      style={{
+                        border: "1px solid #888888",
+                        marginBottom: "0.5em",
+                        marginTop: "0.5em",
+                      }}
+                    />
+                    <p className="text-muted text-center font">
                       {user?.student_profile?.Heading || "N/A"}
                     </p>
                   </div>
@@ -730,87 +785,72 @@ const StudentProfileContent = () => {
                   </div>
                   {/* /.card-header */}
                   <div className="card-body">
-                    {/* <strong>
-                        <i className="fas fa-graduation-cap mr-1" /> Education
-                      </strong>
-                      <p className="text-muted">
-                        {user?.student_profile?.graduation_year ? `Graduation Year: ${user.student_profile.graduation_year}` : "N/A"}
-                      </p>
-                       */}
+                    <strong>
+                      <i className="fas fa-info-circle mr-1" /> About
+                    </strong>
+                    <p className="text-muted aboutfont">
+                      <span className="tag tag-danger aboutfont ">
+                        {user?.About || "N/A"}
+                      </span>
+                    </p>
+
+                    <strong>
+                      <i className="fas fa-briefcase mr-1" /> Work
+                    </strong>
+                    <p className="text-muted workfont aboutfont">
+                      <span className="tag tag-success">
+                        {user?.Work || "N/A"}
+                      </span>
+                    </p>
+
+                    <strong>
+                      <i className="fas fa-laptop-code mr-1" /> Skills
+                    </strong>
+                    <p className="text-muted aboutfont">
+                      <span className="tag tag-danger">
+                        {user?.skills || "N/A"}
+                      </span>
+                    </p>
+
+                    <strong>
+                      <i className="fas fa-code-branch mr-1" /> Branch
+                    </strong>
+                    <p className="text-muted aboutfont">
+                      <span className="tag tag-danger">
+                        {user?.Branch || "N/A"}
+                      </span>
+                    </p>
+
+                    <strong>
+                      <i className="fas fa-graduation-cap mr-1" /> Education
+                    </strong>
+                    <p className="text-muted aboutfont">
+                      {user?.student_profile?.Education || "N/A"}, <br></br>
+                      Graduation Year: {user?.graduation_year || "N/A"}
+                    </p>
+
+                    <strong>
+                      <i className="fas fa-building mr-1" /> Department
+                    </strong>
+                    <p className="text-muted aboutfont">
+                      {user?.student_profile?.department || "N/A"}
+                    </p>
+
+                    <strong>
+                      <i className="fas fa-calendar-alt mr-1" /> Year Joined
+                    </strong>
+
+                    <p className="text-muted aboutfont">
+                      {user?.Year_Joined || "N/A"}
+                    </p>
 
                     <strong>
                       <i className="fas fa-calendar-alt mr-1" /> Current Year of
                       Study
                     </strong>
-                    <p className="text-muted">
-                      {user?.student_profile?.current_year_of_study ||
-                        "N/A"}
-                    </p>
-                    
-
-                    <strong>
-                      <i className="fas fa-code-branch mr-1" /> Branch
-                    </strong>
-                    <p className="text-muted">
-                      <span className="tag tag-danger">
-                        {user?.Branch || "N/A"}
-                      </span>
-                    </p>
-                    
-
-                    <strong>
-                      <i className="fas fa-info-circle mr-1" /> About
-                    </strong>
-                    <p className="text-muted">
-                      <span className="tag tag-danger">
-                        {user?.About || "N/A"}
-                      </span>
-                    </p>
-                    
-
-                    <strong>
-                      <i className="fas fa-laptop-code mr-1" /> Skills
-                    </strong>
-                    <p className="text-muted">
-                      <span className="tag tag-danger">
-                        {user?.skills || "N/A"}
-                      </span>
-                    </p>
-                    
-
-                    <strong>
-                      <i className="fas fa-building mr-1" /> Department
-                    </strong>
-                    <p className="text-muted">
-                      {user?.student_profile?.department || "N/A"}
-                    </p>
-                    
-
-                    <strong>
-                      <i className="fas fa-building mr-1" /> Year Joined
-                    </strong>  
-                   
-                    <p className="text-muted">
-                      {user?.Year_Joined || "N/A"}
-                    </p>
-                    
-
-                    <strong>
-                      <i className="fas fa-building mr-1" /> Graduation Year
-                    </strong>  
-
-                    <p className="text-muted">
-                      {user?.graduation_year || "N/A"}
-                    </p>
-                    
-
-                    <strong>
-                      <i className="fas fa-building mr-1" /> Current year of Study
-                    </strong>  
-                    <p className="text-muted">
+                    <p className="text-muted aboutfont">
                       {user?.student_profile?.current_year_of_study || "N/A"}
                     </p>
-                    
 
                     {/* <strong>
                         <i className="fas fa-link mr-1" /> LinkedIn
@@ -851,24 +891,21 @@ const StudentProfileContent = () => {
                           href="#activity"
                           data-toggle="tab"
                         >
-                          Your Posts
+                          Posts
                         </a>
                       </li> */}
                       <li className="nav-item">
                         <a
                           className="nav-link"
-                          href="#timeline"
+                          href="#contacts"
                           data-toggle="tab"
                         >
                           Contacts
                         </a>
                       </li>
+
                       <li className="nav-item">
-                        <a
-                          className="nav-link"
-                          href="#settings"
-                          data-toggle="tab"
-                        >
+                        <a className="nav-link" href="#edit" data-toggle="tab">
                           Edit Profile
                         </a>
                       </li>
@@ -877,9 +914,8 @@ const StudentProfileContent = () => {
                   {/* /.card-header */}
                   <div className="card-body">
                     <div className="tab-content">
-                      
                       {/* /.tab-pane */}
-                      <div className="tab-pane" id="timeline">
+                      <div className="tab-pane" id="contacts">
                         {/* The timeline */}
                         <div className="timeline timeline-inverse">
                           {/* timeline time label */}
@@ -893,63 +929,115 @@ const StudentProfileContent = () => {
                             <div className="timeline-item">
                               <div className="timeline-body">
                                 <strong>Email:</strong>
-                                <p className="text-muted font">{user?.email || "N/A"}</p>
-                                
+                                <p className="text-muted font">
+                                  {user?.email || "N/A"}
+                                </p>
 
                                 <strong>Mobile:</strong>
-                                <p>{user?.mobile || "N/A"}</p>
-                                
+                                <p className="text-muted font">
+                                  {user?.mobile || "N/A"}
+                                </p>
 
                                 <strong>LinkedIn:</strong>
-                                <p>
-                                  <a
-                                    href={user?.linkedin || "#"}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    {user?.linkedin
-                                      ? user.linkedin
-                                      : "N/A"}
-                                  </a>
+                                <p className="text-muted font">
+                                  {user?.linkedin ? (
+                                    <a
+                                      href={user?.linkedin || "#"}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      {user?.linkedin ? user.linkedin : "N/A"}
+                                    </a>
+                                  ) : (
+                                    "N/A"
+                                  )}
                                 </p>
-                                
 
                                 <strong>GitHub:</strong>
-                                <p>
-                                  <a
-                                    href={user?.Github || "#"}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    {user?.Github
-                                      ? user.Github
-                                      : "N/A"}
-                                  </a>
+                                <p className="text-muted font">
+                                  {user?.Github ? (
+                                    <a
+                                      href={user?.Github || "#"}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      {user?.Github ? user.Github : "N/A"}
+                                    </a>
+                                  ) : (
+                                    "N/A"
+                                  )}
                                 </p>
-                                
 
                                 <strong>Instagram:</strong>
-                                <p>
-                                  <a
-                                    href={user?.instagram || "#"}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    {user?.instagram
-                                      ? user.instagram
-                                      : "N/A"}
-                                  </a>
+                                <p className="text-muted font">
+                                  {user?.instagram ? (
+                                    <a
+                                      href={user?.instagram || "#"}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      {user?.instagram ? user.instagram : "N/A"}
+                                    </a>
+                                  ) : (
+                                    "N/A"
+                                  )}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="time-label">
+                            <span className="bg-danger">
+                              Portfolio & Resume
+                            </span>
+                          </div>
+                          <div>
+                            <i className="fas fa-address-book bg-primary" />
+                            <div className="timeline-item">
+                              <div className="timeline-body">
+                                <strong>Portfolio:</strong>
+                                <p className="text-muted font">
+                                  {user?.portfolio_link ? (
+                                    <a
+                                      href={user?.portfolio_link || "#"}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      {user?.portfolio_link
+                                        ? user.portfolio_link
+                                        : "N/A"}
+                                    </a>
+                                  ) : (
+                                    "N/A"
+                                  )}
+                                </p>
+
+                                <strong>Resume:</strong>
+                                <p className="text-muted font">
+                                  {user?.resume_link ? (
+                                    <a
+                                      href={user?.resume_link || "#"}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      {user?.resume_link
+                                        ? user.resume_link
+                                        : "N/A"}
+                                    </a>
+                                  ) : (
+                                    "N/A"
+                                  )}
                                 </p>
                               </div>
                             </div>
                           </div>
                           {/* END Contact Details Item */}
-
-                         
                         </div>
                       </div>
                       {/* /.tab-pane */}
-                      <div className="tab-pane" id="settings">
+
+                      {/* /.tab-pane */}
+                      <div className="tab-pane" id="edit">
                         <form className="form-horizontal">
                           <div className="form-group row">
                             <label
@@ -1155,7 +1243,7 @@ const SuperUserProfileContent = () => {
         {/* Content Header (Page header) */}
 
         {/* Main content */}
-        <section className="content"  >
+        <section className="content">
           <div className="container-fluid">
             <div className="row">
               <div className="col-md-3" style={{ fontSize: "0.9em" }}>
@@ -1188,8 +1276,14 @@ const SuperUserProfileContent = () => {
                     <h3 className="profile-username text-center">
                       {user ? user?.full_name || user?.username : "User"}
                     </h3>
-                   
-                    <p className="text-muted text-center">
+                    <hr
+                      style={{
+                        border: "1px solid #888888",
+                        marginBottom: "0.5em",
+                        marginTop: "0.5em",
+                      }}
+                    />
+                    <p className="text-muted text-center font">
                       {user?.hod_profile?.designation || "N/A"}
                     </p>
                   </div>
@@ -1205,58 +1299,31 @@ const SuperUserProfileContent = () => {
                   {/* /.card-header */}
                   <div className="card-body">
                     <strong>
-                      <i className="fas fa-university mr-1" /> Department
+                      <i className="fas fa-university mr-1 " /> Department
                     </strong>
-                    <p className="text-muted">
+                    <p className="text-muted aboutfont">
                       {user?.Branch || "N/A"}
                     </p>
-                    
-
-                    <strong>
-                      <i className="fas fa-phone mr-1" /> Mobile
-                    </strong>
-                    <p className="text-muted">
-                      {user?.mobile || "N/A"}
-                    </p>
-                    
-
-                    {/* <strong>
-                          <i className="fas fa-code-branch mr-1" /> Branch
-                        </strong>
-                        <p className="text-muted">
-                          <span className="tag tag-danger">{user?.Branch || "N/A"}</span> <br />
-                        </p>
-                         */}
-
-                    <strong>
-                      <i className="fas fa-envelope mr-1" /> Email
-                    </strong>
-                    <p className="text-muted">
-                      {user?.email || "N/A"}
-                    </p>
-                    
 
                     <strong>
                       <i className="fas fa-info-circle mr-1" /> About
                     </strong>
-                    <p className="text-muted">
+                    <p className="text-muted aboutfont">
                       <span className="tag tag-danger">
                         {user?.About || "N/A"}
                       </span>{" "}
                       <br />
                     </p>
-                    
 
                     <strong>
                       <i className="fas fa-laptop-code mr-1" /> Year Joined
                     </strong>
-                    <p className="text-muted">
+                    <p className="text-muted aboutfont">
                       <span className="tag tag-danger">
                         {user?.Year_Joined || "N/A"}
                       </span>{" "}
                       <br />
                     </p>
-                    
 
                     {/* <strong>
                       <i className="fas fa-building mr-1" /> Designation
@@ -1281,7 +1348,7 @@ const SuperUserProfileContent = () => {
                           href="#activity"
                           data-toggle="tab"
                         >
-                          Your Posts
+                          Posts
                         </a>
                       </li>
                       <li className="nav-item">
@@ -1309,84 +1376,106 @@ const SuperUserProfileContent = () => {
                     <div className="tab-content">
                       <div className="active tab-pane" id="activity">
                         {/* Post */}
-                         <div>
-      {posts.length > 0 && posts.map((post) => (
-        <div key={post?.id} className="post" >
-          <div className="user-block">
-            <img
-              className="img-circle img-bordered-sm"
-              src="../../dist/img/user1-128x128.jpg"
-              alt="user image"
-            />
-            <span className="username">
-              <a href="#">{post?.author_name}</a>
-              <a href="#" className="float-right btn-tool">
-                <i className="fas fa-times" />
-              </a>
-            </span>
-            <span className="description">
-              Shared publicly - {new Date(post?.created_at).toLocaleString()}
-            </span>
-          </div>
-          {/* /.user-block */}
-          <p>{post?.content}</p>
+                        <div>
+                          {posts.length > 0 &&
+                            posts.map((post) => (
+                              <div key={post?.id} className="post">
+                                <div className="user-block">
+                                  <img
+                                    className="img-circle img-bordered-sm"
+                                    src="../../dist/img/user1-128x128.jpg"
+                                    alt="user image"
+                                  />
+                                  <span className="username">
+                                    <a href="#">{post?.author_name}</a>
+                                    <a
+                                      href="#"
+                                      className="float-right btn-tool"
+                                    >
+                                      <i className="fas fa-times" />
+                                    </a>
+                                  </span>
+                                  <span className="description">
+                                    Shared publicly -{" "}
+                                    {new Date(
+                                      post?.created_at
+                                    ).toLocaleString()}
+                                  </span>
+                                </div>
+                                {/* /.user-block */}
+                                <p>{post?.content}</p>
 
-          {/* Button to show image in modal */}
-          {post?.image_url && (
-            <button
-              className="btn btn-primary"
-              onClick={() => openModal({ type: 'image', url: post.image_url })}
-            >
-              View Image
-            </button>
-          )}
+                                {/* Button to show image in modal */}
+                                {post?.image_url && (
+                                  <button
+                                    className="btn btn-primary"
+                                    onClick={() =>
+                                      openModal({
+                                        type: "image",
+                                        url: post.image_url,
+                                      })
+                                    }
+                                  >
+                                    View Image
+                                  </button>
+                                )}
 
-          {/* Button to show document in modal */}
-          {post?.DocUrl && (
-            <button
-              className="btn btn-secondary"
-              onClick={() => openModal({ type: 'document', url: post.DocUrl })}
-            >
-              View Document
-            </button>
-          )}
-        </div>
-      ))}
+                                {/* Button to show document in modal */}
+                                {post?.DocUrl && (
+                                  <button
+                                    className="btn btn-secondary"
+                                    onClick={() =>
+                                      openModal({
+                                        type: "document",
+                                        url: post.DocUrl,
+                                      })
+                                    }
+                                  >
+                                    View Document
+                                  </button>
+                                )}
+                              </div>
+                            ))}
 
-      {/* Modal component */}
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        contentLabel="Content Modal"
-        className="modal"
-        overlayClassName="modal-overlay"
-      >
-        <button onClick={closeModal} className="modal-close-btn">Close</button>
-        
-        {/* Display image or document based on modalContent */}
-        {modalContent?.type === 'image' ? (
-          <div>
-            <img
-              src={modalContent.url}
-              alt="Post image"
-              style={{ maxWidth: '100%' }}
-            />
-          </div>
-        ) : modalContent?.type === 'document' ? (
-          <div>
-            <iframe
-              src={modalContent.url}
-              style={{ width: '100%', height: '500px' }}
-              title="Document"
-            />
-          </div>
-        ) : null}
-      </Modal>
-    </div>
+                          {/* Modal component */}
+                          <Modal
+                            isOpen={modalIsOpen}
+                            onRequestClose={closeModal}
+                            contentLabel="Content Modal"
+                            className="modal"
+                            overlayClassName="modal-overlay"
+                          >
+                            <button
+                              onClick={closeModal}
+                              className="modal-close-btn"
+                            >
+                              Close
+                            </button>
+
+                            {/* Display image or document based on modalContent */}
+                            {modalContent?.type === "image" ? (
+                              <div>
+                                <img
+                                  src={modalContent.url}
+                                  alt="Post image"
+                                  style={{ maxWidth: "100%" }}
+                                />
+                              </div>
+                            ) : modalContent?.type === "document" ? (
+                              <div>
+                                <iframe
+                                  src={modalContent.url}
+                                  style={{ width: "100%", height: "500px" }}
+                                  title="Document"
+                                />
+                              </div>
+                            ) : null}
+                          </Modal>
+                        </div>
 
                         {/* /.post */}
                         {/* Post */}
-                         <div className="post clearfix">
+                        <div className="post clearfix">
                           {/* <div className="user-block">
                             <img
                               className="img-circle img-bordered-sm"
@@ -1404,7 +1493,7 @@ const SuperUserProfileContent = () => {
                             </span>
                           </div> */}
                           {/* /.user-block */}
-                           {/* <p>
+                          {/* <p>
                             Lorem ipsum represents a long-held tradition for
                             designers, typographers and the like. Some people
                             hate it and argue for its demise, but others ignore
@@ -1428,10 +1517,10 @@ const SuperUserProfileContent = () => {
                               </div>
                             </div>
                           </form> */}
-                        </div>  
+                        </div>
                         {/* /.post */}
                         {/* Post */}
-                         <div className="post">
+                        <div className="post">
                           {/* <div className="user-block">
                             <img
                               className="img-circle img-bordered-sm"
@@ -1449,7 +1538,7 @@ const SuperUserProfileContent = () => {
                             </span>
                           </div> */}
                           {/* /.user-block */}
-                            <div className="row mb-3">
+                          <div className="row mb-3">
                             {/* <div className="col-sm-6">
                               <img
                                 className="img-fluid"
@@ -1458,7 +1547,7 @@ const SuperUserProfileContent = () => {
                               />
                             </div>  */}
                             {/* /.col */}
-                             <div className="col-sm-6">
+                            <div className="col-sm-6">
                               <div className="row">
                                 {/* <div className="col-sm-6">
                                   <img
@@ -1472,7 +1561,7 @@ const SuperUserProfileContent = () => {
                                     alt="Photo"
                                   />
                                 </div> */}
-                                
+
                                 {/* <div className="col-sm-6">
                                   <img
                                     className="img-fluid mb-3"
@@ -1488,9 +1577,9 @@ const SuperUserProfileContent = () => {
                                 {/* /.col */}
                               </div>
                               {/* /.row */}
-                            </div> 
+                            </div>
                             {/* /.col */}
-                          </div> 
+                          </div>
                           {/* /.row */}
                           {/* <p>
                             <a href="#" className="link-black text-sm mr-2">
@@ -1511,9 +1600,9 @@ const SuperUserProfileContent = () => {
                             type="text"
                             placeholder="Type a comment"
                           /> */}
-                        </div> 
+                        </div>
                         {/* /.post */}
-                    </div>
+                      </div>
                       {/* /.tab-pane */}
                       <div className="tab-pane" id="timeline">
                         {/* The timeline */}
@@ -1530,59 +1619,55 @@ const SuperUserProfileContent = () => {
                             <div className="timeline-item">
                               <div className="timeline-body">
                                 <strong>Email:</strong>
-                                <p>{user?.email || "N/A"}</p>
-                                
+                                <p className="text-muted font">
+                                  {user?.email || "N/A"}
+                                </p>
 
                                 <strong>Mobile:</strong>
-                                <p>{user?.mobile || "N/A"}</p>
-                                
+                                <p className="text-muted font">
+                                  {" "}
+                                  {user?.mobile || "N/A"}
+                                </p>
 
                                 <strong>LinkedIn:</strong>
-                                <p>
-                                  <a
+                                <p className="text-muted font">
+                                  { user?.linkedin ? (<a
                                     href={user?.linkedin || "#"}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                   >
-                                    {user?.linkedin
-                                      ? user.linkedin
-                                      : "N/A"}
-                                  </a>
+                                    {user?.linkedin ? user.linkedin : "N/A"}
+                                  </a>):("N/A")}
+                                  
                                 </p>
-                                
 
                                 <strong>GitHub:</strong>
-                                <p>
-                                  <a
+                                <p className="text-muted font">
+                                  { user?.Github ? (<a
                                     href={user?.Github || "#"}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                   >
-                                    {user?.Github
-                                      ? user.Github
-                                      : "N/A"}
-                                  </a>
+                                    {user?.Github ? user.Github : "N/A"}
+                                  </a>) : ("N/A")}
+                                  
                                 </p>
-                                
 
                                 <strong>Instagram:</strong>
-                                <p>
-                                  <a
+                                <p className="text-muted font">
+                                  { user?.instagram ? (<a
                                     href={user?.instagram || "#"}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                   >
-                                    {user?.instagram
-                                      ? user.instagram
-                                      : "N/A"}
-                                  </a>
+                                    {user?.instagram ? user.instagram : "N/A"}
+                                  </a>):("N/A")}
+                                  
                                 </p>
                               </div>
                             </div>
                           </div>
                           {/* END Contact Details Item */}
-
-                          
                         </div>
                       </div>
                       {/* /.tab-pane */}
