@@ -145,7 +145,7 @@ class AlumniProfile(models.Model):
     industry = models.CharField(max_length=100, blank=True,default='')
     achievements = models.TextField(blank=True)
     previous_companies = models.TextField(blank=True)
-    preferred_contact_method = models.CharField(max_length=50, choices=[('email', 'Email'), ('phone', 'Phone'), ('linkedin', 'LinkedIn')], default='email')
+    preferred_contact_method = models.CharField(max_length=50, choices=[('email', 'Email'), ('phone', 'Phone'), ('linkedin', 'LinkedIn'),('instagram', 'Instagram')], default='email')
 
 
     def __str__(self):
