@@ -11,14 +11,14 @@ const SideNav = () => {
     <div>
       <aside className="main-sidebar sidebar-dark-primary elevation-4">
         {/* Brand Logo */}
-        <Link to="/" className="brand-link">
+        <Link to="/" className="brand-link" style={{textDecoration:"none"}}>
           <img
             src="dist/img/AdminLTELogo.png"
             alt="AdminLTE Logo"
             className="brand-image img-circle elevation-3"
             style={{ opacity: ".8" }}
           />
-          <span className="brand-text font-weight-light">AlumniHub</span>
+          <span className="brand-text font-weight-light"  >AlumniHub</span>
         </Link>
         {/* Sidebar */}
         <div className="sidebar">
@@ -32,7 +32,7 @@ const SideNav = () => {
               />
             </div>
             <div className="info">
-              <Link to="/profile" className="d-block">
+              <Link to="/profile" className="d-block" style={{textDecoration:"none"}} >
                 Welcome!!
                 <span style={{ textTransform: "uppercase" }}>{` ${
                   userData ? userData.username : "User"

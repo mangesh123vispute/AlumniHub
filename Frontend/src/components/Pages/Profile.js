@@ -1,19 +1,32 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useContext ,useState , useEffect } from "react";
+import React, { useContext ,useState , useEffect, useRef , useCallback } from "react";
 import axios from 'axios'
 import Home from "../Dashboard/Home.js";
 import AuthContext from "../../context/AuthContext.js";
 import { useLocation } from "react-router-dom";
-import Modal from 'react-modal';
 import LoadingSpinner from "../Loading/Loading.js";
 import Notification from "../Notification/Notification.js";
 import "./profile.css"
+import  Cropper  from "react-image-crop"; // Import Cropper
+import "react-image-crop/dist/ReactCrop.css"; // Import CSS for Cropper
+import Modal from "react-bootstrap/Modal";
+
 const AlumniProfileContent = () => {
   
   let { userData,setLoading,showNotification } = useContext(AuthContext);
   console.log("userData", userData);
   const [user, setUser] = useState(null);
+  
+  
+  const [show, setShow] = useState(false);
+  const [imageSrc, setImageSrc] = useState(null);
+  const [crop, setCrop] = useState({ unit: '%', width: 50, aspect: 1 });
+  const [croppedImageUrl, setCroppedImageUrl] = useState(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [uploading, setUploading] = useState(false);
+
+
   const id = localStorage.getItem("id") ? JSON.parse(localStorage.getItem("id")) : null
   const [reload, setReload] = useState(false);
   const [alumniData, setAlumniData] = useState({
@@ -214,6 +227,107 @@ const AlumniProfileContent = () => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
+
+
+  // Show or hide modal
+
+  // Handle open/close modal
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  // Handle image selection
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImageSrc(reader.result);
+        handleShow(); // Open modal after image selection
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Capture crop completion details
+  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  }, []);
+
+  // Create cropped image
+  const getCroppedImage = async (imageSrc, crop) => {
+    const image = new Image();
+    image.src = imageSrc;
+    return new Promise((resolve) => {
+      image.onload = () => {
+        const canvas = document.createElement('canvas');
+        const scaleX = image.naturalWidth / image.width;
+        const scaleY = image.naturalHeight / image.height;
+        canvas.width = crop.width;
+        canvas.height = crop.height;
+        const ctx = canvas.getContext('2d');
+
+        ctx.drawImage(
+          image,
+          crop.x * scaleX,
+          crop.y * scaleY,
+          crop.width * scaleX,
+          crop.height * scaleY,
+          0,
+          0,
+          crop.width,
+          crop.height
+        );
+
+        canvas.toBlob((blob) => {
+          const croppedUrl = URL.createObjectURL(blob);
+          resolve(croppedUrl);
+        }, 'image/jpeg');
+      };
+    });
+  };
+
+  // Handle crop and set cropped image URL
+  const handleCrop = async () => {
+    if (croppedAreaPixels) {
+      const croppedUrl = await getCroppedImage(imageSrc, croppedAreaPixels);
+      setCroppedImageUrl(croppedUrl);
+    }
+    handleClose();
+  };
+  // Handle upload
+  const handleUpload = async () => {
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('profile_picture', croppedImageUrl);
+
+    const token = localStorage.getItem("authTokens")
+    ? JSON.parse(localStorage.getItem("authTokens"))
+    : null;
+
+    try {
+      
+      const response = await axios.put(
+       `http://127.0.0.1:8000/update-image/${userData?.user_id}/`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token?.access}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        alert("Image uploaded successfully");
+        // You can refresh the user data here or perform any other updates.
+      }
+    } catch (error) {
+      console.error("Error uploading the image: ", error);
+      alert("Failed to upload the image");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return (
     <>
       <div>
@@ -240,7 +354,7 @@ const AlumniProfileContent = () => {
                   </div>
 
                   <div className="card-body box-profile">
-                    <div className="text-center">
+                    {/* <div className="text-center">
                       <img
                         className="profile-user-img img-fluid img-circle"
                         src={
@@ -249,7 +363,58 @@ const AlumniProfileContent = () => {
                         }
                         alt="User profile picture"
                       />
-                    </div>
+                    </div> */}
+                   <div className="text-center">
+      <img
+        className="profile-user-img img-fluid img-circle"
+        src={userData?.alumni_profile?.profile_picture_url || "../../dist/img/user4-128x128.jpg"}
+        alt="User profile"
+      />
+      <button className="btn btn-primary mt-2" onClick={() => document.getElementById('imageInput').click()}>
+        <i className="fas fa-edit"></i> Edit Profile Picture
+      </button>
+
+      {/* Modal for cropping */}
+      <Modal show={show} onHide={handleClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Profile Picture</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {imageSrc && (
+            <div className="crop-container" style={{ width: '100%', maxHeight: '400px' }}>
+              <Cropper
+                src={imageSrc}
+                crop={crop}
+                onChange={(newCrop) => setCrop(newCrop)}
+                onComplete={onCropComplete}
+                style={{ width: '100%', height: 'auto' }} // Responsive style
+              />
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <button className="btn btn-secondary" onClick={handleClose}>
+            Cancel
+          </button>
+          <button className="btn btn-primary" onClick={handleCrop}>
+            Crop & Save
+          </button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Cropped Image Preview */}
+      {croppedImageUrl && (
+        <div>
+          <img src={croppedImageUrl} alt="Cropped" className="img-thumbnail mt-3" />
+          <button className="btn btn-success mt-2" onClick={handleUpload} disabled={uploading}>
+            {uploading ? 'Uploading...' : 'Upload Image'}
+          </button>
+        </div>
+      )}
+
+      {/* File input (hidden) */}
+      <input type="file" id="imageInput" accept="image/*" onChange={handleFileChange} style={{ display: 'none' }} />
+    </div>
                     <h3 className="profile-username text-center ">
                       {user ? user.full_name || user.username : "User"}
                     </h3>
