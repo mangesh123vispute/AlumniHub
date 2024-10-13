@@ -536,14 +536,15 @@ const AlumniProfileContent = () => {
                       <i className="fas fa-graduation-cap mr-1" /> Education
                     </strong>
                     <p className="text-muted aboutfont">
-                      {user?.alumni_profile?.Education || "N/A"}                   
+                      {user?.alumni_profile?.Education || "N/A"}
                     </p>
 
                     <strong>
-                      <i className="fas fa-graduation-cap mr-1" /> Graduation Year:
+                      <i className="fas fa-graduation-cap mr-1" /> Graduation
+                      Year:
                     </strong>
                     <p className="text-muted aboutfont">
-                       {user?.graduation_year || "N/A"}
+                      {user?.graduation_year || "N/A"}
                     </p>
 
                     <strong>
@@ -561,7 +562,6 @@ const AlumniProfileContent = () => {
                     </strong>
                     <p className="text-muted aboutfont">
                       {user?.alumni_profile?.current_city || "N/A"},
-                      
                     </p>
 
                     <strong>
@@ -570,7 +570,6 @@ const AlumniProfileContent = () => {
                     <p className="text-muted aboutfont">
                       <span className="tag tag-danger">
                         {user?.alumni_profile?.current_company_name || "N/A"}
-                        
                       </span>{" "}
                       <br />
                     </p>
@@ -579,9 +578,8 @@ const AlumniProfileContent = () => {
                       <i className="fas fa-building mr-1" /> Role:
                     </strong>
                     <p className="text-muted aboutfont">
-                      
                       {user?.alumni_profile?.job_title || "N/A"}
-                      
+
                       <br />
                     </p>
 
@@ -639,14 +637,10 @@ const AlumniProfileContent = () => {
                     <p className="text-muted aboutfont">
                       {user?.Year_Joined || "N/A"}
                     </p>
-
                   </div>
                 </div>
                 {/* /.card */}
               </div>
-
-
-
 
               {/* /.col */}
               <div className="col-md-9">
@@ -999,453 +993,571 @@ const AlumniProfileContent = () => {
                         </div>
                       </div>
                       {/* /.tab-pane */}
-                      <div className="tab-pane" id="settings">
-                        <form className="form-horizontal" onSubmit={handleSubmit}>
-                            {/* <div className="form-group row">
-                              <label htmlFor="inputName" className="col-sm-2 col-form-label">
-                                Username
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="username"
-                                  name="username"
-                                  value={alumniData?.user?.username}
-                                  onChange={handleUserChange}
-                                  placeholder="Username"
-                                />
-                              </div>
-                            </div> */}
-
-                            <div className="form-group row">
-                              <label htmlFor="inputFullName" className="col-sm-2 col-form-label">
-                                Full Name
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="full_name"
-                                  name="full_name"
-                                  value={alumniData?.user?.full_name}
-                                  onChange={handleUserChange}
-                                  placeholder="Full Name"
-                                />
-                              </div>
+                      <div
+                        className="tab-pane"
+                        id="settings"
+                        style={{
+                          maxHeight: "131vh",
+                          overflowY: "auto", // Enable vertical scrolling
+                          overflowX: "hidden", // Prevent horizontal scrolling
+                          padding: "15px", // Optional: add padding if needed
+                          boxSizing: "border-box", // Ensure padding is included in width calculation
+                        }}
+                      >
+                        <form
+                          className="form-horizontal"
+                          onSubmit={handleSubmit}
+                        >
+                          <p className="editheading">Personal Information</p>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputFullName"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Full Name
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="full_name"
+                                name="full_name"
+                                value={alumniData?.user?.full_name}
+                                onChange={handleUserChange}
+                                placeholder="Full Name"
+                              />
                             </div>
+                          </div>
 
-                            <div className="form-group row">
-                              <label htmlFor="inputEmail" className="col-sm-2 col-form-label">
-                                Email
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="email"
-                                  className="form-control"
-                                  id="email"
-                                  name="email"
-                                  value={alumniData?.user?.email}
-                                  onChange={handleUserChange}
-                                  placeholder="Email"
-                                />
-                              </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputHeading"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Education
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="Education"
+                                name="Education"
+                                value={alumniData?.profile?.Education}
+                                onChange={handleProfileChange}
+                                placeholder="Education"
+                              />
                             </div>
+                          </div>
 
-                            <div className="form-group row">
-                              <label htmlFor="inputMobile" className="col-sm-2 col-form-label">
-                                Mobile
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="mobile"
-                                  name="mobile"
-                                  value={alumniData?.user?.mobile}
-                                  onChange={handleUserChange}
-                                  placeholder="Mobile"
-                                />
-                              </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputLinkedIn"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Branch
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="Branch"
+                                name="Branch"
+                                value={alumniData?.user?.Branch}
+                                onChange={handleUserChange}
+                                placeholder="Your Branch"
+                              />
                             </div>
-
-                            <div className="form-group row">
-                              <label htmlFor="inputMobile" className="col-sm-2 col-form-label">
-                                Work
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="Work"
-                                  name="Work"
-                                  value={alumniData?.user?.Work}
-                                  onChange={handleUserChange}
-                                  placeholder="Your Work"
-                                />
-                              </div>
+                          </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputCity"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Current City
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="current_city"
+                                name="current_city"
+                                value={alumniData?.profile?.current_city}
+                                onChange={handleProfileChange}
+                                placeholder="Current City"
+                              />
                             </div>
-
-                            <div className="form-group row">
-                              <label htmlFor="inputMobile" className="col-sm-2 col-form-label">
-                                Year Joined
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="Year_Joined"
-                                  name="Year_Joined"
-                                  value={alumniData?.user?.Year_Joined}
-                                  onChange={handleUserChange}
-                                  placeholder="Year Joined"
-                                />
-                              </div>
+                          </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputMobile"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Admission Year
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="Year_Joined"
+                                name="Year_Joined"
+                                value={alumniData?.user?.Year_Joined}
+                                onChange={handleUserChange}
+                                placeholder="Year Joined"
+                              />
                             </div>
-
-                            <div className="form-group row">
-                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
-                                LinkedIn
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="linkedin"
-                                  name="linkedin"
-                                  value={alumniData?.user?.linkedin}
-                                  onChange={handleUserChange}
-                                  placeholder="LinkedIn URL"
-                                />
-                              </div>
+                          </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputLinkedIn"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Graduation Year
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="graduation_year"
+                                name="graduation_year"
+                                value={alumniData?.user?.graduation_year}
+                                onChange={handleUserChange}
+                                placeholder="Graduation Year  "
+                              />
                             </div>
+                          </div>
+                          <hr
+                            style={{
+                              border: "1px solid black",
+                              marginBottom: "0.5em",
+                              marginTop: "0.5em",
+                            }}
+                          ></hr>
 
-                            <div className="form-group row">
-                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
-                                Instagram
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="instagram"
-                                  name="instagram"
-                                  value={alumniData?.user?.instagram}
-                                  onChange={handleUserChange}
-                                  placeholder="Instagram URL"
-                                />
-                              </div>
+                          <p className="editheading">Contact Information</p>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputEmail"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Email
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="email"
+                                className="form-control"
+                                id="email"
+                                name="email"
+                                value={alumniData?.user?.email}
+                                onChange={handleUserChange}
+                                placeholder="Email"
+                              />
                             </div>
+                          </div>
 
-                            <div className="form-group row">
-                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
-                                Portfolio
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="portfolio_link"
-                                  name="portfolio_link"
-                                  value={alumniData?.user?.portfolio_link}
-                                  onChange={handleUserChange}
-                                  placeholder="Portfolio URL"
-                                />
-                              </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputMobile"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Mobile
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text" // Keep as text to allow length control
+                                className="form-control"
+                                id="mobile"
+                                name="mobile"
+                                value={alumniData?.user?.mobile}
+                                onChange={(e) => {
+                                  const value = e.target.value.replace(
+                                    /[^0-9]/g,
+                                    ""
+                                  ); // Allow only numeric input
+                                  // Only set the mobile number if it is exactly 10 digits
+                                  if (value.length === 10) {
+                                    handleUserChange({
+                                      target: { name: "mobile", value },
+                                    });
+                                  } else if (value.length < 10) {
+                                    // Optionally, you can reset the input or show an error
+                                    handleUserChange({
+                                      target: { name: "mobile", value },
+                                    }); // Update the input while typing
+                                  }
+                                }}
+                                placeholder="Mobile"
+                                maxLength="10" // Optional, provides a hint to the user
+                              />
                             </div>
+                          </div>
 
-
-                            <div className="form-group row">
-                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
-                                Resume
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="resume_link"
-                                  name="resume_link"
-                                  value={alumniData?.user?.resume_link}
-                                  onChange={handleUserChange}
-                                  placeholder="Resume URL"
-                                />
-                              </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputLinkedIn"
+                              className="col-sm-2 col-form-label"
+                            >
+                              LinkedIn
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="linkedin"
+                                name="linkedin"
+                                value={alumniData?.user?.linkedin}
+                                onChange={handleUserChange}
+                                placeholder="LinkedIn profile link"
+                              />
                             </div>
+                          </div>
 
-
-
-                            <div className="form-group row">
-                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
-                                About
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="About"
-                                  name="About"
-                                  value={alumniData?.user?.About}
-                                  onChange={handleUserChange}
-                                  placeholder="About"
-                                />
-                              </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputLinkedIn"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Instagram
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="instagram"
+                                name="instagram"
+                                value={alumniData?.user?.instagram}
+                                onChange={handleUserChange}
+                                placeholder="Instagram profile link"
+                              />
                             </div>
+                          </div>
 
-                            <div className="form-group row">
-                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
-                                 Graduation Year 
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="graduation_year"
-                                  name="graduation_year"
-                                  value={alumniData?.user?.graduation_year}
-                                  onChange={handleUserChange}
-                                  placeholder="Graduation Year  "
-                                />
-                              </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="preferred_contact_method"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Preferred Contact
+                            </label>
+                            <div className="col-sm-10">
+                              <select
+                                className="form-control"
+                                id="preferred_contact_method"
+                                name="preferred_contact_method"
+                                value={
+                                  alumniData?.profile?.preferred_contact_method
+                                }
+                                onChange={handleProfileChange}
+                              >
+                                <option value="" disabled>
+                                  Select Preferred Contact Method
+                                </option>
+                                <option value="email">Email</option>
+                                <option value="phone">Mobile</option>
+                                <option value="linkedin">LinkedIn</option>
+                                <option value="instagram">Instagram</option>
+                              </select>
                             </div>
+                          </div>
+                          <hr
+                            style={{
+                              border: "1px solid black",
+                              marginBottom: "0.5em",
+                              marginTop: "0.5em",
+                            }}
+                          ></hr>
 
-                            <div className="form-group row">
-                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
-                                Branch
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="Branch"
-                                  name="Branch"
-                                  value={alumniData?.user?.Branch}
-                                  onChange={handleUserChange}
-                                  placeholder="Your Branch"
-                                />
-                              </div>
+                          <p className="editheading">
+                            Online Profiles & Documents
+                          </p>
+
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputGithub"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Github Link
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="Github"
+                                name="Github"
+                                value={alumniData?.user?.Github}
+                                onChange={handleUserChange}
+                                placeholder="Github link"
+                              />
                             </div>
+                          </div>
 
-                            <div className="form-group row">
-                              <label htmlFor="inputGithub" className="col-sm-2 col-form-label">
-                                Github
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="Github"
-                                  name="Github"
-                                  value={alumniData?.user?.Github}
-                                  onChange={handleUserChange}
-                                  placeholder="Github URL"
-                                />
-                              </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputLinkedIn"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Portfolio Link
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="portfolio_link"
+                                name="portfolio_link"
+                                value={alumniData?.user?.portfolio_link}
+                                onChange={handleUserChange}
+                                placeholder="Portfolio link"
+                              />
                             </div>
+                          </div>
 
-                            {/* Profile Specific Fields */}
-                            <div className="form-group row">
-                              <label htmlFor="inputHeading" className="col-sm-2 col-form-label">
-                                Heading
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="Heading"
-                                  name="Heading"
-                                  value={alumniData?.profile?.Heading}
-                                  onChange={handleProfileChange}
-                                  placeholder="Profile Heading"
-                                />
-                              </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputLinkedIn"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Resume Link
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="resume_link"
+                                name="resume_link"
+                                value={alumniData?.user?.resume_link}
+                                onChange={handleUserChange}
+                                placeholder="Resume link"
+                              />
                             </div>
+                          </div>
+                          <hr
+                            style={{
+                              border: "1px solid black",
+                              marginBottom: "0.5em",
+                              marginTop: "0.5em",
+                            }}
+                          ></hr>
 
-                            <div className="form-group row">
-                                <label htmlFor="preferred_contact_method" className="col-sm-2 col-form-label">
-                                  Preferred Contact
-                                </label>
-                                <div className="col-sm-10">
-                                  <select
-                                    className="form-control"
-                                    id="preferred_contact_method"
-                                    name="preferred_contact_method"
-                                    value={alumniData?.profile?.preferred_contact_method}
-                                    onChange={handleProfileChange}
-                                  >
-                                    <option value="" disabled>Select Preferred Contact Method</option>
-                                    <option value="email">Email</option>
-                                    <option value="phone">Mobile</option>
-                                    <option value="linkedin">LinkedIn</option>
-                                  </select>
-                                </div>
-                              </div>
+                          <p className="editheading">
+                            Professional Information
+                          </p>
 
-                            <div className="form-group row">
-                              <label htmlFor="inputHeading" className="col-sm-2 col-form-label">
-                                Education
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="Education"
-                                  name="Education"
-                                  value={alumniData?.profile?.Education}
-                                  onChange={handleProfileChange}
-                                  placeholder="Education"
-                                />
-                              </div>
+                          {/* Profile Specific Fields */}
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputHeading"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Heading
+                            </label>
+                            <div className="col-sm-10">
+                              <textarea
+                                className="form-control"
+                                id="Heading"
+                                name="Heading"
+                                value={alumniData?.profile?.Heading}
+                                onChange={handleProfileChange}
+                                placeholder="Front-End Engineer | Smart India Hackathon Finalist|Business coach |Digital marketer| Android development | Web development | Blockchain | AI/ML, etc.."
+                                rows="3"
+                                style={{ resize: "vertical" }}
+                              />
                             </div>
+                          </div>
 
-                            
-
-                            <div className="form-group row">
-                              <label htmlFor="inputHeading" className="col-sm-2 col-form-label">
-                              Previous Companies
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="previous_companies"
-                                  name="previous_companies"
-                                  value={alumniData?.profile?.previous_companies}
-                                  onChange={handleProfileChange}
-                                  placeholder="Previous Companies"
-                                />
-                              </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputLinkedIn"
+                              className="col-sm-2 col-form-label"
+                            >
+                              About
+                            </label>
+                            <div className="col-sm-10">
+                              <textarea
+                                type="text"
+                                className="form-control"
+                                id="About"
+                                name="About"
+                                value={alumniData?.user?.About}
+                                onChange={handleUserChange}
+                                placeholder="Tech Enthusiast: Passionate full-stack developer with experience in React and Django. etc"
+                                rows="3"
+                                style={{ resize: "vertical" }}
+                              />
                             </div>
-                            
+                          </div>
 
-                            <div className="form-group row">
-                              <label htmlFor="inputHeading" className="col-sm-2 col-form-label">
-                              Years Of Experience
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="years_of_experience"
-                                  name="years_of_experience"
-                                  value={alumniData?.profile?.years_of_experience}
-                                  onChange={handleProfileChange}
-                                  placeholder="Years Of Experience"
-                                />
-                              </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputMobile"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Work
+                            </label>
+                            <div className="col-sm-10">
+                              <textarea
+                                type="text"
+                                className="form-control"
+                                id="Work"
+                                name="Work"
+                                value={alumniData?.user?.Work}
+                                onChange={handleUserChange}
+                                placeholder="Full Stack Developer at ABC Tech. Developed and maintained web applications using React and Django, improving site performance by 30%. etc.."
+                                rows="3"
+                                style={{ resize: "vertical" }}
+                              />
                             </div>
-
-
-                            <div className="form-group row">
-                              <label htmlFor="inputHeading" className="col-sm-2 col-form-label">
-                              Achievements
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="achievements"
-                                  name="achievements"
-                                  value={alumniData?.profile?.achievements}
-                                  onChange={handleProfileChange}
-                                  placeholder="Your Achievements"
-                                />
-                              </div>
-                            </div>
-
-                            <div className="form-group row">
-                              <label htmlFor="inputHeading" className="col-sm-2 col-form-label">
+                          </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputHeading"
+                              className="col-sm-2 col-form-label"
+                            >
                               Job Title
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="job_title"
-                                  name="job_title"
-                                  value={alumniData?.profile?.job_title}
-                                  onChange={handleProfileChange}
-                                  placeholder="Your Job Title"
-                                />
-                              </div>
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="job_title"
+                                name="job_title"
+                                value={alumniData?.profile?.job_title}
+                                onChange={handleProfileChange}
+                                placeholder="Software Engineer, Manager etc."
+                              />
                             </div>
+                          </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputCompany"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Current Company
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="current_company_name"
+                                name="current_company_name"
+                                value={
+                                  alumniData?.profile?.current_company_name
+                                }
+                                onChange={handleProfileChange}
+                                placeholder="TCS , Capgemini etc."
+                              />
+                            </div>
+                          </div>
 
-                            <div className="form-group row">
-                              <label htmlFor="inputHeading" className="col-sm-2 col-form-label">
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputHeading"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Previous Companies
+                            </label>
+                            <div className="col-sm-10">
+                              <textarea
+                                type="text"
+                                className="form-control"
+                                id="previous_companies"
+                                name="previous_companies"
+                                value={alumniData?.profile?.previous_companies}
+                                onChange={handleProfileChange}
+                                placeholder="TCS ,Capgemini etc."
+                                rows="3"
+                                style={{ resize: "vertical" }}
+                              />
+                            </div>
+                          </div>
+
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputHeading"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Years Of Experience
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="number"
+                                className="form-control"
+                                id="years_of_experience"
+                                name="years_of_experience"
+                                value={alumniData?.profile?.years_of_experience}
+                                onChange={handleProfileChange}
+                                placeholder="Years Of Experience in Numbers"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputHeading"
+                              className="col-sm-2 col-form-label"
+                            >
                               Industry
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="industry"
-                                  name="industry"
-                                  value={alumniData?.profile?.industry}
-                                  onChange={handleProfileChange}
-                                  placeholder="Your industry"
-                                />
-                              </div>
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="industry"
+                                name="industry"
+                                value={alumniData?.profile?.industry}
+                                onChange={handleProfileChange}
+                                placeholder="IT , Finance , etc."
+                              />
                             </div>
+                          </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputHeading"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Achievement
+                            </label>
+                            <div className="col-sm-10">
+                              <textarea
+                                type="text"
+                                className="form-control"
+                                id="achievements"
+                                name="achievements"
+                                value={alumniData?.profile?.achievements}
+                                onChange={handleProfileChange}
+                                placeholder="Certified Front-End Developer from [Certification Body]"
+                                rows="3"
+                                style={{ resize: "vertical" }}
+                              />
+                            </div>
+                          </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputSkills"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Skills
+                            </label>
+                            <div className="col-sm-10">
+                              <textarea
+                                type="text"
+                                className="form-control"
+                                id="skills"
+                                name="skills"
+                                value={alumniData?.user?.skills}
+                                onChange={handleUserChange}
+                                placeholder="React.js , Node.js , MongoDB etc."
+                                rows="3"
+                              />
+                            </div>
+                          </div>
 
-                            <div className="form-group row">
-                              <label htmlFor="inputCompany" className="col-sm-2 col-form-label">
-                                Current Company
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="current_company_name"
-                                  name="current_company_name"
-                                  value={alumniData?.profile?.current_company_name}
-                                  onChange={handleProfileChange}
-                                  placeholder="Current Company Name"
-                                />
-                              </div>
+                          <div className="form-group row">
+                            <div className="offset-sm-2 col-sm-10 mt-3">
+                              <button type="submit" className="btn btn-danger">
+                                Submit
+                              </button>
                             </div>
-
-                            <div className="form-group row">
-                              <label htmlFor="inputCity" className="col-sm-2 col-form-label">
-                                Current City
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="current_city"
-                                  name="current_city"
-                                  value={alumniData?.profile?.current_city}
-                                  onChange={handleProfileChange}
-                                  placeholder="Current City"
-                                />
-                              </div>
-                            </div>
-
-                            <div className="form-group row">
-                              <label htmlFor="inputSkills" className="col-sm-2 col-form-label">
-                                Skills
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="skills"
-                                  name="skills"
-                                  value={alumniData?.user?.skills}
-                                  onChange={handleUserChange}
-                                  placeholder="Skills"
-                                />
-                              </div>
-                            </div>
-
-                            <div className="form-group row">
-                              <div className="offset-sm-2 col-sm-10">
-                                <button type="submit" className="btn btn-danger">
-                                  Submit
-                                </button>
-                              </div>
-                            </div>
-                           
-                          </form>
+                          </div>
+                        </form>
                       </div>
                       {/* /.tab-pane */}
                     </div>
@@ -2002,29 +2114,45 @@ const StudentProfileContent = () => {
                       {/* /.tab-pane */}
 
                       {/* /.tab-pane */}
-                      <div className="tab-pane" id="edit">
-                      <form className="form-horizontal" onSubmit={handleSubmit}>
-                          
-
-                             <div className="form-group row">
-                              <label htmlFor="inputFullName" className="col-sm-2 col-form-label">
-                                Full Name
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="full_name"
-                                  name="full_name"
-                                  value={studentData?.user?.full_name}
-                                  onChange={handleUserChange}
-                                  placeholder="Full Name"
-                                />
-                              </div>
+                      <div
+                        className="tab-pane"
+                        id="edit"
+                        style={{
+                          maxHeight: "117vh",
+                          overflowY: "auto", // Enable vertical scrolling
+                          overflowX: "hidden", // Prevent horizontal scrolling
+                          padding: "15px", // Optional: add padding if needed
+                          boxSizing: "border-box", // Ensure padding is included in width calculation
+                        }}
+                      >
+                        <form
+                          className="form-horizontal"
+                          onSubmit={handleSubmit}
+                        >
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputFullName"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Full Name
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="full_name"
+                                name="full_name"
+                                value={studentData?.user?.full_name}
+                                onChange={handleUserChange}
+                                placeholder="Full Name"
+                              />
                             </div>
+                          </div>
 
                           <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">About:</label>
+                            <label className="col-sm-2 col-form-label">
+                              About:
+                            </label>
                             <div className="col-sm-10">
                               <input
                                 type="text"
@@ -2039,7 +2167,9 @@ const StudentProfileContent = () => {
                           </div>
 
                           <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Work:</label>
+                            <label className="col-sm-2 col-form-label">
+                              Work:
+                            </label>
                             <div className="col-sm-10">
                               <input
                                 type="text"
@@ -2048,13 +2178,15 @@ const StudentProfileContent = () => {
                                 name="Work"
                                 value={studentData.user.Work}
                                 onChange={handleUserChange}
-                                 placeholder="Your Work"
+                                placeholder="Your Work"
                               />
                             </div>
                           </div>
 
                           <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Year Joined:</label>
+                            <label className="col-sm-2 col-form-label">
+                              Year Joined:
+                            </label>
                             <div className="col-sm-10">
                               <input
                                 type="text"
@@ -2069,7 +2201,9 @@ const StudentProfileContent = () => {
                           </div>
 
                           <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Graduation Year:</label>
+                            <label className="col-sm-2 col-form-label">
+                              Graduation Year:
+                            </label>
                             <div className="col-sm-10">
                               <input
                                 type="text"
@@ -2084,7 +2218,9 @@ const StudentProfileContent = () => {
                           </div>
 
                           <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Branch:</label>
+                            <label className="col-sm-2 col-form-label">
+                              Branch:
+                            </label>
                             <div className="col-sm-10">
                               <input
                                 type="text"
@@ -2099,7 +2235,9 @@ const StudentProfileContent = () => {
                           </div>
 
                           <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Email:</label>
+                            <label className="col-sm-2 col-form-label">
+                              Email:
+                            </label>
                             <div className="col-sm-10">
                               <input
                                 type="email"
@@ -2109,13 +2247,14 @@ const StudentProfileContent = () => {
                                 value={studentData.user.email}
                                 onChange={handleUserChange}
                                 placeholder="Email"
-
                               />
                             </div>
                           </div>
 
                           <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Mobile:</label>
+                            <label className="col-sm-2 col-form-label">
+                              Mobile:
+                            </label>
                             <div className="col-sm-10">
                               <input
                                 type="text"
@@ -2130,7 +2269,9 @@ const StudentProfileContent = () => {
                           </div>
 
                           <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">LinkedIn:</label>
+                            <label className="col-sm-2 col-form-label">
+                              LinkedIn:
+                            </label>
                             <div className="col-sm-10">
                               <input
                                 type="url"
@@ -2145,7 +2286,9 @@ const StudentProfileContent = () => {
                           </div>
 
                           <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Github:</label>
+                            <label className="col-sm-2 col-form-label">
+                              Github:
+                            </label>
                             <div className="col-sm-10">
                               <input
                                 type="url"
@@ -2160,7 +2303,9 @@ const StudentProfileContent = () => {
                           </div>
 
                           <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Instagram:</label>
+                            <label className="col-sm-2 col-form-label">
+                              Instagram:
+                            </label>
                             <div className="col-sm-10">
                               <input
                                 type="url"
@@ -2170,13 +2315,14 @@ const StudentProfileContent = () => {
                                 value={studentData.user.instagram}
                                 onChange={handleUserChange}
                                 placeholder="Instagram URL"
-                            
                               />
                             </div>
                           </div>
 
                           <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Portfolio Link:</label>
+                            <label className="col-sm-2 col-form-label">
+                              Portfolio Link:
+                            </label>
                             <div className="col-sm-10">
                               <input
                                 type="url"
@@ -2191,7 +2337,9 @@ const StudentProfileContent = () => {
                           </div>
 
                           <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Resume Link:</label>
+                            <label className="col-sm-2 col-form-label">
+                              Resume Link:
+                            </label>
                             <div className="col-sm-10">
                               <input
                                 type="url"
@@ -2206,7 +2354,9 @@ const StudentProfileContent = () => {
                           </div>
 
                           <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Skills:</label>
+                            <label className="col-sm-2 col-form-label">
+                              Skills:
+                            </label>
                             <div className="col-sm-10">
                               <input
                                 type="text"
@@ -2220,10 +2370,10 @@ const StudentProfileContent = () => {
                             </div>
                           </div>
 
-                         
-
                           <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Heading:</label>
+                            <label className="col-sm-2 col-form-label">
+                              Heading:
+                            </label>
                             <div className="col-sm-10">
                               <input
                                 type="text"
@@ -2238,7 +2388,9 @@ const StudentProfileContent = () => {
                           </div>
 
                           <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Education:</label>
+                            <label className="col-sm-2 col-form-label">
+                              Education:
+                            </label>
                             <div className="col-sm-10">
                               <input
                                 type="text"
@@ -2253,14 +2405,18 @@ const StudentProfileContent = () => {
                           </div>
 
                           <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Current Year of Study:</label>
+                            <label className="col-sm-2 col-form-label">
+                              Current Year of Study:
+                            </label>
                             <div className="col-sm-10">
                               <input
                                 type="text"
                                 id="current_year_of_study"
                                 className="form-control"
                                 name="current_year_of_study"
-                                value={studentData.profile.current_year_of_study}
+                                value={
+                                  studentData.profile.current_year_of_study
+                                }
                                 onChange={handleProfileChange}
                                 placeholder="Current Year of Study"
                               />
@@ -2268,15 +2424,13 @@ const StudentProfileContent = () => {
                           </div>
 
                           <div className="form-group row">
-                              <div className="offset-sm-2 col-sm-10">
-                                <button type="submit" className="btn btn-danger">
-                                  Submit
-                                </button>
-                              </div>
+                            <div className="offset-sm-2 col-sm-10">
+                              <button type="submit" className="btn btn-danger">
+                                Submit
+                              </button>
+                            </div>
                           </div>
-                           
                         </form>
-
                       </div>
                       {/* /.tab-pane */}
                     </div>
@@ -2886,7 +3040,7 @@ const SuperUserProfileContent = () => {
                             placeholder="Type a comment"
                           />
                         </div>
-                       
+
                         {/* /.post */}
                       </div>
                       {/* /.tab-pane */}
@@ -2966,95 +3120,122 @@ const SuperUserProfileContent = () => {
                         </div>
                       </div>
                       {/* /.tab-pane */}
-                      <div className="tab-pane" id="settings">
-                      <form className="form-horizontal" onSubmit={handleSubmit}>
-                           
-                            <div className="form-group row">
-                              <label htmlFor="inputFullName" className="col-sm-2 col-form-label">
-                                Full Name
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="full_name"
-                                  name="full_name"
-                                  value={superUserData?.user?.full_name}
-                                  onChange={handleUserChange}
-                                  placeholder="Full Name"
-                                />
-                              </div>
+                      <div
+                        className="tab-pane"
+                        id="settings"
+                        style={{
+                          maxHeight: "131vh",
+                          overflowY: "auto", // Enable vertical scrolling
+                          overflowX: "hidden", // Prevent horizontal scrolling
+                          padding: "15px", // Optional: add padding if needed
+                          boxSizing: "border-box", // Ensure padding is included in width calculation
+                        }}
+                      >
+                        <form
+                          className="form-horizontal"
+                          onSubmit={handleSubmit}
+                        >
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputFullName"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Full Name
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="full_name"
+                                name="full_name"
+                                value={superUserData?.user?.full_name}
+                                onChange={handleUserChange}
+                                placeholder="Full Name"
+                              />
                             </div>
+                          </div>
 
-                            <div className="form-group row">
-                              <label htmlFor="inputEmail" className="col-sm-2 col-form-label">
-                                Email
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="email"
-                                  className="form-control"
-                                  id="email"
-                                  name="email"
-                                  value={superUserData?.user?.email}
-                                  onChange={handleUserChange}
-                                  placeholder="Email"
-                                />
-                              </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputEmail"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Email
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="email"
+                                className="form-control"
+                                id="email"
+                                name="email"
+                                value={superUserData?.user?.email}
+                                onChange={handleUserChange}
+                                placeholder="Email"
+                              />
                             </div>
+                          </div>
 
-                            <div className="form-group row">
-                              <label htmlFor="inputMobile" className="col-sm-2 col-form-label">
-                                Mobile
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="mobile"
-                                  name="mobile"
-                                  value={superUserData?.user?.mobile}
-                                  onChange={handleUserChange}
-                                  placeholder="Mobile"
-                                />
-                              </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputMobile"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Mobile
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="mobile"
+                                name="mobile"
+                                value={superUserData?.user?.mobile}
+                                onChange={handleUserChange}
+                                placeholder="Mobile"
+                              />
                             </div>
+                          </div>
 
-                            <div className="form-group row">
-                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
-                                LinkedIn
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="linkedin"
-                                  name="linkedin"
-                                  value={superUserData?.user?.linkedin}
-                                  onChange={handleUserChange}
-                                  placeholder="LinkedIn URL"
-                                />
-                              </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputLinkedIn"
+                              className="col-sm-2 col-form-label"
+                            >
+                              LinkedIn
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="linkedin"
+                                name="linkedin"
+                                value={superUserData?.user?.linkedin}
+                                onChange={handleUserChange}
+                                placeholder="LinkedIn URL"
+                              />
                             </div>
+                          </div>
 
-                            <div className="form-group row">
-                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
-                                Instagram
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="instagram"
-                                  name="instagram"
-                                  value={superUserData?.user?.instagram}
-                                  onChange={handleUserChange}
-                                  placeholder="Instagram URL"
-                                />
-                              </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputLinkedIn"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Instagram
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="instagram"
+                                name="instagram"
+                                value={superUserData?.user?.instagram}
+                                onChange={handleUserChange}
+                                placeholder="Instagram URL"
+                              />
                             </div>
+                          </div>
 
-                            {/* <div className="form-group row">
+                          {/* <div className="form-group row">
                               <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
                                 Portfolio
                               </label>
@@ -3071,25 +3252,27 @@ const SuperUserProfileContent = () => {
                               </div>
                             </div> */}
 
-                           <div className="form-group row">
-                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
-                                 Year Joined
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="Year_Joined"
-                                  name="Year_Joined"
-                                  value={superUserData?.user?.Year_Joined}
-                                  onChange={handleUserChange}
-                                  placeholder="Year Joined"
-                                />
-                              </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputLinkedIn"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Year Joined
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="Year_Joined"
+                                name="Year_Joined"
+                                value={superUserData?.user?.Year_Joined}
+                                onChange={handleUserChange}
+                                placeholder="Year Joined"
+                              />
                             </div>
+                          </div>
 
-
-                            {/* <div className="form-group row">
+                          {/* <div className="form-group row">
                               <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
                                 Resume
                               </label>
@@ -3106,80 +3289,87 @@ const SuperUserProfileContent = () => {
                               </div>
                             </div> */}
 
-
-
-                            <div className="form-group row">
-                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
-                                About
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="About"
-                                  name="About"
-                                  value={superUserData?.user?.About}
-                                  onChange={handleUserChange}
-                                  placeholder="About"
-                                />
-                              </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputLinkedIn"
+                              className="col-sm-2 col-form-label"
+                            >
+                              About
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="About"
+                                name="About"
+                                value={superUserData?.user?.About}
+                                onChange={handleUserChange}
+                                placeholder="About"
+                              />
                             </div>
+                          </div>
 
-                            <div className="form-group row">
-                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
-                                 Graduation Year 
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="graduation_year"
-                                  name="graduation_year"
-                                  value={superUserData?.user?.graduation_year}
-                                  onChange={handleUserChange}
-                                  placeholder="Graduation Year  "
-                                />
-                              </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputLinkedIn"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Graduation Year
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="graduation_year"
+                                name="graduation_year"
+                                value={superUserData?.user?.graduation_year}
+                                onChange={handleUserChange}
+                                placeholder="Graduation Year  "
+                              />
                             </div>
+                          </div>
 
-                            <div className="form-group row">
-                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
-                                Branch
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="Branch"
-                                  name="Branch"
-                                  value={superUserData?.user?.Branch}
-                                  onChange={handleUserChange}
-                                  placeholder="Your Branch"
-                                />
-                              </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputLinkedIn"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Branch
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="Branch"
+                                name="Branch"
+                                value={superUserData?.user?.Branch}
+                                onChange={handleUserChange}
+                                placeholder="Your Branch"
+                              />
                             </div>
+                          </div>
 
-                            <div className="form-group row">
-                              <label htmlFor="inputGithub" className="col-sm-2 col-form-label">
-                                Github
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="Github"
-                                  name="Github"
-                                  value={superUserData?.user?.Github}
-                                  onChange={handleUserChange}
-                                  placeholder="Github URL"
-                                />
-                              </div>
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputGithub"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Github
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="Github"
+                                name="Github"
+                                value={superUserData?.user?.Github}
+                                onChange={handleUserChange}
+                                placeholder="Github URL"
+                              />
                             </div>
+                          </div>
 
-                            
-                           
-                          
-                            {/* <div className="form-group row">
+                          {/* <div className="form-group row">
                               <label htmlFor="inputSkills" className="col-sm-2 col-form-label">
                                 Skills
                               </label>
@@ -3196,33 +3386,35 @@ const SuperUserProfileContent = () => {
                               </div>
                             </div> */}
 
-                            {/* Profile Specific Fields */}
-                            <div className="form-group row">
-                              <label htmlFor="inputDesignation" className="col-sm-2 col-form-label">
-                                Designation
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="designation"
-                                  name="designation"
-                                  value={superUserData?.profile?.designation}
-                                  onChange={handleProfileChange}
-                                  placeholder="Designation"
-                                />
-                              </div>
+                          {/* Profile Specific Fields */}
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputDesignation"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Designation
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="designation"
+                                name="designation"
+                                value={superUserData?.profile?.designation}
+                                onChange={handleProfileChange}
+                                placeholder="Designation"
+                              />
                             </div>
+                          </div>
 
-                            <div className="form-group row">
-                              <div className="offset-sm-2 col-sm-10">
-                                <button type="submit" className="btn btn-danger">
-                                  Submit
-                                </button>
-                              </div>
+                          <div className="form-group row">
+                            <div className="offset-sm-2 col-sm-10">
+                              <button type="submit" className="btn btn-danger">
+                                Submit
+                              </button>
                             </div>
-                           
-                          </form>
+                          </div>
+                        </form>
                       </div>
                       {/* /.tab-pane */}
                     </div>
