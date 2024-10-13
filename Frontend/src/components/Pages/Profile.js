@@ -6,14 +6,16 @@ import Home from "../Dashboard/Home.js";
 import AuthContext from "../../context/AuthContext.js";
 import { useLocation } from "react-router-dom";
 import Modal from 'react-modal';
+import LoadingSpinner from "../Loading/Loading.js";
+import Notification from "../Notification/Notification.js";
 import "./profile.css"
 const AlumniProfileContent = () => {
   
-  let { userData } = useContext(AuthContext);
+  let { userData,setLoading,showNotification } = useContext(AuthContext);
   console.log("userData", userData);
   const [user, setUser] = useState(null);
   const id = localStorage.getItem("id") ? JSON.parse(localStorage.getItem("id")) : null
-
+  const [reload, setReload] = useState(false);
   const [alumniData, setAlumniData] = useState({
     user: {
       // username: '',
@@ -68,7 +70,7 @@ const AlumniProfileContent = () => {
     const token = localStorage.getItem("authTokens")
       ? JSON.parse(localStorage.getItem("authTokens"))
       : null;
-    
+    setLoading(true);
     axios
       .get(`http://127.0.0.1:8000/getalumni/${ id || userData?.user_id}`, {
         headers: {
@@ -77,7 +79,8 @@ const AlumniProfileContent = () => {
       })
       .then((response) => {
         setUser(response.data);
-            if(response.data){
+        if (response.data) {
+              
               setAlumniData({
                 user: {
                   // username: response.data.username,
@@ -127,53 +130,27 @@ const AlumniProfileContent = () => {
                   preferred_contact_method: response.data.alumni_profile?.preferred_contact_method,
             }
               })
+          
+              setLoading(false);
             }
       })
       .catch((error) => {
         console.error("Error fetching alumni data:", error);
+        showNotification(error.message || "Error fetching alumni data.", "error", "Error");
+        setLoading(false);
       });
       localStorage.getItem("id") && localStorage.removeItem("id") 
-  }, [userData?.user_id]);
+  }, [userData?.user_id,reload]);
 
   console.log("user ", user);
 
- 
-   // State variables for user and profile details
-   
 
-
-  // const removeEmptyFields = (obj) => {
-  //   const filteredObj = {};
-    
-  //   Object.keys(obj).forEach((key) => {
-  //     if (typeof obj[key] === 'object' && obj[key] !== null) {
-  //       // Recursively handle nested objects
-  //       const nestedObj = removeEmptyFields(obj[key]);
-  //       if (Object.keys(nestedObj).length > 0) {
-  //         filteredObj[key] = nestedObj;
-  //       }
-  //     } else if (obj[key] !== undefined && obj[key] !== null && obj[key] !== '') {
-  //       filteredObj[key] = obj[key];
-  //     }
-  //   });
-  
-  //   return filteredObj;
-  // };
-
-  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const token = localStorage.getItem("authTokens")
       ? JSON.parse(localStorage.getItem("authTokens"))
       : null;
-      // const filteredAlumniData = removeEmptyFields(alumniData);
-      // console.log("filter data ",filteredAlumniData);
-
-      // for (const key in alumniData) {
-      //   if (alumniData.hasOwnProperty(key)) {
-      //     console.log(`${key}:`, alumniData[key]);
-      //   }
-      // }
      
     try {
       const response = await axios.put(`http://127.0.0.1:8000/edit-alumni-profile/${id || userData?.user_id}/`, alumniData,{
@@ -182,64 +159,21 @@ const AlumniProfileContent = () => {
         },
       });
       console.log('Profile updated successfully', response.data);
-      // After successful update, reset alumniData and refresh the window
 
-      setAlumniData({
-        user: {
-          // username: "",
-          full_name: "",
-          About: "",
-          Work: "",
-          Year_Joined: "",
-          graduation_year: "",
-          Branch: "",
-          email: "",
-          mobile: "",
-          linkedin: "",
-          Github: "",
-          instagram: "",
-          portfolio_link: "",
-          resume_link: "",
-          skills: "",
-        },
-        profile: {
-          user: {
-            // username: "",
-            full_name: "",
-            About: "",
-            Work: "",
-            Year_Joined: "",
-            graduation_year: "",
-            Branch: "",
-            email: "",
-            mobile: "",
-            linkedin: "",
-            Github: "",
-            instagram: "",
-            portfolio_link: "",
-            resume_link: "",
-            skills: "",
-          },
-          Heading: "",
-          current_company_name: "",
-          job_title: "",
-          Education: "",
-          current_city: "",
-          current_country: "",
-          years_of_experience: "",
-          industry: "",
-          achievements: "",
-          previous_companies: "",
-          preferred_contact_method: "",
-        },
-      });
+      if (response.status === 200) {
+        setLoading(false);
+        showNotification(response.data.detail || "Profile updated successfully.", "success", "Success");
+        if(reload){
+          setReload(false);
+        } else {
+          setReload(true);
+        }
+      }
       
-       
-    
-    // Optionally, you can refresh the page or redirect to another page
-         window.location.reload(); // This will refresh the page
     } catch (error) {
       console.error('Error updating profile:', error.message);
+      showNotification(error.response.data.detail || "Error updating profile.", "error", "Error");
+      setLoading(false);
     }
   };
 
@@ -396,7 +330,7 @@ const AlumniProfileContent = () => {
                       <i className="fas fa-map-marker-alt mr-1" /> Location
                     </strong>
                     <p className="text-muted aboutfont">
-                      {user?.alumni_profile?.current_city || "N/A"},
+                      {user?.alumni_profile?.current_city || "N/A"}, { user?.alumni_profile?.current_country || "N/A"}
                     </p>
 
                     <strong>
@@ -843,7 +777,7 @@ const AlumniProfileContent = () => {
                           className="form-horizontal"
                           onSubmit={handleSubmit}
                         >
-                          <p className="editheading">Personal Information</p>
+                          <p className="editheading" style={{ marginTop: "0" }}>Personal Information</p>
                           <div className="form-group row">
                             <label
                               htmlFor="inputFullName"
@@ -872,14 +806,16 @@ const AlumniProfileContent = () => {
                               Education
                             </label>
                             <div className="col-sm-10">
-                              <input
+                              <textarea
                                 type="text"
                                 className="form-control"
                                 id="Education"
                                 name="Education"
                                 value={alumniData?.profile?.Education}
                                 onChange={handleProfileChange}
-                                placeholder="Education"
+                                placeholder="BE in Computer Science etc.."
+                                row="3"
+                                style={{resize:"vertical"}}
                               />
                             </div>
                           </div>
@@ -899,7 +835,7 @@ const AlumniProfileContent = () => {
                                 name="Branch"
                                 value={alumniData?.user?.Branch}
                                 onChange={handleUserChange}
-                                placeholder="Your Branch"
+                                placeholder="Computer, Electronics etc.."
                               />
                             </div>
                           </div>
@@ -908,7 +844,7 @@ const AlumniProfileContent = () => {
                               htmlFor="inputCity"
                               className="col-sm-2 col-form-label"
                             >
-                              Current City
+                             City
                             </label>
                             <div className="col-sm-10">
                               <input
@@ -918,10 +854,33 @@ const AlumniProfileContent = () => {
                                 name="current_city"
                                 value={alumniData?.profile?.current_city}
                                 onChange={handleProfileChange}
-                                placeholder="Current City"
+                                placeholder="Delhi,Jalgaon, mumbai etc.. "
                               />
                             </div>
+
                           </div>
+
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputCity"
+                              className="col-sm-2 col-form-label"
+                            >
+                            Country
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="current_country"
+                                name="current_country"
+                                value={alumniData?.profile?.current_country}
+                                onChange={handleProfileChange}
+                                placeholder="India,USA etc.. "
+                              />
+                            </div>
+
+                          </div>
+                          
                           <div className="form-group row">
                             <label
                               htmlFor="inputMobile"
@@ -931,13 +890,13 @@ const AlumniProfileContent = () => {
                             </label>
                             <div className="col-sm-10">
                               <input
-                                type="text"
+                                type="number"
                                 className="form-control"
                                 id="Year_Joined"
                                 name="Year_Joined"
                                 value={alumniData?.user?.Year_Joined}
                                 onChange={handleUserChange}
-                                placeholder="Year Joined"
+                                placeholder="Admission Year"
                               />
                             </div>
                           </div>
@@ -950,13 +909,13 @@ const AlumniProfileContent = () => {
                             </label>
                             <div className="col-sm-10">
                               <input
-                                type="text"
+                                type="number"
                                 className="form-control"
                                 id="graduation_year"
                                 name="graduation_year"
                                 value={alumniData?.user?.graduation_year}
                                 onChange={handleUserChange}
-                                placeholder="Graduation Year  "
+                                placeholder="Graduation Year "
                               />
                             </div>
                           </div>
@@ -1007,21 +966,22 @@ const AlumniProfileContent = () => {
                                   const value = e.target.value.replace(
                                     /[^0-9]/g,
                                     ""
-                                  ); // Allow only numeric input
-                                  // Only set the mobile number if it is exactly 10 digits
+                                  ); 
+                                  
                                   if (value.length === 10) {
                                     handleUserChange({
                                       target: { name: "mobile", value },
                                     });
-                                  } else if (value.length < 10) {
-                                    // Optionally, you can reset the input or show an error
+                                  } else if (value.length <= 10) {
+                                   
                                     handleUserChange({
                                       target: { name: "mobile", value },
-                                    }); // Update the input while typing
+                                    }); 
                                   }
                                 }}
                                 placeholder="Mobile"
-                                maxLength="10" // Optional, provides a hint to the user
+                                maxLength="10" 
+                                minLength="10"
                               />
                             </div>
                           </div>
@@ -1035,7 +995,7 @@ const AlumniProfileContent = () => {
                             </label>
                             <div className="col-sm-10">
                               <input
-                                type="text"
+                                type="url"
                                 className="form-control"
                                 id="linkedin"
                                 name="linkedin"
@@ -1055,7 +1015,7 @@ const AlumniProfileContent = () => {
                             </label>
                             <div className="col-sm-10">
                               <input
-                                type="text"
+                                type="url"
                                 className="form-control"
                                 id="instagram"
                                 name="instagram"
@@ -1087,7 +1047,7 @@ const AlumniProfileContent = () => {
                                   Select Preferred Contact Method
                                 </option>
                                 <option value="email">Email</option>
-                                <option value="phone">Mobile</option>
+                                <option value="mobile">Mobile</option>
                                 <option value="linkedin">LinkedIn</option>
                                 <option value="instagram">Instagram</option>
                               </select>
@@ -1114,7 +1074,7 @@ const AlumniProfileContent = () => {
                             </label>
                             <div className="col-sm-10">
                               <input
-                                type="text"
+                                type="url"
                                 className="form-control"
                                 id="Github"
                                 name="Github"
@@ -1134,7 +1094,7 @@ const AlumniProfileContent = () => {
                             </label>
                             <div className="col-sm-10">
                               <input
-                                type="text"
+                                type="url"
                                 className="form-control"
                                 id="portfolio_link"
                                 name="portfolio_link"
@@ -1154,7 +1114,7 @@ const AlumniProfileContent = () => {
                             </label>
                             <div className="col-sm-10">
                               <input
-                                type="text"
+                                type="url"
                                 className="form-control"
                                 id="resume_link"
                                 name="resume_link"
@@ -1309,7 +1269,7 @@ const AlumniProfileContent = () => {
                               htmlFor="inputHeading"
                               className="col-sm-2 col-form-label"
                             >
-                              Years Of Experience
+                             Work Experience
                             </label>
                             <div className="col-sm-10">
                               <input
@@ -3275,9 +3235,20 @@ const SuperUserProfileContent = () => {
 const Profile = () => {
   const location = useLocation();
   const { state } = location;
-  let { userData, setFilter } = useContext(AuthContext);
+  let {
+    userData,
+    setFilter,
+    isOpen,
+    message,
+    icon,
+    title,
+    handleClose,
+    loading,
+  } = useContext(AuthContext);
+  
   setFilter(false);
   console.log("state", state);
+  
   if (state) {
     userData = state;
     localStorage.setItem("id", JSON.stringify(state?.id));
@@ -3293,11 +3264,21 @@ const Profile = () => {
     }
   };
   return (
-    <Home
-      DynamicContent={getProfileContent()}
-      url="profile"
-      heading="Profile"
-    />
+    <>
+      <LoadingSpinner isLoading={loading} />
+      <Notification
+        message={message}
+        isOpen={isOpen}
+        onClose={handleClose}
+        icon={icon}
+        title={title}
+      />
+      <Home
+        DynamicContent={getProfileContent()}
+        url="profile"
+        heading="Profile"
+      />
+    </>
   );
 };
 

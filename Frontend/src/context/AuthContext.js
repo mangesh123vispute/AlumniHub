@@ -14,6 +14,8 @@ export const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
   const [Login, setLogin] = useState(false);
   const [filter, setFilter] = useState(false);
+  const [Loading, setLoading] = useState(false);
+  
    
   const showNotification = async (msg, iconType, titleText) => {
     
@@ -39,7 +41,7 @@ export const AuthProvider = ({ children }) => {
       ? jwtDecode(localStorage.getItem("authTokens"))
       : null
   );
-  const [Loading, setLoading] = useState(false);
+  
   
   //* logout
   let logoutUser = async () => {
@@ -124,7 +126,7 @@ export const AuthProvider = ({ children }) => {
     authTokens: authTokens,
     setAuthTokens: setAuthTokens,
     logoutUser: logoutUser,
-    Loading: Loading,
+    loading: Loading,
     setLoading: setLoading,
     setIsOpen: setIsOpen,
     setMessage: setMessage,
