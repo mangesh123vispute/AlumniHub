@@ -31,12 +31,25 @@
   }
   
 
-.editheading{
+.editheading {
     font-weight: bold;
-    margin:0;
+    margin: 0;
     margin-bottom: 1rem;
     margin-top: 1rem;
     font-size: 1.5em;
     text-align: center;
+    color: #DC143C;
+    transition: transform 0.3s ease-in-out;
+    /* Adds a smooth transition effect */
+    cursor: pointer;
+    border-bottom: #8B0000;
+    
+}
+
+.editheading:hover {
+    transform: scale(1.02);
+    /* Slightly enlarges on hover */
+    color: #8B0000;
+    /* Darker shade on hover */
 }
 
