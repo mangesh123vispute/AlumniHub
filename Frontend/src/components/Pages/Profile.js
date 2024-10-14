@@ -9,6 +9,7 @@ import LoadingSpinner from "../Loading/Loading.js";
 import Notification from "../Notification/Notification.js";
 import "./profile.css"
 import  Cropper  from "react-image-crop"; // Import Cropper
+// import Modal from "react-image-crop/Modal"
 
 
 const AlumniProfileContent = () => {
@@ -373,7 +374,34 @@ const AlumniProfileContent = () => {
         <i className="fas fa-edit"></i> Edit Profile Picture
       </button>
 
-    
+      {/* Modal for cropping */}
+      {/* <Modal show={show} onHide={handleClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Profile Picture</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {imageSrc && (
+            <div className="crop-container" style={{ width: '100%', maxHeight: '400px' }}>
+              <Cropper
+                src={imageSrc}
+                crop={crop}
+                onChange={(newCrop) => setCrop(newCrop)}
+                onComplete={onCropComplete}
+                style={{ width: '100%', height: 'auto' }} // Responsive style
+              />
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <button className="btn btn-secondary" onClick={handleClose}>
+            Cancel
+          </button>
+          <button className="btn btn-primary" onClick={handleCrop}>
+            Crop & Save
+          </button>
+        </Modal.Footer>
+      </Modal> */}
+
       {/* Cropped Image Preview */}
       {croppedImageUrl && (
         <div>
@@ -1500,9 +1528,9 @@ const AlumniProfileContent = () => {
                 {/* /.card */}
               </div>
               {/* /.col */}
-            </div>
-            {/* /.row */}
           </div>
+            {/* /.row */}
+          {/* </div> */}
 
           {/* /.container-fluid */}
         </section>
