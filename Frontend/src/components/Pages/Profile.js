@@ -148,7 +148,7 @@ const AlumniProfileContent = () => {
       })
       .catch((error) => {
         console.error("Error fetching alumni data:", error);
-        showNotification(error.message || "Error fetching alumni data.", "error", "Error");
+        showNotification( "Error fetching alumni data.", "error", "Error");
         setLoading(false);
       });
       localStorage.getItem("id") && localStorage.removeItem("id") 
@@ -184,7 +184,7 @@ const AlumniProfileContent = () => {
       
     } catch (error) {
       console.error('Error updating profile:', error.message);
-      showNotification(error.response.data.detail || "Error updating profile.", "error", "Error");
+      showNotification( "Error updating profile.", "error", "Error");
       setLoading(false);
     }
   };
@@ -321,7 +321,7 @@ const AlumniProfileContent = () => {
       }
     } catch (error) {
       console.error("Error uploading the image: ", error);
-      alert("Failed to upload the image");
+      showNotification("Failed to upload the image", "error", "Error");
     } finally {
       setUploading(false);
     }
@@ -571,7 +571,7 @@ const AlumniProfileContent = () => {
                           Contacts
                         </a>
                       </li>
-                      <li className="nav-item ">
+                      {userData?.user_id === user?.id && (<li className="nav-item ">
                         <a
                           className="nav-link"
                           href="#settings"
@@ -579,7 +579,8 @@ const AlumniProfileContent = () => {
                         >
                           Edit Profile
                         </a>
-                      </li>
+                      </li>) }
+                     
                     </ul>
                   </div>
                   {/* /.card-header */}
@@ -1625,10 +1626,11 @@ const StudentProfileContent = () => {
           }
       })
       .catch((error) => {
-        console.error("Error fetching alumni data:", error);
-        showNotification(error.message || "Error fetching alumni data.", "error", "Error");
+        console.error("Error fetching Students data:", error);
+        showNotification( "Error fetching Students data.", "error", "Error");
         setLoading(false);
       });
+      localStorage.getItem("id") && localStorage.removeItem("id"); 
   }, [userData?.user_id, reload]);
 
   console.log("user ", user);
@@ -1659,7 +1661,7 @@ const StudentProfileContent = () => {
       
       } catch (error) {
         console.error('Error updating profile:', error.message);
-        showNotification(error.message || "Error updating profile.", "error", "Error");
+        showNotification( "Error updating profile.", "error", "Error");
         setLoading(false);
       }
     };
@@ -1872,12 +1874,14 @@ const StudentProfileContent = () => {
                           Contacts
                         </a>
                       </li>
-
-                      <li className="nav-item">
+                      { userData?.user_id===user?.id && (
+                        <li className="nav-item">
                         <a className="nav-link" href="#edit" data-toggle="tab">
                           Edit Profile
                         </a>
                       </li>
+                      )}
+                      
                     </ul>
                   </div>
                   {/* /.card-header */}
@@ -2413,6 +2417,9 @@ const SuperUserProfileContent = () => {
     : null;
   const [user, setUser] = useState(null);
   const [reload, setReload] = useState(false);
+  const [posts, setPosts] = useState([]);  // Store posts
+  const [page, setPage] = useState(1);     // Keep track of the page number
+  const [hasMore, setHasMore] = useState(true); 
 
   const [superUserData, setSuperUserData] = useState({
     user: {
@@ -2455,7 +2462,7 @@ const SuperUserProfileContent = () => {
   });
   
 
-  const [posts, setPosts] = useState([]);
+  
   
   useEffect(() => {
     setLoading(true);
@@ -2517,9 +2524,9 @@ const SuperUserProfileContent = () => {
       .catch((error) => {
         console.error("Error fetching Admin data:", error);
         setLoading(false);
-        showNotification(error.message || "Error fetching Admin data.", "error", "Error");
+        showNotification("Error fetching Admin data.", "error", "Error");
       });
-
+localStorage.getItem("id") && localStorage.removeItem("id"); 
      
   }, [userData?.user_id,reload]);
 
@@ -2562,7 +2569,7 @@ const SuperUserProfileContent = () => {
     } catch (error) {
       console.error('Error updating profile:', error.message);
       setLoading(false);
-      showNotification(error.message || "Error updating profile.", "error", "Error");
+      showNotification("Error updating profile.", "error", "Error");
     }
   };
 
@@ -2597,8 +2604,45 @@ const SuperUserProfileContent = () => {
     }));
   };
 
+useEffect(() => {
+    fetchPosts(page); // Fetch the first page of posts when the component mounts
 
+    const handleScroll = () => {
+      // Check if the user has scrolled to the bottom
+      if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 100 && hasMore) {
+        loadMorePosts(); // Load more posts when scrolled near the bottom
+      }
+    };
 
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll); // Clean up the event listener
+  }, [page, hasMore]);
+
+  const fetchPosts = async (page) => {
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/hodposts/author/${id || userData?.user_id}/?page=${page}&page_size=10`);
+      setPosts(prevPosts => [...prevPosts, ...response.data.results]); // Append new posts to existing posts
+      setHasMore(response.data.next !== null); // If 'next' is null, stop loading more posts
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    }
+  };
+
+  const loadMorePosts = () => {
+    setPage(prevPage => prevPage + 1); // Increment page count to load more posts
+  };
+
+  const formatDate = (isoDate) => {
+    const date = new Date(isoDate);
+    return date.toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    });
+  };
   return (
     <>
       <div>
@@ -2730,7 +2774,8 @@ const SuperUserProfileContent = () => {
                           Contacts
                         </a>
                       </li>
-                      <li className="nav-item">
+                      { userData?.user_id===user?.id && (
+                         <li className="nav-item">
                         <a
                           className="nav-link"
                           href="#settings"
@@ -2739,189 +2784,77 @@ const SuperUserProfileContent = () => {
                           Edit Profile
                         </a>
                       </li>
+                      )}
+                     
                     </ul>
                   </div>
-                  {/* /.card-header */}
+            
                   <div className="card-body">
                     <div className="tab-content">
-                      <div className="active tab-pane" id="activity">
+                      <div className="active tab-pane" id="activity"  style={{
+                          maxHeight: "131vh",
+                          overflowY: "auto", // Enable vertical scrolling
+                          overflowX: "hidden", // Prevent horizontal scrolling
+                          padding: "15px", // Optional: add padding if needed
+                          boxSizing: "border-box", // Ensure padding is included in width calculation
+                        }}>
                         {/* Post */}
-                        {/* Post */}
-                        <div className="post">
-                          <div className="user-block">
+                      {posts.map(post => (
+        <div key={post.id} className="post">
+            
+                          <div className="user-block" >
                             <img
                               className="img-circle img-bordered-sm"
-                              src="../../dist/img/user1-128x128.jpg"
+                              src={ `http://127.0.0.1:8000/${user?.Image || "#"}` }
                               alt="user image"
+                              
                             />
-                            <span className="username">
-                              <a href="#">Jonathan Burke Jr.</a>
-                              <a href="#" className="float-right btn-tool">
-                                <i className="fas fa-times" />
-                              </a>
-                            </span>
+                            < span className="username">
+                              <a href="#">{post?.author_name || (post?.author_username ? post?.author_username : "Author")}</a>
+                              
+                              
+                            </ span>
+                            
                             <span className="description">
-                              Shared publicly - 7:30 PM today
+                              Created at - {formatDate(post?.created_at) || "Date"}
+                              <br></br>
+                              <span className="badge bg-success" style={{fontSize: "0.8em",padding: "0.5em"}} > { post?.tag || "Tag" }</span>
                             </span>
+                            
                           </div>
-                          {/* /.user-block */}
-                          <p className="postfont">
-                            Lorem ipsum represents a long-held tradition for
-                            designers, typographers and the like. Some people
-                            hate it and argue for its demise, but others ignore
-                            the hate as they create awesome tools to help create
-                            filler text for everyone from bacon lovers to
-                            Charlie Sheen fans.
+                        
+                          <span style={{ fontWeight: "bold" , fontSize: "1.09em"}}>
+                            { post?.title || "Title" }
+                          </span>
+                          <p className="postfont" style={{ marginTop: "0.5em" ,marginBottom: "0.5em"}}>
+                            { post?.content || "Content" }
                           </p>
-                          <p>
-                            <a href="#" className="link-black text-sm mr-2">
-                              <i className="fas fa-share mr-1" /> Share
-                            </a>
-                            <a href="#" className="link-black text-sm">
-                              <i className="far fa-thumbs-up mr-1" /> Like
-                            </a>
-                            <span className="float-right">
-                              <a href="#" className="link-black text-sm">
-                                <i className="far fa-comments mr-1" /> Comments
-                                (5)
-                              </a>
-                            </span>
-                          </p>
-                          <input
-                            className="form-control form-control-sm"
-                            type="text"
-                            placeholder="Type a comment"
-                          />
-                        </div>
-                        {/* /.post */}
-                        {/* Post */}
-                        <div className="post clearfix">
-                          <div className="user-block">
-                            <img
-                              className="img-circle img-bordered-sm"
-                              src="../../dist/img/user7-128x128.jpg"
-                              alt="User Image"
-                            />
-                            <span className="username">
-                              <a href="#">Sarah Ross</a>
-                              <a href="#" className="float-right btn-tool">
-                                <i className="fas fa-times" />
-                              </a>
-                            </span>
-                            <span className="description">
-                              Sent you a message - 3 days ago
-                            </span>
-                          </div>
-                          {/* /.user-block */}
-                          <p>
-                            Lorem ipsum represents a long-held tradition for
-                            designers, typographers and the like. Some people
-                            hate it and argue for its demise, but others ignore
-                            the hate as they create awesome tools to help create
-                            filler text for everyone from bacon lovers to
-                            Charlie Sheen fans.
-                          </p>
-                          <form className="form-horizontal">
-                            <div className="input-group input-group-sm mb-0">
-                              <input
-                                className="form-control form-control-sm"
-                                placeholder="Response"
-                              />
-                              <div className="input-group-append">
-                                <button
-                                  type="submit"
-                                  className="btn btn-danger"
-                                >
-                                  Send
-                                </button>
-                              </div>
-                            </div>
-                          </form>
-                        </div>
-                        {/* /.post */}
-                        {/* Post */}
-                        <div className="post">
-                          <div className="user-block">
-                            <img
-                              className="img-circle img-bordered-sm"
-                              src="../../dist/img/user6-128x128.jpg"
-                              alt="User Image"
-                            />
-                            <span className="username">
-                              <a href="#">Adam Jones</a>
-                              <a href="#" className="float-right btn-tool">
-                                <i className="fas fa-times" />
-                              </a>
-                            </span>
-                            <span className="description">
-                              Posted 5 photos - 5 days ago
-                            </span>
-                          </div>
-                          {/* /.user-block */}
-                          <div className="row mb-3">
-                            <div className="col-sm-6">
-                              <img
-                                className="img-fluid"
-                                src="../../dist/img/photo1.png"
-                                alt="Photo"
-                              />
-                            </div>
-                            {/* /.col */}
-                            <div className="col-sm-6">
-                              <div className="row">
-                                <div className="col-sm-6">
-                                  <img
-                                    className="img-fluid mb-3"
-                                    src="../../dist/img/photo2.png"
-                                    alt="Photo"
-                                  />
-                                  <img
-                                    className="img-fluid"
-                                    src="../../dist/img/photo3.jpg"
-                                    alt="Photo"
-                                  />
-                                </div>
-                                {/* /.col */}
-                                <div className="col-sm-6">
-                                  <img
-                                    className="img-fluid mb-3"
-                                    src="../../dist/img/photo4.jpg"
-                                    alt="Photo"
-                                  />
-                                  <img
-                                    className="img-fluid"
-                                    src="../../dist/img/photo1.png"
-                                    alt="Photo"
-                                  />
-                                </div>
-                                {/* /.col */}
-                              </div>
-                              {/* /.row */}
-                            </div>
-                            {/* /.col */}
-                          </div>
-                          {/* /.row */}
-                          <p>
-                            <a href="#" className="link-black text-sm mr-2">
-                              <i className="fas fa-share mr-1" /> Share
-                            </a>
-                            <a href="#" className="link-black text-sm">
-                              <i className="far fa-thumbs-up mr-1" /> Like
-                            </a>
-                            <span className="float-right">
-                              <a href="#" className="link-black text-sm">
-                                <i className="far fa-comments mr-1" /> Comments
-                                (5)
-                              </a>
-                            </span>
-                          </p>
-                          <input
-                            className="form-control form-control-sm"
-                            type="text"
-                            placeholder="Type a comment"
-                          />
-                        </div>
+                          <div className="row">
+  <div className="col-auto">
+    <a href={post?.image_url || "#"} target="_blank" rel="noreferrer" className="mr-3">
+      <i className="fas fa-image mr-1" /> Image
+    </a>
+  </div>
+  <div className="col-auto">
+    <a href={post?.DocUrl || "#"} target="_blank" rel="noreferrer" className="mr-3">
+      <i className="fas fa-file-alt mr-1" /> Document
+    </a>
+  </div>
+  <div className="col-auto">
+    <a href={post?.link || "#"} target="_blank" rel="noreferrer" className="mr-3">
+      <i className="fas fa-link mr-1" /> Link
+    </a>
+  </div>
+</div>
 
+                      
+                        
+        </div>
+      ))}
+      
+
+                     
+                     
                         {/* /.post */}
                       </div>
                       {/* /.tab-pane */}
