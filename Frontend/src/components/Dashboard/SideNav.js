@@ -11,14 +11,14 @@ const SideNav = () => {
     <div>
       <aside className="main-sidebar sidebar-dark-primary elevation-4">
         {/* Brand Logo */}
-        <Link to="/" className="brand-link" style={{textDecoration:"none"}}>
+        <Link to="/" className="brand-link" style={{ textDecoration: "none" }}>
           <img
             src="dist/img/AdminLTELogo.png"
             alt="AdminLTE Logo"
             className="brand-image img-circle elevation-3"
             style={{ opacity: ".8" }}
           />
-          <span className="brand-text font-weight-light"  >AlumniHub</span>
+          <span className="brand-text font-weight-light">AlumniHub</span>
         </Link>
         {/* Sidebar */}
         <div className="sidebar">
@@ -32,7 +32,11 @@ const SideNav = () => {
               />
             </div>
             <div className="info">
-              <Link to="/profile" className="d-block" style={{textDecoration:"none"}} >
+              <Link
+                to="/profile"
+                className="d-block"
+                style={{ textDecoration: "none" }}
+              >
                 Welcome!!
                 <span style={{ textTransform: "uppercase" }}>{` ${
                   userData ? userData.username : "User"
@@ -221,30 +225,24 @@ const SideNav = () => {
                 (!userData?.is_alumni && !userData?.is_student)) && (
                 <>
                   <li className="nav-item">
-                    <Link to="#" className="nav-link">
+                    <Link
+                      to="#"
+                      className="nav-link"
+                      onClick={(e) => e.preventDefault()}
+                    >
                       <i
                         className="nav-icon fas fa-user"
                         style={{ fontSize: "1em" }}
                       />
                       <p style={{ fontSize: "1em" }}>
-                         USER
+                        USER
                         <i className="right fas fa-angle-left" />
-                      </p>  
+                      </p>
                     </Link>
                     <ul
                       className="nav nav-treeview"
                       style={{ marginLeft: "1em" }}
                     >
-                      <li className="nav-item" >
-                        <Link to="/all_hods" className="nav-link">
-                          <i
-                            className="fas fa-user-tie nav-icon"
-                            style={{ fontSize: "1em" }}
-                          ></i>
-
-                          <p style={{ fontSize: "1em" }}>Hods</p>
-                        </Link>
-                      </li>
                       <li className="nav-item">
                         <Link to="/all_alumnis" className="nav-link">
                           <i
@@ -265,10 +263,24 @@ const SideNav = () => {
                           <p style={{ fontSize: "1em" }}>Students</p>
                         </Link>
                       </li>
+                      <li className="nav-item">
+                        <Link to="/all_hods" className="nav-link">
+                          <i
+                            className="fas fa-user-tie nav-icon"
+                            style={{ fontSize: "1em" }}
+                          ></i>
+
+                          <p style={{ fontSize: "1em" }}>Hods</p>
+                        </Link>
+                      </li>
                     </ul>
                   </li>
                   <li className="nav-item">
-                    <Link to="#" className="nav-link">
+                    <Link
+                      to="#"
+                      className="nav-link"
+                      onClick={(e) => e.preventDefault()}
+                    >
                       <i
                         className="fas fa-pencil-alt nav-icon"
                         style={{ fontSize: "1em" }}
@@ -314,7 +326,7 @@ const SideNav = () => {
                       </li>
                     </ul>
                   </li>
-{/* 
+                  {/* 
                   <li className="nav-item">
                     <Link
                       to="http://127.0.0.1:8000/admin/"
