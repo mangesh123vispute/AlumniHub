@@ -30,18 +30,49 @@ const ActivateEmail = () => {
     // Check if all fields are filled
     if (!username || !email || !password || !confirmPassword || !role) {
       setLoading(false);
-      await showNotification(
-        "All fields are required, including role.",
-        "warning",
-        "Warning"
-      );
+      if (!username) {
+        await showNotification(
+          "Username is required!!",
+          "warning",
+          "Warning"
+        );
+        
+      }
+      else if (!email) {
+        await showNotification(
+          "Email is required!!",
+          "warning",
+          "Warning"
+        );
+      }
+      else if (!password) {
+        await showNotification(
+          "Password is required!!",
+          "warning",
+          "Warning"
+        );
+      }
+      else if (!confirmPassword) {
+        await showNotification(
+          "confirmPassword is required!!",
+          "warning",
+          "Warning"
+        );
+      }
+      else if (!role) {
+        await showNotification(
+          "User role is required!!",
+          "warning",
+          "Warning"
+        );
+      }
       return;
     }
 
     // Check if passwords match
     if (password !== confirmPassword) {
       setLoading(false);
-      await showNotification("Passwords do not match.", "warning", "Warning");
+      await showNotification("Passwords do not match!!", "warning", "Warning");
       return;
     }
 
@@ -74,7 +105,7 @@ const ActivateEmail = () => {
     } catch (error) {
       setLoading(false);
       await showNotification(
-        "Network error. Please try again later.",
+        "Failed to send activation email. Please try again later.",
         "error",
         "Error"
       );

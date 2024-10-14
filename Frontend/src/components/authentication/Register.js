@@ -41,7 +41,21 @@ const handleSubmit = async (e) => {
     formData.confirmPassword &&
     formData.email && formData.role )
   ) {
-    await showNotification("All fields are required", "warning", "Warning");
+    if (!formData.username) {
+      await showNotification("Username is required!!", "warning", "Warning");
+    } else if (!formData.password) {
+      await showNotification("Password is required!!", "warning", "Warning");
+    }
+    else if (!formData.confirmPassword) {
+      await showNotification("Confirm Password is required!!", "warning", "Warning");
+    }
+    else if (!formData.email) {
+      await showNotification("Email is required !!", "warning", "Warning");
+    }
+    else if (!formData.role) {
+      await showNotification("Role is required !!", "warning", "Warning");
+    }
+    setLoading(false);
     return;
   }
     if (formData.password !== formData.confirmPassword) {
@@ -72,7 +86,7 @@ const handleSubmit = async (e) => {
       setLoading(false);
       if (response.status === 201) {
         // console.log("Registration successful:", data);
-        await showNotification('Registration successful:', 'success', 'Success')
+        await showNotification('Registration successful !', 'success', 'Success')
         navigate("/login"); 
       }
     } else {
@@ -96,7 +110,7 @@ const handleSubmit = async (e) => {
   }catch (error) {
     // console.error("Error during registration:", error);
     // setMessage("An error occurred during registration. Please try again.");
-    await showNotification(`Error during registration: ${error}`, 'error', 'Error')
+    await showNotification(`Error during registration, Please try again.`, 'error', 'Error')
 
     setLoading(false);
   } };

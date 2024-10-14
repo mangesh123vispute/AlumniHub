@@ -119,7 +119,7 @@ const SuperUserProfileContent = () => {
         .catch((error) => {
           console.error("Error fetching Admin data:", error);
           setLoading(false);
-          showNotification("Error fetching Admin data.", "error", "Error");
+          showNotification("Error fetching Admin data, please try again.", "error", "Error");
         });
   localStorage.getItem("id") && localStorage.removeItem("id"); 
        
@@ -141,7 +141,7 @@ const SuperUserProfileContent = () => {
             Authorization: `Bearer ${token?.access}`,
           },
         });
-        if (response.status == 200) {
+        if (response.status === 200) {
           setLoading(false);
           showNotification("Profile updated successfully", "success", "Success");
           if (reload) {
@@ -164,7 +164,7 @@ const SuperUserProfileContent = () => {
       } catch (error) {
         console.error('Error updating profile:', error.message);
         setLoading(false);
-        showNotification("Error updating profile.", "error", "Error");
+        showNotification("Error updating profile, please try again.", "error", "Error");
       }
     };
   
@@ -220,6 +220,7 @@ const SuperUserProfileContent = () => {
         setHasMore(response.data.next !== null); // If 'next' is null, stop loading more posts
       } catch (error) {
         console.error('Error fetching posts:', error);
+        showNotification("Error fetching posts, please try again.", "error", "Error");
       }
     };
   

@@ -141,7 +141,7 @@ const AlumniProfileContent = () => {
         })
         .catch((error) => {
           console.error("Error fetching alumni data:", error);
-          showNotification( "Error fetching alumni data.", "error", "Error");
+          showNotification( "Error fetching alumni data, please try again.", "error", "Error");
           setLoading(false);
         });
         localStorage.getItem("id") && localStorage.removeItem("id") 
@@ -177,7 +177,7 @@ const AlumniProfileContent = () => {
         
       } catch (error) {
         console.error('Error updating profile:', error.message);
-        showNotification( "Error updating profile.", "error", "Error");
+        showNotification( "Error updating profile, please try again.", "error", "Error");
         setLoading(false);
       }
     };
@@ -309,12 +309,12 @@ const AlumniProfileContent = () => {
           }
         );
         if (response.status === 200) {
-          alert("Image uploaded successfully");
+          showNotification(response.data.detail || "Profile updated successfully.", "success", "Success");
           // You can refresh the user data here or perform any other updates.
         }
       } catch (error) {
         console.error("Error uploading the image: ", error);
-        showNotification("Failed to upload the image", "error", "Error");
+        showNotification("Failed to upload the image, please try again.", "error", "Error");
       } finally {
         setUploading(false);
       }
