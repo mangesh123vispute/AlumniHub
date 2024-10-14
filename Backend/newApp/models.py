@@ -120,6 +120,9 @@ class User(AbstractUser):
         )
 
     def save(self, *args, **kwargs):
+        if self.is_superuser:
+            self.is_active = True
+
         if not self.username:
             self.username = self.generate_unique_username()
         super().save(*args, **kwargs)
