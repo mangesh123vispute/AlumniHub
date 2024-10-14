@@ -353,20 +353,20 @@ const AlumniProfileContent = () => {
                   </div>
 
                   <div className="card-body box-profile">
-                    <div className="text-center">
+                    {/* <div className="text-center">
                       <img
                         className="profile-user-img img-fluid img-circle"
                         src={
-                          `http://127.0.0.1:8000/${user?.Image}` ||
+                          user?.alumni_profile?.profile_picture_url ||
                           "../../dist/img/user4-128x128.jpg"
                         }
                         alt="User profile picture"
                       />
-                    </div>
-                   {/* <div className="text-center">
+                    </div> */}
+                   <div className="text-center">
       <img
         className="profile-user-img img-fluid img-circle"
-        src={`http://127.0.0.1:8000/${user?.Image}` || "../../dist/img/user4-128x128.jpg"}
+        src={userData?.alumni_profile?.profile_picture_url || "../../dist/img/user4-128x128.jpg"}
         alt="User profile"
       />
       <button className="btn btn-primary mt-2" onClick={() => document.getElementById('imageInput').click()}>
@@ -384,9 +384,9 @@ const AlumniProfileContent = () => {
         </div>
       )}
 
-      
+      {/* File input (hidden) */}
       <input type="file" id="imageInput" accept="image/*" onChange={handleFileChange} style={{ display: 'none' }} />
-    </div> */}
+    </div>
                     <h3 className="profile-username text-center ">
                       {user ? user.full_name || user.username : "User"}
                     </h3>
