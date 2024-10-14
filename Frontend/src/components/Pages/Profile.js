@@ -414,7 +414,7 @@ const AlumniProfileContent = () => {
 
       
       <input type="file" id="imageInput" accept="image/*" onChange={handleFileChange} style={{ display: 'none' }} />
-    </div> */}
+    </div> 
                     <h3 className="profile-username text-center ">
                       {user ? user.full_name || user.username : "User"}
                     </h3>
