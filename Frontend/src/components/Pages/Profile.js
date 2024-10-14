@@ -9,8 +9,7 @@ import LoadingSpinner from "../Loading/Loading.js";
 import Notification from "../Notification/Notification.js";
 import "./profile.css"
 import  Cropper  from "react-image-crop"; // Import Cropper
-import "react-image-crop/dist/ReactCrop.css"; // Import CSS for Cropper
-import Modal from "react-bootstrap/Modal";
+
 
 const AlumniProfileContent = () => {
   
@@ -374,35 +373,8 @@ const AlumniProfileContent = () => {
         <i className="fas fa-edit"></i> Edit Profile Picture
       </button>
 
-     
-      <Modal show={show} onHide={handleClose} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Profile Picture</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {imageSrc && (
-            <div className="crop-container" style={{ width: '100%', maxHeight: '400px' }}>
-              <Cropper
-                src={imageSrc}
-                crop={crop}
-                onChange={(newCrop) => setCrop(newCrop)}
-                onComplete={onCropComplete}
-                style={{ width: '100%', height: 'auto' }} // Responsive style
-              />
-            </div>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <button className="btn btn-secondary" onClick={handleClose}>
-            Cancel
-          </button>
-          <button className="btn btn-primary" onClick={handleCrop}>
-            Crop & Save
-          </button>
-        </Modal.Footer>
-      </Modal>
-
-      
+    
+      {/* Cropped Image Preview */}
       {croppedImageUrl && (
         <div>
           <img src={croppedImageUrl} alt="Cropped" className="img-thumbnail mt-3" />
@@ -433,10 +405,10 @@ const AlumniProfileContent = () => {
                 </div>
                 {/* /.card */}
 
-                {/* About Me Box */}
+                {/* About Box */}
                 <div className="card card-primary">
                   <div className="card-header">
-                    <h3 className="card-title">About Me</h3>
+                    <h3 className="card-title">About</h3>
                   </div>
                   {/* /.card-header */}
                   <div
@@ -1227,7 +1199,7 @@ const AlumniProfileContent = () => {
                           ></hr>
 
                           <p className="editheading">
-                            Online Profiles & Documents
+                            Professional Profiles
                           </p>
 
                           <div className="form-group row">
@@ -1541,12 +1513,13 @@ const AlumniProfileContent = () => {
 };
 
 const StudentProfileContent = () => {
-  let { userData } = useContext(AuthContext);
+  let { userData, showNotification,setLoading } = useContext(AuthContext);
   console.log("userData", userData);
   const id = localStorage.getItem("id")
     ? JSON.parse(localStorage.getItem("id"))
     : null;
   const [user, setUser] = useState(null);
+  const [reload, setReload] = useState(false);
 
   const [studentData, setStudentData] = useState({
     user: {
@@ -1592,7 +1565,7 @@ const StudentProfileContent = () => {
   
 
   useEffect(() => {
-    // Fetch alumni data when the component mounts
+    setLoading(true);
     const token = localStorage.getItem("authTokens")
       ? JSON.parse(localStorage.getItem("authTokens"))
       : null;
@@ -1648,88 +1621,46 @@ const StudentProfileContent = () => {
                 }
 
               })
+              setLoading(false);
           }
       })
       .catch((error) => {
         console.error("Error fetching alumni data:", error);
+        showNotification(error.message || "Error fetching alumni data.", "error", "Error");
+        setLoading(false);
       });
-  }, [userData?.user_id]);
+  }, [userData?.user_id, reload]);
 
   console.log("user ", user);
 
 
     // Function to handle form submission
-    const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
+      setLoading(true);
       e.preventDefault();
       const token = localStorage.getItem("authTokens")
         ? JSON.parse(localStorage.getItem("authTokens"))
         : null;
-        // const filteredAlumniData = removeEmptyFields(alumniData);
-        // console.log("filter data ",filteredAlumniData);
-  
-        // for (const key in alumniData) {
-        //   if (alumniData.hasOwnProperty(key)) {
-        //     console.log(`${key}:`, alumniData[key]);
-        //   }
-        // }
-       
       try {
         const response = await axios.put(`http://127.0.0.1:8000/edit-student-profile/${id || userData?.user_id}/`, studentData,{
           headers: {
             Authorization: `Bearer ${token?.access}`,
           },
         });
-        console.log('Profile updated successfully', response.data);
-        // After successful update, reset alumniData and refresh the window
-  
-        setStudentData({
-          user: {
-            username: "",
-            full_name: "",
-            About: "",
-            Work: "",
-            Year_Joined: "",
-            graduation_year: "",
-            Branch: "",
-            email: "",
-            mobile: "",
-            linkedin: "",
-            Github: "",
-            instagram: "",
-            portfolio_link: "",
-            resume_link: "",
-            skills: ""
-          },
-          profile: {
-            user: {
-              username: "",
-              full_name: "",
-              About: "",
-              Work: "",
-              Year_Joined: "",
-              graduation_year: "",
-              Branch: "",
-              email: "",
-              mobile: "",
-              linkedin: "",
-              Github: "",
-              instagram: "",
-              portfolio_link: "",
-              resume_link: "",
-              skills: ""
-            },
-            Heading: "",
-            Education: "",
-            current_year_of_study: ""
+        if (response.status === 200) {
+          setLoading(false);
+          if (reload) {
+            setReload(false);
+          } else {
+            setReload(true);
           }
-        });
-        
-         
+          showNotification("Profile updated successfully!", "success", "Success");
+        }
       
-      // Optionally, you can refresh the page or redirect to another page
-           window.location.reload(); // This will refresh the page
       } catch (error) {
         console.error('Error updating profile:', error.message);
+        showNotification(error.message || "Error updating profile.", "error", "Error");
+        setLoading(false);
       }
     };
   
@@ -1817,10 +1748,10 @@ const StudentProfileContent = () => {
                 </div>
                 {/* /.card */}
 
-                {/* About Me Box */}
+                {/* About Box */}
                 <div className="card card-primary">
                   <div className="card-header">
-                    <h3 className="card-title">About Me</h3>
+                    <h3 className="card-title">About</h3>
                   </div>
                   {/* /.card-header */}
                   <div
@@ -1872,18 +1803,13 @@ const StudentProfileContent = () => {
                     </strong>
                     <p className="text-muted aboutfont">
                       {user?.student_profile?.Education || "N/A"}, <br></br>
-                      Graduation Year: {user?.graduation_year || "N/A"}
+
                     </p>
 
-                    <strong>
-                      <i className="fas fa-building mr-1" /> Department
-                    </strong>
-                    <p className="text-muted aboutfont">
-                      {user?.student_profile?.department || "N/A"}
-                    </p>
+                   
 
                     <strong>
-                      <i className="fas fa-calendar-alt mr-1" /> Year Joined
+                      <i className="fas fa-calendar-alt mr-1" /> Adminssion Year
                     </strong>
 
                     <p className="text-muted aboutfont">
@@ -1891,11 +1817,17 @@ const StudentProfileContent = () => {
                     </p>
 
                     <strong>
-                      <i className="fas fa-calendar-alt mr-1" /> Current Year of
-                      Study
+                      <i className="fas fa-calendar-alt mr-1" /> Academic Year
                     </strong>
                     <p className="text-muted aboutfont">
                       {user?.student_profile?.current_year_of_study || "N/A"}
+                    </p>
+
+                      <strong>
+                      <i className="fas fa-calendar-alt mr-1" /> Graduation Year
+                    </strong>
+                    <p className="text-muted aboutfont">
+                      {user?.graduation_year || "N/A"}
                     </p>
 
                     {/* <strong>
@@ -1933,7 +1865,7 @@ const StudentProfileContent = () => {
                     <ul className="nav nav-pills">
                       <li className="nav-item">
                         <a
-                          className="nav-link"
+                          className="active nav-link"
                           href="#contacts"
                           data-toggle="tab"
                         >
@@ -1952,7 +1884,7 @@ const StudentProfileContent = () => {
                   <div className="card-body">
                     <div className="tab-content">
                       {/* /.tab-pane */}
-                      <div className="tab-pane" id="contacts">
+                      <div className="active tab-pane" id="contacts">
                         {/* The timeline */}
                         <div className="timeline timeline-inverse">
                           {/* timeline time label */}
@@ -2090,6 +2022,12 @@ const StudentProfileContent = () => {
                           onSubmit={handleSubmit}
                         >
                           <div className="form-group row">
+                            <p
+                              className="editheading"
+                              style={{ marginTop: "0" }}
+                            >
+                              Personal Information
+                            </p>
                             <label
                               htmlFor="inputFullName"
                               className="col-sm-2 col-form-label"
@@ -2111,75 +2049,26 @@ const StudentProfileContent = () => {
 
                           <div className="form-group row">
                             <label className="col-sm-2 col-form-label">
-                              About:
+                              Education
                             </label>
                             <div className="col-sm-10">
-                              <input
+                              <textarea
                                 type="text"
-                                id="About"
+                                id="Education"
                                 className="form-control"
-                                name="About"
-                                value={studentData.user.About}
-                                onChange={handleUserChange}
-                                placeholder="About"
+                                name="Education"
+                                value={studentData.profile.Education}
+                                onChange={handleProfileChange}
+                                placeholder="BE in CSE, etc"
+                                rows="3"
+                                style={{ resize: "vertical" }}
                               />
                             </div>
                           </div>
 
                           <div className="form-group row">
                             <label className="col-sm-2 col-form-label">
-                              Work:
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                type="text"
-                                id="Work"
-                                className="form-control"
-                                name="Work"
-                                value={studentData.user.Work}
-                                onChange={handleUserChange}
-                                placeholder="Your Work"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">
-                              Year Joined:
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                type="text"
-                                id="Year_Joined"
-                                className="form-control"
-                                name="Year_Joined"
-                                value={studentData.user.Year_Joined}
-                                onChange={handleUserChange}
-                                placeholder="Year Joined"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">
-                              Graduation Year:
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                type="text"
-                                id="graduation_year"
-                                className="form-control"
-                                name="graduation_year"
-                                value={studentData.user.graduation_year}
-                                onChange={handleUserChange}
-                                placeholder="Graduation Year"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">
-                              Branch:
+                              Branch
                             </label>
                             <div className="col-sm-10">
                               <input
@@ -2189,14 +2078,75 @@ const StudentProfileContent = () => {
                                 name="Branch"
                                 value={studentData.user.Branch}
                                 onChange={handleUserChange}
-                                placeholder="Branch"
+                                placeholder="CSE, ECE, etc"
                               />
                             </div>
                           </div>
 
                           <div className="form-group row">
                             <label className="col-sm-2 col-form-label">
-                              Email:
+                              Academic Year
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="number"
+                                id="current_year_of_study"
+                                className="form-control"
+                                name="current_year_of_study"
+                                value={
+                                  studentData.profile.current_year_of_study
+                                }
+                                onChange={handleProfileChange}
+                                placeholder="Academic Year"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">
+                              Admission Year
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="number"
+                                id="Year_Joined"
+                                className="form-control"
+                                name="Year_Joined"
+                                value={studentData.user.Year_Joined}
+                                onChange={handleUserChange}
+                                placeholder="Admission Year"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">
+                              Graduation Year
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="number"
+                                id="graduation_year"
+                                className="form-control"
+                                name="graduation_year"
+                                value={studentData.user.graduation_year}
+                                onChange={handleUserChange}
+                                placeholder="Graduation Year"
+                              />
+                            </div>
+                          </div>
+                          <hr
+                            style={{
+                              border: "1px solid black",
+                              marginBottom: "0.5em",
+                              marginTop: "0.5em",
+                            }}
+                          ></hr>
+                          <p className="editheading">Contact Information</p>
+
+                          <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">
+                              Email
                             </label>
                             <div className="col-sm-10">
                               <input
@@ -2213,24 +2163,41 @@ const StudentProfileContent = () => {
 
                           <div className="form-group row">
                             <label className="col-sm-2 col-form-label">
-                              Mobile:
+                              Mobile
                             </label>
                             <div className="col-sm-10">
                               <input
                                 type="text"
-                                id="mobile"
                                 className="form-control"
+                                id="mobile"
                                 name="mobile"
-                                value={studentData.user.mobile}
-                                onChange={handleUserChange}
-                                placeholder="Mobile No"
+                                value={studentData?.user?.mobile}
+                                onChange={(e) => {
+                                  const value = e.target.value.replace(
+                                    /[^0-9]/g,
+                                    ""
+                                  );
+
+                                  if (value.length === 10) {
+                                    handleUserChange({
+                                      target: { name: "mobile", value },
+                                    });
+                                  } else if (value.length <= 10) {
+                                    handleUserChange({
+                                      target: { name: "mobile", value },
+                                    });
+                                  }
+                                }}
+                                placeholder="Mobile"
+                                maxLength="10"
+                                minLength="10"
                               />
                             </div>
                           </div>
 
                           <div className="form-group row">
                             <label className="col-sm-2 col-form-label">
-                              LinkedIn:
+                              LinkedIn
                             </label>
                             <div className="col-sm-10">
                               <input
@@ -2240,31 +2207,14 @@ const StudentProfileContent = () => {
                                 name="linkedin"
                                 value={studentData.user.linkedin}
                                 onChange={handleUserChange}
-                                placeholder="Linkedin URL"
+                                placeholder="Linkedin profile link"
                               />
                             </div>
                           </div>
 
                           <div className="form-group row">
                             <label className="col-sm-2 col-form-label">
-                              Github:
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                type="url"
-                                id="Github"
-                                className="form-control"
-                                name="Github"
-                                value={studentData.user.Github}
-                                onChange={handleUserChange}
-                                placeholder="Github URL"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">
-                              Instagram:
+                              Instagram
                             </label>
                             <div className="col-sm-10">
                               <input
@@ -2274,14 +2224,41 @@ const StudentProfileContent = () => {
                                 name="instagram"
                                 value={studentData.user.instagram}
                                 onChange={handleUserChange}
-                                placeholder="Instagram URL"
+                                placeholder="Instagram profile link"
+                              />
+                            </div>
+                          </div>
+
+                          <hr
+                            style={{
+                              border: "1px solid black",
+                              marginBottom: "0.5em",
+                              marginTop: "0.5em",
+                            }}
+                          ></hr>
+
+                          <p className="editheading">Professional Profiles</p>
+
+                          <div className="form-group row">
+                            <label className="col-sm-2 col-form-label">
+                              Github
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="url"
+                                id="Github"
+                                className="form-control"
+                                name="Github"
+                                value={studentData.user.Github}
+                                onChange={handleUserChange}
+                                placeholder="Github profile link"
                               />
                             </div>
                           </div>
 
                           <div className="form-group row">
                             <label className="col-sm-2 col-form-label">
-                              Portfolio Link:
+                              Portfolio Link
                             </label>
                             <div className="col-sm-10">
                               <input
@@ -2291,14 +2268,14 @@ const StudentProfileContent = () => {
                                 name="portfolio_link"
                                 value={studentData.user.portfolio_link}
                                 onChange={handleUserChange}
-                                placeholder="Portfolio URL"
+                                placeholder="Portfolio link"
                               />
                             </div>
                           </div>
 
                           <div className="form-group row">
                             <label className="col-sm-2 col-form-label">
-                              Resume Link:
+                              Resume Link
                             </label>
                             <div className="col-sm-10">
                               <input
@@ -2308,83 +2285,98 @@ const StudentProfileContent = () => {
                                 name="resume_link"
                                 value={studentData.user.resume_link}
                                 onChange={handleUserChange}
-                                placeholder="Resume URL"
+                                placeholder="Resume link"
                               />
                             </div>
                           </div>
 
-                          <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">
-                              Skills:
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                type="text"
-                                className="form-control"
-                                id="skills"
-                                name="skills"
-                                value={studentData.user.skills}
-                                onChange={handleUserChange}
-                                placeholder="Skills"
-                              />
-                            </div>
-                          </div>
+                          <hr
+                            style={{
+                              border: "1px solid black",
+                              marginBottom: "0.5em",
+                              marginTop: "0.5em",
+                            }}
+                          ></hr>
+                          <p className="editheading">
+                            Professional Information
+                          </p>
 
                           <div className="form-group row">
                             <label className="col-sm-2 col-form-label">
-                              Heading:
+                              Heading
                             </label>
                             <div className="col-sm-10">
-                              <input
+                              <textarea
                                 type="text"
                                 id="Heading"
                                 className="form-control"
                                 name="Heading"
                                 value={studentData.profile.Heading}
                                 onChange={handleProfileChange}
-                                placeholder="Your Heading"
+                                placeholder="Python | Django | DRF | Full Stack Developer | and Passionate Problem Solver etc."
+                                rows="3"
+                                style={{ resize: "vertical" }}
                               />
                             </div>
                           </div>
 
                           <div className="form-group row">
                             <label className="col-sm-2 col-form-label">
-                              Education:
+                              About
                             </label>
                             <div className="col-sm-10">
-                              <input
+                              <textarea
                                 type="text"
-                                id="Education"
+                                id="About"
                                 className="form-control"
-                                name="Education"
-                                value={studentData.profile.Education}
-                                onChange={handleProfileChange}
-                                placeholder="Education"
+                                name="About"
+                                value={studentData.user.About}
+                                onChange={handleUserChange}
+                                placeholder="Passionate Full Stack Developer | Python & Django Enthusiast ... etc..."
                               />
                             </div>
                           </div>
 
                           <div className="form-group row">
                             <label className="col-sm-2 col-form-label">
-                              Current Year of Study:
+                              Work
                             </label>
                             <div className="col-sm-10">
-                              <input
+                              <textarea
                                 type="text"
-                                id="current_year_of_study"
+                                id="Work"
                                 className="form-control"
-                                name="current_year_of_study"
-                                value={
-                                  studentData.profile.current_year_of_study
-                                }
-                                onChange={handleProfileChange}
-                                placeholder="Current Year of Study"
+                                name="Work"
+                                value={studentData.user.Work}
+                                onChange={handleUserChange}
+                                placeholder=" Work experience, projects and certifications etc.."
+                                row="3"
+                                style={{ resize: "vertical" }}
                               />
                             </div>
                           </div>
 
                           <div className="form-group row">
-                            <div className="offset-sm-2 col-sm-10">
+                            <label className="col-sm-2 col-form-label">
+                              Skills
+                            </label>
+                            <div className="col-sm-10">
+                              <textarea
+                                type="text"
+                                className="form-control"
+                                id="skills"
+                                name="skills"
+                                value={studentData.user.skills}
+                                onChange={handleUserChange}
+                                placeholder="Python , Django , DRF , etc.. "
+                                rows="3"
+                                style={{ resize: "vertical" }}
+                              />
+                            </div>
+                          </div>
+
+                          <div className="form-group row ">
+                            <div className="offset-sm-2 col-sm-10 mt-3">
                               <button type="submit" className="btn btn-danger">
                                 Submit
                               </button>
@@ -2414,16 +2406,13 @@ const StudentProfileContent = () => {
 };
 
 const SuperUserProfileContent = () => {
-  let { userData } = useContext(AuthContext);
+  let { userData ,setLoading, showNotification} = useContext(AuthContext);
   console.log("userData", userData);
   const id = localStorage.getItem("id")
     ? JSON.parse(localStorage.getItem("id"))
     : null;
-
-
-    Modal.setAppElement('#root');
-
   const [user, setUser] = useState(null);
+  const [reload, setReload] = useState(false);
 
   const [superUserData, setSuperUserData] = useState({
     user: {
@@ -2467,27 +2456,9 @@ const SuperUserProfileContent = () => {
   
 
   const [posts, setPosts] = useState([]);
-  // const [modalIsOpen, setModalIsOpen] = useState(false);
-  // const [modalContent, setModalContent] = useState(null);
-
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [modalContent, setModalContent] = useState(null);
-
-  // Function to open the modal with content (image or document)
-  const openModal = (content) => {
-    setModalContent(content);
-    setModalIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-    setModalContent(null);
-  };
-
-
   
   useEffect(() => {
-    // Fetch alumni data when the component mounts
+    setLoading(true);
     const token = localStorage.getItem("authTokens")
       ? JSON.parse(localStorage.getItem("authTokens"))
       : null;
@@ -2540,109 +2511,58 @@ const SuperUserProfileContent = () => {
                 designation: response.data.hod_profile.designation
           }
             })
+            setLoading(false);
           }
       })
       .catch((error) => {
-        console.error("Error fetching alumni data:", error);
+        console.error("Error fetching Admin data:", error);
+        setLoading(false);
+        showNotification(error.message || "Error fetching Admin data.", "error", "Error");
       });
 
      
-  }, [userData?.user_id]);
+  }, [userData?.user_id,reload]);
 
-  useEffect(() => {
-    const token = localStorage.getItem("authTokens")
-    ? JSON.parse(localStorage.getItem("authTokens"))
-    : null;
-    axios
-      .get(`http://127.0.0.1:8000/hodposts/author/${userData?.user_id}`, {
-        headers: {
-          Authorization: `Bearer ${token?.access}`,
-        },
-      })
-      .then((response) => {
-        setPosts(response.data);
-        // console.log("ress "+JSON.stringify(response.data))
-      })
-      .catch((error) => {
-        console.error('Error fetching the posts:', error);
-      });
-  }, [userData?.user_id]);
 
   console.log("user ", user);
-  // console.log("postsss "+ posts);
 
- 
 
-  // Function to handle form submission
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     const token = localStorage.getItem("authTokens")
       ? JSON.parse(localStorage.getItem("authTokens"))
       : null;
-      // const filteredAlumniData = removeEmptyFields(alumniData);
-      // console.log("filter data ",filteredAlumniData);
-
-      // for (const key in alumniData) {
-      //   if (alumniData.hasOwnProperty(key)) {
-      //     console.log(`${key}:`, alumniData[key]);
-      //   }
-      // }
-     
     try {
       const response = await axios.put(`http://127.0.0.1:8000/edit-hod-profile/${id || userData?.user_id}/`, superUserData,{
         headers: {
           Authorization: `Bearer ${token?.access}`,
         },
       });
-      console.log('Profile updated successfully', response.data);
-      // After successful update, reset alumniData and refresh the window
+      if (response.status == 200) {
+        setLoading(false);
+        showNotification("Profile updated successfully", "success", "Success");
+        if (reload) {
+          setReload(false);
+        } else {
+          setReload(true);
+        }
+      }
+      else {
+        setLoading(false);
+        showNotification(response.data.detail, "error", "Error");
+        if (reload) {
+          setReload(false);
+        } else {
+          setReload(true);
+        }
+        
+      }
 
-      setSuperUserData({
-        user: {
-          // username: "",
-          full_name: "",
-          About: "",
-          Work: "",
-          Year_Joined: "",
-          graduation_year: "",
-          Branch: "",
-          email: "",
-          mobile: "",
-          linkedin: "",
-          Github: "",
-          instagram: "",
-          portfolio_link: "",
-          resume_link: "",
-          skills: "",
-        },
-        profile: {
-          user: {
-            // username: "",
-            full_name: "",
-            About: "",
-            Work: "",
-            Year_Joined: "",
-            graduation_year: "",
-            Branch: "",
-            email: "",
-            mobile: "",
-            linkedin: "",
-            Github: "",
-            instagram: "",
-            portfolio_link: "",
-            resume_link: "",
-            skills: "",
-          },
-          designation:""
-        },
-      });
-      
-       
-    
-    // Optionally, you can refresh the page or redirect to another page
-         window.location.reload(); // This will refresh the page
     } catch (error) {
       console.error('Error updating profile:', error.message);
+      setLoading(false);
+      showNotification(error.message || "Error updating profile.", "error", "Error");
     }
   };
 
@@ -2733,10 +2653,10 @@ const SuperUserProfileContent = () => {
                 </div>
                 {/* /.card */}
 
-                {/* About Me Box */}
+                {/* About Box */}
                 <div className="card card-primary">
                   <div className="card-header">
-                    <h3 className="card-title">About Me</h3>
+                    <h3 className="card-title">About</h3>
                   </div>
                   {/* /.card-header */}
                   <div
@@ -2765,7 +2685,8 @@ const SuperUserProfileContent = () => {
                     </p>
 
                     <strong>
-                      <i className="fas fa-laptop-code mr-1" /> Year Joined
+                      <i className="fas fa-calendar-alt mr-1" />
+                      Joining Year
                     </strong>
                     <p className="text-muted aboutfont">
                       <span className="tag tag-danger">
@@ -3095,6 +3016,12 @@ const SuperUserProfileContent = () => {
                           className="form-horizontal"
                           onSubmit={handleSubmit}
                         >
+                          <p
+                            className="editheading"
+                            style={{ marginTop: "0px" }}
+                          >
+                            Personal Information
+                          </p>
                           <div className="form-group row">
                             <label
                               htmlFor="inputFullName"
@@ -3117,6 +3044,54 @@ const SuperUserProfileContent = () => {
 
                           <div className="form-group row">
                             <label
+                              htmlFor="inputLinkedIn"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Department
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="Branch"
+                                name="Branch"
+                                value={superUserData?.user?.Branch}
+                                onChange={handleUserChange}
+                                placeholder="CSE, ECE, CIVIL, etc."
+                              />
+                            </div>
+                          </div>
+
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputLinkedIn"
+                              className="col-sm-2 col-form-label"
+                            >
+                              Joining Year
+                            </label>
+                            <div className="col-sm-10">
+                              <input
+                                type="number"
+                                className="form-control"
+                                id="Year_Joined"
+                                name="Year_Joined"
+                                value={superUserData?.user?.Year_Joined}
+                                onChange={handleUserChange}
+                                placeholder="Year Joined"
+                              />
+                            </div>
+                          </div>
+
+                          <hr
+                            style={{
+                              border: "1px solid black",
+                              marginTop: "0.5rem",
+                              marginBottom: "0.5rem",
+                            }}
+                          ></hr>
+                          <p className="editheading">Contact Information</p>
+                          <div className="form-group row">
+                            <label
                               htmlFor="inputEmail"
                               className="col-sm-2 col-form-label"
                             >
@@ -3136,10 +3111,7 @@ const SuperUserProfileContent = () => {
                           </div>
 
                           <div className="form-group row">
-                            <label
-                              htmlFor="inputMobile"
-                              className="col-sm-2 col-form-label"
-                            >
+                            <label className="col-sm-2 col-form-label">
                               Mobile
                             </label>
                             <div className="col-sm-10">
@@ -3149,12 +3121,28 @@ const SuperUserProfileContent = () => {
                                 id="mobile"
                                 name="mobile"
                                 value={superUserData?.user?.mobile}
-                                onChange={handleUserChange}
+                                onChange={(e) => {
+                                  const value = e.target.value.replace(
+                                    /[^0-9]/g,
+                                    ""
+                                  );
+
+                                  if (value.length === 10) {
+                                    handleUserChange({
+                                      target: { name: "mobile", value },
+                                    });
+                                  } else if (value.length <= 10) {
+                                    handleUserChange({
+                                      target: { name: "mobile", value },
+                                    });
+                                  }
+                                }}
                                 placeholder="Mobile"
+                                maxLength="10"
+                                minLength="10"
                               />
                             </div>
                           </div>
-
                           <div className="form-group row">
                             <label
                               htmlFor="inputLinkedIn"
@@ -3164,13 +3152,13 @@ const SuperUserProfileContent = () => {
                             </label>
                             <div className="col-sm-10">
                               <input
-                                type="text"
+                                type="url"
                                 className="form-control"
                                 id="linkedin"
                                 name="linkedin"
                                 value={superUserData?.user?.linkedin}
                                 onChange={handleUserChange}
-                                placeholder="LinkedIn URL"
+                                placeholder="LinkedIn profile link"
                               />
                             </div>
                           </div>
@@ -3184,131 +3172,25 @@ const SuperUserProfileContent = () => {
                             </label>
                             <div className="col-sm-10">
                               <input
-                                type="text"
+                                type="url"
                                 className="form-control"
                                 id="instagram"
                                 name="instagram"
                                 value={superUserData?.user?.instagram}
                                 onChange={handleUserChange}
-                                placeholder="Instagram URL"
+                                placeholder="Instagram profile link"
                               />
                             </div>
                           </div>
 
-                          {/* <div className="form-group row">
-                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
-                                Portfolio
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="portfolio_link"
-                                  name="portfolio_link"
-                                  value={superUserData?.user?.portfolio_link}
-                                  onChange={handleUserChange}
-                                  placeholder="Portfolio URL"
-                                />
-                              </div>
-                            </div> */}
-
-                          <div className="form-group row">
-                            <label
-                              htmlFor="inputLinkedIn"
-                              className="col-sm-2 col-form-label"
-                            >
-                              Year Joined
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                type="text"
-                                className="form-control"
-                                id="Year_Joined"
-                                name="Year_Joined"
-                                value={superUserData?.user?.Year_Joined}
-                                onChange={handleUserChange}
-                                placeholder="Year Joined"
-                              />
-                            </div>
-                          </div>
-
-                          {/* <div className="form-group row">
-                              <label htmlFor="inputLinkedIn" className="col-sm-2 col-form-label">
-                                Resume
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="resume_link"
-                                  name="resume_link"
-                                  value={superUserData?.user?.resume_link}
-                                  onChange={handleUserChange}
-                                  placeholder="Resume URL"
-                                />
-                              </div>
-                            </div> */}
-
-                          <div className="form-group row">
-                            <label
-                              htmlFor="inputLinkedIn"
-                              className="col-sm-2 col-form-label"
-                            >
-                              About
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                type="text"
-                                className="form-control"
-                                id="About"
-                                name="About"
-                                value={superUserData?.user?.About}
-                                onChange={handleUserChange}
-                                placeholder="About"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="form-group row">
-                            <label
-                              htmlFor="inputLinkedIn"
-                              className="col-sm-2 col-form-label"
-                            >
-                              Graduation Year
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                type="text"
-                                className="form-control"
-                                id="graduation_year"
-                                name="graduation_year"
-                                value={superUserData?.user?.graduation_year}
-                                onChange={handleUserChange}
-                                placeholder="Graduation Year  "
-                              />
-                            </div>
-                          </div>
-
-                          <div className="form-group row">
-                            <label
-                              htmlFor="inputLinkedIn"
-                              className="col-sm-2 col-form-label"
-                            >
-                              Branch
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                type="text"
-                                className="form-control"
-                                id="Branch"
-                                name="Branch"
-                                value={superUserData?.user?.Branch}
-                                onChange={handleUserChange}
-                                placeholder="Your Branch"
-                              />
-                            </div>
-                          </div>
-
+                          <hr
+                            style={{
+                              border: "1px solid black",
+                              marginTop: "0.5rem",
+                              marginBottom: "0.5rem",
+                            }}
+                          ></hr>
+                          <p className="editheading">Professional Profiles</p>
                           <div className="form-group row">
                             <label
                               htmlFor="inputGithub"
@@ -3318,35 +3200,50 @@ const SuperUserProfileContent = () => {
                             </label>
                             <div className="col-sm-10">
                               <input
-                                type="text"
+                                type="url"
                                 className="form-control"
                                 id="Github"
                                 name="Github"
                                 value={superUserData?.user?.Github}
                                 onChange={handleUserChange}
-                                placeholder="Github URL"
+                                placeholder="Github profile link"
                               />
                             </div>
                           </div>
 
-                          {/* <div className="form-group row">
-                              <label htmlFor="inputSkills" className="col-sm-2 col-form-label">
-                                Skills
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="skills"
-                                  name="skills"
-                                  value={superUserData?.user?.skills}
-                                  onChange={handleUserChange}
-                                  placeholder="Skills"
-                                />
-                              </div>
-                            </div> */}
+                          <hr
+                            style={{
+                              border: "1px solid black",
+                              marginTop: "0.5rem",
+                              marginBottom: "0.5rem",
+                            }}
+                          ></hr>
+                          <p className="editheading">
+                            Professional Information
+                          </p>
 
-                          {/* Profile Specific Fields */}
+                          <div className="form-group row">
+                            <label
+                              htmlFor="inputLinkedIn"
+                              className="col-sm-2 col-form-label"
+                            >
+                              About
+                            </label>
+                            <div className="col-sm-10">
+                              <textarea
+                                type="text"
+                                className="form-control"
+                                id="About"
+                                name="About"
+                                value={superUserData?.user?.About}
+                                onChange={handleUserChange}
+                                placeholder="About..."
+                                rows="3"
+                                style={{ resize: "vertical" }}
+                              />
+                            </div>
+                          </div>
+
                           <div className="form-group row">
                             <label
                               htmlFor="inputDesignation"
@@ -3362,13 +3259,13 @@ const SuperUserProfileContent = () => {
                                 name="designation"
                                 value={superUserData?.profile?.designation}
                                 onChange={handleProfileChange}
-                                placeholder="Designation"
+                                placeholder="Head of Department, etc."
                               />
                             </div>
                           </div>
 
                           <div className="form-group row">
-                            <div className="offset-sm-2 col-sm-10">
+                            <div className="offset-sm-2 col-sm-10 mt-3">
                               <button type="submit" className="btn btn-danger">
                                 Submit
                               </button>
