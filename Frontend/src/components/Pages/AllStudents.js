@@ -125,7 +125,7 @@ const AllStudentsContent = () => {
                         </div>
                         <div className="col-5 text-center">
                           <img
-                            src="../../dist/img/user1-128x128.jpg" // Replace with dynamic image path if needed
+                            src={students?.Image ? `http://127.0.0.1:8000/${students?.Image}` : `../../dist/img/user1-128x128.jpg`} // Replace with dynamic image path if needed
                             alt="user-avatar"
                             className="img-circle img-fluid"
                           />
