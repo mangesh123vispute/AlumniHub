@@ -82,7 +82,7 @@ class ActivationEmailView(APIView):
 
                 return Response({"detail": "Activation email sent!"}, status=status.HTTP_200_OK)
             except User.DoesNotExist:
-                return Response({"detail": "No user found with this email."}, status=status.HTTP_404_NOT_FOUND)
+                return Response({"detail": "No user found with this email,Please register."}, status=status.HTTP_404_NOT_FOUND)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -99,8 +99,19 @@ class ActivateAccountView(APIView):
         if user is not None and default_token_generator.check_token(user, token):
             # Get all passed query parameters (validated data)
             data = request.GET.dict()
-           
-            user.set_password(data.get('password'))
+            print(data)
+            if(data.get("password")):
+              user.set_password(data.get('password'))
+
+            if data.get("username"):
+                new_username = data.get("username")
+                if User.objects.filter(username=new_username).exists():
+                    return Response(
+                        {"detail": "Username is already taken."},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+                else:
+                    user.username = new_username
            
             if(data.get('role')=="Alumni"):
                 user.is_alumni=True
@@ -113,21 +124,24 @@ class ActivateAccountView(APIView):
                     {"detail": "Please select your role"},
                     status=status.HTTP_400_BAD_REQUEST
                 )
-        
+
             # Activate user
             user.is_active = True
             user.save()
-
+          
             # Optionally, send a confirmation email
             self.send_confirmation_email(user)
             return render(request, 'account/activation_success.html', {'user': user,"message":"Account Activated Successfully!","message2":"Click here to login.","message3":"Login","url":"http://localhost:3000/login"})
             
 
         else:
-            return render(request, 'account/activation_invalid.html')
-           
-            
-
+           return render(request, 'account/activation_invalid.html', {
+            'user': user,
+            'message': "Account activation failed!",
+             'message2': "The activation link is invalid or has expired.",
+                'message3': "Request a new activation link.",
+                 'url': "http://localhost:3000/activate_email"
+                })
     def send_confirmation_email(self, user):
         subject = "Account Activated"
         message = f"Hello {user.username},\n\nYour account has been successfully activated. You can now log in."

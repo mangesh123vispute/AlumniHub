@@ -97,7 +97,7 @@ const handleSubmit = async (e) => {
     console.error("Error during login:", error);
     setMessage("An error occurred during login. Please try again.", error);
    await showNotification(
-      error || "Something went wrong.",
+     "Something went wrong, please try again.",
       "error",
       "Error"
     );
