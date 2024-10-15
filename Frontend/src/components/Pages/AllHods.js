@@ -123,7 +123,7 @@ const AllAlumnisContent = () => {
                     >
                       <img
                         className="img-circle elevation-2"
-                        src="../dist/img/user1-128x128.jpg"
+                        src={admins?.Image ? `http://127.0.0.1:8000/${admins?.Image}` : `../../dist/img/user1-128x128.jpg`}
                         alt="User Avatar"
                       />
                     </div>

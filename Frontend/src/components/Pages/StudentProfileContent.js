@@ -221,7 +221,7 @@ const StudentProfileContent = () => {
                       <div className="text-center">
                         <img
                           className="profile-user-img img-fluid img-circle"
-                          src={"../../dist/img/user4-128x128.jpg"}
+                          src={user?.Image ? `http://127.0.0.1:8000/${user?.Image}` : `../../dist/img/user1-128x128.jpg`}
                           alt="User profile picture"
                         />
                       </div>

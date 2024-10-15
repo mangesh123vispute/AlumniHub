@@ -79,6 +79,8 @@ const AllAlumnisContent = () => {
     fetchAlumni(pageNumber);
   }, [  pageNumber ]);
 
+  console.log("Als=umni data ", alumniData);
+
   return (
     <div>
       <LoadingSpinner isLoading={loading} />
@@ -143,7 +145,7 @@ const AllAlumnisContent = () => {
                         </div>
                         <div className="col-5 text-center">
                           <img
-                            src="../../dist/img/user1-128x128.jpg" // Replace with dynamic image path if needed
+                            src={ alumnus?.Image ? `http://127.0.0.1:8000/${alumnus?.Image}` : `../../dist/img/user1-128x128.jpg` } // Replace with dynamic image path if needed
                             alt="user-avatar"
                             className="img-circle img-fluid"
                           />
