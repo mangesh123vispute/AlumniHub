@@ -120,6 +120,13 @@ class User(AbstractUser):
         )
 
     def save(self, *args, **kwargs):
+        if self.email and User.objects.filter(email=self.email).exclude(pk=self.pk).exists():
+            raise ValidationError(f"A user with email '{self.email}' already exists.")
+
+        if self.is_superuser:
+            self.is_active = True
+            
+
         if not self.username:
             self.username = self.generate_unique_username()
         super().save(*args, **kwargs)

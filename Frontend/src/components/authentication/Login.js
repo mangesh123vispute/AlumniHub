@@ -40,7 +40,12 @@ const handleSubmit = async (e) => {
   setLoading(true);
   
   if (!(formData.username && formData.password)) {
-    await showNotification("All fields are required", "warning", "Warning");
+    if (!formData.username) {
+      await showNotification("Username is required", "warning", "Warning");
+    } else if (!formData.password) {
+      await showNotification("Password is required", "warning", "Warning");
+    }
+    setLoading(false);
     return;
   }
 

@@ -7,10 +7,6 @@ import AuthContext from "../../../context/AuthContext";
 import LoadingSpinner from "../../Loading/Loading";
 import Notification from "../../Notification/Notification";
 
-const accessToken = localStorage.getItem("authTokens")
-  ? JSON.parse(localStorage.getItem("authTokens")).access
-  : null;
-
 const AddHodPostContent = () => {
   const [Title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -33,13 +29,17 @@ const AddHodPostContent = () => {
     setFilter,
   } = useContext(AuthContext);
 
+  const accessToken = localStorage.getItem("authTokens")
+    ? JSON.parse(localStorage.getItem("authTokens")).access
+    : null;
+
   // Handle file change for image
   const handleFileChange = (e) => {
     if (e.target.files[0]) {
       setFile(e.target.files[0]);
     }
   };
-  setFilter(false);
+  setFilter(false); // This looks like a side effect, ensure it doesn't trigger rendering issues.
 
   // Handle file change for document (if needed)
   const handleDocChange = (e) => {
@@ -52,10 +52,10 @@ const AddHodPostContent = () => {
   const handleImageUpload = async (e) => {
     setLoading(true);
     e.preventDefault();
-    if (await verifyaccessToken() === -1) {
-      
+    if ((await verifyaccessToken()) === -1) {
+      setLoading(false);
       return;
-    };
+    }
     if (!file) {
       showNotification(
         "Please select an image file to upload.",
@@ -100,6 +100,7 @@ const AddHodPostContent = () => {
     setLoading(true);
     e.preventDefault();
     if ((await verifyaccessToken()) === -1) {
+      setLoading(false);
       return;
     }
 
@@ -125,7 +126,7 @@ const AddHodPostContent = () => {
       },
       (error) => {
         console.error("Error during document upload:", error);
-        showNotification(error.message,"Error", "Document upload failed" );
+        showNotification(error.message, "warning", "Document upload failed");
         setLoading(false);
       },
       () => {
@@ -147,12 +148,13 @@ const AddHodPostContent = () => {
     setLoading(true);
     e.preventDefault();
     if ((await verifyaccessToken()) === -1) {
+      setLoading(false);
       return;
     }
 
-    if (!Title || !content || !tag || !imageUrl) {
+    if (!Title || !content || !tag || !imageUrl || !docUrl) {
       showNotification(
-        "Please fill in all fields and upload an image.",
+        "Please fill in all fields and upload an image and document.",
         "warning",
         "Missing fields"
       );
@@ -191,7 +193,7 @@ const AddHodPostContent = () => {
       .catch((error) => {
         console.error("Error during submission:", error);
         showNotification(
-          "Error submitting the post.",
+          "Error submitting the post, please try again.",
           "warning",
           "Submission failed"
         );
@@ -223,7 +225,7 @@ const AddHodPostContent = () => {
                     type="text"
                     className="form-control"
                     placeholder="Enter title"
-                    value={title}
+                    value={Title}
                     onChange={(e) => setTitle(e.target.value)}
                   />
                 </div>
@@ -287,7 +289,7 @@ const AddHodPostContent = () => {
               </div>
               <div className="card-footer">
                 <button type="submit" className="btn btn-primary">
-                  Submit 
+                  Submit
                 </button>
               </div>
             </form>
