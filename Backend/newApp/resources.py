@@ -1,6 +1,7 @@
 from import_export import resources, fields
 from import_export.widgets import BooleanWidget
 from .models import User
+from django.core.exceptions import ValidationError
 
 class UserResource(resources.ModelResource):
     # Use BooleanWidget to correctly interpret TRUE/FALSE values
@@ -16,13 +17,14 @@ class UserResource(resources.ModelResource):
             'linkedin', 'Github', 'instagram', 'skills', 
             'first_name', 'last_name'
         )
-
+        
     def import_field(self, field, obj, data, is_m2m=False, **kwargs):
         """
         Overriding import_field to ensure only fields that exist in the model
         are considered. Fields not defined in the model will be ignored.
         If a field is missing in the Excel data, it is set to a blank value.
         """
+        print("i am running")
         if field.column_name in data:
             # If the field is in the data, import its value
             super().import_field(field, obj, data, is_m2m, **kwargs)
