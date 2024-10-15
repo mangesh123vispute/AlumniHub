@@ -120,7 +120,7 @@ const StudentProfileContent = () => {
         })
         .catch((error) => {
           console.error("Error fetching Students data:", error);
-          showNotification( "Error fetching Students data.", "error", "Error");
+          showNotification( "Error fetching Students data, please try again.", "error", "Error");
           setLoading(false);
         });
         localStorage.getItem("id") && localStorage.removeItem("id"); 
@@ -154,7 +154,7 @@ const StudentProfileContent = () => {
         
         } catch (error) {
           console.error('Error updating profile:', error.message);
-          showNotification( "Error updating profile.", "error", "Error");
+          showNotification( "Error updating profile, please try again.", "error", "Error");
           setLoading(false);
         }
       };

@@ -26,6 +26,12 @@ setFilter(false);
 
     setLoading(true);
 
+    if (!newPassword) {
+      setLoading(false);
+      showNotification("Please enter a new password", "warning", "Warning");
+      return;
+    }
+
     try {
       const response = await axios.post(
         `http://127.0.0.1:8000/reset-password/${uidb64}/${token}/`,
@@ -37,7 +43,7 @@ setFilter(false);
       }
     } catch (error) {
       setLoading(false);
-      showNotification(error.response.data.detail, "error", "Error");
+      showNotification("Failed to reset password, Please try again", "error", "Error");
     }
   };
 

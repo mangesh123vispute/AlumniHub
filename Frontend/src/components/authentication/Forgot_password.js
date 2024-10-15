@@ -33,7 +33,7 @@ const ForgotPassword = () => {
 
     } catch (error) {
       setLoading(false);
-      showNotification(error.response.data.detail, "error", "Error");
+      showNotification("Failed to reset password, Please try again", "error", "Error");
     }
   };
 
