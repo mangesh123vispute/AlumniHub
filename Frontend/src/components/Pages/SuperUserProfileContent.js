@@ -14,7 +14,10 @@ const SuperUserProfileContent = () => {
     const [reload, setReload] = useState(false);
     const [posts, setPosts] = useState([]);  // Store posts
     const [page, setPage] = useState(1);     // Keep track of the page number
-    const [hasMore, setHasMore] = useState(true); 
+    const [hasMore, setHasMore] = useState(true);
+    const [totalPages,setTotalPages] = useState(1)
+    
+    const activityRef = useRef(null); // Reference to the activity container
   
     const [superUserData, setSuperUserData] = useState({
       user: {
@@ -198,35 +201,33 @@ const SuperUserProfileContent = () => {
         }
       }));
     };
+
+   
   
   useEffect(() => {
+    
       fetchPosts(page); // Fetch the first page of posts when the component mounts
-  
-      const handleScroll = () => {
-        // Check if the user has scrolled to the bottom
-        if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 100 && hasMore) {
-          loadMorePosts(); // Load more posts when scrolled near the bottom
-        }
-      };
-  
-      window.addEventListener('scroll', handleScroll);
-      return () => window.removeEventListener('scroll', handleScroll); // Clean up the event listener
-    }, [page, hasMore]);
-  
+    }, [page]);
+
+   
+
     const fetchPosts = async (page) => {
+       
       try {
+        console.log("page " + page);
         const response = await axios.get(`http://127.0.0.1:8000/hodposts/author/${id || userData?.user_id}/?page=${page}&page_size=10`);
-        setPosts(prevPosts => [...prevPosts, ...response.data.results]); // Append new posts to existing posts
-        setHasMore(response.data.next !== null); // If 'next' is null, stop loading more posts
+        setPosts(response.data.results); // Set fetched posts
+        setHasMore(response.data.next !== null);
+         // If 'next' is null, stop loading more posts
+         const totalItems = response.data.count;
+         setTotalPages(Math.ceil(totalItems / 10));
       } catch (error) {
         console.error('Error fetching posts:', error);
         showNotification("Error fetching posts, please try again.", "error", "Error");
       }
     };
   
-    const loadMorePosts = () => {
-      setPage(prevPage => prevPage + 1); // Increment page count to load more posts
-    };
+   
   
     const formatDate = (isoDate) => {
       const date = new Date(isoDate);
@@ -239,6 +240,8 @@ const SuperUserProfileContent = () => {
         hour12: true,
       });
     };
+
+   
     return (
       <>
         <div>
@@ -393,10 +396,12 @@ const SuperUserProfileContent = () => {
                             overflowX: "hidden", // Prevent horizontal scrolling
                             padding: "15px", // Optional: add padding if needed
                             boxSizing: "border-box", // Ensure padding is included in width calculation
-                          }}>
+                          }}
+                          
+                          >
                           {/* Post */}
                         {posts.map(post => (
-          <div key={post.id} className="post">
+                           <div key={post.id} className="post">
               
                             <div className="user-block" >
                               <img
@@ -444,7 +449,59 @@ const SuperUserProfileContent = () => {
                             </div>                        
                        </div>
                      ))}
-  
+                          {/* Pagination controls */}
+                          <div className="card-footer">
+            <nav aria-label="Page Navigation">
+              <ul className="pagination justify-content-center m-0">
+                {/* Previous button */}
+                <li
+                  className={`page-item ${page === 1 ? "disabled" : ""}`}
+                >
+                  <button
+                    className={`page-link ${
+                      page === 1 ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                    onClick={() => setPage(page - 1)}
+                    disabled={page === 1}
+                  >
+                    <i
+                      className="fas fa-arrow-left"
+                      style={{ fontSize: "1em" }}
+                    />
+                  </button>
+                </li>
+
+                {/* Current page */}
+                <li className="page-item active">
+                  <button className="page-link" disabled>
+                    {page}
+                  </button>
+                </li>
+
+                {/* Next button */}
+                <li
+                  className={`page-item ${
+                    page === totalPages ? "disabled" : ""
+                  }`}
+                >
+                  <button
+                    className={`page-link ${
+                      page === totalPages
+                        ? "opacity-50 cursor-not-allowed"
+                        : ""
+                    }`}
+                    onClick={() => setPage(page + 1)}
+                    disabled={page === totalPages}
+                  >
+                    <i
+                      className="fas fa-arrow-right"
+                      style={{ fontSize: "1em" }}
+                    />
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          </div>
                           {/* /.post */}
                         </div>
                         {/* /.tab-pane */}
