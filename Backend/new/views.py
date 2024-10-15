@@ -13,6 +13,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 import urllib.parse
 from django.utils.encoding import force_str
+from django.shortcuts import render
 
 User=get_user_model()
 
@@ -119,11 +120,13 @@ class ActivateAccountView(APIView):
 
             # Optionally, send a confirmation email
             self.send_confirmation_email(user)
+            return render(request, 'account/activation_success.html', {'user': user,"message":"Account Activated Successfully!","message2":"Click here to login.","message3":"Login","url":"http://localhost:3000/login"})
+            
 
-            # Redirect to homepage or return success response
-            return Response({"redirect_url": "http://localhost:3000/"}, status=status.HTTP_200_OK)
         else:
-            return Response({"detail": "Activation link is invalid!"}, status=status.HTTP_400_BAD_REQUEST)
+            return render(request, 'account/activation_invalid.html')
+           
+            
 
     def send_confirmation_email(self, user):
         subject = "Account Activated"

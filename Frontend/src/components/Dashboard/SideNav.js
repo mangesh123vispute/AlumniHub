@@ -1,12 +1,15 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import AuthContext from "../../context/AuthContext.js";
 import { Link } from "react-router-dom";
 
 const SideNav = () => {
   let { userData } = useContext(AuthContext);
   console.log("userData", userData);
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  // const [isOpen, setIsOpen] = useState(false); // State to control dropdown visibility
+
   return (
     <div>
       <aside className="main-sidebar sidebar-dark-primary elevation-4">
@@ -38,9 +41,8 @@ const SideNav = () => {
                 style={{ textDecoration: "none" }}
               >
                 Welcome!!
-                <span style={{ textTransform: "uppercase" }}>{` ${
-                  userData ? userData.username : "User"
-                }`}</span>{" "}
+                <span style={{ textTransform: "uppercase" }}>{` ${userData ? userData.username : "User"
+                  }`}</span>{" "}
               </Link>
             </div>
           </div>
@@ -223,110 +225,88 @@ const SideNav = () => {
               {/* HOD  */}
               {(userData?.is_superuser ||
                 (!userData?.is_alumni && !userData?.is_student)) && (
-                <>
-                  <li className="nav-item">
-                    <Link
-                      to="#"
-                      className="nav-link"
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      <i
-                        className="nav-icon fas fa-user"
-                        style={{ fontSize: "1em" }}
-                      />
-                      <p style={{ fontSize: "1em" }}>
-                        USER
-                        <i className="right fas fa-angle-left" />
-                      </p>
-                    </Link>
-                    <ul
-                      className="nav nav-treeview"
-                      style={{ marginLeft: "1em" }}
-                    >
-                      <li className="nav-item">
-                        <Link to="/all_alumnis" className="nav-link">
-                          <i
-                            className="fas fa-users nav-icon"
-                            style={{ fontSize: "1em" }}
-                          ></i>
+                  <>
+                    <li className="nav-item">
+                      <Link
+                        to="#"
+                        className="nav-link"
+                        onClick={(e) => {
+                          e.preventDefault(); // Prevent default anchor behavior
+                          setActiveDropdown(activeDropdown === 'user' ? null : 'user'); // Toggle dropdown state
+                        }}
+                      >
+                        <i className="nav-icon fas fa-user" style={{ fontSize: "1em" }} />
+                        <p style={{ fontSize: "1em" }}>
+                          USER
+                          <i className={`right fas ${activeDropdown === 'user' ? 'fa-angle-down' : 'fa-angle-left'}`} />                        </p>
+                      </Link>
+                      {activeDropdown === 'user' && ( // Only render the list if activeDropdown is 'user'
+                        <div style={{ marginLeft: "1em" }}>
+                          <li className="nav-item">
+                            <Link to="/all_alumnis" className="nav-link">
+                              <i className="fas fa-users nav-icon" style={{ fontSize: "1em" }} />
+                              <p style={{ fontSize: "1em" }}>Alumnies</p>
+                            </Link>
+                          </li>
+                          <li className="nav-item">
+                            <Link to="/all_students" className="nav-link">
+                              <i className="fas fa-user-graduate nav-icon" style={{ fontSize: "1em" }} />
+                              <p style={{ fontSize: "1em" }}>Students</p>
+                            </Link>
+                          </li>
+                          <li className="nav-item">
+                            <Link to="/all_hods" className="nav-link">
+                              <i className="fas fa-user-tie nav-icon" style={{ fontSize: "1em" }} />
+                              <p style={{ fontSize: "1em" }}>Hods</p>
+                            </Link>
+                          </li>
+                        </div>
+                      )}
+                    </li>
 
-                          <p style={{ fontSize: "1em" }}>Alumnies</p>
-                        </Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link to="/all_students" className="nav-link">
-                          <i
-                            className="fas fa-user-graduate nav-icon"
-                            style={{ fontSize: "1em" }}
-                          ></i>
+                    <li className="nav-item">
+                      <Link
+                        to="#"
+                        className="nav-link"
+                        onClick={(e) => {
+                          e.preventDefault(); // Prevent default anchor behavior
+                          setActiveDropdown(activeDropdown === 'post' ? null : 'post'); // Toggle dropdown state
+                        }}
+                      >
+                        <i className="fas fa-pencil-alt nav-icon" style={{ fontSize: "1em" }}></i>
+                        <p style={{ fontSize: "1em" }}>
+                          POST
+                          <i className={`right fas ${activeDropdown === 'post' ? 'fa-angle-down' : 'fa-angle-left'}`} />
+                        </p>
+                      </Link>
+                      {activeDropdown === 'post' && ( // Only render the list if activeDropdown is 'post'
+                        <div style={{ marginLeft: "1em" }}>
+                          <li className="nav-item">
+                            <Link to="/all_posts" className="nav-link">
+                              <i className="fas fa-list mr-2" style={{ fontSize: "1em" }} />
+                              <p style={{ fontSize: "1em" }}>All Posts</p>
+                            </Link>
+                          </li>
+                          <li className="nav-item">
+                            <Link to="/your_posts" className="nav-link">
+                              <i className="fas fa-newspaper mr-2" style={{ fontSize: "1em" }} />
+                              <p style={{ fontSize: "1em" }}>Your Posts</p>
+                            </Link>
+                          </li>
+                          <li className="nav-item">
+                            <Link to="/add_hod_post" className="nav-link">
+                              <i className="fas fa-plus mr-2" style={{ fontSize: "1em" }} />
+                              <p style={{ fontSize: "1em" }}>Add Post</p>
+                            </Link>
+                          </li>
+                        </div>
+                      )}
+                    </li>
 
-                          <p style={{ fontSize: "1em" }}>Students</p>
-                        </Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link to="/all_hods" className="nav-link">
-                          <i
-                            className="fas fa-user-tie nav-icon"
-                            style={{ fontSize: "1em" }}
-                          ></i>
 
-                          <p style={{ fontSize: "1em" }}>Hods</p>
-                        </Link>
-                      </li>
-                    </ul>
-                  </li>
-                  <li className="nav-item">
-                    <Link
-                      to="#"
-                      className="nav-link"
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      <i
-                        className="fas fa-pencil-alt nav-icon"
-                        style={{ fontSize: "1em" }}
-                      ></i>
-                      <p style={{ fontSize: "1em" }}>
-                        POST
-                        <i className="right fas fa-angle-left" />
-                      </p>
-                    </Link>
-                    <ul
-                      className="nav nav-treeview"
-                      style={{ marginLeft: "1em" }}
-                    >
-                      <li className="nav-item">
-                        <Link to="/all_posts" className="nav-link">
-                          <i
-                            className="fas fa-list mr-2"
-                            style={{ fontSize: "1em" }}
-                          />
 
-                          <p style={{ fontSize: "1em" }}>All Posts</p>
-                        </Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link to="/your_posts" className="nav-link">
-                          <i
-                            className="fas fa-newspaper mr-2"
-                            style={{ fontSize: "1em" }}
-                          />
 
-                          <p style={{ fontSize: "1em" }}>Your Posts</p>
-                        </Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link to="/add_hod_post" className="nav-link">
-                          <i
-                            className="fas fa-plus mr-2"
-                            style={{ fontSize: "1em" }}
-                          />
-
-                          <p style={{ fontSize: "1em" }}>Add Post</p>
-                        </Link>
-                      </li>
-                    </ul>
-                  </li>
-                  {/* 
+                    {/* 
                   <li className="nav-item">
                     <Link
                       to="http://127.0.0.1:8000/admin/"
@@ -388,24 +368,24 @@ const SideNav = () => {
                       <p style={{ fontSize: "1em" }}>User Roles</p>
                     </Link>
                   </li> */}
-                  <li className="nav-item">
-                    <Link
-                      to="http://127.0.0.1:8000/admin/"
-                      className="nav-link"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <p style={{ fontSize: "1em" }}>
-                        <i
-                          className="fas fa-cog nav-icon"
-                          style={{ fontSize: "1em" }}
-                        ></i>
-                        Settings
-                      </p>
-                    </Link>
-                  </li>
-                </>
-              )}
+                    <li className="nav-item">
+                      <Link
+                        to="http://127.0.0.1:8000/admin/"
+                        className="nav-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <p style={{ fontSize: "1em" }}>
+                          <i
+                            className="fas fa-cog nav-icon"
+                            style={{ fontSize: "1em" }}
+                          ></i>
+                          Settings
+                        </p>
+                      </Link>
+                    </li>
+                  </>
+                )}
 
               {/* <li className="nav-item">
           <a href="#" className="nav-link">
