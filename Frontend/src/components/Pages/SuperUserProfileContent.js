@@ -425,31 +425,25 @@ const SuperUserProfileContent = () => {
                               { post?.content || "Content" }
                             </p>
                             <div className="row">
-    <div className="col-auto">
-      <a href={post?.image_url || "#"} target="_blank" rel="noreferrer" className="mr-3">
-        <i className="fas fa-image mr-1" /> Image
-      </a>
-    </div>
-    <div className="col-auto">
-      <a href={post?.DocUrl || "#"} target="_blank" rel="noreferrer" className="mr-3">
-        <i className="fas fa-file-alt mr-1" /> Document
-      </a>
-    </div>
-    <div className="col-auto">
-      <a href={post?.link || "#"} target="_blank" rel="noreferrer" className="mr-3">
-        <i className="fas fa-link mr-1" /> Link
-      </a>
-    </div>
-  </div>
+                                <div className="col-auto">
+                                <a href={post?.image_url || "#"} target="_blank" rel="noreferrer" className="mr-3">
+                                    <i className="fas fa-image mr-1" /> Image
+                                </a>
+                                </div>
+                                <div className="col-auto">
+                                <a href={post?.DocUrl || "#"} target="_blank" rel="noreferrer" className="mr-3">
+                                    <i className="fas fa-file-alt mr-1" /> Document
+                                </a>
+                                </div>
+                                <div className="col-auto">
+                                <a href={post?.link || "#"} target="_blank" rel="noreferrer" className="mr-3">
+                                    <i className="fas fa-link mr-1" /> Link
+                                </a>
+                                </div>
+                            </div>                        
+                       </div>
+                     ))}
   
-                        
-                          
-          </div>
-        ))}
-        
-  
-                       
-                       
                           {/* /.post */}
                         </div>
                         {/* /.tab-pane */}
