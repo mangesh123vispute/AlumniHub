@@ -15,10 +15,7 @@ from django.core.mail import send_mail
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
-COLLEGE_CHOICES = [
-    ('SSBT COET, Jalgaon', 'SSBT COET, Jalgaon'),
-     
-]   
+
 
 class User(AbstractUser):
     username = models.CharField(max_length=150, unique=True, blank=True, default="")
@@ -26,12 +23,6 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=30, blank=True, default='')  
     last_name = models.CharField(max_length=150, blank=True, default='')
     email = models.EmailField( blank=True, default='')
-    College = models.CharField(
-        max_length=80,
-        choices=COLLEGE_CHOICES, 
-        default="SSBT COET",
-        blank=True
-    )
 
     is_alumni = models.BooleanField(default=False, blank=True)
     is_student = models.BooleanField(default=False, blank=True)
@@ -55,40 +46,11 @@ class User(AbstractUser):
     resume_link=models.URLField(max_length=500, blank=True, null=True)
     skills = models.TextField(default='', blank=True) 
 
-    # followings and followers 
-    followers = models.TextField(default='[]', blank=True)  
-    following = models.TextField(default='[]', blank=True)
-
     graduation_month= models.IntegerField(blank=False, null=False,default=0)
     graduation_year = models.IntegerField(blank=False, null=False,default=0)
     is_active = models.BooleanField(default=False)
 
-    def string_to_list(self, string):
-        """Converts a string representing a list to a Python list."""
-        items = string.strip('[]').split(',')
-        items = [item.strip() for item in items if item.strip()]
-        return items
     
-    def list_to_string(self, lst):
-        """Converts a Python list to a string representing a list."""
-        str_items = map(str, lst)
-        joined_str = ', '.join(str_items)
-        return '[' + joined_str + ']'
-
-    def set_followers(self, followers_list):
-        stringfollowers_list = self.list_to_string(followers_list)
-        self.followers = stringfollowers_list
-
-    def get_followers(self):
-        return self.string_to_list(self.followers)
-
-    def set_following(self, following_list):
-        stringfollowing_list = self.list_to_string(following_list)
-        self.following = stringfollowing_list
-        
-    def get_following(self):
-        return self.string_to_list(self.following)
-
     def generate_unique_username(self):
         """Generates a unique username using a UUID."""
         unique_username = str(uuid.uuid4())[:8]  # Generate an 8-character unique identifier
@@ -240,72 +202,5 @@ class Command(createsuperuser.Command):
             except self.UserModel.DoesNotExist:
                 raise CommandError("The user doesn't exist.")
 
-
-
-# class AlumniExperience(models.Model):
-#     alumni_profile = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE, related_name="experiences")
-#     company_name = models.CharField(max_length=255)
-#     job_title = models.CharField(max_length=255)
-#     start_date = models.DateField()
-#     end_date = models.DateField(blank=True, null=True)  
-#     description = models.TextField(blank=True)
-#     CurrentlyWorking = models.BooleanField(default=False)
-#     responsibilities = models.TextField(blank=True)  
-#     location_city = models.CharField(max_length=100, blank=True)
-#     location_country = models.CharField(max_length=100, blank=True)
-
-#     def __str__(self):
-#         return f"{self.job_title} at {self.company_name} ({self.start_date} - {self.end_date or 'Present'})"
-
-# class Event(models.Model):
-#     title = models.CharField(max_length=255)
-#     description = models.TextField()
-#     event_date = models.DateTimeField()
-#     location = models.CharField(max_length=255)
-#     created_by = models.ForeignKey(HODPrincipalProfile, on_delete=models.CASCADE)
-
-#     def __str__(self):
-#         return self.title
-
-# class Feedback(models.Model):
-#     alumni = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE)
-#     feedback_text = models.TextField()
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-#         return f"Feedback by {self.alumni.user.full_name}"
-
-# class Donation(models.Model):
-#     alumni = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE)
-#     amount = models.DecimalField(max_digits=10, decimal_places=2)
-#     date_donated = models.DateTimeField(auto_now_add=True)
-#     purpose = models.CharField(max_length=255, blank=True)
-
-#     def __str__(self):
-#         return f"{self.alumni.user.full_name} - {self.amount}"
-
-
-# class AlumniPost(models.Model):
-#     author=models.ForeignKey(User, on_delete=models.CASCADE,default=0)
-#     tag = models.CharField(max_length=255,default='')
-#     content = models.TextField(default='')
-#     title = models.CharField(max_length=255,default='')
-#     Image = models.ImageField(
-#         upload_to='images',
-#         default='default/def.jpeg',
-#         blank=True
-#     )
-#     likes = models.IntegerField(default=0, blank=True)
-  
-#     def __str__(self):
-#         return self.title
-
-#     def save(self, *args, **kwargs):
-#         super().save(*args, **kwargs)
-#         img = Image.open(self.Image.path)
-#         if img.height > 500 or img.width > 500:
-#             output_size = (300, 300)
-#             img.thumbnail(output_size)
-#             img.save(self.Image.path)
 
 
