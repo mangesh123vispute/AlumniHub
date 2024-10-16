@@ -52,7 +52,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['is_alumni'] = user.is_alumni
         token['is_student'] = user.is_student
         token['is_superuser'] = user.is_superuser
-        token['College'] = user.College
         token['image'] = user.Image.url if user.Image else None
         token['mobile'] = user.mobile
         token['linkedin'] = user.linkedin
