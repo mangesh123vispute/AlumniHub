@@ -59,7 +59,8 @@ class User(AbstractUser):
     followers = models.TextField(default='[]', blank=True)  
     following = models.TextField(default='[]', blank=True)
 
-    graduation_year = models.IntegerField(blank=True, null=True)
+    graduation_month= models.IntegerField(blank=False, null=False,default=0)
+    graduation_year = models.IntegerField(blank=False, null=False,default=0)
     is_active = models.BooleanField(default=False)
 
     def string_to_list(self, string):
@@ -118,6 +119,8 @@ class User(AbstractUser):
             html_message=html_message,
             fail_silently=False,
         )
+
+    
 
     def save(self, *args, **kwargs):
         if self.email and User.objects.filter(email=self.email).exclude(pk=self.pk).exists():

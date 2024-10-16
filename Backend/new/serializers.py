@@ -11,7 +11,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
+        fields = ['username', 'email', 'password',"graduation_month","graduation_year"]
 
     def validate_email(self, value):
         """
@@ -32,7 +32,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             pass  
 
         return value
-
+    
   
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
@@ -72,6 +72,10 @@ class ActivationEmailSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password=serializers.CharField()
     role=serializers.CharField()
+    graduation_year=serializers.CharField()
+    graduation_month=serializers.CharField()
+
+    
 
 
 class ForgotPasswordSerializer(serializers.Serializer):

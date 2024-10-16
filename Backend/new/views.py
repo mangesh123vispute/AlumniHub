@@ -24,12 +24,16 @@ class UserRegisterAPIView(APIView):
         if serializer.is_valid():
             username = serializer.validated_data['username']
             email = serializer.validated_data['email']
+            graduation_month = serializer.validated_data['graduation_month']
+            graduation_year = serializer.validated_data['graduation_year']
             role=request.data['role']
             
             try:
                 new_user = User(
                     username=username,
                     email=email,
+                    graduation_month=graduation_month,
+                    graduation_year=graduation_year,
                 )
                 new_user.set_password(serializer.validated_data['password'])
                 new_user.is_active = True
@@ -45,6 +49,7 @@ class UserRegisterAPIView(APIView):
                     {"detail": "Please select your role"},
                     status=status.HTTP_400_BAD_REQUEST
                 )
+                print(new_user)
                 new_user.save()
 
                 return Response(
@@ -124,7 +129,10 @@ class ActivateAccountView(APIView):
                     {"detail": "Please select your role"},
                     status=status.HTTP_400_BAD_REQUEST
                 )
-
+            if data.get("graduation_month") and data.get("graduation_year"):
+                user.graduation_month = data.get("graduation_month")
+                user.graduation_year = data.get("graduation_year")
+                
             # Activate user
             user.is_active = True
             user.save()

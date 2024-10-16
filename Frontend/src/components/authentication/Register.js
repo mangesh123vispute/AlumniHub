@@ -24,6 +24,8 @@ const Register = () => {
     password: "",
     confirmPassword: "",
     role: "",
+    graduation_year: "",
+    graduation_month: "",
   });
   // const [message, setMessage] = useState("");
   const handleChange = (e) => {
@@ -39,7 +41,7 @@ const handleSubmit = async (e) => {
     !(formData.username &&
     formData.password &&
     formData.confirmPassword &&
-    formData.email && formData.role )
+    formData.email && formData.role  && formData.graduation_year && formData.graduation_month)
   ) {
     if (!formData.username) {
       await showNotification("Username is required!!", "warning", "Warning");
@@ -54,6 +56,12 @@ const handleSubmit = async (e) => {
     }
     else if (!formData.role) {
       await showNotification("Role is required !!", "warning", "Warning");
+    }
+    else if(!formData.graduation_year) {
+      await showNotification("Graduation year is required !!", "warning", "Warning");
+    }
+    else if (!formData.graduation_month) {
+      await showNotification("Graduation month is required !!", "warning", "Warning");
     }
     setLoading(false);
     return;
@@ -77,6 +85,8 @@ const handleSubmit = async (e) => {
         email: formData.email,
         password: formData.password,
         role: formData.role,
+        graduation_year: formData.graduation_year,
+        graduation_month: formData.graduation_month
       }),
     });
 
@@ -156,7 +166,8 @@ const handleSubmit = async (e) => {
             <div className="card-body register-card-body">
               <p className="login-box-msg">
                 {" "}
-                Register as a <b>Alumni</b><b>/Student</b>
+                Register as a <b>Alumni</b>
+                <b>/Student</b>
               </p>
 
               <hr
@@ -200,6 +211,67 @@ const handleSubmit = async (e) => {
                     </div>
                   </div>
                 </div>
+
+                <div className="form-row mb-3">
+                  {/* Graduation Month */}
+                  <div className="col-6">
+                    <div className="input-group">
+                      <input
+                        type="number"
+                        className="form-control"
+                        placeholder="Grad Month "
+                        name="graduation_month"
+                        value={formData.graduation_month}
+                        onChange={handleChange}
+                        min="1"
+                        max="12"
+                        required
+                      />
+                      <div className="input-group-append">
+                        <div
+                          className="input-group-text"
+                          style={{
+                            padding: "0px",
+                            paddingRight: "5px",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          <span className="fas fa-calendar-alt" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Graduation Year */}
+                  <div className="col-6">
+                    <div className="input-group">
+                      <input
+                        type="number"
+                        className="form-control"
+                        placeholder="Grad Year"
+                        name="graduation_year"
+                        value={formData.graduation_year}
+                        onChange={handleChange}
+                        min="1983"
+                        max="2100"
+                        required
+                      />
+                      <div className="input-group-append">
+                        <div
+                          className="input-group-text"
+                          style={{
+                            padding: "0px",
+                            paddingRight: "5px",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          <span className="fas fa-calendar" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="input-group mb-3">
                   <input
                     type="password"
@@ -232,6 +304,7 @@ const handleSubmit = async (e) => {
                     </div>
                   </div>
                 </div>
+
                 <div className="row">
                   <div className="col-8">
                     <div

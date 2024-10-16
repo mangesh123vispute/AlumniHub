@@ -9,7 +9,9 @@ const ActivateEmail = () => {
   const [email, setEmail] = useState(""); // State for email
   const [password, setPassword] = useState(""); // State for password
   const [confirmPassword, setConfirmPassword] = useState(""); // State for confirm password
-  const [role, setRole] = useState(""); // State for role
+  const [role, setRole] = useState("");
+  const [graduation_month, setGraduation_month] = useState("");
+  const [graduation_year, setGraduation_year] = useState("");// State for role
   const navigate = useNavigate();
   const {
     isOpen,
@@ -28,7 +30,7 @@ const ActivateEmail = () => {
     event.preventDefault();
 
     // Check if all fields are filled
-    if (!username || !email || !password || !confirmPassword || !role) {
+    if (!username || !email || !password || !confirmPassword || !role || !graduation_year || !graduation_month) {
       setLoading(false);
       if (!username) {
         await showNotification(
@@ -66,6 +68,20 @@ const ActivateEmail = () => {
           "Warning"
         );
       }
+      else if (!graduation_year) {
+        await showNotification(
+          "Graduation year is required!!",
+          "warning",
+          "Warning"
+        );
+      }
+      else if (!graduation_month) {
+        await showNotification(
+          "Graduation month is required!!",
+          "warning",
+          "Warning"
+        );
+      }
       return;
     }
 
@@ -82,7 +98,7 @@ const ActivateEmail = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, email, password, role }), // Include role in the request body
+        body: JSON.stringify({ username, email, password, role, graduation_year, graduation_month }), // Include role in the request body
       });
 
       if (response.ok) {
@@ -168,6 +184,65 @@ const ActivateEmail = () => {
                   <div className="input-group-append">
                     <div className="input-group-text">
                       <span className="fas fa-envelope" />
+                    </div>
+                  </div>
+                </div>
+                <div className="form-row mb-3">
+                  {/* Graduation Month */}
+                  <div className="col-6">
+                    <div className="input-group">
+                      <input
+                        type="number"
+                        className="form-control"
+                        placeholder="Grad Month "
+                        name="graduation_month"
+                        value={graduation_month}
+                        onChange={(e)=>setGraduation_month(e.target.value)}
+                        min="1"
+                        max="12"
+                        required
+                      />
+                      <div className="input-group-append">
+                        <div
+                          className="input-group-text"
+                          style={{
+                            padding: "0px",
+                            paddingRight: "5px",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          <span className="fas fa-calendar-alt" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Graduation Year */}
+                  <div className="col-6">
+                    <div className="input-group">
+                      <input
+                        type="number"
+                        className="form-control"
+                        placeholder="Grad Year"
+                        name="graduation_year"
+                        value={graduation_year}
+                        onChange={(e)=>setGraduation_year(e.target.value)}
+                        min="1983"
+                        max="2100"
+                        required
+                      />
+                      <div className="input-group-append">
+                        <div
+                          className="input-group-text"
+                          style={{
+                            padding: "0px",
+                            paddingRight: "5px",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          <span className="fas fa-calendar" />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
