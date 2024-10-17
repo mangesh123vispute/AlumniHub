@@ -9,10 +9,13 @@ def create_user_profile(sender, instance, created, **kwargs):
         print("creating user profile", instance.is_student, instance.is_alumni)
 
         if instance.is_student:
+            print("creating student profile")
             StudentProfile.objects.create(user=instance)
         elif instance.is_alumni :
+            print("creating alumni profile")
             AlumniProfile.objects.create(user=instance)
         else:
+            print("creating hod profile")
             HODPrincipalProfile.objects.create(user=instance)
 
 @receiver(post_save, sender=User)

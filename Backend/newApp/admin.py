@@ -227,6 +227,18 @@ class AlumniProfileAdmin(ImportExportModelAdmin):
     list_per_page = 20
     
     save_on_top = True
+
+    actions = ['refresh_profiles']
+
+    def refresh_profiles(self, request, queryset):
+        for profile in queryset:
+            if not profile.user.is_alumni:
+                profile.delete()
+                self.message_user(request, f"Deleted alumni profile for {profile.user.username} as they are no longer an alumni.")
+            else:
+                pass
+
+    refresh_profiles.short_description = "Refresh and delete invalid alumni profiles"
    
 
 
@@ -254,7 +266,19 @@ class StudentProfileAdmin(ImportExportModelAdmin):
         'Heading',                 
     ]
     ordering = ['user']          
-    readonly_fields = ['id']    
+    readonly_fields = ['id']   
+
+    actions = ['refresh_profiles'] 
+
+    def refresh_profiles(self, request, queryset):
+        for profile in queryset:
+            if not profile.user.is_student:
+                profile.delete()
+                self.message_user(request, f"Deleted student profile for {profile.user.username} as they are no longer a student.")
+            else:
+                pass
+
+    refresh_profiles.short_description = "Refresh and delete invalid student profiles"
 
 
 
@@ -278,6 +302,19 @@ class HODPrincipalProfileAdmin(ImportExportModelAdmin):
     ]
     ordering = ['user']  
     readonly_fields = ['id']  
+
+    actions = ['refresh_profiles']
+
+    def refresh_profiles(self, request, queryset):
+        for profile in queryset:
+            # Assuming there's a field to check if user is HOD
+            if not profile.user.is_superuser:  # Replace 'is_hod' with the actual field if necessary
+                profile.delete()
+                self.message_user(request, f"Deleted HOD profile for {profile.user.username} as they are no longer a HOD.")
+            else:
+                pass
+
+    refresh_profiles.short_description = "Refresh and delete invalid HOD profiles"
 
 class AluminiPostAdmin(ImportExportModelAdmin):
     list_display = [
