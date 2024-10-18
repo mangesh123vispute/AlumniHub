@@ -94,17 +94,17 @@ const AllStudentsContent = () => {
           <div className="card-body pb-0">
             <div className="row">
               {studentData?.results?.length === 0 ? (
-                <div className="col-12" style={{ textAlign: "center" ,height:"100vh"}}>
+                <div className="col-12" style={{ textAlign: "center" ,height:"200vh"}}>
                   <h3 className="text-center" style={{ marginTop: "50px" ,fontSize:"30px"}}>No students found !! </h3>
                 </div>
               ) : (
-                  <>
+                  <div style={{ height: "200vh"  , overflowX: "auto"}}>
                    
                   {studentData?.results?.map((students) => (
                     <div
                       key={students.id}
                       className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column"
-                      style={{height:"200vh",overflowY:"auto"}}
+                      
                     >
                       <div className="card bg-light d-flex flex-fill">
                         <div className="card-header text-muted border-bottom-0">
@@ -301,7 +301,7 @@ const AllStudentsContent = () => {
                       </div>
                     </div>
                   ))}
-                </>
+                </div>
               )}
             </div>
           </div>

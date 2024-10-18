@@ -74,6 +74,8 @@ const AllAlumnisContent = () => {
     }
   };
 
+  
+
   // Fetch alumni on component mount
   useEffect(() => {
     fetchAlumni(pageNumber);
@@ -96,219 +98,244 @@ const AllAlumnisContent = () => {
         <div className="card card-solid">
           <div className="card-body pb-0">
             <div className="row">
-              {alumniData?.results?.map((alumnus) => (
-                <div
-                  key={alumnus.id}
-                  className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column"
-                >
-                  <div className="card bg-light d-flex flex-fill">
-                    <div className="card-header text-muted border-bottom-0">
-                      <b>{alumnus?.full_name || "N/A"} </b>
-                      <small className="text-muted float-right">
-                        Grad Year: {alumnus.graduation_year || "N/A"}
-                      </small>
-                    </div>
+              <>
+                {alumniData?.results?.length === 0 ? (
+                  <div
+                    className="col-12"
+                    style={{ textAlign: "center", height: "200vh" }}
+                  >
+                    <h3
+                      className="text-center"
+                      style={{ marginTop: "50px", fontSize: "30px" }}
+                    >
+                      No Alumni found !!{" "}
+                    </h3>
+                  </div>
+                ) : (
+                  <div style={{ height: "200vh", overflowX: "auto" }}>
+                    {alumniData?.results?.map((alumnus) => (
+                      <div
+                        key={alumnus.id}
+                        className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column"
+                      >
+                        <div className="card bg-light d-flex flex-fill">
+                          <div className="card-header text-muted border-bottom-0">
+                            <b>{alumnus?.full_name || "N/A"} </b>
+                            <small className="text-muted float-right">
+                              Grad Year: {alumnus.graduation_year || "N/A"}
+                            </small>
+                          </div>
 
-                    <hr
-                      style={{
-                        border: "1px solid #d2d6df",
-                        marginBottom: "10px",
-                      }}
-                    />
-                    <div className="card-body pt-0">
-                      <div className="row">
-                        <div className="col-7">
-                          <p className="text-muted text-sm">
-                            {alumnus?.alumni_profile?.Heading
-                              ? alumnus.alumni_profile.Heading
-                              : alumnus?.alumni_profile?.job_title
-                              ? alumnus.alumni_profile.job_title
-                              : "N/A"}
-                          </p>
-
-                          <ul className="ml-4 mb-0 fa-ul text-muted">
-                            <li className="small">
-                              <span className="fa-li">
-                                <i className="fas fa-lg fa-building" />
-                              </span>
-                              Company:{" "}
-                              {alumnus.alumni_profile?.current_company_name ||
-                                "N/A"}
-                            </li>
-                            <li className="small mt-1">
-                              <span className="fa-li">
-                                <i className="fas fa-lg fa-id-badge" />
-                              </span>
-                              Role: {alumnus.alumni_profile?.job_title || "N/A"}
-                            </li>
-                          </ul>
-                        </div>
-                        <div className="col-5 text-center">
-                          <img
-                            src={ alumnus?.Image ? `http://127.0.0.1:8000/${alumnus?.Image}` : `../../dist/img/user1-128x128.jpg` } // Replace with dynamic image path if needed
-                            alt="user-avatar"
-                            className="img-circle img-fluid"
+                          <hr
+                            style={{
+                              border: "1px solid #d2d6df",
+                              marginBottom: "10px",
+                            }}
                           />
-                        </div>
-                      </div>
-                      <hr
-                        style={{
-                          border: "1px solid #d2d6df",
-                          marginBottom: "10px",
-                          marginTop: "20px",
-                        }}
-                      />
-                      <div className="text-muted">
-                        <div className="text-muted mb-2">
-                          Portfolio and Resume
-                        </div>
-                        <ul className="ml-4 mb-0 fa-ul text-muted">
-                          <li className="small mt-1">
-                            <span className="fa-li">
-                              <i className="fas fa-lg fa-folder mr-1" />
-                            </span>
-                            Portfolio:{" "}
-                            {alumnus?.portfolio_link ? (
-                              <a
-                                href={alumnus.portfolio_link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                Click here
-                              </a>
-                            ) : (
-                              "N/A"
-                            )}
-                          </li>
-                          <li className="small mt-1">
-                            <span className="fa-li">
-                              <i className="fas fa-lg fa-file-alt mr-1" />
-                            </span>
-                            Resume:{" "}
-                            {alumnus?.resume_link ? (
-                              <a
-                                href={alumnus.resume_link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                Click here
-                              </a>
-                            ) : (
-                              "N/A"
-                            )}
-                          </li>
-                        </ul>
-                      </div>
-                      <hr
-                        style={{
-                          border: "1px solid #d2d6df",
-                          marginBottom: "10px",
-                          marginTop: "10px",
-                        }}
-                      />
-                      {/* Additional Information Section */}
-                      <div className="text-muted">
-                        <div className="text-muted mb-2">Contact Info:</div>
-                        <ul className="ml-4 mb-0 fa-ul text-muted">
-                          <li className="small mt-1">
-                            <span className="fa-li">
-                              <i className="fas fa-lg fa-envelope mr-1" />
-                            </span>
-                            Email:{" "}
-                            {alumnus.email ? (
-                              isValidEmail(alumnus.email) ? (
-                                <a href={`mailto:${alumnus.email}`}>
-                                  {alumnus.email}
-                                </a>
-                              ) : (
-                                "Invalid Email"
-                              )
-                            ) : (
-                              "N/A"
-                            )}
-                          </li>
-                          <li className="small mt-1">
-                            <span className="fa-li">
-                              <i className="fab fa-lg fa-github mr-1" />
-                            </span>
-                            GitHub:{" "}
-                            <a
-                              href={alumnus.Github}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {alumnus.Github ? (
-                                isValidGitHubUrl(alumnus.Github) ? (
+                          <div className="card-body pt-0">
+                            <div className="row">
+                              <div className="col-7">
+                                <p className="text-muted text-sm">
+                                  {alumnus?.alumni_profile?.Heading
+                                    ? alumnus.alumni_profile.Heading
+                                    : alumnus?.alumni_profile?.job_title
+                                    ? alumnus.alumni_profile.job_title
+                                    : "N/A"}
+                                </p>
+
+                                <ul className="ml-4 mb-0 fa-ul text-muted">
+                                  <li className="small">
+                                    <span className="fa-li">
+                                      <i className="fas fa-lg fa-building" />
+                                    </span>
+                                    Company:{" "}
+                                    {alumnus.alumni_profile
+                                      ?.current_company_name || "N/A"}
+                                  </li>
+                                  <li className="small mt-1">
+                                    <span className="fa-li">
+                                      <i className="fas fa-lg fa-id-badge" />
+                                    </span>
+                                    Role:{" "}
+                                    {alumnus.alumni_profile?.job_title || "N/A"}
+                                  </li>
+                                </ul>
+                              </div>
+                              <div className="col-5 text-center">
+                                <img
+                                  src={
+                                    alumnus?.Image
+                                      ? `http://127.0.0.1:8000/${alumnus?.Image}`
+                                      : `../../dist/img/user1-128x128.jpg`
+                                  } // Replace with dynamic image path if needed
+                                  alt="user-avatar"
+                                  className="img-circle img-fluid"
+                                />
+                              </div>
+                            </div>
+                            <hr
+                              style={{
+                                border: "1px solid #d2d6df",
+                                marginBottom: "10px",
+                                marginTop: "20px",
+                              }}
+                            />
+                            <div className="text-muted">
+                              <div className="text-muted mb-2">
+                                Portfolio and Resume
+                              </div>
+                              <ul className="ml-4 mb-0 fa-ul text-muted">
+                                <li className="small mt-1">
+                                  <span className="fa-li">
+                                    <i className="fas fa-lg fa-folder mr-1" />
+                                  </span>
+                                  Portfolio:{" "}
+                                  {alumnus?.portfolio_link ? (
+                                    <a
+                                      href={alumnus.portfolio_link}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      Click here
+                                    </a>
+                                  ) : (
+                                    "N/A"
+                                  )}
+                                </li>
+                                <li className="small mt-1">
+                                  <span className="fa-li">
+                                    <i className="fas fa-lg fa-file-alt mr-1" />
+                                  </span>
+                                  Resume:{" "}
+                                  {alumnus?.resume_link ? (
+                                    <a
+                                      href={alumnus.resume_link}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      Click here
+                                    </a>
+                                  ) : (
+                                    "N/A"
+                                  )}
+                                </li>
+                              </ul>
+                            </div>
+                            <hr
+                              style={{
+                                border: "1px solid #d2d6df",
+                                marginBottom: "10px",
+                                marginTop: "10px",
+                              }}
+                            />
+                            {/* Additional Information Section */}
+                            <div className="text-muted">
+                              <div className="text-muted mb-2">
+                                Contact Info:
+                              </div>
+                              <ul className="ml-4 mb-0 fa-ul text-muted">
+                                <li className="small mt-1">
+                                  <span className="fa-li">
+                                    <i className="fas fa-lg fa-envelope mr-1" />
+                                  </span>
+                                  Email:{" "}
+                                  {alumnus.email ? (
+                                    isValidEmail(alumnus.email) ? (
+                                      <a href={`mailto:${alumnus.email}`}>
+                                        {alumnus.email}
+                                      </a>
+                                    ) : (
+                                      "Invalid Email"
+                                    )
+                                  ) : (
+                                    "N/A"
+                                  )}
+                                </li>
+                                <li className="small mt-1">
+                                  <span className="fa-li">
+                                    <i className="fab fa-lg fa-github mr-1" />
+                                  </span>
+                                  GitHub:{" "}
                                   <a
                                     href={alumnus.Github}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                   >
-                                    {alumnus.Github}
+                                    {alumnus.Github ? (
+                                      isValidGitHubUrl(alumnus.Github) ? (
+                                        <a
+                                          href={alumnus.Github}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                        >
+                                          {alumnus.Github}
+                                        </a>
+                                      ) : (
+                                        "Invalid URL"
+                                      )
+                                    ) : (
+                                      "N/A"
+                                    )}
                                   </a>
-                                ) : (
-                                  "Invalid URL"
-                                )
-                              ) : (
-                                "N/A"
-                              )}
-                            </a>
-                          </li>
-                          <li className="small mt-1">
-                            <span className="fa-li">
-                              <i className="fab fa-lg fa-linkedin mr-1" />
-                            </span>
-                            LinkedIn:{" "}
-                            <a
-                              href={alumnus.linkedin}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {alumnus.linkedin ? (
-                                isValidLinkedInUrl(alumnus.linkedin) ? (
+                                </li>
+                                <li className="small mt-1">
+                                  <span className="fa-li">
+                                    <i className="fab fa-lg fa-linkedin mr-1" />
+                                  </span>
+                                  LinkedIn:{" "}
                                   <a
                                     href={alumnus.linkedin}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                   >
-                                    {alumnus.linkedin}
+                                    {alumnus.linkedin ? (
+                                      isValidLinkedInUrl(alumnus.linkedin) ? (
+                                        <a
+                                          href={alumnus.linkedin}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                        >
+                                          {alumnus.linkedin}
+                                        </a>
+                                      ) : (
+                                        "Invalid URL"
+                                      )
+                                    ) : (
+                                      "N/A"
+                                    )}
                                   </a>
-                                ) : (
-                                  "Invalid URL"
-                                )
-                              ) : (
-                                "N/A"
-                              )}
-                            </a>
-                          </li>
-                          <li className="small">
-                            <span className="fa-li">
-                              <i className="fas fa-lg fa-fax mr-1" />
-                            </span>
-                            Mobile No:{" "}
-                            {alumnus.mobile
-                              ? isValidMobileNumber(alumnus.mobile)
-                                ? alumnus.mobile
-                                : "Invalid Mobile Number"
-                              : "N/A"}
-                          </li>
-                        </ul>
+                                </li>
+                                <li className="small">
+                                  <span className="fa-li">
+                                    <i className="fas fa-lg fa-fax mr-1" />
+                                  </span>
+                                  Mobile No:{" "}
+                                  {alumnus.mobile
+                                    ? isValidMobileNumber(alumnus.mobile)
+                                      ? alumnus.mobile
+                                      : "Invalid Mobile Number"
+                                    : "N/A"}
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <div className="card-footer">
+                            <div className="text-right">
+                              <button
+                                onClick={() => handleViewProfile(alumnus)}
+                                className="btn btn-sm btn-primary"
+                                aria-label={`View profile of ${alumnus.full_name}`}
+                              >
+                                <i className="fas fa-user" /> View Profile
+                              </button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <div className="card-footer">
-                      <div className="text-right">
-                        <button
-                          onClick={() => handleViewProfile(alumnus)}
-                          className="btn btn-sm btn-primary"
-                          aria-label={`View profile of ${alumnus.full_name}`}
-                        >
-                          <i className="fas fa-user" /> View Profile
-                        </button>
-                      </div>
-                    </div>
+                    ))}
                   </div>
-                </div>
-              ))}
+                )}
+              </>
             </div>
           </div>
           {/* /.card-body */}

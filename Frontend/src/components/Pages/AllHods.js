@@ -94,7 +94,7 @@ const AllAlumnisContent = () => {
               {adminData?.results?.length === 0 ? (
                 <div
                   className="col-12"
-                  style={{ textAlign: "center", height: "100vh" }}
+                  style={{ textAlign: "center", height: "200vh" }}
                 >
                   <h3
                     className="text-center"
@@ -104,12 +104,12 @@ const AllAlumnisContent = () => {
                   </h3>
                 </div>
               ) : (
-                <>
+                <div style={{ height: "200vh", overflowX: "auto" }}>
                   {adminData?.results?.map((admins) => (
                     <div
                       key={admins.id}
                       className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column"
-                      style={{height: "150vh",overflowY:"auto"}}
+                      style={{ height: "150vh", overflowY: "auto" }}
                     >
                       <div className="card card-widget widget-user">
                         {/* Add the bg color to the header using any of the bg-* classes */}
@@ -171,7 +171,7 @@ const AllAlumnisContent = () => {
                       </div>
                     </div>
                   ))}
-                </>
+                </div>
               )}
             </div>
           </div>

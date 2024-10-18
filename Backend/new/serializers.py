@@ -4,6 +4,8 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.exceptions import AuthenticationFailed
 from rest_framework import status
 User=get_user_model()
+from django.contrib.auth import authenticate
+
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -65,6 +67,20 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         # Add any other fields that you want to include in the token payload
         return token
+    
+    def validate(self, attrs):
+        # Check if the user credentials are correct
+        user = authenticate(username=attrs['username'], password=attrs['password'])
+        
+        if user is None:
+            raise AuthenticationFailed(
+                detail='Credentials are not correct, please try again.', 
+                code=status.HTTP_401_UNAUTHORIZED
+            )
+
+        # Proceed with the rest of the validation and token creation
+        return super().validate(attrs)
+       
 
 class ActivationEmailSerializer(serializers.Serializer):
     username=serializers.CharField()
