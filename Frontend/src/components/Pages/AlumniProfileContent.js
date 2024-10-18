@@ -17,7 +17,10 @@ const AlumniProfileContent = () => {
     const [croppedImageUrl, setCroppedImageUrl] = useState(null);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
     const [uploading, setUploading] = useState(false);
-  
+    const [posts, setPosts] = useState([]); 
+    const [page, setPage] = useState(1); // Keep track of the page number
+    const [hasMore, setHasMore] = useState(true);
+    const [totalPages, setTotalPages] = useState(1);
   
     const id = localStorage.getItem("id") ? JSON.parse(localStorage.getItem("id")) : null
     const [reload, setReload] = useState(false);
@@ -70,6 +73,18 @@ const AlumniProfileContent = () => {
         preferred_contact_method: user?.alumni_profile?.preferred_contact_method
       }
     });
+  
+   const formatDate = (isoDate) => {
+     const date = new Date(isoDate);
+     return date.toLocaleString("en-US", {
+       year: "numeric",
+       month: "long",
+       day: "numeric",
+       hour: "numeric",
+       minute: "numeric",
+       hour12: true,
+     });
+   };
     
     useEffect(() => {
       const token = localStorage.getItem("authTokens")
@@ -182,6 +197,29 @@ const AlumniProfileContent = () => {
       }
     };
   
+  
+    const fetchPosts = async (page) => {
+      try {
+        console.log("page " + page);
+        const response = await axios.get(
+          `http://127.0.0.1:8000/hodposts/author/${
+            id || userData?.user_id
+          }/?page=${page}&page_size=10`
+        );
+        setPosts(response.data.results); // Set fetched posts
+        setHasMore(response.data.next !== null);
+        // If 'next' is null, stop loading more posts
+        const totalItems = response.data.count;
+        setTotalPages(Math.ceil(totalItems / 10));
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+        showNotification(
+          "Error fetching posts, please try again.",
+          "error",
+          "Error"
+        );
+      }
+    };
     // Handle input changes for user data
     const handleUserChange = (e) => {
       const { name, value } = e.target;
@@ -240,10 +278,9 @@ const AlumniProfileContent = () => {
       }
     };
   
-    // Capture crop completion details
-    const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
-      setCroppedAreaPixels(croppedAreaPixels);
-    }, []);
+    useEffect(() => {
+      fetchPosts(page); // Fetch the first page of posts when the component mounts
+    }, [page]);
   
     // Create cropped image
     const getCroppedImage = async (imageSrc, crop) => {
@@ -324,7 +361,7 @@ const AlumniProfileContent = () => {
       <>
         <div>
           {/* Content Header (Page header) */}
-  
+
           {/* Main content */}
           <section className="content">
             <div className="container-fluid">
@@ -344,7 +381,7 @@ const AlumniProfileContent = () => {
                           : "User"}
                       </div>
                     </div>
-  
+
                     <div className="card-body box-profile">
                       {/* <div className="text-center">
                         <img
@@ -356,30 +393,52 @@ const AlumniProfileContent = () => {
                           alt="User profile picture"
                         />
                       </div> */}
-                     <div className="text-center">
-        <img
-          className="profile-user-img img-fluid img-circle"
-          src={user?.Image ? `http://127.0.0.1:8000/${user?.Image}` : `../../dist/img/user1-128x128.jpg`}
-          alt="User profile"
-        />
-        <button className="btn btn-primary mt-2" onClick={() => document.getElementById('imageInput').click()}>
-          <i className="fas fa-edit"></i> Edit Profile Picture
-        </button>
-  
-      
-        {/* Cropped Image Preview */}
-        {croppedImageUrl && (
-          <div>
-            <img src={croppedImageUrl} alt="Cropped" className="img-thumbnail mt-3" />
-            <button className="btn btn-success mt-2" onClick={handleUpload} disabled={uploading}>
-              {uploading ? 'Uploading...' : 'Upload Image'}
-            </button>
-          </div>
-        )}
-  
-        {/* File input (hidden) */}
-        <input type="file" id="imageInput" accept="image/*" onChange={handleFileChange} style={{ display: 'none' }} />
-      </div>
+                      <div className="text-center">
+                        <img
+                          className="profile-user-img img-fluid img-circle"
+                          src={
+                            user?.Image
+                              ? `http://127.0.0.1:8000/${user?.Image}`
+                              : `../../dist/img/user1-128x128.jpg`
+                          }
+                          alt="User profile"
+                        />
+                        <button
+                          className="btn btn-primary mt-2"
+                          onClick={() =>
+                            document.getElementById("imageInput").click()
+                          }
+                        >
+                          <i className="fas fa-edit"></i> Edit Profile Picture
+                        </button>
+
+                        {/* Cropped Image Preview */}
+                        {croppedImageUrl && (
+                          <div>
+                            <img
+                              src={croppedImageUrl}
+                              alt="Cropped"
+                              className="img-thumbnail mt-3"
+                            />
+                            <button
+                              className="btn btn-success mt-2"
+                              onClick={handleUpload}
+                              disabled={uploading}
+                            >
+                              {uploading ? "Uploading..." : "Upload Image"}
+                            </button>
+                          </div>
+                        )}
+
+                        {/* File input (hidden) */}
+                        <input
+                          type="file"
+                          id="imageInput"
+                          accept="image/*"
+                          onChange={handleFileChange}
+                          style={{ display: "none" }}
+                        />
+                      </div>
                       <h3 className="profile-username text-center ">
                         {user ? user.full_name || user.username : "User"}
                       </h3>
@@ -397,7 +456,7 @@ const AlumniProfileContent = () => {
                     {/* /.card-body */}
                   </div>
                   {/* /.card */}
-  
+
                   {/* About Box */}
                   <div className="card card-primary">
                     <div className="card-header">
@@ -421,7 +480,7 @@ const AlumniProfileContent = () => {
                         </span>{" "}
                         <br />
                       </p>
-  
+
                       <strong>
                         <i className="fas fa-briefcase mr-1" /> Work
                       </strong>
@@ -430,14 +489,14 @@ const AlumniProfileContent = () => {
                           {user?.Work || "N/A"}
                         </span>
                       </p>
-  
+
                       <strong>
                         <i className="fas fa-graduation-cap mr-1" /> Education
                       </strong>
                       <p className="text-muted aboutfont">
                         {user?.alumni_profile?.Education || "N/A"}
                       </p>
-  
+
                       <strong>
                         <i className="fas fa-graduation-cap mr-1" /> Graduation
                         Year:
@@ -445,7 +504,7 @@ const AlumniProfileContent = () => {
                       <p className="text-muted aboutfont">
                         {user?.graduation_year || "N/A"}
                       </p>
-  
+
                       <strong>
                         <i className="fas fa-code-branch mr-1 " /> Branch
                       </strong>
@@ -455,14 +514,15 @@ const AlumniProfileContent = () => {
                         </span>{" "}
                         <br />
                       </p>
-  
+
                       <strong>
                         <i className="fas fa-map-marker-alt mr-1" /> Location
                       </strong>
                       <p className="text-muted aboutfont">
-                        {user?.alumni_profile?.current_city || "N/A"}, { user?.alumni_profile?.current_country || "N/A"}
+                        {user?.alumni_profile?.current_city || "N/A"},{" "}
+                        {user?.alumni_profile?.current_country || "N/A"}
                       </p>
-  
+
                       <strong>
                         <i className="fas fa-building mr-1" /> Current Company
                       </strong>
@@ -472,18 +532,19 @@ const AlumniProfileContent = () => {
                         </span>{" "}
                         <br />
                       </p>
-  
+
                       <strong>
                         <i className="fas fa-building mr-1" /> Role:
                       </strong>
                       <p className="text-muted aboutfont">
                         {user?.alumni_profile?.job_title || "N/A"}
-  
+
                         <br />
                       </p>
-  
+
                       <strong>
-                        <i className="fas fa-building mr-1" /> Previous Companies
+                        <i className="fas fa-building mr-1" /> Previous
+                        Companies
                       </strong>
                       <p className="text-muted aboutfont">
                         {user?.alumni_profile?.previous_companies ||
@@ -499,7 +560,7 @@ const AlumniProfileContent = () => {
                         </span>{" "}
                         <br />
                       </p>
-  
+
                       <strong>
                         <i className="fas fa-laptop-code mr-1" /> Skills
                       </strong>
@@ -509,7 +570,7 @@ const AlumniProfileContent = () => {
                         </span>{" "}
                         <br />
                       </p>
-  
+
                       <strong>
                         <i className="fas fa-industry mr-1" /> Industry
                       </strong>
@@ -519,7 +580,7 @@ const AlumniProfileContent = () => {
                         </span>{" "}
                         <br />
                       </p>
-  
+
                       <strong>
                         <i className="fas fa-trophy mr-1" /> Achievements
                       </strong>
@@ -529,7 +590,7 @@ const AlumniProfileContent = () => {
                             "No Achievements"}
                         </span>
                       </p>
-  
+
                       <strong>
                         <i className="fas fa-calendar-alt mr-1" /> Year Joined
                       </strong>
@@ -540,7 +601,7 @@ const AlumniProfileContent = () => {
                   </div>
                   {/* /.card */}
                 </div>
-  
+
                 {/* /.col */}
                 <div className="col-md-9">
                   <div className="card">
@@ -564,198 +625,139 @@ const AlumniProfileContent = () => {
                             Contacts
                           </a>
                         </li>
-                        {userData?.user_id === user?.id && (<li className="nav-item ">
-                          <a
-                            className="nav-link"
-                            href="#settings"
-                            data-toggle="tab"
-                          >
-                            Edit Profile
-                          </a>
-                        </li>) }
-                       
+                        {userData?.user_id === user?.id && (
+                          <li className="nav-item ">
+                            <a
+                              className="nav-link"
+                              href="#settings"
+                              data-toggle="tab"
+                            >
+                              Edit Profile
+                            </a>
+                          </li>
+                        )}
                       </ul>
                     </div>
                     {/* /.card-header */}
                     <div className="card-body">
                       <div className="tab-content">
-                        <div className="active tab-pane" id="activity">
+                        <div
+                          className="active tab-pane"
+                          id="activity"
+                          style={{
+                            maxHeight: "131vh",
+                            overflowY: "auto",
+                            overflowX: "hidden",
+                            padding: "15px",
+                            boxSizing: "border-box",
+                          }}
+                        >
                           {/* Post */}
-                          <div className="post">
-                            <div className="user-block">
-                              <img
-                                className="img-circle img-bordered-sm"
-                                src="../../dist/img/user1-128x128.jpg"
-                                alt="user image"
-                              />
-                              <span className="username">
-                                <a href="#">Jonathan Burke Jr.</a>
-                                <a href="#" className="float-right btn-tool">
-                                  <i className="fas fa-times" />
-                                </a>
-                              </span>
-                              <span className="description">
-                                Shared publicly - 7:30 PM today
-                              </span>
+                          {posts?.length === 0 ? (
+                            <div
+                              style={{
+                                textAlign: "center",
+                                fontSize: "1.5em",
+                                fontWeight: "bold",
+                                height: "100vh",
+                              }}
+                            >
+                              No Posts Available
                             </div>
-                            {/* /.user-block */}
-                            <p className="postfont">
-                              Lorem ipsum represents a long-held tradition for
-                              designers, typographers and the like. Some people
-                              hate it and argue for its demise, but others ignore
-                              the hate as they create awesome tools to help create
-                              filler text for everyone from bacon lovers to
-                              Charlie Sheen fans.
-                            </p>
-                            <p>
-                              <a href="#" className="link-black text-sm mr-2">
-                                <i className="fas fa-share mr-1" /> Share
-                              </a>
-                              <a href="#" className="link-black text-sm">
-                                <i className="far fa-thumbs-up mr-1" /> Like
-                              </a>
-                              <span className="float-right">
-                                <a href="#" className="link-black text-sm">
-                                  <i className="far fa-comments mr-1" /> Comments
-                                  (5)
-                                </a>
-                              </span>
-                            </p>
-                            <input
-                              className="form-control form-control-sm"
-                              type="text"
-                              placeholder="Type a comment"
-                            />
-                          </div>
-                          {/* /.post */}
-                          {/* Post */}
-                          <div className="post clearfix">
-                            <div className="user-block">
-                              <img
-                                className="img-circle img-bordered-sm"
-                                src="../../dist/img/user7-128x128.jpg"
-                                alt="User Image"
-                              />
-                              <span className="username">
-                                <a href="#">Sarah Ross</a>
-                                <a href="#" className="float-right btn-tool">
-                                  <i className="fas fa-times" />
-                                </a>
-                              </span>
-                              <span className="description">
-                                Sent you a message - 3 days ago
-                              </span>
-                            </div>
-                            {/* /.user-block */}
-                            <p>
-                              Lorem ipsum represents a long-held tradition for
-                              designers, typographers and the like. Some people
-                              hate it and argue for its demise, but others ignore
-                              the hate as they create awesome tools to help create
-                              filler text for everyone from bacon lovers to
-                              Charlie Sheen fans.
-                            </p>
-                            <form className="form-horizontal">
-                              <div className="input-group input-group-sm mb-0">
-                                <input
-                                  className="form-control form-control-sm"
-                                  placeholder="Response"
-                                />
-                                <div className="input-group-append">
-                                  <button
-                                    type="submit"
-                                    className="btn btn-danger"
+                          ) : (
+                            <>
+                              {" "}
+                              {posts.map((post) => (
+                                <div key={post.id} className="post">
+                                  <div className="user-block">
+                                    <img
+                                      className="img-circle img-bordered-sm"
+                                      src={`http://127.0.0.1:8000/${
+                                        user?.Image || "#"
+                                      }`}
+                                      alt="user image"
+                                    />
+                                    <span className="username">
+                                      <a href="#">
+                                        {post?.author_name ||
+                                          (post?.author_username
+                                            ? post?.author_username
+                                            : "Author")}
+                                      </a>
+                                    </span>
+
+                                    <span className="description">
+                                      Created at -{" "}
+                                      {formatDate(post?.created_at) || "Date"}
+                                      <br></br>
+                                      <span
+                                        className="badge bg-success"
+                                        style={{
+                                          fontSize: "0.8em",
+                                          padding: "0.5em",
+                                        }}
+                                      >
+                                        {" "}
+                                        {post?.tag || "Tag"}
+                                      </span>
+                                    </span>
+                                  </div>
+
+                                  <span
+                                    style={{
+                                      fontWeight: "bold",
+                                      fontSize: "1.09em",
+                                    }}
                                   >
-                                    Send
-                                  </button>
-                                </div>
-                              </div>
-                            </form>
-                          </div>
-                          {/* /.post */}
-                          {/* Post */}
-                          <div className="post">
-                            <div className="user-block">
-                              <img
-                                className="img-circle img-bordered-sm"
-                                src="../../dist/img/user6-128x128.jpg"
-                                alt="User Image"
-                              />
-                              <span className="username">
-                                <a href="#">Adam Jones</a>
-                                <a href="#" className="float-right btn-tool">
-                                  <i className="fas fa-times" />
-                                </a>
-                              </span>
-                              <span className="description">
-                                Posted 5 photos - 5 days ago
-                              </span>
-                            </div>
-                            {/* /.user-block */}
-                            <div className="row mb-3">
-                              <div className="col-sm-6">
-                                <img
-                                  className="img-fluid"
-                                  src="../../dist/img/photo1.png"
-                                  alt="Photo"
-                                />
-                              </div>
-                              {/* /.col */}
-                              <div className="col-sm-6">
-                                <div className="row">
-                                  <div className="col-sm-6">
-                                    <img
-                                      className="img-fluid mb-3"
-                                      src="../../dist/img/photo2.png"
-                                      alt="Photo"
-                                    />
-                                    <img
-                                      className="img-fluid"
-                                      src="../../dist/img/photo3.jpg"
-                                      alt="Photo"
-                                    />
+                                    {post?.title || "Title"}
+                                  </span>
+                                  <p
+                                    className="postfont"
+                                    style={{
+                                      marginTop: "0.5em",
+                                      marginBottom: "0.5em",
+                                    }}
+                                  >
+                                    {post?.content || "Content"}
+                                  </p>
+                                  <div className="row">
+                                    <div className="col-auto">
+                                      <a
+                                        href={post?.image_url || "#"}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="mr-3"
+                                      >
+                                        <i className="fas fa-image mr-1" />{" "}
+                                        Image
+                                      </a>
+                                    </div>
+                                    <div className="col-auto">
+                                      <a
+                                        href={post?.DocUrl || "#"}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="mr-3"
+                                      >
+                                        <i className="fas fa-file-alt mr-1" />{" "}
+                                        Document
+                                      </a>
+                                    </div>
+                                    <div className="col-auto">
+                                      <a
+                                        href={post?.link || "#"}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="mr-3"
+                                      >
+                                        <i className="fas fa-link mr-1" /> Link
+                                      </a>
+                                    </div>
                                   </div>
-                                  {/* /.col */}
-                                  <div className="col-sm-6">
-                                    <img
-                                      className="img-fluid mb-3"
-                                      src="../../dist/img/photo4.jpg"
-                                      alt="Photo"
-                                    />
-                                    <img
-                                      className="img-fluid"
-                                      src="../../dist/img/photo1.png"
-                                      alt="Photo"
-                                    />
-                                  </div>
-                                  {/* /.col */}
                                 </div>
-                                {/* /.row */}
-                              </div>
-                              {/* /.col */}
-                            </div>
-                            {/* /.row */}
-                            <p>
-                              <a href="#" className="link-black text-sm mr-2">
-                                <i className="fas fa-share mr-1" /> Share
-                              </a>
-                              <a href="#" className="link-black text-sm">
-                                <i className="far fa-thumbs-up mr-1" /> Like
-                              </a>
-                              <span className="float-right">
-                                <a href="#" className="link-black text-sm">
-                                  <i className="far fa-comments mr-1" /> Comments
-                                  (5)
-                                </a>
-                              </span>
-                            </p>
-                            <input
-                              className="form-control form-control-sm"
-                              type="text"
-                              placeholder="Type a comment"
-                            />
-                          </div>
-                          {/* /.post */}
+                              ))}
+                            </>
+                          )}
                         </div>
                         {/* /.tab-pane */}
                         <div className="tab-pane" id="timeline">
@@ -776,12 +778,12 @@ const AlumniProfileContent = () => {
                                   <p className="text-muted font">
                                     {user?.email || "N/A"}
                                   </p>
-  
+
                                   <strong>Mobile:</strong>
                                   <p className="text-muted font">
                                     {user?.mobile || "N/A"}
                                   </p>
-  
+
                                   <strong>LinkedIn:</strong>
                                   <p className="text-muted font">
                                     {user?.linkedin ? (
@@ -796,7 +798,7 @@ const AlumniProfileContent = () => {
                                       "N/A"
                                     )}
                                   </p>
-  
+
                                   <strong>GitHub:</strong>
                                   <p className="text-muted font">
                                     {user?.Github ? (
@@ -811,7 +813,7 @@ const AlumniProfileContent = () => {
                                       "N/A"
                                     )}
                                   </p>
-  
+
                                   <strong>Instagram:</strong>
                                   <p className="text-muted font">
                                     {user?.instagram ? (
@@ -820,7 +822,9 @@ const AlumniProfileContent = () => {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                       >
-                                        {user?.instagram ? user.instagram : "N/A"}
+                                        {user?.instagram
+                                          ? user.instagram
+                                          : "N/A"}
                                       </a>
                                     ) : (
                                       "N/A"
@@ -835,7 +839,8 @@ const AlumniProfileContent = () => {
                                   />
                                   <strong>Preferred Contact:</strong>
                                   <p className="text-muted font">
-                                    {user?.alumni_profile.preferred_contact_method
+                                    {user?.alumni_profile
+                                      .preferred_contact_method
                                       ? capitalizeFirstLetter(
                                           user.alumni_profile
                                             .preferred_contact_method
@@ -870,7 +875,7 @@ const AlumniProfileContent = () => {
                                       "N/A"
                                     )}
                                   </p>
-  
+
                                   <strong>Resume:</strong>
                                   <p className="text-muted font">
                                     {user?.resume_link ? (
@@ -908,7 +913,12 @@ const AlumniProfileContent = () => {
                             className="form-horizontal"
                             onSubmit={handleSubmit}
                           >
-                            <p className="editheading" style={{ marginTop: "0" }}>Personal Information</p>
+                            <p
+                              className="editheading"
+                              style={{ marginTop: "0" }}
+                            >
+                              Personal Information
+                            </p>
                             <div className="form-group row">
                               <label
                                 htmlFor="inputFullName"
@@ -928,7 +938,7 @@ const AlumniProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label
                                 htmlFor="inputHeading"
@@ -946,11 +956,11 @@ const AlumniProfileContent = () => {
                                   onChange={handleProfileChange}
                                   placeholder="BE in Computer Science etc.."
                                   row="3"
-                                  style={{resize:"vertical"}}
+                                  style={{ resize: "vertical" }}
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label
                                 htmlFor="inputLinkedIn"
@@ -975,7 +985,7 @@ const AlumniProfileContent = () => {
                                 htmlFor="inputCity"
                                 className="col-sm-2 col-form-label"
                               >
-                               City
+                                City
                               </label>
                               <div className="col-sm-10">
                                 <input
@@ -988,15 +998,14 @@ const AlumniProfileContent = () => {
                                   placeholder="Delhi,Jalgaon, mumbai etc.. "
                                 />
                               </div>
-  
                             </div>
-  
+
                             <div className="form-group row">
                               <label
                                 htmlFor="inputCity"
                                 className="col-sm-2 col-form-label"
                               >
-                              Country
+                                Country
                               </label>
                               <div className="col-sm-10">
                                 <input
@@ -1009,9 +1018,8 @@ const AlumniProfileContent = () => {
                                   placeholder="India,USA etc.. "
                                 />
                               </div>
-  
                             </div>
-                            
+
                             <div className="form-group row">
                               <label
                                 htmlFor="inputMobile"
@@ -1057,7 +1065,7 @@ const AlumniProfileContent = () => {
                                 marginTop: "0.5em",
                               }}
                             ></hr>
-  
+
                             <p className="editheading">Contact Information</p>
                             <div className="form-group row">
                               <label
@@ -1078,7 +1086,7 @@ const AlumniProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label
                                 htmlFor="inputMobile"
@@ -1097,26 +1105,25 @@ const AlumniProfileContent = () => {
                                     const value = e.target.value.replace(
                                       /[^0-9]/g,
                                       ""
-                                    ); 
-                                    
+                                    );
+
                                     if (value.length === 10) {
                                       handleUserChange({
                                         target: { name: "mobile", value },
                                       });
                                     } else if (value.length <= 10) {
-                                     
                                       handleUserChange({
                                         target: { name: "mobile", value },
-                                      }); 
+                                      });
                                     }
                                   }}
                                   placeholder="Mobile"
-                                  maxLength="10" 
+                                  maxLength="10"
                                   minLength="10"
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label
                                 htmlFor="inputLinkedIn"
@@ -1126,7 +1133,7 @@ const AlumniProfileContent = () => {
                               </label>
                               <div className="col-sm-10">
                                 <input
-                                  type="url"
+                                  type="text"
                                   className="form-control"
                                   id="linkedin"
                                   name="linkedin"
@@ -1136,7 +1143,7 @@ const AlumniProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label
                                 htmlFor="inputLinkedIn"
@@ -1146,7 +1153,7 @@ const AlumniProfileContent = () => {
                               </label>
                               <div className="col-sm-10">
                                 <input
-                                  type="url"
+                                  type="text"
                                   className="form-control"
                                   id="instagram"
                                   name="instagram"
@@ -1156,7 +1163,7 @@ const AlumniProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label
                                 htmlFor="preferred_contact_method"
@@ -1170,7 +1177,8 @@ const AlumniProfileContent = () => {
                                   id="preferred_contact_method"
                                   name="preferred_contact_method"
                                   value={
-                                    alumniData?.profile?.preferred_contact_method
+                                    alumniData?.profile
+                                      ?.preferred_contact_method
                                   }
                                   onChange={handleProfileChange}
                                 >
@@ -1191,11 +1199,9 @@ const AlumniProfileContent = () => {
                                 marginTop: "0.5em",
                               }}
                             ></hr>
-  
-                            <p className="editheading">
-                              Professional Profiles
-                            </p>
-  
+
+                            <p className="editheading">Professional Profiles</p>
+
                             <div className="form-group row">
                               <label
                                 htmlFor="inputGithub"
@@ -1205,7 +1211,7 @@ const AlumniProfileContent = () => {
                               </label>
                               <div className="col-sm-10">
                                 <input
-                                  type="url"
+                                  type="text"
                                   className="form-control"
                                   id="Github"
                                   name="Github"
@@ -1215,7 +1221,7 @@ const AlumniProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label
                                 htmlFor="inputLinkedIn"
@@ -1225,7 +1231,7 @@ const AlumniProfileContent = () => {
                               </label>
                               <div className="col-sm-10">
                                 <input
-                                  type="url"
+                                  type="text"
                                   className="form-control"
                                   id="portfolio_link"
                                   name="portfolio_link"
@@ -1235,7 +1241,7 @@ const AlumniProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label
                                 htmlFor="inputLinkedIn"
@@ -1245,7 +1251,7 @@ const AlumniProfileContent = () => {
                               </label>
                               <div className="col-sm-10">
                                 <input
-                                  type="url"
+                                  type="text"
                                   className="form-control"
                                   id="resume_link"
                                   name="resume_link"
@@ -1262,11 +1268,11 @@ const AlumniProfileContent = () => {
                                 marginTop: "0.5em",
                               }}
                             ></hr>
-  
+
                             <p className="editheading">
                               Professional Information
                             </p>
-  
+
                             {/* Profile Specific Fields */}
                             <div className="form-group row">
                               <label
@@ -1288,7 +1294,7 @@ const AlumniProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label
                                 htmlFor="inputLinkedIn"
@@ -1310,7 +1316,7 @@ const AlumniProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label
                                 htmlFor="inputMobile"
@@ -1372,7 +1378,7 @@ const AlumniProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label
                                 htmlFor="inputHeading"
@@ -1386,7 +1392,9 @@ const AlumniProfileContent = () => {
                                   className="form-control"
                                   id="previous_companies"
                                   name="previous_companies"
-                                  value={alumniData?.profile?.previous_companies}
+                                  value={
+                                    alumniData?.profile?.previous_companies
+                                  }
                                   onChange={handleProfileChange}
                                   placeholder="TCS ,Capgemini etc."
                                   rows="3"
@@ -1394,13 +1402,13 @@ const AlumniProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label
                                 htmlFor="inputHeading"
                                 className="col-sm-2 col-form-label"
                               >
-                               Work Experience
+                                Work Experience
                               </label>
                               <div className="col-sm-10">
                                 <input
@@ -1408,13 +1416,15 @@ const AlumniProfileContent = () => {
                                   className="form-control"
                                   id="years_of_experience"
                                   name="years_of_experience"
-                                  value={alumniData?.profile?.years_of_experience}
+                                  value={
+                                    alumniData?.profile?.years_of_experience
+                                  }
                                   onChange={handleProfileChange}
                                   placeholder="Years Of Experience in Numbers"
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label
                                 htmlFor="inputHeading"
@@ -1475,10 +1485,13 @@ const AlumniProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <div className="offset-sm-2 col-sm-10 mt-3">
-                                <button type="submit" className="btn btn-danger">
+                                <button
+                                  type="submit"
+                                  className="btn btn-danger"
+                                >
                                   Submit
                                 </button>
                               </div>
@@ -1497,7 +1510,7 @@ const AlumniProfileContent = () => {
               </div>
               {/* /.row */}
             </div>
-  
+
             {/* /.container-fluid */}
           </section>
           {/* /.content */}

@@ -6,8 +6,14 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['username', 'full_name', 'About', 'Work', 'Year_Joined', 'graduation_year', 'Branch', 'email', 'mobile','linkedin', 'Github', 'instagram', 'portfolio_link', 'resume_link', 'skills']
 
+
+class CustomUserSerializerForHOD(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'full_name', 'About', 'Year_Joined', 'Branch', 'email', 'mobile', 'linkedin', 'Github', 'instagram']
+
 class HODPrincipalProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer()  
+    user = CustomUserSerializerForHOD()  
 
     class Meta:
         model = HODPrincipalProfile
@@ -27,8 +33,34 @@ class HODPrincipalProfileSerializer(serializers.ModelSerializer):
 
         return instance
 
+
+class CustomUserSerializerForStudent(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'username', 
+            'full_name', 
+            'email', 
+            'About', 
+            'Work', 
+            'Year_Joined', 
+            'Branch', 
+            'mobile', 
+            'linkedin', 
+            'Github', 
+            'instagram',
+            'skills', 
+            'graduation_year', 
+            'graduation_month', 
+            'portfolio_link', 
+            'resume_link', 
+            
+        ]
+
+
+
 class StudentProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = CustomUserSerializerForStudent()
 
     class Meta:
         model = StudentProfile
@@ -48,9 +80,31 @@ class StudentProfileSerializer(serializers.ModelSerializer):
 
         return instance
 
+class CustomUserSerializerForAlumni(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'username', 
+            'full_name', 
+            'email', 
+            'About', 
+            'Work', 
+            'Year_Joined', 
+            'Branch', 
+            'mobile', 
+            'linkedin', 
+            'Github', 
+            'instagram',
+            'skills', 
+            'graduation_year', 
+            'graduation_month', 
+            'portfolio_link', 
+            'resume_link', 
+        ]
+           
 
 class AlumniProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = CustomUserSerializerForAlumni()
 
     class Meta:
         model = AlumniProfile
@@ -79,6 +133,6 @@ class UserImageUploadSerializer(serializers.ModelSerializer):
         max_size = 2 * 1024 * 1024  # 2 MB in bytes
 
         if value.size > max_size:
-            raise serializers.ValidationError(f"The image file is too large. Maximum size allowed is 2 MB.")
+            raise serializers.ValidationError("The image file is too large. Maximum size allowed is 2 MB.")
         
         return value

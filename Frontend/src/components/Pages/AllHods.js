@@ -91,59 +91,88 @@ const AllAlumnisContent = () => {
         <div className="card card-solid">
           <div className="card-body pb-0">
             <div className="row">
-              {adminData?.results?.map((admins) => (
+              {adminData?.results?.length === 0 ? (
                 <div
-                  key={admins.id}
-                  className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column"
+                  className="col-12"
+                  style={{ textAlign: "center", height: "100vh" }}
                 >
-                  <div className="card card-widget widget-user">
-                    {/* Add the bg color to the header using any of the bg-* classes */}
-                    <div className="widget-user-header bg-info">
-                      <h3
-                        className="widget-user-username mb-1"
-                        style={{ fontSize: "1rem" }}
-                      >
-                        {admins.full_name || admins.username}
-                      </h3>
-                      <h5 className="widget-user-desc">
-                        <b style={{ marginRight: "0.1rem" }}>{`${
-                          admins?.hod_profile?.designation
-                            ? admins.hod_profile?.designation
-                            : "Senior Faculty"
-                        } `}</b>
-                        at SSBT COET ,Jalgaon ,Maharashtra.
-                        <div className="mt-1" style={{ fontWeight: "bold" }}>
-                          Branch : {admins?.Branch || "N/A"}
-                        </div>
-                      </h5>
-                    </div>
+                  <h3
+                    className="text-center"
+                    style={{ marginTop: "50px", fontSize: "30px" }}
+                  >
+                    No Admin found !!{" "}
+                  </h3>
+                </div>
+              ) : (
+                <>
+                  {adminData?.results?.map((admins) => (
                     <div
-                      className="widget-user-image"
-                      style={{ marginTop: "1.5rem" }}
+                      key={admins.id}
+                      className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column"
+                      style={{height: "150vh",overflowY:"auto"}}
                     >
-                      <img
-                        className="img-circle elevation-2"
-                        src={admins?.Image ? `http://127.0.0.1:8000/${admins?.Image}` : `../../dist/img/user1-128x128.jpg`}
-                        alt="User Avatar"
-                      />
-                    </div>
-
-                    <div className="card-footer" style={{ marginTop: "1.5rem" }}>
-                      <div style={{ display: "flex", justifyContent: "right" }}>
-                        <div >
-                          <button
-                            onClick={() => handleViewProfile(admins)}
-                            className="btn btn-sm btn-primary"
-                            aria-label={`View profile of ${admins.full_name}`}
+                      <div className="card card-widget widget-user">
+                        {/* Add the bg color to the header using any of the bg-* classes */}
+                        <div className="widget-user-header bg-info">
+                          <h3
+                            className="widget-user-username mb-1"
+                            style={{ fontSize: "1rem" }}
                           >
-                            <i className="fas fa-user" /> View Profile
-                          </button>
+                            {admins.full_name || admins.username}
+                          </h3>
+                          <h5 className="widget-user-desc">
+                            <b style={{ marginRight: "0.1rem" }}>{`${
+                              admins?.hod_profile?.designation
+                                ? admins.hod_profile?.designation
+                                : "Senior Faculty"
+                            } `}</b>
+                            at SSBT COET ,Jalgaon ,Maharashtra.
+                            <div
+                              className="mt-1"
+                              style={{ fontWeight: "bold" }}
+                            >
+                              Branch : {admins?.Branch || "N/A"}
+                            </div>
+                          </h5>
+                        </div>
+                        <div
+                          className="widget-user-image"
+                          style={{ marginTop: "1.5rem" }}
+                        >
+                          <img
+                            className="img-circle elevation-2"
+                            src={
+                              admins?.Image
+                                ? `http://127.0.0.1:8000/${admins?.Image}`
+                                : `../../dist/img/user1-128x128.jpg`
+                            }
+                            alt="User Avatar"
+                          />
+                        </div>
+
+                        <div
+                          className="card-footer"
+                          style={{ marginTop: "1.5rem" }}
+                        >
+                          <div
+                            style={{ display: "flex", justifyContent: "right" }}
+                          >
+                            <div>
+                              <button
+                                onClick={() => handleViewProfile(admins)}
+                                className="btn btn-sm btn-primary"
+                                aria-label={`View profile of ${admins.full_name}`}
+                              >
+                                <i className="fas fa-user" /> View Profile
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              ))}
+                  ))}
+                </>
+              )}
             </div>
           </div>
           {/* /.card-body */}

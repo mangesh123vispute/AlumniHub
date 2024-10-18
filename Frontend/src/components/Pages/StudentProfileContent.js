@@ -698,7 +698,7 @@ const StudentProfileContent = () => {
                               </label>
                               <div className="col-sm-10">
                                 <input
-                                  type="url"
+                                  type="text"
                                   id="linkedin"
                                   className="form-control"
                                   name="linkedin"
@@ -715,7 +715,7 @@ const StudentProfileContent = () => {
                               </label>
                               <div className="col-sm-10">
                                 <input
-                                  type="url"
+                                  type="text"
                                   id="instagram"
                                   className="form-control"
                                   name="instagram"
@@ -742,7 +742,7 @@ const StudentProfileContent = () => {
                               </label>
                               <div className="col-sm-10">
                                 <input
-                                  type="url"
+                                  type="text"
                                   id="Github"
                                   className="form-control"
                                   name="Github"
@@ -759,7 +759,7 @@ const StudentProfileContent = () => {
                               </label>
                               <div className="col-sm-10">
                                 <input
-                                  type="url"
+                                  type="text"
                                   id="portfolio_link"
                                   className="form-control"
                                   name="portfolio_link"
@@ -776,7 +776,7 @@ const StudentProfileContent = () => {
                               </label>
                               <div className="col-sm-10">
                                 <input
-                                  type="url"
+                                  type="text"
                                   id="resume_link"
                                   className="form-control"
                                   name="resume_link"

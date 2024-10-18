@@ -21,41 +21,29 @@ const SuperUserProfileContent = () => {
   
     const [superUserData, setSuperUserData] = useState({
       user: {
-        // username: '',
         full_name: '',
         About: '',
-        Work: '',
         Year_Joined: '',
-        graduation_year: '',
         Branch: '',
         email: '',
         mobile: '',
         linkedin: '',
         Github: '',
         instagram: '',
-        portfolio_link: '',
-        resume_link: '',
-        skills: '',
       },
       profile: {
         user: {
-          // username: user?.username,
-          full_name: '',
+        full_name: '',
         About: '',
-        Work: '',
         Year_Joined: '',
-        graduation_year: '',
         Branch: '',
         email: '',
         mobile: '',
         linkedin: '',
         Github: '',
         instagram: '',
-        portfolio_link: '',
-        resume_link: '',
-        skills: '',
         },
-        designation:'', // Designation for the HOD
+        designation:'', 
       },
     });
     
@@ -79,39 +67,27 @@ const SuperUserProfileContent = () => {
             if(response.data){
               setSuperUserData({
                 user: {
-                  // username: response.data.username,
                   full_name: response.data.full_name,
                   About: response.data.About,
-                  Work: response.data.Work,
                   Year_Joined: response.data.Year_Joined,
-                  graduation_year: response.data.graduation_year,
                   Branch: response.data.Branch,
                   email: response.data.email,
                   mobile: response.data.mobile,
                   linkedin: response.data.linkedin,
                   Github: response.data.Github,
                   instagram: response.data.instagram,
-                  portfolio_link: response.data.portfolio_link,
-                  resume_link: response.data.resume_link,
-                  skills: response.data.skills,
                 },
                 profile: {
                   user: {
-                    // username: response.data.username,
                     full_name: response.data.full_name,
                     About: response.data.About,
-                    Work: response.data.Work,
                     Year_Joined: response.data.Year_Joined,
-                    graduation_year: response.data.graduation_year,
                     Branch: response.data.Branch,
                     email: response.data.email,
                     mobile: response.data.mobile,
                     linkedin: response.data.linkedin,
                     Github: response.data.Github,
                     instagram: response.data.instagram,
-                    portfolio_link: response.data.portfolio_link,
-                    resume_link: response.data.resume_link,
-                    skills: response.data.skills,
                   },
                   designation: response.data.hod_profile.designation
             }
@@ -246,7 +222,7 @@ const SuperUserProfileContent = () => {
       <>
         <div>
           {/* Content Header (Page header) */}
-  
+
           {/* Main content */}
           <section className="content">
             <div className="container-fluid">
@@ -266,12 +242,16 @@ const SuperUserProfileContent = () => {
                           : "User"}
                       </div>
                     </div>
-  
+
                     <div className="card-body box-profile">
                       <div className="text-center">
                         <img
                           className="profile-user-img img-fluid img-circle"
-                          src={user?.Image ? `http://127.0.0.1:8000/${user?.Image}` : `../../dist/img/user1-128x128.jpg`}
+                          src={
+                            user?.Image
+                              ? `http://127.0.0.1:8000/${user?.Image}`
+                              : `../../dist/img/user1-128x128.jpg`
+                          }
                           alt="User profile picture"
                         />
                       </div>
@@ -292,7 +272,7 @@ const SuperUserProfileContent = () => {
                     {/* /.card-body */}
                   </div>
                   {/* /.card */}
-  
+
                   {/* About Box */}
                   <div className="card card-primary">
                     <div className="card-header">
@@ -313,7 +293,7 @@ const SuperUserProfileContent = () => {
                       <p className="text-muted aboutfont">
                         {user?.Branch || "N/A"}
                       </p>
-  
+
                       <strong>
                         <i className="fas fa-info-circle mr-1" /> About
                       </strong>
@@ -323,7 +303,7 @@ const SuperUserProfileContent = () => {
                         </span>{" "}
                         <br />
                       </p>
-  
+
                       <strong>
                         <i className="fas fa-calendar-alt mr-1" />
                         Joining Year
@@ -334,7 +314,7 @@ const SuperUserProfileContent = () => {
                         </span>{" "}
                         <br />
                       </p>
-  
+
                       {/* <strong>
                         <i className="fas fa-building mr-1" /> Designation
                       </strong>
@@ -346,7 +326,7 @@ const SuperUserProfileContent = () => {
                   </div>
                   {/* /.card */}
                 </div>
-  
+
                 {/* /.col */}
                 <div className="col-md-9">
                   <div className="card">
@@ -370,135 +350,197 @@ const SuperUserProfileContent = () => {
                             Contacts
                           </a>
                         </li>
-                        { userData?.user_id===user?.id && (
-                           <li className="nav-item">
-                          <a
-                            className="nav-link"
-                            href="#settings"
-                            data-toggle="tab"
-                          >
-                            Edit Profile
-                          </a>
-                        </li>
+                        {userData?.user_id === user?.id && (
+                          <li className="nav-item">
+                            <a
+                              className="nav-link"
+                              href="#settings"
+                              data-toggle="tab"
+                            >
+                              Edit Profile
+                            </a>
+                          </li>
                         )}
-                       
                       </ul>
                     </div>
-              
+
                     <div className="card-body">
                       <div className="tab-content">
-                        <div className="active tab-pane" id="activity"  style={{
+                        <div
+                          className="active tab-pane"
+                          id="activity"
+                          style={{
                             maxHeight: "131vh",
-                            overflowY: "auto", // Enable vertical scrolling
-                            overflowX: "hidden", // Prevent horizontal scrolling
-                            padding: "15px", // Optional: add padding if needed
-                            boxSizing: "border-box", // Ensure padding is included in width calculation
+                            overflowY: "auto",
+                            overflowX: "hidden",
+                            padding: "15px",
+                            boxSizing: "border-box",
                           }}
-                          
-                          >
+                        >
                           {/* Post */}
-                        {posts.map(post => (
-                           <div key={post.id} className="post">
-              
-                            <div className="user-block" >
-                              <img
-                                className="img-circle img-bordered-sm"
-                                src={ `http://127.0.0.1:8000/${user?.Image || "#"}` }
-                                alt="user image"
-                                
-                              />
-                              < span className="username">
-                                <a href="#">{post?.author_name || (post?.author_username ? post?.author_username : "Author")}</a>
-                                
-                                
-                              </ span>
-                              
-                              <span className="description">
-                                Created at - {formatDate(post?.created_at) || "Date"}
-                                <br></br>
-                                <span className="badge bg-success" style={{fontSize: "0.8em",padding: "0.5em"}} > { post?.tag || "Tag" }</span>
-                              </span>
-                              
+                          {posts?.length === 0 ? (
+                            <div
+                              style={{
+                                textAlign: "center",
+                                fontSize: "1.5em",
+                                fontWeight: "bold",
+                                height: "100vh",
+                              }}
+                            >
+                              No Posts Available
                             </div>
-                          
-                            <span style={{ fontWeight: "bold" , fontSize: "1.09em"}}>
-                              { post?.title || "Title" }
-                            </span>
-                            <p className="postfont" style={{ marginTop: "0.5em" ,marginBottom: "0.5em"}}>
-                              { post?.content || "Content" }
-                            </p>
-                            <div className="row">
-                                <div className="col-auto">
-                                <a href={post?.image_url || "#"} target="_blank" rel="noreferrer" className="mr-3">
-                                    <i className="fas fa-image mr-1" /> Image
-                                </a>
+                          ) : (
+                            <>
+                              {" "}
+                              {posts.map((post) => (
+                                <div key={post.id} className="post">
+                                  <div className="user-block">
+                                    <img
+                                      className="img-circle img-bordered-sm"
+                                      src={`http://127.0.0.1:8000/${
+                                        user?.Image || "#"
+                                      }`}
+                                      alt="user image"
+                                    />
+                                    <span className="username">
+                                      <a href="#">
+                                        {post?.author_name ||
+                                          (post?.author_username
+                                            ? post?.author_username
+                                            : "Author")}
+                                      </a>
+                                    </span>
+
+                                    <span className="description">
+                                      Created at -{" "}
+                                      {formatDate(post?.created_at) || "Date"}
+                                      <br></br>
+                                      <span
+                                        className="badge bg-success"
+                                        style={{
+                                          fontSize: "0.8em",
+                                          padding: "0.5em",
+                                        }}
+                                      >
+                                        {" "}
+                                        {post?.tag || "Tag"}
+                                      </span>
+                                    </span>
+                                  </div>
+
+                                  <span
+                                    style={{
+                                      fontWeight: "bold",
+                                      fontSize: "1.09em",
+                                    }}
+                                  >
+                                    {post?.title || "Title"}
+                                  </span>
+                                  <p
+                                    className="postfont"
+                                    style={{
+                                      marginTop: "0.5em",
+                                      marginBottom: "0.5em",
+                                    }}
+                                  >
+                                    {post?.content || "Content"}
+                                  </p>
+                                  <div className="row">
+                                    <div className="col-auto">
+                                      <a
+                                        href={post?.image_url || "#"}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="mr-3"
+                                      >
+                                        <i className="fas fa-image mr-1" />{" "}
+                                        Image
+                                      </a>
+                                    </div>
+                                    <div className="col-auto">
+                                      <a
+                                        href={post?.DocUrl || "#"}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="mr-3"
+                                      >
+                                        <i className="fas fa-file-alt mr-1" />{" "}
+                                        Document
+                                      </a>
+                                    </div>
+                                    <div className="col-auto">
+                                      <a
+                                        href={post?.link || "#"}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="mr-3"
+                                      >
+                                        <i className="fas fa-link mr-1" /> Link
+                                      </a>
+                                    </div>
+                                  </div>
                                 </div>
-                                <div className="col-auto">
-                                <a href={post?.DocUrl || "#"} target="_blank" rel="noreferrer" className="mr-3">
-                                    <i className="fas fa-file-alt mr-1" /> Document
-                                </a>
-                                </div>
-                                <div className="col-auto">
-                                <a href={post?.link || "#"} target="_blank" rel="noreferrer" className="mr-3">
-                                    <i className="fas fa-link mr-1" /> Link
-                                </a>
-                                </div>
-                            </div>                        
-                       </div>
-                     ))}
+                              ))}
+                            </>
+                          )}
+
                           {/* Pagination controls */}
                           <div className="card-footer">
-            <nav aria-label="Page Navigation">
-              <ul className="pagination justify-content-center m-0">
-                {/* Previous button */}
-                <li
-                  className={`page-item ${page === 1 ? "disabled" : ""}`}
-                >
-                  <button
-                    className={`page-link ${
-                      page === 1 ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
-                    onClick={() => setPage(page - 1)}
-                    disabled={page === 1}
-                  >
-                    <i
-                      className="fas fa-arrow-left"
-                      style={{ fontSize: "1em" }}
-                    />
-                  </button>
-                </li>
+                            <nav aria-label="Page Navigation">
+                              <ul className="pagination justify-content-center m-0">
+                                {/* Previous button */}
+                                <li
+                                  className={`page-item ${
+                                    page === 1 ? "disabled" : ""
+                                  }`}
+                                >
+                                  <button
+                                    className={`page-link ${
+                                      page === 1
+                                        ? "opacity-50 cursor-not-allowed"
+                                        : ""
+                                    }`}
+                                    onClick={() => setPage(page - 1)}
+                                    disabled={page === 1}
+                                  >
+                                    <i
+                                      className="fas fa-arrow-left"
+                                      style={{ fontSize: "1em" }}
+                                    />
+                                  </button>
+                                </li>
 
-                {/* Current page */}
-                <li className="page-item active">
-                  <button className="page-link" disabled>
-                    {page}
-                  </button>
-                </li>
+                                {/* Current page */}
+                                <li className="page-item active">
+                                  <button className="page-link" disabled>
+                                    {page}
+                                  </button>
+                                </li>
 
-                {/* Next button */}
-                <li
-                  className={`page-item ${
-                    page === totalPages ? "disabled" : ""
-                  }`}
-                >
-                  <button
-                    className={`page-link ${
-                      page === totalPages
-                        ? "opacity-50 cursor-not-allowed"
-                        : ""
-                    }`}
-                    onClick={() => setPage(page + 1)}
-                    disabled={page === totalPages}
-                  >
-                    <i
-                      className="fas fa-arrow-right"
-                      style={{ fontSize: "1em" }}
-                    />
-                  </button>
-                </li>
-              </ul>
-            </nav>
-            </div>
+                                {/* Next button */}
+                                <li
+                                  className={`page-item ${
+                                    page === totalPages ? "disabled" : ""
+                                  }`}
+                                >
+                                  <button
+                                    className={`page-link ${
+                                      page === totalPages
+                                        ? "opacity-50 cursor-not-allowed"
+                                        : ""
+                                    }`}
+                                    onClick={() => setPage(page + 1)}
+                                    disabled={page === totalPages}
+                                  >
+                                    <i
+                                      className="fas fa-arrow-right"
+                                      style={{ fontSize: "1em" }}
+                                    />
+                                  </button>
+                                </li>
+                              </ul>
+                            </nav>
+                          </div>
                           {/* /.post */}
                         </div>
                         {/* /.tab-pane */}
@@ -520,13 +562,13 @@ const SuperUserProfileContent = () => {
                                   <p className="text-muted font">
                                     {user?.email || "N/A"}
                                   </p>
-  
+
                                   <strong>Mobile:</strong>
                                   <p className="text-muted font">
                                     {" "}
                                     {user?.mobile || "N/A"}
                                   </p>
-  
+
                                   <strong>LinkedIn:</strong>
                                   <p className="text-muted font">
                                     {user?.linkedin ? (
@@ -541,7 +583,7 @@ const SuperUserProfileContent = () => {
                                       "N/A"
                                     )}
                                   </p>
-  
+
                                   <strong>GitHub:</strong>
                                   <p className="text-muted font">
                                     {user?.Github ? (
@@ -556,7 +598,7 @@ const SuperUserProfileContent = () => {
                                       "N/A"
                                     )}
                                   </p>
-  
+
                                   <strong>Instagram:</strong>
                                   <p className="text-muted font">
                                     {user?.instagram ? (
@@ -565,7 +607,9 @@ const SuperUserProfileContent = () => {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                       >
-                                        {user?.instagram ? user.instagram : "N/A"}
+                                        {user?.instagram
+                                          ? user.instagram
+                                          : "N/A"}
                                       </a>
                                     ) : (
                                       "N/A"
@@ -618,7 +662,7 @@ const SuperUserProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label
                                 htmlFor="inputLinkedIn"
@@ -638,7 +682,7 @@ const SuperUserProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label
                                 htmlFor="inputLinkedIn"
@@ -658,7 +702,7 @@ const SuperUserProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <hr
                               style={{
                                 border: "1px solid black",
@@ -686,7 +730,7 @@ const SuperUserProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label className="col-sm-2 col-form-label">
                                 Mobile
@@ -703,7 +747,7 @@ const SuperUserProfileContent = () => {
                                       /[^0-9]/g,
                                       ""
                                     );
-  
+
                                     if (value.length === 10) {
                                       handleUserChange({
                                         target: { name: "mobile", value },
@@ -729,7 +773,7 @@ const SuperUserProfileContent = () => {
                               </label>
                               <div className="col-sm-10">
                                 <input
-                                  type="url"
+                                  type="text"
                                   className="form-control"
                                   id="linkedin"
                                   name="linkedin"
@@ -739,7 +783,7 @@ const SuperUserProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label
                                 htmlFor="inputLinkedIn"
@@ -749,7 +793,7 @@ const SuperUserProfileContent = () => {
                               </label>
                               <div className="col-sm-10">
                                 <input
-                                  type="url"
+                                  type="text"
                                   className="form-control"
                                   id="instagram"
                                   name="instagram"
@@ -759,7 +803,7 @@ const SuperUserProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <hr
                               style={{
                                 border: "1px solid black",
@@ -777,7 +821,7 @@ const SuperUserProfileContent = () => {
                               </label>
                               <div className="col-sm-10">
                                 <input
-                                  type="url"
+                                  type="text"
                                   className="form-control"
                                   id="Github"
                                   name="Github"
@@ -787,7 +831,7 @@ const SuperUserProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <hr
                               style={{
                                 border: "1px solid black",
@@ -798,7 +842,25 @@ const SuperUserProfileContent = () => {
                             <p className="editheading">
                               Professional Information
                             </p>
-  
+                            <div className="form-group row">
+                              <label
+                                htmlFor="inputDesignation"
+                                className="col-sm-2 col-form-label"
+                              >
+                                Designation
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="designation"
+                                  name="designation"
+                                  value={superUserData?.profile?.designation}
+                                  onChange={handleProfileChange}
+                                  placeholder="Head of Department, etc."
+                                />
+                              </div>
+                            </div>
                             <div className="form-group row">
                               <label
                                 htmlFor="inputLinkedIn"
@@ -820,30 +882,13 @@ const SuperUserProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
-                            <div className="form-group row">
-                              <label
-                                htmlFor="inputDesignation"
-                                className="col-sm-2 col-form-label"
-                              >
-                                Designation
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="designation"
-                                  name="designation"
-                                  value={superUserData?.profile?.designation}
-                                  onChange={handleProfileChange}
-                                  placeholder="Head of Department, etc."
-                                />
-                              </div>
-                            </div>
-  
+
                             <div className="form-group row">
                               <div className="offset-sm-2 col-sm-10 mt-3">
-                                <button type="submit" className="btn btn-danger">
+                                <button
+                                  type="submit"
+                                  className="btn btn-danger"
+                                >
                                   Submit
                                 </button>
                               </div>
@@ -862,7 +907,7 @@ const SuperUserProfileContent = () => {
               </div>
               {/* /.row */}
             </div>
-  
+
             {/* /.container-fluid */}
           </section>
           {/* /.content */}

@@ -18,40 +18,40 @@ from django.core.exceptions import ValidationError
 
 
 class User(AbstractUser):
-    username = models.CharField(max_length=150, unique=True, blank=True, default="")
+    username = models.CharField(max_length=150, unique=True,blank=True)
     full_name = models.CharField(max_length=255,blank=True, default="-")
-    email = models.EmailField( blank=True, default='-')
+    email = models.EmailField(blank=True, default='-')
 
-    is_alumni = models.BooleanField(default=False, blank=True)
-    is_student = models.BooleanField(default=False, blank=True)
+    is_alumni = models.BooleanField(default=False)
+    is_student = models.BooleanField(default=False)
     
 #    Other info
-    About = models.TextField(max_length=800, blank=True, default='-')        
-    Work = models.TextField(max_length=800, blank=True, default='-')
-    Year_Joined = models.CharField(max_length=4, blank=True, default='-')
-    Branch = models.CharField(max_length=50, blank=True, default='-')
+    About = models.TextField(max_length=1000,blank=True, default='-')        
+    Work = models.TextField(max_length=1000,blank=True, default='-')
+    Year_Joined = models.IntegerField(blank=True, default=0, validators=[MinValueValidator(1983), MaxValueValidator(2100)] )
+    Branch = models.CharField(max_length=50,blank=True, default='-')
     Image = models.ImageField(
         upload_to='images', 
         default='default/def.jpeg',
         blank=True
     )
     # contact infromation
-    mobile = models.CharField(max_length=10, default='-', blank=True)
-    linkedin = models.CharField(max_length=100, default='-', blank=True)
-    Github = models.CharField(max_length=100, default='-', blank=True)
-    instagram = models.CharField(max_length=100, default='-', blank=True)
-    portfolio_link=models.URLField(max_length=500, blank=True, null=True,default='-')
-    resume_link=models.URLField(max_length=500, blank=True, null=True,default='-')
-    skills = models.TextField(default='-', blank=True) 
+    mobile = models.CharField(max_length=10,blank=True, default='-')
+    linkedin = models.CharField(max_length=500,blank=True, default='-')
+    Github = models.CharField(max_length=500,blank=True, default='-')
+    instagram = models.CharField(max_length=500, blank=True,default='-')
+    portfolio_link=models.CharField(max_length=500,blank=True,default='-')
+    resume_link=models.CharField(max_length=500,blank=True,default='-')
+    skills = models.TextField(blank=True,default='-') 
 
-    graduation_month= models.IntegerField(blank=False, null=False)
-    graduation_year = models.IntegerField(blank=False, null=False)
+    graduation_month= models.IntegerField(blank=False, null=False,default=0, validators=[MinValueValidator(1), MaxValueValidator(12)])
+    graduation_year = models.IntegerField(blank=False, null=False,default=0, validators=[MinValueValidator(1983), MaxValueValidator(2100)])
     is_active = models.BooleanField(default=False)
 
     
     def generate_unique_username(self):
         """Generates a unique username using a UUID."""
-        unique_username = str(uuid.uuid4())[:8]  # Generate an 8-character unique identifier
+        unique_username = str(uuid.uuid4())[:8]  
         while User.objects.filter(username=unique_username).exists():
             unique_username = str(uuid.uuid4())[:8]
         return unique_username
@@ -80,9 +80,11 @@ class User(AbstractUser):
             fail_silently=False,
         )
 
-    
+   
+
 
     def save(self, *args, **kwargs):
+        
         if self.email and User.objects.filter(email=self.email).exclude(pk=self.pk).exists():
             raise ValidationError(f"A user with email '{self.email}' already exists.")
 
@@ -105,17 +107,17 @@ class User(AbstractUser):
 
 class AlumniProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    Heading= models.CharField(max_length=255, blank=True,default='-')
-    current_company_name = models.CharField(max_length=255, blank=True,default='-')
-    job_title = models.CharField(max_length=255, blank=True,default='-')
+    Heading= models.CharField(max_length=255,blank=True,default='-')
+    current_company_name = models.CharField(max_length=255,blank=True,default='-')
+    job_title = models.CharField(max_length=255,blank=True,default='-')
     Education = models.CharField(max_length=255, blank=True,default='-')
-    current_city = models.CharField(max_length=100, blank=True,default='-')
+    current_city = models.CharField(max_length=100,blank=True, default='-')
     current_country = models.CharField(max_length=100, blank=True,default='-')
-    years_of_experience = models.IntegerField(blank=True, null=True,default=0)
-    industry = models.CharField(max_length=100, blank=True,default='-')
+    years_of_experience = models.IntegerField(blank=True, default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    industry = models.CharField(max_length=100,blank=True, default='-')
     achievements = models.TextField(blank=True,default='-')
     previous_companies = models.TextField(blank=True,default='-')
-    preferred_contact_method = models.CharField(max_length=50, choices=[('email', 'Email'), ('mobile', 'Mobile'), ('linkedin', 'LinkedIn'),('instagram', 'Instagram')], default='email')
+    preferred_contact_method = models.CharField(max_length=50, choices=[('email', 'Email'), ('mobile', 'Mobile'), ('linkedin', 'LinkedIn'),('instagram', 'Instagram')], blank=True,default='email')
 
 
     def __str__(self):
@@ -124,8 +126,8 @@ class AlumniProfile(models.Model):
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     Heading= models.CharField(max_length=255, blank=True,default='-')
-    Education = models.CharField(max_length=255, blank=True,default='-')
-    current_year_of_study = models.IntegerField(blank=True, null=True,default=0)
+    Education = models.CharField(max_length=255,blank=True,default='-')
+    current_year_of_study = models.IntegerField(blank=True,default=0, validators=[MinValueValidator(0), MaxValueValidator(10)])
 
     def __str__(self):
         return f"{self.user.full_name} - Student"
@@ -133,22 +135,22 @@ class StudentProfile(models.Model):
 
 class HODPrincipalProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    designation = models.CharField(max_length=100, blank=True, null=True,default="-")  
+    designation = models.CharField(max_length=100,blank=True,default="-")  
     def __str__(self):
         return f"{self.user.full_name} - {self.designation}"
 
 class AlumniPost(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
-    tag = models.CharField(max_length=255, default='-')
-    title = models.CharField(max_length=255, default='-')
-    content = models.TextField(default='-')
+    tag = models.CharField(max_length=255,blank=True, default='-')
+    title = models.CharField(max_length=255, blank=True,default='-')
+    content = models.TextField(blank=True,default='-')
     Image = models.ImageField(
         upload_to='images',
         default='default/def.jpeg',
         blank=True
     )
-    image_url = models.URLField(max_length=500, blank=True, null=True)  
-    DocUrl = models.URLField(max_length=500, blank=True, null=True)  
+    image_url = models.URLField(max_length=500,blank=True, default='-')  
+    DocUrl = models.URLField(max_length=500,blank=True, default='-')  
     created_at = models.DateTimeField(default=timezone.now, blank=True)  
     updated_at = models.DateTimeField(auto_now=True, blank=True)  
     
@@ -166,11 +168,11 @@ class AlumniPost(models.Model):
 
 class HodPrincipalPost(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=255, default='-')
-    content = models.TextField(default='-')
-    tag = models.CharField(max_length=255, default='-')
-    image_url = models.URLField(max_length=500, blank=True, null=True)  
-    DocUrl = models.URLField(max_length=500, blank=True, null=True)  
+    title = models.CharField(max_length=255,blank=True, default='-')
+    content = models.TextField(blank=True,default='-')
+    tag = models.CharField(max_length=255,blank=True, default='-')
+    image_url = models.URLField(max_length=500,blank=True,default='-')  
+    DocUrl = models.URLField(max_length=500, blank=True,default='-')  
     created_at = models.DateTimeField(default=timezone.now, blank=True)  
     updated_at = models.DateTimeField(auto_now=True, blank=True) 
     

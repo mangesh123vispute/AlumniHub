@@ -76,7 +76,7 @@ class UserAlumniSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id', 'username', 'full_name', 'email','skills','portfolio_link','resume_link',"Image",
-            'College', 'is_alumni', 'is_student', 'graduation_year','About', 'Work', 'Year_Joined', 
+            'is_alumni', 'is_student', 'graduation_year','About', 'Work', 'Year_Joined', 
             'Branch',  'mobile', 'linkedin', 'Github', 'instagram', 
             'alumni_profile'  
         ]

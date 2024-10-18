@@ -204,7 +204,12 @@ setFilter(true);
             </div>
           ))
         ) : (
-          <p className="text-center text-gray-500">No posts available.</p>
+          <p
+            className="text-center text-gray-500"
+            style={{ fontSize: "1.5em", fontWeight: "bold", height: "100vh" }}
+          >
+            No posts available.
+          </p>
         )}
       </div>
     </section>

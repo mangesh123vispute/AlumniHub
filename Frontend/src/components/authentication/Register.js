@@ -72,8 +72,43 @@ const handleSubmit = async (e) => {
       await showNotification("Passwords do not match!", "warning", "Warning");
       return;
     }
-   
+  if (formData.password.length < 8) {
+    
+    setLoading(false);
+    await showNotification("Password must be at least 8 characters long!", "warning", "Warning");
+    return;
+     
+  }
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1;
 
+  if(formData.role === "Student") {
+   const gradYear = parseInt(formData.graduation_year);
+   const gradMonth = parseInt(formData.graduation_month);
+
+   if (
+     gradYear < currentYear ||
+     (gradYear === currentYear && gradMonth <= currentMonth)
+   ) {
+     setLoading(false);
+     await showNotification(
+       "Graduation date must be in the future for students!",
+       "warning",
+       "Warning"
+     );
+     return;
+    }
+  }
+  else if (formData.role === "Alumni") {
+  const gradYear = parseInt(formData.graduation_year);
+  const gradMonth = parseInt(formData.graduation_month);
+
+  if (gradYear > currentYear || (gradYear === currentYear && gradMonth >= currentMonth)) {
+    setLoading(false);
+    await showNotification("Graduation date must be in the past for alumni!", "warning", "Warning");
+    return;
+  }
+}
   try {
     const response = await fetch("http://127.0.0.1:8000/register/", {
       method: "POST",
