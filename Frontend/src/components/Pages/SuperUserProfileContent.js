@@ -5,8 +5,9 @@ import AuthContext from "../../context/AuthContext.js";
 
 
 const SuperUserProfileContent = () => {
-    let { userData ,setLoading, showNotification} = useContext(AuthContext);
-    console.log("userData", userData);
+    let { userData, setLoading, showNotification, ShowProfileOfId } =
+      useContext(AuthContext);
+     console.log("userData", userData);
     const id = localStorage.getItem("id")
       ? JSON.parse(localStorage.getItem("id"))
       : null;
@@ -17,7 +18,7 @@ const SuperUserProfileContent = () => {
     const [hasMore, setHasMore] = useState(true);
     const [totalPages,setTotalPages] = useState(1)
     
-    const activityRef = useRef(null); // Reference to the activity container
+    
   
     const [superUserData, setSuperUserData] = useState({
       user: {
@@ -57,15 +58,32 @@ const SuperUserProfileContent = () => {
         : null;
   
       axios
-        .get(`http://127.0.0.1:8000/hods/${id || userData?.user_id}`, {
-          headers: {
-            Authorization: `Bearer ${token?.access}`,
-          },
-        })
+        .get(
+          `http://127.0.0.1:8000/hods/${
+            ShowProfileOfId? id : userData?.user_id
+          }`,
+          {
+            headers: {
+              Authorization: `Bearer ${token?.access}`,
+            },
+          }
+        )
         .then((response) => {
           setUser(response.data);
-            if(response.data){
-              setSuperUserData({
+          if (response.data) {
+            setSuperUserData({
+              user: {
+                full_name: response.data.full_name,
+                About: response.data.About,
+                Year_Joined: response.data.Year_Joined,
+                Branch: response.data.Branch,
+                email: response.data.email,
+                mobile: response.data.mobile,
+                linkedin: response.data.linkedin,
+                Github: response.data.Github,
+                instagram: response.data.instagram,
+              },
+              profile: {
                 user: {
                   full_name: response.data.full_name,
                   About: response.data.About,
@@ -77,28 +95,20 @@ const SuperUserProfileContent = () => {
                   Github: response.data.Github,
                   instagram: response.data.instagram,
                 },
-                profile: {
-                  user: {
-                    full_name: response.data.full_name,
-                    About: response.data.About,
-                    Year_Joined: response.data.Year_Joined,
-                    Branch: response.data.Branch,
-                    email: response.data.email,
-                    mobile: response.data.mobile,
-                    linkedin: response.data.linkedin,
-                    Github: response.data.Github,
-                    instagram: response.data.instagram,
-                  },
-                  designation: response.data.hod_profile.designation
-            }
-              })
-              setLoading(false);
-            }
+                designation: response.data.hod_profile.designation,
+              },
+            });
+            setLoading(false);
+          }
         })
         .catch((error) => {
           console.error("Error fetching Admin data:", error);
           setLoading(false);
-          showNotification("Error fetching Admin data, please try again.", "error", "Error");
+          showNotification(
+            "Error fetching Admin data, please try again.",
+            "error",
+            "Error"
+          );
         });
   localStorage.getItem("id") && localStorage.removeItem("id"); 
        

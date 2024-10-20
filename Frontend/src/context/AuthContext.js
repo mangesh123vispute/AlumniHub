@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -15,6 +16,9 @@ export const AuthProvider = ({ children }) => {
   const [Login, setLogin] = useState(false);
   const [filter, setFilter] = useState(false);
   const [Loading, setLoading] = useState(false);
+  const [ShowProfileOfId, setShowProfileOfId] = useState(false);
+  
+  const location=useLocation();
   
    
   const showNotification = async (msg, iconType, titleText) => {
@@ -108,7 +112,8 @@ export const AuthProvider = ({ children }) => {
        if (tokenData && tokenData.access) {
          const decodedToken = jwtDecode(tokenData.access);     
          setUserData(decodedToken);
-       }
+    }
+    
   }, []);
 
    useEffect(() => {
@@ -118,6 +123,10 @@ export const AuthProvider = ({ children }) => {
        setUserData(decodedToken);
      }
    }, [Login]);
+  
+  useEffect(() => {
+    setShowProfileOfId(false);
+  }, [location]);
 
   //* context data and functions
   let contextData = {
@@ -144,6 +153,8 @@ export const AuthProvider = ({ children }) => {
     verifyaccessToken: verifyaccessToken,
     setFilter: setFilter,
     filter: filter,
+    ShowProfileOfId,
+    setShowProfileOfId
   };
 
  

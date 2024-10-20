@@ -21,6 +21,7 @@ const AllAlumnisContent = () => {
     showNotification,
     handleClose,
     setFilter,
+    setShowProfileOfId,
   } = useContext(AuthContext);
   setFilter(true);
   
@@ -45,7 +46,8 @@ const AllAlumnisContent = () => {
     return emailPattern.test(email);
   };
 
-   const handleViewProfile = (userData) => {
+  const handleViewProfile = (userData) => {
+     setShowProfileOfId(true);
      navigate("/profile", { state: userData });
    };
 
@@ -112,7 +114,7 @@ const AllAlumnisContent = () => {
                     </h3>
                   </div>
                 ) : (
-                  <div style={{ height: "200vh", overflowX: "auto" }}>
+                  <>
                     {alumniData?.results?.map((alumnus) => (
                       <div
                         key={alumnus.id}
@@ -333,7 +335,7 @@ const AllAlumnisContent = () => {
                         </div>
                       </div>
                     ))}
-                  </div>
+                  </>
                 )}
               </>
             </div>

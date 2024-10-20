@@ -7,13 +7,19 @@ import AuthContext from "../../context/AuthContext.js";
 
 
 const StudentProfileContent = () => {
-    let { userData, showNotification,setLoading } = useContext(AuthContext);
+    let {
+      userData,
+      showNotification,
+      setLoading,
+      ShowProfileOfId,
+    } = useContext(AuthContext);
     console.log("userData", userData);
     const id = localStorage.getItem("id")
       ? JSON.parse(localStorage.getItem("id"))
       : null;
     const [user, setUser] = useState(null);
-    const [reload, setReload] = useState(false);
+  const [reload, setReload] = useState(false);
+
   
     const [studentData, setStudentData] = useState({
       user: {
@@ -63,64 +69,66 @@ const StudentProfileContent = () => {
       const token = localStorage.getItem("authTokens")
         ? JSON.parse(localStorage.getItem("authTokens"))
         : null;
-  
+      
       axios
-        .get(`http://127.0.0.1:8000/students/${id || userData?.user_id}`, {
+        .get(`http://127.0.0.1:8000/students/${ShowProfileOfId ? id : userData?.user_id}`, {
           headers: {
             Authorization: `Bearer ${token?.access}`,
           },
         })
         .then((response) => {
           setUser(response.data);
-            if(response.data){
-                setStudentData({
-                  user: {
-                    // username: response.data.username,
-                    full_name: response.data.full_name,
-                    About: response.data.About,
-                    Work: response.data.Work,
-                    Year_Joined: response.data.Year_Joined,
-                    graduation_year: response.data.graduation_year,
-                    Branch: response.data.Branch,
-                    email: response.data.email,
-                    mobile: response.data.mobile,
-                    linkedin: response.data.linkedin,
-                    Github: response.data.Github,
-                    instagram: response.data.instagram,
-                    portfolio_link: response.data.portfolio_link,
-                    resume_link: response.data.resume_link,
-                    skills: response.data.skills,
-                  },
-                  profile: {
-                    user: {
-                      // username: response.data.username,
-                      full_name: response.data.full_name,
-                      About: response.data.About,
-                      Work: response.data.Work,
-                      Year_Joined: response.data.Year_Joined,
-                      graduation_year: response.data.graduation_year,
-                      Branch: response.data.Branch,
-                      email: response.data.email,
-                      mobile: response.data.mobile,
-                      linkedin: response.data.linkedin,
-                      Github: response.data.Github,
-                      instagram: response.data.instagram,
-                      portfolio_link: response.data.portfolio_link,
-                      resume_link: response.data.resume_link,
-                      skills: response.data.skills,
-                    },
-                    Heading: response.data.student_profile?.Heading,
-                    Education: response.data.student_profile?.Education,
-                    current_year_of_study: response.data.student_profile?.current_year_of_study,                
-                  }
-  
-                })
-                setLoading(false);
-            }
+          if (response.data) {
+            setStudentData({
+              user: {
+                full_name: response.data.full_name,
+                About: response.data.About,
+                Work: response.data.Work,
+                Year_Joined: response.data.Year_Joined,
+                graduation_year: response.data.graduation_year,
+                Branch: response.data.Branch,
+                email: response.data.email,
+                mobile: response.data.mobile,
+                linkedin: response.data.linkedin,
+                Github: response.data.Github,
+                instagram: response.data.instagram,
+                portfolio_link: response.data.portfolio_link,
+                resume_link: response.data.resume_link,
+                skills: response.data.skills,
+              },
+              profile: {
+                user: {
+                  full_name: response.data.full_name,
+                  About: response.data.About,
+                  Work: response.data.Work,
+                  Year_Joined: response.data.Year_Joined,
+                  graduation_year: response.data.graduation_year,
+                  Branch: response.data.Branch,
+                  email: response.data.email,
+                  mobile: response.data.mobile,
+                  linkedin: response.data.linkedin,
+                  Github: response.data.Github,
+                  instagram: response.data.instagram,
+                  portfolio_link: response.data.portfolio_link,
+                  resume_link: response.data.resume_link,
+                  skills: response.data.skills,
+                },
+                Heading: response.data.student_profile?.Heading,
+                Education: response.data.student_profile?.Education,
+                current_year_of_study:
+                  response.data.student_profile?.current_year_of_study,
+              },
+            });
+            setLoading(false);
+          }
         })
         .catch((error) => {
           console.error("Error fetching Students data:", error);
-          showNotification( "Error fetching Students data, please try again.", "error", "Error");
+          showNotification(
+            "Error fetching Students data, please try again.",
+            "error",
+            "Error"
+          );
           setLoading(false);
         });
         localStorage.getItem("id") && localStorage.removeItem("id"); 

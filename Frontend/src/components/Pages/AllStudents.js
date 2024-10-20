@@ -21,6 +21,8 @@ const AllStudentsContent = () => {
     showNotification,
     handleClose,
     setFilter,
+    ShowProfileOfId,
+    setShowProfileOfId,
   } = useContext(AuthContext);
   setFilter(true);
   const isValidGitHubUrl = (url) => {
@@ -45,6 +47,7 @@ const AllStudentsContent = () => {
   };
 
   const handleViewProfile = (userData) => {
+    setShowProfileOfId(true);
     navigate("/profile", { state: userData });
   };
 
@@ -98,7 +101,7 @@ const AllStudentsContent = () => {
                   <h3 className="text-center" style={{ marginTop: "50px" ,fontSize:"30px"}}>No students found !! </h3>
                 </div>
               ) : (
-                  <div style={{ height: "200vh"  , overflowX: "auto"}}>
+                  <>
                    
                   {studentData?.results?.map((students) => (
                     <div
@@ -301,7 +304,7 @@ const AllStudentsContent = () => {
                       </div>
                     </div>
                   ))}
-                </div>
+                </>
               )}
             </div>
           </div>

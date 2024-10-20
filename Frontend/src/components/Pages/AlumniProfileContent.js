@@ -6,11 +6,14 @@ import AuthContext from "../../context/AuthContext.js";
 
 const AlumniProfileContent = () => {
   
-    let { userData,setLoading,showNotification } = useContext(AuthContext);
+    let {
+      userData,
+      setLoading,
+      showNotification,
+      ShowProfileOfId,
+    } = useContext(AuthContext);
     console.log("userData", userData);
     const [user, setUser] = useState(null);
-    
-    
     const [show, setShow] = useState(false);
     const [imageSrc, setImageSrc] = useState(null);
     const [crop, setCrop] = useState({ unit: '%', width: 50, aspect: 1 });
@@ -21,9 +24,10 @@ const AlumniProfileContent = () => {
     const [page, setPage] = useState(1); // Keep track of the page number
     const [hasMore, setHasMore] = useState(true);
     const [totalPages, setTotalPages] = useState(1);
-  
-    const id = localStorage.getItem("id") ? JSON.parse(localStorage.getItem("id")) : null
-    const [reload, setReload] = useState(false);
+  const id = localStorage.getItem("id") ? JSON.parse(localStorage.getItem("id")) : null
+  console.log("This is id: ",id)
+  const [reload, setReload] = useState(false);
+   
     const [alumniData, setAlumniData] = useState({
       user: {
         // username: '',
@@ -91,77 +95,91 @@ const AlumniProfileContent = () => {
         ? JSON.parse(localStorage.getItem("authTokens"))
         : null;
       setLoading(true);
+      
       axios
-        .get(`http://127.0.0.1:8000/getalumni/${ id || userData?.user_id}`, {
-          headers: {
-            Authorization: `Bearer ${token?.access}`,
-          },
-        })
+        .get(
+          `http://127.0.0.1:8000/getalumni/${
+            ShowProfileOfId ?id: userData?.user_id
+          }`,
+          {
+            headers: {
+              Authorization: `Bearer ${token?.access}`,
+            },
+          }
+        )
         .then((response) => {
           setUser(response.data);
           if (response.data) {
-                
-                setAlumniData({
-                  user: {
-                    // username: response.data.username,
-                    full_name: response.data.full_name,
-                    About: response.data.About,
-                    Work: response.data.Work,
-                    Year_Joined: response.data.Year_Joined,
-                    graduation_year: response.data.graduation_year,
-                    Branch: response.data.Branch,
-                    email: response.data.email,
-                    mobile: response.data.mobile,
-                    linkedin: response.data.linkedin,
-                    Github: response.data.Github,
-                    instagram: response.data.instagram,
-                    portfolio_link: response.data.portfolio_link,
-                    resume_link: response.data.resume_link,
-                    skills: response.data.skills,
-                  },
-                  profile: {
-                    user: {
-                      // username: response.data.username,
-                      full_name: response.data.full_name,
-                      About: response.data.About,
-                      Work: response.data.Work,
-                      Year_Joined: response.data.Year_Joined,
-                      graduation_year: response.data.graduation_year,
-                      Branch: response.data.Branch,
-                      email: response.data.email,
-                      mobile: response.data.mobile,
-                      linkedin: response.data.linkedin,
-                      Github: response.data.Github,
-                      instagram: response.data.instagram,
-                      portfolio_link: response.data.portfolio_link,
-                      resume_link: response.data.resume_link,
-                      skills: response.data.skills,
-                    },
-                    Heading: response.data.alumni_profile?.Heading,
-                    current_company_name: response.data.alumni_profile?.current_company_name,
-                    job_title: response.data.alumni_profile?.job_title,
-                    Education: response.data.alumni_profile?.Education,
-                    current_city: response.data.alumni_profile?.current_city,
-                    current_country: response.data.alumni_profile?.current_country,
-                    years_of_experience: response.data.alumni_profile?.years_of_experience,
-                    industry: response.data.alumni_profile?.industry,
-                    achievements: response.data.alumni_profile?.achievements,
-                    previous_companies: response.data.alumni_profile?.previous_companies,
-                    preferred_contact_method: response.data.alumni_profile?.preferred_contact_method,
-              }
-                })
-            
-                setLoading(false);
-              }
+            setAlumniData({
+              user: {
+                // username: response.data.username,
+                full_name: response.data.full_name,
+                About: response.data.About,
+                Work: response.data.Work,
+                Year_Joined: response.data.Year_Joined,
+                graduation_year: response.data.graduation_year,
+                Branch: response.data.Branch,
+                email: response.data.email,
+                mobile: response.data.mobile,
+                linkedin: response.data.linkedin,
+                Github: response.data.Github,
+                instagram: response.data.instagram,
+                portfolio_link: response.data.portfolio_link,
+                resume_link: response.data.resume_link,
+                skills: response.data.skills,
+              },
+              profile: {
+                user: {
+                  // username: response.data.username,
+                  full_name: response.data.full_name,
+                  About: response.data.About,
+                  Work: response.data.Work,
+                  Year_Joined: response.data.Year_Joined,
+                  graduation_year: response.data.graduation_year,
+                  Branch: response.data.Branch,
+                  email: response.data.email,
+                  mobile: response.data.mobile,
+                  linkedin: response.data.linkedin,
+                  Github: response.data.Github,
+                  instagram: response.data.instagram,
+                  portfolio_link: response.data.portfolio_link,
+                  resume_link: response.data.resume_link,
+                  skills: response.data.skills,
+                },
+                Heading: response.data.alumni_profile?.Heading,
+                current_company_name:
+                  response.data.alumni_profile?.current_company_name,
+                job_title: response.data.alumni_profile?.job_title,
+                Education: response.data.alumni_profile?.Education,
+                current_city: response.data.alumni_profile?.current_city,
+                current_country: response.data.alumni_profile?.current_country,
+                years_of_experience:
+                  response.data.alumni_profile?.years_of_experience,
+                industry: response.data.alumni_profile?.industry,
+                achievements: response.data.alumni_profile?.achievements,
+                previous_companies:
+                  response.data.alumni_profile?.previous_companies,
+                preferred_contact_method:
+                  response.data.alumni_profile?.preferred_contact_method,
+              },
+            });
+
+            setLoading(false);
+          }
         })
         .catch((error) => {
           console.error("Error fetching alumni data:", error);
-          showNotification( "Error fetching alumni data, please try again.", "error", "Error");
+          showNotification(
+            "Error fetching alumni data, please try again.",
+            "error",
+            "Error"
+          );
           setLoading(false);
         });
+       
         localStorage.getItem("id") && localStorage.removeItem("id") 
     }, [userData?.user_id,reload]);
-  
+    
     console.log("user ", user);
   
   

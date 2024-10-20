@@ -17,8 +17,8 @@ const SideNav = () => {
         <Link to="/" className="brand-link" style={{ textDecoration: "none" }}>
           <img
             src={
-              userData?.Image
-                ? `http://127.0.0.1:8000/${userData?.Image}`
+              userData?.image
+                ? `http://127.0.0.1:8000/${userData?.image}`
                 : `../../dist/img/user1-128x128.jpg`
             }
             alt="AdminLTE Logo"
@@ -34,11 +34,11 @@ const SideNav = () => {
             <div className="image">
               <img
                 src={
-                  userData?.Image
-                    ? `http://127.0.0.1:8000/${userData?.Image}`
+                  userData?.image
+                    ? `http://127.0.0.1:8000/${userData?.image}`
                     : `../../dist/img/user1-128x128.jpg`
                 }
-                className="img-circle elevation-2"
+                className="img-circle elevation-2 mt-1"
                 alt="User Image"
               />
             </div>

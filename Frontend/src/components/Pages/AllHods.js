@@ -18,10 +18,12 @@ const AllAlumnisContent = () => {
     showNotification,
     handleClose,
     setFilter,
+    setShowProfileOfId,
   } = useContext(AuthContext);
   
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
   const pageSize = 10;
   const isValidGitHubUrl = (url) => {
     const githubUrlPattern =
@@ -45,6 +47,7 @@ const AllAlumnisContent = () => {
   };
 
   const handleViewProfile = (userData) => {
+    setShowProfileOfId(true);
     navigate("/profile", { state: userData });
   };
 
@@ -104,7 +107,7 @@ const AllAlumnisContent = () => {
                   </h3>
                 </div>
               ) : (
-                <div style={{ height: "200vh", overflowX: "auto" }}>
+                < >
                   {adminData?.results?.map((admins) => (
                     <div
                       key={admins.id}
@@ -171,7 +174,7 @@ const AllAlumnisContent = () => {
                       </div>
                     </div>
                   ))}
-                </div>
+                </>
               )}
             </div>
           </div>
