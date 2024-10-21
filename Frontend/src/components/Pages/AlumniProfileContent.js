@@ -25,7 +25,7 @@ const AlumniProfileContent = () => {
     const [hasMore, setHasMore] = useState(true);
     const [totalPages, setTotalPages] = useState(1);
   const id = localStorage.getItem("id") ? JSON.parse(localStorage.getItem("id")) : null
-  console.log("This is id: ",id)
+  
   const [reload, setReload] = useState(false);
    
     const [alumniData, setAlumniData] = useState({
@@ -90,6 +90,62 @@ const AlumniProfileContent = () => {
      });
    };
     
+ const calculateProfileCompletion = () => {
+   // Define the total number of fields you are checking for
+   const totalFields = 26;
+   let filledFields = 0;
+
+   // List of fields to check from the user and profile data
+   const fieldsToCheck = [
+     alumniData.user.full_name,
+     user?.Image,
+     alumniData.user.About,
+     alumniData.user.Work,
+     alumniData.user.Year_Joined,
+     alumniData.user.graduation_year,
+     alumniData.user.Branch,
+     alumniData.user.email,
+     alumniData.user.mobile,
+     alumniData.user.linkedin,
+     alumniData.user.Github,
+     alumniData.user.instagram,
+     alumniData.user.portfolio_link,
+     alumniData.user.resume_link,
+     alumniData.user.skills,
+     alumniData.profile.Heading,
+     alumniData.profile.current_company_name,
+     alumniData.profile.previous_companies,
+     alumniData.profile.preferred_contact_method,
+     alumniData.profile.job_title,
+     alumniData.profile.Education,
+     alumniData.profile.current_city,
+     alumniData.profile.current_country,
+     alumniData.profile.years_of_experience,
+     alumniData.profile.industry,
+     alumniData.profile.achievements,
+   ];
+
+   // Check if the fields are not empty or equal to the default value (e.g., "N/A", 0)
+   fieldsToCheck.forEach((field) => {
+     if (
+       (typeof field === "string" &&
+         field.trim() !== "" &&
+         field.trim() !== "N/A" &&
+         field.trim() !== "0" &&
+         field.trim() !== "-" &&
+         field.trim() !== "/media/default/def.jpeg") ||
+       (typeof field === "number" && field !== 0)
+     ) {
+       filledFields++;
+     }
+   });
+
+   // Calculate and return the profile completion percentage
+   return Math.round((filledFields / totalFields) * 100);
+ };
+
+
+   const profileCompletion = calculateProfileCompletion();
     useEffect(() => {
       const token = localStorage.getItem("authTokens")
         ? JSON.parse(localStorage.getItem("authTokens"))
@@ -381,9 +437,25 @@ const AlumniProfileContent = () => {
           {/* Content Header (Page header) */}
 
           {/* Main content */}
+
           <section className="content">
             <div className="container-fluid">
               <div className="row">
+                {userData?.user_id === user?.id && (
+                  <div className="col-12 mb-3">
+                    <div>Profile Completed : {profileCompletion}%</div>
+                    <div className="progress progress-sm active">
+                      <div
+                        className="progress-bar bg-success progress-bar-striped"
+                        role="progressbar"
+                        aria-valuenow={20}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                        style={{ width: `${profileCompletion}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                )}
                 <div className="col-md-3 " style={{ fontSize: "0.9em" }}>
                   {/* Profile Image */}
                   <div className="card card-primary card-outline position-relative">
@@ -628,21 +700,22 @@ const AlumniProfileContent = () => {
                         <li className="nav-item ">
                           <a
                             className="nav-link active"
-                            href="#activity"
-                            data-toggle="tab"
-                          >
-                            Posts
-                          </a>
-                        </li>
-                        <li className="nav-item ">
-                          <a
-                            className="nav-link"
                             href="#timeline"
                             data-toggle="tab"
                           >
                             Contacts
                           </a>
                         </li>
+                        <li className="nav-item ">
+                          <a
+                            className="nav-link"
+                            href="#activity"
+                            data-toggle="tab"
+                          >
+                            Posts
+                          </a>
+                        </li>
+
                         {userData?.user_id === user?.id && (
                           <li className="nav-item ">
                             <a
@@ -654,13 +727,24 @@ const AlumniProfileContent = () => {
                             </a>
                           </li>
                         )}
+                        {userData?.user_id === user?.id && (
+                          <li className="nav-item ">
+                            <a
+                              className="nav-link"
+                              href="#editGradDate"
+                              data-toggle="tab"
+                            >
+                              Update Graduation Date
+                            </a>
+                          </li>
+                        )}
                       </ul>
                     </div>
                     {/* /.card-header */}
                     <div className="card-body">
                       <div className="tab-content">
                         <div
-                          className="active tab-pane"
+                          className="tab-pane"
                           id="activity"
                           style={{
                             maxHeight: "131vh",
@@ -778,7 +862,7 @@ const AlumniProfileContent = () => {
                           )}
                         </div>
                         {/* /.tab-pane */}
-                        <div className="tab-pane" id="timeline">
+                        <div className="active tab-pane" id="timeline">
                           {/* The timeline */}
                           <div className="timeline timeline-inverse">
                             {/* timeline time label */}
@@ -1500,6 +1584,84 @@ const AlumniProfileContent = () => {
                                   onChange={handleUserChange}
                                   placeholder="React.js , Node.js , MongoDB etc."
                                   rows="3"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <div className="offset-sm-2 col-sm-10 mt-3">
+                                <button
+                                  type="submit"
+                                  className="btn btn-danger"
+                                >
+                                  Submit
+                                </button>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+
+                        <div
+                          className="tab-pane"
+                          id="editGradDate"
+                          style={{
+                            maxHeight: "131vh",
+                            overflowY: "auto", // Enable vertical scrolling
+                            overflowX: "hidden", // Prevent horizontal scrolling
+                            padding: "15px", // Optional: add padding if needed
+                            boxSizing: "border-box", // Ensure padding is included in width calculation
+                          }}
+                        >
+                          <form
+                            className="form-horizontal"
+                            onSubmit={handleSubmit}
+                          >
+                            <p
+                              className="editheading"
+                              style={{ marginTop: "0" }}
+                            >
+                              Modify Graduation Details
+                            </p>
+                            <div className="form-group row">
+                              <label
+                                htmlFor="inputFullName"
+                                className="col-sm-2 col-form-label"
+                              >
+                                Graduation Month
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  id="month"
+                                  name="month"
+                                  value={alumniData?.user?.full_name}
+                                  onChange={handleUserChange}
+                                  placeholder="Graduation Month"
+                                  max={12}
+                                  min={1}
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label
+                                htmlFor="inputHeading"
+                                className="col-sm-2 col-form-label"
+                              >
+                                Graduation Year
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  id="year"
+                                  name="year"
+                                  value={alumniData?.profile?.Education}
+                                  onChange={handleProfileChange}
+                                  placeholder="Graduation Year"
+                                  max={2100}
+                                  min={1983}
                                 />
                               </div>
                             </div>

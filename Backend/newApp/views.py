@@ -165,7 +165,6 @@ class AlumniPostAPIView(APIView):
     
 
 
-
 class GETAlumni(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -182,7 +181,13 @@ class GETAlumni(APIView):
             alumni_id = kwargs.get('pk', None)
             if alumni_id:
                 # If 'pk' is provided in the URL, return specific alumni instance
-                alumni_user = User.objects.get(id=alumni_id, is_alumni=True)
+                alumni_user = get_object_or_404(User, id=alumni_id, is_alumni=True)
+
+                # Check if the alumni profile exists, if not create a new profile
+                if not hasattr(alumni_user, 'alumniprofile'):
+                    # Assuming `AlumniProfile` is the related model for alumni profiles
+                    AlumniProfile.objects.create(user=alumni_user)
+
                 serializer = UserAlumniSerializer(alumni_user)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
@@ -199,7 +204,6 @@ class GETAlumni(APIView):
             return Response({"error": "Database error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        
 
 class GETHODs(APIView):
     permission_classes = [IsAuthenticated]
@@ -214,7 +218,13 @@ class GETHODs(APIView):
             hod_id = kwargs.get('pk', None)
             if hod_id:
                 # If 'pk' is provided, return a specific HOD
-                hod_user = User.objects.get(id=hod_id, hodprincipalprofile__isnull=False)
+                hod_user = get_object_or_404(User, id=hod_id, hodprincipalprofile__isnull=False)
+
+                # Check if the HOD profile exists, if not create a new profile
+                if not hasattr(hod_user, 'hodprincipalprofile'):
+                    # Assuming `HODPrincipalProfile` is the related model for HOD profiles
+                    HODPrincipalProfile.objects.create(user=hod_user)
+
                 serializer = UserHODSerializer(hod_user)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
@@ -243,11 +253,21 @@ class GETStudent(APIView):
         Handle GET requests for retrieving all students or a specific instance by 'id'.
         """
         student_id = kwargs.get('pk', None)
+        
+        # If a student ID (pk) is provided in the URL, return specific student instance
         if student_id:
-            # If 'pk' is provided in the URL, return specific student instance
+            # Get student user instance
             student_user = get_object_or_404(User, id=student_id, is_student=True)
+            print("student profile is created")
+            # Check if the student profile exists, if not create a new profile
+            if not hasattr(student_user, 'studentprofile'):
+                # Assuming `StudentProfile` is the related model for student profiles
+                StudentProfile.objects.create(user=student_user)
+            
+            # Serialize the student user data
             serializer = UserStudentSerializer(student_user)
             return Response(serializer.data, status=status.HTTP_200_OK)
+        
         else:
             # If no 'pk' is provided, return a paginated list of students
             student_users = User.objects.filter(is_student=True)

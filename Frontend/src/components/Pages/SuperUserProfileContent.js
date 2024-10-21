@@ -48,7 +48,46 @@ const SuperUserProfileContent = () => {
       },
     });
     
-  
+  const calculateAdminProfileCompletion = () => {
+    // Define the total number of fields for admin profile
+    const totalFields = 11;
+    let filledFields = 0;
+
+    // List of fields to check from the user and profile data
+    const fieldsToCheck = [
+      superUserData.user.full_name,
+      superUserData.user.About,
+      superUserData.user.Year_Joined,
+      superUserData.user.Branch,
+      superUserData.user.email,
+      superUserData.user.mobile,
+      superUserData.user.linkedin,
+      superUserData.user.Github,
+      superUserData.user.instagram,
+      user?.Image,
+      superUserData.profile.designation,
+
+    ]; 
+
+    // Check if the fields are not empty or equal to the default values
+    fieldsToCheck.forEach((field) => {
+      if (
+        (typeof field === "string" &&
+          field.trim() !== "" &&
+          field.trim() !== "N/A" &&
+          field.trim() !== "0" &&
+          field.trim() !== "-" &&
+          field.trim() !== "/media/default/def.jpeg") ||
+        (typeof field === "number" && field !== 0)
+      ) {
+        filledFields++;
+      }
+    });
+
+    // Calculate and return the profile completion percentage
+    return Math.round((filledFields / totalFields) * 100);
+  };
+
     
     
     useEffect(() => {
@@ -237,6 +276,21 @@ const SuperUserProfileContent = () => {
           <section className="content">
             <div className="container-fluid">
               <div className="row">
+                {userData?.user_id === user?.id && (
+                  <div className="col-12 mb-3">
+                    <div>Profile Completed : {calculateAdminProfileCompletion()}%</div>
+                    <div className="progress progress-sm active">
+                      <div
+                        className="progress-bar bg-success progress-bar-striped"
+                        role="progressbar"
+                        aria-valuenow={20}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                        style={{ width: `${calculateAdminProfileCompletion()}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                )}
                 <div className="col-md-3" style={{ fontSize: "0.9em" }}>
                   {/* Profile Image */}
                   <div className="card card-primary card-outline position-relative">
@@ -344,20 +398,20 @@ const SuperUserProfileContent = () => {
                       <ul className="nav nav-pills">
                         <li className="nav-item">
                           <a
-                            className="nav-link active"
-                            href="#activity"
+                            className="active nav-link"
+                            href="#timeline"
                             data-toggle="tab"
                           >
-                            Posts
+                            Contacts
                           </a>
                         </li>
                         <li className="nav-item">
                           <a
                             className="nav-link"
-                            href="#timeline"
+                            href="#activity"
                             data-toggle="tab"
                           >
-                            Contacts
+                            Posts
                           </a>
                         </li>
                         {userData?.user_id === user?.id && (
@@ -377,7 +431,7 @@ const SuperUserProfileContent = () => {
                     <div className="card-body">
                       <div className="tab-content">
                         <div
-                          className="active tab-pane"
+                          className="tab-pane"
                           id="activity"
                           style={{
                             maxHeight: "131vh",
@@ -554,7 +608,7 @@ const SuperUserProfileContent = () => {
                           {/* /.post */}
                         </div>
                         {/* /.tab-pane */}
-                        <div className="tab-pane" id="timeline">
+                        <div className="tab-pane active" id="timeline">
                           {/* The timeline */}
                           <div className="timeline timeline-inverse">
                             {/* timeline time label */}

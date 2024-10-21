@@ -15,17 +15,12 @@ const SideNav = () => {
       <aside className="main-sidebar sidebar-dark-primary elevation-4">
         {/* Brand Logo */}
         <Link to="/" className="brand-link" style={{ textDecoration: "none" }}>
-          <img
-            src={
-              userData?.image
-                ? `http://127.0.0.1:8000/${userData?.image}`
-                : `../../dist/img/user1-128x128.jpg`
-            }
-            alt="AdminLTE Logo"
-            className="brand-image img-circle elevation-3"
-            style={{ opacity: ".8" }}
-          />
-          <span className="brand-text font-weight-light">AlumniHub</span>
+         <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style={{opacity: .8}}></img>
+          <span className="brand-text font-weight-light">
+            <span style={{  color: "red" }}>
+              Alumni
+            </span>Hub
+          </span>
         </Link>
         {/* Sidebar */}
         <div className="sidebar">
@@ -136,7 +131,7 @@ const SideNav = () => {
                               className="fas fa-user-tie nav-icon"
                               style={{ fontSize: "1em" }}
                             />
-                            <p style={{ fontSize: "1em" }}>Hods</p>
+                            <p style={{ fontSize: "1em" }}>Admins</p>
                           </Link>
                         </li>
                       </div>
@@ -180,7 +175,6 @@ const SideNav = () => {
                             <p style={{ fontSize: "1em" }}>All Posts</p>
                           </Link>
                         </li>
-                      
                       </div>
                     )}
                   </li>
@@ -242,7 +236,7 @@ const SideNav = () => {
                               className="fas fa-user-tie nav-icon"
                               style={{ fontSize: "1em" }}
                             />
-                            <p style={{ fontSize: "1em" }}>Hods</p>
+                            <p style={{ fontSize: "1em" }}>Admins</p>
                           </Link>
                         </li>
                       </div>
@@ -366,7 +360,7 @@ const SideNav = () => {
                               className="fas fa-user-tie nav-icon"
                               style={{ fontSize: "1em" }}
                             />
-                            <p style={{ fontSize: "1em" }}>Hods</p>
+                            <p style={{ fontSize: "1em" }}>Admins</p>
                           </Link>
                         </li>
                       </div>

@@ -1,4 +1,4 @@
-import React, { useContext ,useState , useEffect, useRef , useCallback } from "react";
+import React, { useContext ,useState , useEffect } from "react";
 import "./profile.css"
 import axios from 'axios'
 import AuthContext from "../../context/AuthContext.js";
@@ -28,6 +28,7 @@ const StudentProfileContent = () => {
         About: "",
         Work: "",
         Year_Joined: "",
+        graduation_month: "",
         graduation_year: "",
         Branch: "",
         email: "",
@@ -37,7 +38,7 @@ const StudentProfileContent = () => {
         instagram: "",
         portfolio_link: "",
         resume_link: "",
-        skills: ""
+        skills: "",
       },
       profile: {
         user: {
@@ -46,6 +47,7 @@ const StudentProfileContent = () => {
           About: "",
           Work: "",
           Year_Joined: "",
+          graduation_month: "",
           graduation_year: "",
           Branch: "",
           email: "",
@@ -55,15 +57,62 @@ const StudentProfileContent = () => {
           instagram: "",
           portfolio_link: "",
           resume_link: "",
-          skills: ""
+          skills: "",
         },
         Heading: "",
         Education: "",
-        current_year_of_study: ""
-      }
+        current_year_of_study: "",
+      },
     });
     
-  
+  const calculateStudentProfileCompletion = () => {
+    // Define the total number of fields you are checking for
+    const totalFields = 17; // Update this if you add or remove fields
+    let filledFields = 0;
+
+    // List of fields to check from the user and profile data
+    const fieldsToCheck = [
+      studentData.user.full_name,
+      studentData.user.About,
+      studentData.user.Work,
+      user?.Image,
+      studentData.user.Year_Joined,
+      studentData.user.graduation_month,
+      studentData.user.graduation_year,
+      studentData.user.Branch,
+      studentData.user.email,
+      studentData.user.mobile,
+      studentData.user.linkedin,
+      studentData.user.Github,
+      studentData.user.instagram,
+      studentData.user.portfolio_link,
+      studentData.user.resume_link,
+      studentData.user.skills,
+      studentData.profile.Heading,
+      studentData.profile.Education,
+      studentData.profile.current_year_of_study,
+    ];
+    console.log(studentData.user.instagram);
+    // Check if the fields are not empty or equal to the default value (e.g., "N/A", 0)
+    fieldsToCheck.forEach((field) => {
+      if (
+        (typeof field === "string" &&
+          field.trim() !== "" &&
+          field.trim() !== "N/A" &&
+          field.trim() !== "0" &&
+          field.trim() !== "-" &&
+          field.trim() !== "/media/default/def.jpeg") ||
+        (typeof field === "number" && field !== 0)
+      ) {
+        console.log(field);
+        filledFields++;
+      }
+    });
+
+    // Calculate and return the profile completion percentage
+    return Math.round((filledFields / totalFields) * 100);
+  };
+
     useEffect(() => {
       setLoading(true);
       const token = localStorage.getItem("authTokens")
@@ -85,6 +134,7 @@ const StudentProfileContent = () => {
                 About: response.data.About,
                 Work: response.data.Work,
                 Year_Joined: response.data.Year_Joined,
+                graduation_month: response.data.graduation_month,
                 graduation_year: response.data.graduation_year,
                 Branch: response.data.Branch,
                 email: response.data.email,
@@ -102,6 +152,7 @@ const StudentProfileContent = () => {
                   About: response.data.About,
                   Work: response.data.Work,
                   Year_Joined: response.data.Year_Joined,
+                  graduation_month: response.data.graduation_month,
                   graduation_year: response.data.graduation_year,
                   Branch: response.data.Branch,
                   email: response.data.email,
@@ -166,6 +217,76 @@ const StudentProfileContent = () => {
           setLoading(false);
         }
       };
+
+    // const handleGradSubmit = async (e) => {
+    //   e.preventDefault();
+    //   setLoading(true);
+     
+    //   const token = localStorage.getItem("authTokens")
+    //     ? JSON.parse(localStorage.getItem("authTokens"))
+    //     : null;
+
+    //   const currentDate = new Date();
+    //   const currentYear = currentDate.getFullYear();
+    //   const currentMonth = currentDate.getMonth() + 1; // getMonth() is zero-based
+    //   if(studentData?.user?.graduation_year === "" || studentData?.user?.graduation_month === "") {
+    //     showNotification(
+    //       "Please enter graduation year and month.",
+    //       "warning",
+    //       "Warning"
+    //     );
+    //     setLoading(false);
+    //     return;
+    //   }
+    //   const gradYear = parseInt(studentData?.user?.graduation_year);
+    //   const gradMonth = parseInt(studentData?.user?.graduation_month);
+
+    //   try {
+    //     const response = await axios.put(
+    //       `http://127.0.0.1:8000/edit-student-profile/${
+    //         id || userData?.user_id
+    //       }/`,
+    //       studentData,
+    //       {
+    //         headers: {
+    //           Authorization: `Bearer ${token?.access}`,
+    //         },
+    //       }
+    //     );
+
+    //     if (response.status === 200) {
+    //       setLoading(false);
+    //       setReload(!reload);
+
+    //       // Check graduation year and month logic
+    //       if (
+    //         gradYear > currentYear ||
+    //         (gradYear === currentYear && gradMonth >= currentMonth)
+    //       ) {
+    //         showNotification(
+    //           "You are assigned with a Student profile.",
+    //           "success",
+    //           "Profile Updated to Student"
+    //         );
+    //       } else {
+    //         showNotification(
+    //           "You are assigned with the Alumni profile.",
+    //           "success",
+    //           "Profile Updated to Alumni"
+    //         );
+    //       }
+    //     }
+    //   } catch (error) {
+    //     console.error("Error updating profile:", error.message);
+    //     showNotification(
+    //       "Error updating profile, please try again.",
+    //       "error",
+    //       "Error"
+    //     );
+    //     setLoading(false);
+    //   }
+    // };
+
     
       // Handle input changes for user data
       const handleUserChange = (e) => {
@@ -204,11 +325,28 @@ const StudentProfileContent = () => {
       <>
         <div>
           {/* Content Header (Page header) */}
-  
+
           {/* Main content */}
           <section className="content">
             <div className="container-fluid">
               <div className="row">
+                {userData?.user_id === user?.id && (
+                  <div className="col-12 mb-3">
+                    <div>
+                      Profile Completed : {calculateStudentProfileCompletion()}%
+                    </div>
+                    <div className="progress progress-sm active">
+                      <div
+                        className="progress-bar bg-success progress-bar-striped"
+                        role="progressbar"
+                        aria-valuenow={20}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                        style={{ width: `${calculateStudentProfileCompletion()}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                )}
                 <div className="col-md-3" style={{ fontSize: "0.9em" }}>
                   {/* Profile Image */}
                   <div className="card card-primary card-outline position-relative">
@@ -224,12 +362,16 @@ const StudentProfileContent = () => {
                           : "User"}
                       </div>
                     </div>
-  
+
                     <div className="card-body box-profile">
                       <div className="text-center">
                         <img
                           className="profile-user-img img-fluid img-circle"
-                          src={user?.Image ? `http://127.0.0.1:8000/${user?.Image}` : `../../dist/img/user1-128x128.jpg`}
+                          src={
+                            user?.Image
+                              ? `http://127.0.0.1:8000/${user?.Image}`
+                              : `../../dist/img/user1-128x128.jpg`
+                          }
                           alt="User profile picture"
                         />
                       </div>
@@ -250,7 +392,7 @@ const StudentProfileContent = () => {
                     {/* /.card-body */}
                   </div>
                   {/* /.card */}
-  
+
                   {/* About Box */}
                   <div className="card card-primary">
                     <div className="card-header">
@@ -273,7 +415,7 @@ const StudentProfileContent = () => {
                           {user?.About || "N/A"}
                         </span>
                       </p>
-  
+
                       <strong>
                         <i className="fas fa-briefcase mr-1" /> Work
                       </strong>
@@ -282,7 +424,7 @@ const StudentProfileContent = () => {
                           {user?.Work || "N/A"}
                         </span>
                       </p>
-  
+
                       <strong>
                         <i className="fas fa-laptop-code mr-1" /> Skills
                       </strong>
@@ -291,7 +433,7 @@ const StudentProfileContent = () => {
                           {user?.skills || "N/A"}
                         </span>
                       </p>
-  
+
                       <strong>
                         <i className="fas fa-code-branch mr-1" /> Branch
                       </strong>
@@ -300,39 +442,40 @@ const StudentProfileContent = () => {
                           {user?.Branch || "N/A"}
                         </span>
                       </p>
-  
+
                       <strong>
                         <i className="fas fa-graduation-cap mr-1" /> Education
                       </strong>
                       <p className="text-muted aboutfont">
                         {user?.student_profile?.Education || "N/A"}, <br></br>
-  
                       </p>
-  
-                     
-  
+
                       <strong>
-                        <i className="fas fa-calendar-alt mr-1" /> Adminssion Year
+                        <i className="fas fa-calendar-alt mr-1" /> Adminssion
+                        Year
                       </strong>
-  
+
                       <p className="text-muted aboutfont">
                         {user?.Year_Joined || "N/A"}
                       </p>
-  
+
                       <strong>
                         <i className="fas fa-calendar-alt mr-1" /> Academic Year
                       </strong>
                       <p className="text-muted aboutfont">
                         {user?.student_profile?.current_year_of_study || "N/A"}
                       </p>
-  
-                        <strong>
-                        <i className="fas fa-calendar-alt mr-1" /> Graduation Year
+
+                      <strong>
+                        <i className="fas fa-calendar-alt mr-1" /> Graduation
+                        Month & Year (MM/YYYY)
                       </strong>
                       <p className="text-muted aboutfont">
-                        {user?.graduation_year || "N/A"}
+                        {user?.graduation_month && user?.graduation_year
+                          ? `${user.graduation_month}/${user.graduation_year}`
+                          : "N/A"}
                       </p>
-  
+
                       {/* <strong>
                           <i className="fas fa-link mr-1" /> LinkedIn
                         </strong>
@@ -360,7 +503,7 @@ const StudentProfileContent = () => {
                   </div>
                   {/* /.card */}
                 </div>
-  
+
                 {/* /.col */}
                 <div className="col-md-9">
                   <div className="card">
@@ -375,14 +518,36 @@ const StudentProfileContent = () => {
                             Contacts
                           </a>
                         </li>
-                        { userData?.user_id===user?.id && (
+                        {userData?.user_id === user?.id && (
                           <li className="nav-item">
-                          <a className="nav-link" href="#edit" data-toggle="tab">
-                            Edit Profile
-                          </a>
-                        </li>
+                            <a
+                              className="nav-link"
+                              href="#edit"
+                              data-toggle="tab"
+                            >
+                              Edit Profile
+                            </a>
+                          </li>
                         )}
-                        
+
+                        {/* {userData?.user_id === user?.id && (
+                          <li className="nav-item">
+                            <a
+                              className="nav-link"
+                              href="#updateGraduation"
+                              data-toggle="tab"
+                              onClick={() =>
+                                showNotification(
+                                  "Your profile will change based on your graduation date. If it’s the same or after today, you’ll be a Student. If it’s before today, you’ll be an Alumni.",
+                                  "info",
+                                  "Graduation Details"
+                                )
+                              }
+                            >
+                              Graduation Details
+                            </a>
+                          </li>
+                        )} */}
                       </ul>
                     </div>
                     {/* /.card-header */}
@@ -406,12 +571,12 @@ const StudentProfileContent = () => {
                                   <p className="text-muted font">
                                     {user?.email || "N/A"}
                                   </p>
-  
+
                                   <strong>Mobile:</strong>
                                   <p className="text-muted font">
                                     {user?.mobile || "N/A"}
                                   </p>
-  
+
                                   <strong>LinkedIn:</strong>
                                   <p className="text-muted font">
                                     {user?.linkedin ? (
@@ -426,7 +591,7 @@ const StudentProfileContent = () => {
                                       "N/A"
                                     )}
                                   </p>
-  
+
                                   <strong>GitHub:</strong>
                                   <p className="text-muted font">
                                     {user?.Github ? (
@@ -441,7 +606,7 @@ const StudentProfileContent = () => {
                                       "N/A"
                                     )}
                                   </p>
-  
+
                                   <strong>Instagram:</strong>
                                   <p className="text-muted font">
                                     {user?.instagram ? (
@@ -450,7 +615,9 @@ const StudentProfileContent = () => {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                       >
-                                        {user?.instagram ? user.instagram : "N/A"}
+                                        {user?.instagram
+                                          ? user.instagram
+                                          : "N/A"}
                                       </a>
                                     ) : (
                                       "N/A"
@@ -459,7 +626,7 @@ const StudentProfileContent = () => {
                                 </div>
                               </div>
                             </div>
-  
+
                             <div className="time-label">
                               <span className="bg-danger">
                                 Portfolio & Resume
@@ -485,7 +652,7 @@ const StudentProfileContent = () => {
                                       "N/A"
                                     )}
                                   </p>
-  
+
                                   <strong>Resume:</strong>
                                   <p className="text-muted font">
                                     {user?.resume_link ? (
@@ -509,7 +676,7 @@ const StudentProfileContent = () => {
                           </div>
                         </div>
                         {/* /.tab-pane */}
-  
+
                         {/* /.tab-pane */}
                         <div
                           className="tab-pane"
@@ -551,7 +718,7 @@ const StudentProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label className="col-sm-2 col-form-label">
                                 Education
@@ -570,7 +737,7 @@ const StudentProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label className="col-sm-2 col-form-label">
                                 Branch
@@ -587,7 +754,7 @@ const StudentProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label className="col-sm-2 col-form-label">
                                 Academic Year
@@ -606,7 +773,7 @@ const StudentProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label className="col-sm-2 col-form-label">
                                 Admission Year
@@ -623,23 +790,7 @@ const StudentProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
-                            <div className="form-group row">
-                              <label className="col-sm-2 col-form-label">
-                                Graduation Year
-                              </label>
-                              <div className="col-sm-10">
-                                <input
-                                  type="number"
-                                  id="graduation_year"
-                                  className="form-control"
-                                  name="graduation_year"
-                                  value={studentData.user.graduation_year}
-                                  onChange={handleUserChange}
-                                  placeholder="Graduation Year"
-                                />
-                              </div>
-                            </div>
+
                             <hr
                               style={{
                                 border: "1px solid black",
@@ -648,7 +799,7 @@ const StudentProfileContent = () => {
                               }}
                             ></hr>
                             <p className="editheading">Contact Information</p>
-  
+
                             <div className="form-group row">
                               <label className="col-sm-2 col-form-label">
                                 Email
@@ -665,7 +816,7 @@ const StudentProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label className="col-sm-2 col-form-label">
                                 Mobile
@@ -682,7 +833,7 @@ const StudentProfileContent = () => {
                                       /[^0-9]/g,
                                       ""
                                     );
-  
+
                                     if (value.length === 10) {
                                       handleUserChange({
                                         target: { name: "mobile", value },
@@ -699,7 +850,7 @@ const StudentProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label className="col-sm-2 col-form-label">
                                 LinkedIn
@@ -716,7 +867,7 @@ const StudentProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label className="col-sm-2 col-form-label">
                                 Instagram
@@ -733,7 +884,7 @@ const StudentProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <hr
                               style={{
                                 border: "1px solid black",
@@ -741,9 +892,9 @@ const StudentProfileContent = () => {
                                 marginTop: "0.5em",
                               }}
                             ></hr>
-  
+
                             <p className="editheading">Professional Profiles</p>
-  
+
                             <div className="form-group row">
                               <label className="col-sm-2 col-form-label">
                                 Github
@@ -760,7 +911,7 @@ const StudentProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label className="col-sm-2 col-form-label">
                                 Portfolio Link
@@ -777,7 +928,7 @@ const StudentProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label className="col-sm-2 col-form-label">
                                 Resume Link
@@ -794,7 +945,7 @@ const StudentProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <hr
                               style={{
                                 border: "1px solid black",
@@ -805,7 +956,7 @@ const StudentProfileContent = () => {
                             <p className="editheading">
                               Professional Information
                             </p>
-  
+
                             <div className="form-group row">
                               <label className="col-sm-2 col-form-label">
                                 Heading
@@ -824,7 +975,7 @@ const StudentProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label className="col-sm-2 col-form-label">
                                 About
@@ -841,7 +992,7 @@ const StudentProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label className="col-sm-2 col-form-label">
                                 Work
@@ -860,7 +1011,7 @@ const StudentProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row">
                               <label className="col-sm-2 col-form-label">
                                 Skills
@@ -879,16 +1030,114 @@ const StudentProfileContent = () => {
                                 />
                               </div>
                             </div>
-  
+
                             <div className="form-group row ">
                               <div className="offset-sm-2 col-sm-10 mt-3">
-                                <button type="submit" className="btn btn-danger">
+                                <button
+                                  type="submit"
+                                  className="btn btn-danger"
+                                >
                                   Submit
                                 </button>
                               </div>
                             </div>
                           </form>
                         </div>
+                        {/* 
+                        <div
+                          className="tab-pane"
+                          id="updateGraduation"
+                          style={{
+                            maxHeight: "117vh",
+                            overflowY: "auto", // Enable vertical scrolling
+                            overflowX: "hidden", // Prevent horizontal scrolling
+                            padding: "15px", // Optional: add padding if needed
+                            boxSizing: "border-box", // Ensure padding is included in width calculation
+                          }}
+                        >
+                          <form
+                            className="form-horizontal"
+                            onSubmit={handleGradSubmit}
+                          >
+                            <p
+                              className="editheading"
+                              style={{ marginTop: "0" }}
+                            >
+                              Update Graduation Details
+                            </p>
+                            <span style={{ color: "red" }}>
+                              <i>
+                                Please double-check your graduation year and
+                                month. Incorrect information could impact your
+                                career, as alumni won’t be able to access your
+                                data or provide referrals.
+                              </i>
+                            </span>
+                            <hr
+                              style={{
+                                border: "1px solid black",
+                                marginBottom: "1.5em",
+                                marginTop: "1.5em",
+                              }}
+                            ></hr>
+                            <div className="form-group row">
+                              <label
+                                htmlFor="inputFullName"
+                                className="col-sm-2 col-form-label"
+                              >
+                                Graduation Month
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  id="month"
+                                  name="graduation_month"
+                                  value={studentData?.user?.graduation_month}
+                                  onChange={handleUserChange}
+                                  placeholder="Graduation Month"
+                                  max={12}
+                                  min={1}
+                                  style={{ width: "25%" }}
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <label
+                                htmlFor="inputHeading"
+                                className="col-sm-2 col-form-label"
+                              >
+                                Graduation Year
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  id="year"
+                                  name="graduation_year"
+                                  value={studentData?.user?.graduation_year}
+                                  onChange={handleUserChange}
+                                  placeholder="Graduation Year"
+                                  max={2100}
+                                  min={1983}
+                                  style={{ width: "25%" }}
+                                />
+                              </div>
+                            </div>
+
+                            <div className="form-group row">
+                              <div className="offset-sm-2 col-sm-10 mt-3">
+                                <button
+                                  type="submit"
+                                  className="btn btn-danger"
+                                >
+                                  Submit
+                                </button>
+                              </div>
+                            </div>
+                          </form>
+                        </div> */}
                         {/* /.tab-pane */}
                       </div>
                       {/* /.tab-content */}
@@ -901,7 +1150,7 @@ const StudentProfileContent = () => {
               </div>
               {/* /.row */}
             </div>
-  
+
             {/* /.container-fluid */}
           </section>
           {/* /.content */}
