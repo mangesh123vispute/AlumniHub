@@ -74,7 +74,7 @@ class HodPrincipalPostAPIView(APIView):
             return Response({"detail": "You do not have permission to delete this post."}, status=status.HTTP_403_FORBIDDEN)
 
         post.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({ "detail": "Post deleted successfully."} ,status=status.HTTP_204_NO_CONTENT)
 
 
 class AlumniPostPagination(PageNumberPagination):
@@ -161,7 +161,7 @@ class AlumniPostAPIView(APIView):
             return Response({"detail": "You do not have permission to delete this post."}, status=status.HTTP_403_FORBIDDEN)
 
         post.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({ "detail": "Post deleted successfully."},status=status.HTTP_204_NO_CONTENT)
     
 class GETAlumni(APIView):
     permission_classes = [IsAuthenticated]
