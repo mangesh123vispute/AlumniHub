@@ -1,15 +1,15 @@
 import React, { useState, useContext } from "react";
-import Home from "../../Dashboard/Home";
+import Home from "../Dashboard/Home";
 import axios from "axios";
-import AuthContext from "../../../context/AuthContext";
-import LoadingSpinner from "../../Loading/Loading";
-import Notification from "../../Notification/Notification";
+import AuthContext from "../../context/AuthContext";
+import LoadingSpinner from "../Loading/Loading";
+import Notification from "../Notification/Notification";
 
 const accessToken = localStorage.getItem("authTokens")
   ? JSON.parse(localStorage.getItem("authTokens")).access
   : null;
 
-const AddHodPostContent = () => {
+const AddAlumniPostContent = () => {
   const [Title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tag, setTag] = useState("");
@@ -48,18 +48,19 @@ const AddHodPostContent = () => {
       return;
     }
 
-    const postData = {
-      title:Title,
-      content,
-      tag,
-      Image,
-      DocUrl: docUrl,
-    };
+     // Create FormData object
+  const formData = new FormData();
+  formData.append("title", Title);
+  formData.append("content", content);
+  formData.append("tag", tag);
+  formData.append("Image", Image); // Assuming `Image` is the file object
+  formData.append("DocUrl", docUrl);
 
     axios
-      .post("http://127.0.0.1:8000/hodposts/", postData, {
+      .post("http://127.0.0.1:8000/alumni/posts/", formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "multipart/form-data"
         },
       })
       .then((response) => {
@@ -175,14 +176,14 @@ const AddHodPostContent = () => {
   );
 };
 
-const AddHodPost = () => {
+const AddAlumniPost = () => {
   return (
     <Home
-      DynamicContent={AddHodPostContent}
+      DynamicContent={AddAlumniPostContent}
       url="Add Post"
       heading="Add Post"
     />
   );
 };
 
-export default AddHodPost;
+export default AddAlumniPost;

@@ -290,7 +290,7 @@ const SideNav = () => {
                           </Link>
                         </li>
                         <li className="nav-item">
-                          <Link to="/add_hod_post" className="nav-link">
+                          <Link to="/add_alumni_post" className="nav-link">
                             <i
                               className="fas fa-plus mr-2"
                               style={{ fontSize: "1em" }}
