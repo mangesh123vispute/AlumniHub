@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'corsheaders',
     'newApp',
+    'django_filters',
     'import_export',
     'rest_framework',
     'rest_framework_simplejwt',
@@ -153,7 +154,9 @@ SITE_URL = 'http://localhost:8000'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        
     ),
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
 
 SIMPLE_JWT = {

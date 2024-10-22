@@ -22,9 +22,13 @@ const AllAlumnisContent = () => {
     handleClose,
     setFilter,
     setShowProfileOfId,
+    setIsAllStudentPage,
+    filters,
+    setFilters,
   } = useContext(AuthContext);
   setFilter(true);
   
+  setIsAllStudentPage(false);
   const isValidGitHubUrl = (url) => {
     const githubUrlPattern =
       /^(https?:\/\/)?(www\.)?github\.com\/[A-Za-z0-9_-]+\/?$/;
@@ -51,23 +55,28 @@ const AllAlumnisContent = () => {
      navigate("/profile", { state: userData });
    };
 
-  const fetchAlumni = async (pageNumber) => {
+  const fetchAlumni = async (pageNumber, filters) => {
     setLoading(true);
     const token = localStorage.getItem("authTokens")
       ? JSON.parse(localStorage.getItem("authTokens"))
       : null;
+
+    // Construct query parameters from filters
+    const queryParams = new URLSearchParams({
+      page: pageNumber,
+      page_size: pageSize,
+      ...filters, // Spread the filters into the query params
+    }).toString();
+
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/getalumni/?page=${pageNumber}&page_size=${pageSize}`,
-        {
-          headers: { Authorization: `Bearer ${token?.access}` },
-        }
+        `http://127.0.0.1:8000/getalumni/?${queryParams}`,
+        { headers: { Authorization: `Bearer ${token?.access}` } }
       );
       if (response.status === 200) {
         setAlumniData(response.data);
         const totalItems = response.data.count;
         setTotalPages(Math.ceil(totalItems / pageSize));
-        
         setLoading(false);
       }
     } catch (err) {
@@ -80,8 +89,12 @@ const AllAlumnisContent = () => {
 
   // Fetch alumni on component mount
   useEffect(() => {
-    fetchAlumni(pageNumber);
-  }, [  pageNumber ]);
+    fetchAlumni(pageNumber, filters);
+  }, [pageNumber, filters]);
+
+  useEffect(() => {
+    setIsAllStudentPage(false);
+  }, []);
 
   console.log("Als=umni data ", alumniData);
 

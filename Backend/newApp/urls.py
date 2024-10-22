@@ -4,9 +4,13 @@ from . import views
 from django.conf.urls.static import static
 from .views import HodPrincipalPostAPIView,GETAlumni,HodAuthorPostListView,AlumniPostAPIView,GETHODs,GETStudent,UserImageUploadView,AlumniAuthorPostListView
 
+
+
+
 urlpatterns = [ 
-    # DRF Routes
-    # 1.HOD 
+    # ^DRF Routes
+
+    # ^1.HOD 
     path('hodposts/', HodPrincipalPostAPIView.as_view(), name='hod-posts'),  
     path('hodposts/<int:pk>/', HodPrincipalPostAPIView.as_view(), name='hod-post-detail'),
     path('getalumni/', GETAlumni.as_view()),  # For list or creation

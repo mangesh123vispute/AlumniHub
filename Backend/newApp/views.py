@@ -15,7 +15,7 @@ from rest_framework.exceptions import NotFound
 from rest_framework import generics
 from rest_framework.decorators import api_view
 from .editserialisers import HODPrincipalProfileSerializer, UserSerializer, AlumniProfileSerializer, StudentProfileSerializer,UserImageUploadSerializer
-
+from django.db.models import Q
 
 class HodPrincipalPostAPIView(APIView):
     permission_classes = [IsAuthenticated]  # Require authentication for all actions
@@ -163,39 +163,85 @@ class AlumniPostAPIView(APIView):
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-
-
 class GETAlumni(APIView):
     permission_classes = [IsAuthenticated]
 
     class AlumniPagination(PageNumberPagination):
-        page_size = 10  
+        page_size = 10  # Number of results per page
         page_size_query_param = 'page_size'
         max_page_size = 100
 
     def get(self, request, *args, **kwargs):
         """
-        Handle GET requests for retrieving all alumni or a specific instance by 'id'.
+        Handle GET requests for retrieving all alumni or a specific instance by 'id' with optional filtering.
         """
         try:
             alumni_id = kwargs.get('pk', None)
             if alumni_id:
-                # If 'pk' is provided in the URL, return specific alumni instance
                 alumni_user = get_object_or_404(User, id=alumni_id, is_alumni=True)
-
-                # Check if the alumni profile exists, if not create a new profile
                 if not hasattr(alumni_user, 'alumniprofile'):
-                    # Assuming `AlumniProfile` is the related model for alumni profiles
                     AlumniProfile.objects.create(user=alumni_user)
-
                 serializer = UserAlumniSerializer(alumni_user)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
-                # If no 'pk' is provided, return a paginated list of alumni
+                # Base query for alumni users
                 alumni_users = User.objects.filter(is_alumni=True)
+
+                # Filtering parameters
+                filters = {
+                    'full_name__icontains': request.query_params.get('full_name', None),
+                    'Year_Joined__gte': request.query_params.get('Year_Joined_min', None),
+                    'Year_Joined__lte': request.query_params.get('Year_Joined_max', None),
+                    'Branch__icontains': request.query_params.get('Branch', None),
+                    'mobile__icontains': request.query_params.get('mobile', None),
+                    'skills__icontains': request.query_params.get('skills', None),
+                    'graduation_year__gte': request.query_params.get('graduation_year_min', None),
+                    'graduation_year__lte': request.query_params.get('graduation_year_max', None),
+                    'alumniprofile__current_company_name__icontains': request.query_params.get('current_company_name', None),
+                    'alumniprofile__job_title__icontains': request.query_params.get('job_title', None),
+                    'alumniprofile__current_city__icontains': request.query_params.get('current_city', None),
+                    'alumniprofile__current_country__icontains': request.query_params.get('current_country', None),
+                    'alumniprofile__years_of_experience__gte': request.query_params.get('years_of_experience_min', None),
+                    'alumniprofile__years_of_experience__lte': request.query_params.get('years_of_experience_max', None),
+                    'alumniprofile__industry__icontains': request.query_params.get('industry', None),
+                }
+                
+                # Removing None values from filters
+                filters = {key: value for key, value in filters.items() if value is not None}
+                
+                # Apply filters to the query
+                alumni_users = alumni_users.filter(**filters)
+
+                # Multi-field search (OR condition)
+                search_query = request.query_params.get('search', None)
+                if search_query:
+                    alumni_users = alumni_users.filter(
+                        Q(full_name__icontains=search_query) |
+                        Q(skills__icontains=search_query) |
+                        Q(alumniprofile__job_title__icontains=search_query) |
+                        Q(alumniprofile__current_company_name__icontains=search_query)
+                    )
+
+                # Filter by multiple values for fields like skills or location
+                skills = request.query_params.getlist('skills', None)
+                cities = request.query_params.getlist('cities', None)
+                
+                if skills:
+                    alumni_users = alumni_users.filter(skills__icontains='|'.join(skills))
+                if cities:
+                    alumni_users = alumni_users.filter(alumniprofile__current_city__in=cities)
+
+                # Sorting functionality
+                sort_by = request.query_params.get('sort_by', None)
+                if sort_by:
+                    alumni_users = alumni_users.order_by(sort_by)
+
+                # Pagination
                 paginator = self.AlumniPagination()
                 paginated_alumni = paginator.paginate_queryset(alumni_users, request)
                 serializer = UserAlumniSerializer(paginated_alumni, many=True)
+
+                # Return paginated response
                 return paginator.get_paginated_response(serializer.data)
 
         except ObjectDoesNotExist:
@@ -204,6 +250,7 @@ class GETAlumni(APIView):
             return Response({"error": "Database error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class GETHODs(APIView):
     permission_classes = [IsAuthenticated]

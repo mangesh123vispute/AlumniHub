@@ -16,7 +16,7 @@ class UserAdmin(ImportExportModelAdmin):
     readonly_fields = ['id']
     list_display = [
         'id', 'username', 'full_name', 'Branch', 'is_active',
-        'is_alumni', 'is_student', 'is_superuser','graduation_month', 'graduation_year',
+        'is_alumni', 'is_student', 'is_superuser','graduation_month', 'graduation_year',"is_staff",
         'email', 'portfolio_link', 'resume_link', 'mobile',
         'linkedin', 'instagram', 'Github', 'skills',
         'About', 'Work', 'Year_Joined', 'Image'
@@ -31,7 +31,7 @@ class UserAdmin(ImportExportModelAdmin):
             'fields': ('username', 'full_name', 'Branch', 'skills', 'About', 'Work', 'Image')
         }),
         ('Permissions', {
-            'fields': ('is_active', 'is_superuser', 'is_alumni', 'is_student'),
+            'fields': ('is_active', 'is_superuser', 'is_alumni', 'is_student','is_staff'),
         }),
         ('Important dates', {
             'fields': ("graduation_month",'graduation_year', 'Year_Joined'),

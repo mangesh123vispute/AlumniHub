@@ -21,10 +21,11 @@ const AllStudentsContent = () => {
     showNotification,
     handleClose,
     setFilter,
-    ShowProfileOfId,
     setShowProfileOfId,
+    setIsAllStudentPage,
   } = useContext(AuthContext);
   setFilter(true);
+  
   const isValidGitHubUrl = (url) => {
     const githubUrlPattern =
       /^(https?:\/\/)?(www\.)?github\.com\/[A-Za-z0-9_-]+\/?$/;
@@ -81,6 +82,9 @@ const AllStudentsContent = () => {
     fetchStudents(pageNumber);
   }, [pageNumber]);
 
+  useEffect(() => {
+    setIsAllStudentPage(true);
+  }, []);
   return (
     <div>
       <LoadingSpinner isLoading={loading} />

@@ -48,13 +48,13 @@ class User(AbstractUser):
         blank=True,  # Allow blank for superuser in the validation
         null=True,   # Allow null for superuser in the validation
         default=0, 
-        validators=[MinValueValidator(1), MaxValueValidator(12)]
+        
     )
     graduation_year = models.IntegerField(
         blank=True,  # Allow blank for superuser in the validation
         null=True,   # Allow null for superuser in the validation
         default=0, 
-        validators=[MinValueValidator(1983), MaxValueValidator(2100)]
+        
     )
     is_active = models.BooleanField(default=False)
 
@@ -114,13 +114,22 @@ class User(AbstractUser):
     def clean(self):
         # Call the parent clean method
         super().clean()
-        
+
         # Apply validation only if the user is not a superuser
         if not self.is_superuser:
-            if self.graduation_year == 0 or self.graduation_year is None:
+            # Check for missing graduation year and month
+            if self.graduation_year is None:
                 raise ValidationError("Graduation year is required for non-superusers.")
-            if self.graduation_month == 0 or self.graduation_month is None:
-                raise ValidationError("Graduation month is required for non-superusers.")        
+            if self.graduation_month is None:
+                raise ValidationError("Graduation month is required for non-superusers.")
+
+            # Validate graduation year between 1983 and 2100
+            if not (1983 <= self.graduation_year <= 2100):
+                raise ValidationError("Graduation year must be between 1983 and 2100.")
+
+            # Validate graduation month between 1 and 12
+            if not (1 <= self.graduation_month <= 12):
+                raise ValidationError("Graduation month must be between 1 and 12.")       
 
 class AlumniProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

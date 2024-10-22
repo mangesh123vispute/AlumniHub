@@ -105,15 +105,16 @@ const Header = () => {
           {filter ? (
             <>
               <li className="nav-item">
-                <a className="nav-link" href="#" role="button">
+                <a
+                  className="nav-link"
+                  data-widget="control-sidebar"
+                  href="#"
+                  role="button"
+                >
                   <i class="fas fa-filter  text-sm"></i>
                 </a>
               </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#" role="button">
-                  <i className="fas fa-search" />
-                </a>
-              </li>
+              
             </>
           ) : null}
 

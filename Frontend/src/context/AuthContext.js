@@ -17,7 +17,23 @@ export const AuthProvider = ({ children }) => {
   const [filter, setFilter] = useState(false);
   const [Loading, setLoading] = useState(false);
   const [ShowProfileOfId, setShowProfileOfId] = useState(false);
-  
+  const [isAllStudentPage, setIsAllStudentPage] = useState(false);
+ const [filters, setFilters] = useState({
+   full_name: "",
+   Branch: "",
+   graduation_year_min: 1981,
+   graduation_year_max: 2100,
+   mobile: "",
+   current_company_name: "",
+   job_title: "",
+   years_of_experience_min: 0,
+   years_of_experience_max: 100,
+   current_city: "",
+   current_country: "",
+   industry: "",
+   skills: "",
+ });
+
   const location=useLocation();
   
    
@@ -154,7 +170,11 @@ export const AuthProvider = ({ children }) => {
     setFilter: setFilter,
     filter: filter,
     ShowProfileOfId,
-    setShowProfileOfId
+    setShowProfileOfId,
+    isAllStudentPage: isAllStudentPage,
+    setIsAllStudentPage: setIsAllStudentPage,
+    filters: filters,
+    setFilters: setFilters
   };
 
  
