@@ -2,23 +2,23 @@ import React, { useContext, useState } from "react";
 import AuthContext from "../../context/AuthContext.js";
 
 const AlumniFilter = () => {
-  let { setFilters, filters } = useContext(AuthContext);
+  let { setAlumniFilters, Alumnifilters } = useContext(AuthContext);
   const handleChange = (e) => {
-    setFilters({ ...filters, [e.target.name]: e.target.value });
+    setAlumniFilters({ ...Alumnifilters, [e.target.name]: e.target.value });
   };
 
   const handleReset = () => {
-    // Reset the filters to an empty object or default values
-    setFilters({});
+    // Reset the Alumnifilters to an empty object or default values
+    setAlumniFilters({});
   };
 
   const handleFilter = (e) => {
     e.preventDefault();
-    setFilters(filters);
+    setAlumniFilters(Alumnifilters);
   };
 
   return (
-    <div className="p-3" style={{ height: "90%", overflowY: "auto" }}>
+    <div className="p-3" style={{ height: "90%", overflowY: "auto", overflowX: "hidden" }}>
       <div
         style={{
           backgroundColor: "#fff",
@@ -60,7 +60,7 @@ const AlumniFilter = () => {
             type="text"
             className="form-control"
             name="full_name"
-            value={filters.full_name || ""}
+            value={Alumnifilters.full_name || ""}
             onChange={handleChange}
             style={{ marginBottom: "0.5em" }}
             placeholder="Enter Full Name"
@@ -74,7 +74,7 @@ const AlumniFilter = () => {
             type="text"
             className="form-control"
             name="Branch"
-            value={filters.Branch || ""}
+            value={Alumnifilters.Branch || ""}
             onChange={handleChange}
             style={{ marginBottom: "0.5em" }}
             placeholder="Enter Branch"
@@ -87,7 +87,7 @@ const AlumniFilter = () => {
             type="number"
             className="form-control col-5 mr-2 ml-1"
             name="graduation_year_min"
-            value={filters.graduation_year_min || ""}
+            value={Alumnifilters.graduation_year_min || ""}
             onChange={handleChange}
             style={{ marginBottom: "0.5em" }}
             placeholder="Min"
@@ -98,7 +98,7 @@ const AlumniFilter = () => {
             type="number"
             className="form-control col-5"
             name="graduation_year_max"
-            value={filters.graduation_year_max || ""}
+            value={Alumnifilters.graduation_year_max || ""}
             onChange={handleChange}
             style={{ marginBottom: "0.5em" }}
             placeholder="Max"
@@ -107,19 +107,7 @@ const AlumniFilter = () => {
           />
         </div>
 
-        {/* Mobile */}
-        <div>
-          <label>Mobile:</label>
-          <input
-            type="text"
-            className="form-control"
-            name="mobile"
-            value={filters.mobile || ""}
-            onChange={handleChange}
-            style={{ marginBottom: "0.5em" }}
-            placeholder="Enter Mobile Number"
-          />
-        </div>
+        
 
         {/* Current Company */}
         <div>
@@ -128,7 +116,7 @@ const AlumniFilter = () => {
             type="text"
             className="form-control"
             name="current_company_name"
-            value={filters.current_company_name || ""}
+            value={Alumnifilters.current_company_name || ""}
             onChange={handleChange}
             style={{ marginBottom: "0.5em" }}
             placeholder="Enter Current Company Name"
@@ -142,7 +130,7 @@ const AlumniFilter = () => {
             type="text"
             className="form-control"
             name="job_title"
-            value={filters.job_title || ""}
+            value={Alumnifilters.job_title || ""}
             onChange={handleChange}
             style={{ marginBottom: "0.5em" }}
             placeholder="Enter Job Title"
@@ -156,7 +144,7 @@ const AlumniFilter = () => {
             type="number"
             className="form-control col-5 mr-2 ml-1"
             name="years_of_experience_min"
-            value={filters.years_of_experience_min || 0}
+            value={Alumnifilters.years_of_experience_min || ""}
             onChange={handleChange}
             style={{ marginBottom: "0.5em" }}
             placeholder="Min"
@@ -167,7 +155,7 @@ const AlumniFilter = () => {
             type="number"
             className="form-control col-5"
             name="years_of_experience_max"
-            value={filters.years_of_experience_max || ""}
+            value={Alumnifilters.years_of_experience_max || ""}
             onChange={handleChange}
             style={{ marginBottom: "0.5em" }}
             placeholder="Max"
@@ -183,7 +171,7 @@ const AlumniFilter = () => {
             type="text"
             className="form-control"
             name="current_city"
-            value={filters.current_city || ""}
+            value={Alumnifilters.current_city || ""}
             onChange={handleChange}
             style={{ marginBottom: "0.5em" }}
             placeholder="Enter Current City"
@@ -196,7 +184,7 @@ const AlumniFilter = () => {
             type="text"
             className="form-control"
             name="industry"
-            value={filters.industry || ""}
+            value={Alumnifilters.industry || ""}
             onChange={handleChange}
             style={{ marginBottom: "0.5em" }}
             placeholder="Enter Industry"
@@ -210,7 +198,7 @@ const AlumniFilter = () => {
             type="text"
             className="form-control"
             name="current_country"
-            value={filters.current_country || ""}
+            value={Alumnifilters.current_country || ""}
             onChange={handleChange}
             style={{ marginBottom: "0.5em" }}
             placeholder="Enter Current Country"
@@ -223,7 +211,7 @@ const AlumniFilter = () => {
             className="form-control"
             type="text"
             name="cities"
-            value={filters.cities || ""}
+            value={Alumnifilters.cities || ""}
             onChange={handleChange}
             style={{ marginBottom: "0.5em" }}
             placeholder="Enter Current Cities"
@@ -237,7 +225,7 @@ const AlumniFilter = () => {
             className="form-control"
             type="text"
             name="skills"
-            value={filters.skills || ""}
+            value={Alumnifilters.skills || ""}
             onChange={handleChange}
             style={{ marginBottom: "0.5em" }}
             placeholder="Enter Skills"

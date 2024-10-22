@@ -6,8 +6,17 @@ import Notification from "../Notification/Notification.js";
 
 const Header = () => {
   // console.log("i am user", useContext(AuthContext));
-  let { user, logoutUser, isOpen, message, icon, title, handleClose, filter } =
-    useContext(AuthContext);
+  let {
+    user,
+    logoutUser,
+    isOpen,
+    message,
+    icon,
+    title,
+    handleClose,
+    filter,
+    setFilterClicked,
+  } = useContext(AuthContext);
   return (
     <div className="wrapper">
       <Notification
@@ -110,6 +119,7 @@ const Header = () => {
                   data-widget="control-sidebar"
                   href="#"
                   role="button"
+                  onClick={() => setFilterClicked(true)}
                 >
                   <i class="fas fa-filter  text-sm"></i>
                 </a>

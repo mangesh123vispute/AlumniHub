@@ -193,7 +193,6 @@ class GETAlumni(APIView):
                     'Year_Joined__gte': request.query_params.get('Year_Joined_min', None),
                     'Year_Joined__lte': request.query_params.get('Year_Joined_max', None),
                     'Branch__icontains': request.query_params.get('Branch', None),
-                    'mobile__icontains': request.query_params.get('mobile', None),
                     'skills__icontains': request.query_params.get('skills', None),
                     'graduation_year__gte': request.query_params.get('graduation_year_min', None),
                     'graduation_year__lte': request.query_params.get('graduation_year_max', None),
@@ -269,14 +268,63 @@ class GETHODs(APIView):
 
                 # Check if the HOD profile exists, if not create a new profile
                 if not hasattr(hod_user, 'hodprincipalprofile'):
-                    # Assuming `HODPrincipalProfile` is the related model for HOD profiles
                     HODPrincipalProfile.objects.create(user=hod_user)
 
                 serializer = UserHODSerializer(hod_user)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
-                # Return a paginated list of all HODs
+                # Base query for HOD users
                 hod_users = User.objects.filter(hodprincipalprofile__isnull=False)
+
+                # Filtering parameters (including additional fields from both User and HODPrincipalProfile models)
+                filters = {
+                    'full_name__icontains': request.query_params.get('full_name', None),
+                    'email__icontains': request.query_params.get('email', None),
+                    'Branch__icontains': request.query_params.get('Branch', None),
+                    'mobile__icontains': request.query_params.get('mobile', None),
+                    'skills__icontains': request.query_params.get('skills', None),
+                    'About__icontains': request.query_params.get('About', None),
+                    'Work__icontains': request.query_params.get('Work', None),
+                    'linkedin__icontains': request.query_params.get('linkedin', None),
+                    'Github__icontains': request.query_params.get('Github', None),
+                    'instagram__icontains': request.query_params.get('instagram', None),
+                    'portfolio_link__icontains': request.query_params.get('portfolio_link', None),
+                    'resume_link__icontains': request.query_params.get('resume_link', None),
+                    'hodprincipalprofile__designation__icontains': request.query_params.get('designation', None),
+                    'Year_Joined__gte': request.query_params.get('Year_Joined_min', None),
+                    'Year_Joined__lte': request.query_params.get('Year_Joined_max', None),
+                    'graduation_year__gte': request.query_params.get('graduation_year_min', None),
+                    'graduation_year__lte': request.query_params.get('graduation_year_max', None),
+                    'graduation_month__gte': request.query_params.get('graduation_month_min', None),
+                    'graduation_month__lte': request.query_params.get('graduation_month_max', None),
+                }
+
+                # Removing None values from filters
+                filters = {key: value for key, value in filters.items() if value is not None}
+
+                # Apply filters
+                hod_users = hod_users.filter(**filters)
+
+                # Multi-field search (OR condition) - extended for more fields
+                search_query = request.query_params.get('search', None)
+                if search_query:
+                    hod_users = hod_users.filter(
+                        Q(full_name__icontains=search_query) |
+                        Q(email__icontains=search_query) |
+                        Q(skills__icontains=search_query) |
+                        Q(Branch__icontains=search_query) |
+                        Q(mobile__icontains=search_query) |
+                        Q(hodprincipalprofile__designation__icontains=search_query) |
+                        Q(linkedin__icontains=search_query) |
+                        Q(Work__icontains=search_query)
+                    )
+
+                # Sorting functionality (optional)
+                sort_by = request.query_params.get('sort_by', None)
+                if sort_by:
+                    hod_users = hod_users.order_by(sort_by)
+
+                # Pagination
                 paginator = self.HODPagination()
                 paginated_hods = paginator.paginate_queryset(hod_users, request)
                 serializer = UserHODSerializer(paginated_hods, many=True)
@@ -286,6 +334,7 @@ class GETHODs(APIView):
             raise NotFound("HOD not found.")
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class GETStudent(APIView):
     permission_classes = [IsAuthenticated]
@@ -297,32 +346,61 @@ class GETStudent(APIView):
 
     def get(self, request, *args, **kwargs):
         """
-        Handle GET requests for retrieving all students or a specific instance by 'id'.
+        Handle GET requests for retrieving all students or a specific instance by 'id' with optional filtering.
         """
-        student_id = kwargs.get('pk', None)
-        
-        # If a student ID (pk) is provided in the URL, return specific student instance
-        if student_id:
-            # Get student user instance
-            student_user = get_object_or_404(User, id=student_id, is_student=True)
-            print("student profile is created")
-            # Check if the student profile exists, if not create a new profile
-            if not hasattr(student_user, 'studentprofile'):
-                # Assuming `StudentProfile` is the related model for student profiles
-                StudentProfile.objects.create(user=student_user)
-            
-            # Serialize the student user data
-            serializer = UserStudentSerializer(student_user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        
-        else:
-            # If no 'pk' is provided, return a paginated list of students
-            student_users = User.objects.filter(is_student=True)
-            paginator = self.StudentPagination()
-            paginated_students = paginator.paginate_queryset(student_users, request)
-            serializer = UserStudentSerializer(paginated_students, many=True)
-            return paginator.get_paginated_response(serializer.data)
+        try:
+            student_id = kwargs.get('pk', None)
+            if student_id:
+                student_user = get_object_or_404(User, id=student_id, is_student=True)
+                if not hasattr(student_user, 'studentprofile'):
+                    StudentProfile.objects.create(user=student_user)
+                serializer = UserStudentSerializer(student_user)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                # Base query for student users
+                student_users = User.objects.filter(is_student=True)
 
+                # Filtering parameters
+                filters = {
+                    'full_name__icontains': request.query_params.get('full_name', None),
+                    'Branch__icontains': request.query_params.get('Branch', None),
+                    'skills__icontains': request.query_params.get('skills', None),
+                    'graduation_year__gte': request.query_params.get('graduation_year_min', None),
+                    'graduation_year__lte': request.query_params.get('graduation_year_max', None),
+                    'studentprofile__Heading__icontains': request.query_params.get('Heading', None),
+                    'studentprofile__Education__icontains': request.query_params.get('Education', None),
+                    'studentprofile__current_year_of_study__gte': request.query_params.get('current_year_of_study_min', None),
+                    'studentprofile__current_year_of_study__lte': request.query_params.get('current_year_of_study_max', None),
+                }
+
+                # Remove None values from filters
+                filters = {key: value for key, value in filters.items() if value is not None}
+                
+                # Apply filters
+                student_users = student_users.filter(**filters)
+
+                # Multi-field search (OR condition)
+                search_query = request.query_params.get('search', None)
+                if search_query:
+                    student_users = student_users.filter(
+                        Q(full_name__icontains=search_query) |
+                        Q(skills__icontains=search_query) |
+                        Q(studentprofile__Education__icontains=search_query)
+                    )
+
+                # Pagination
+                paginator = self.StudentPagination()
+                paginated_students = paginator.paginate_queryset(student_users, request)
+                serializer = UserStudentSerializer(paginated_students, many=True)
+                
+                return paginator.get_paginated_response(serializer.data)
+        
+        except ObjectDoesNotExist:
+            raise NotFound("Student not found.")
+        except DatabaseError:
+            return Response({"error": "Database error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 #^ Edit profile views
 

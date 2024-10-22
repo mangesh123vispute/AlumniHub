@@ -23,8 +23,8 @@ const AllAlumnisContent = () => {
     setFilter,
     setShowProfileOfId,
     setIsAllStudentPage,
-    filters,
-    setFilters,
+    Alumnifilters,
+    setAlumniFilters,
   } = useContext(AuthContext);
   setFilter(true);
   
@@ -55,17 +55,17 @@ const AllAlumnisContent = () => {
      navigate("/profile", { state: userData });
    };
 
-  const fetchAlumni = async (pageNumber, filters) => {
+  const fetchAlumni = async (pageNumber, Alumnifilters) => {
     setLoading(true);
     const token = localStorage.getItem("authTokens")
       ? JSON.parse(localStorage.getItem("authTokens"))
       : null;
 
-    // Construct query parameters from filters
+    // Construct query parameters from Alumnifilters
     const queryParams = new URLSearchParams({
       page: pageNumber,
       page_size: pageSize,
-      ...filters, // Spread the filters into the query params
+      ...Alumnifilters, // Spread the Alumnifilters into the query params
     }).toString();
 
     try {
@@ -89,8 +89,8 @@ const AllAlumnisContent = () => {
 
   // Fetch alumni on component mount
   useEffect(() => {
-    fetchAlumni(pageNumber, filters);
-  }, [pageNumber, filters]);
+    fetchAlumni(pageNumber, Alumnifilters);
+  }, [pageNumber, Alumnifilters]);
 
   useEffect(() => {
     setIsAllStudentPage(false);

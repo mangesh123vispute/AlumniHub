@@ -23,9 +23,11 @@ const AllStudentsContent = () => {
     setFilter,
     setShowProfileOfId,
     setIsAllStudentPage,
+    studentFilters,
   } = useContext(AuthContext);
   setFilter(true);
   
+  console.log("studentfilter", studentFilters);
   const isValidGitHubUrl = (url) => {
     const githubUrlPattern =
       /^(https?:\/\/)?(www\.)?github\.com\/[A-Za-z0-9_-]+\/?$/;
@@ -52,18 +54,27 @@ const AllStudentsContent = () => {
     navigate("/profile", { state: userData });
   };
 
-  const fetchStudents = async ( pageNumber) => {
+  const fetchStudents = async (pageNumber) => {
     setLoading(true);
     const token = localStorage.getItem("authTokens")
       ? JSON.parse(localStorage.getItem("authTokens"))
       : null;
+
+    // Construct query parameters from StudentFilters
+    const queryParams = new URLSearchParams({
+      page: pageNumber,
+      page_size: pageSize,
+      ...studentFilters, 
+    }).toString();
+
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/students/?page=${pageNumber}&page_size=${pageSize}`,
+        `http://127.0.0.1:8000/students/?${queryParams}`,
         {
           headers: { Authorization: `Bearer ${token?.access}` },
         }
       );
+
       if (response.status === 200) {
         setStudentData(response.data);
         const totalItems = response.data.count;
@@ -71,16 +82,16 @@ const AllStudentsContent = () => {
         setLoading(false);
       }
     } catch (err) {
-      console.error("Error fetching alumni: ", err);
+      console.error("Error fetching students: ", err);
       setLoading(false);
-      
     }
   };
+
 
   // Fetch alumni on component mount
   useEffect(() => {
     fetchStudents(pageNumber);
-  }, [pageNumber]);
+  }, [pageNumber, studentFilters]);
 
   useEffect(() => {
     setIsAllStudentPage(true);

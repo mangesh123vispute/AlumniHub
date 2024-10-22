@@ -18,12 +18,12 @@ export const AuthProvider = ({ children }) => {
   const [Loading, setLoading] = useState(false);
   const [ShowProfileOfId, setShowProfileOfId] = useState(false);
   const [isAllStudentPage, setIsAllStudentPage] = useState(false);
- const [filters, setFilters] = useState({
+  const [filterClicked, setFilterClicked] = useState(false);
+ const [Alumnifilters, setAlumniFilters] = useState({
    full_name: "",
    Branch: "",
    graduation_year_min: 1981,
    graduation_year_max: 2100,
-   mobile: "",
    current_company_name: "",
    job_title: "",
    years_of_experience_min: 0,
@@ -33,6 +33,19 @@ export const AuthProvider = ({ children }) => {
    industry: "",
    skills: "",
  });
+  
+  const [studentFilters, setStudentFilters] = useState({
+    full_name: "",
+    Branch: "",
+    graduation_year_min: 1981,
+    graduation_year_max: 2100,
+    skills: "",
+    Heading: "",
+    Education: "",
+    current_year_of_study_min: 1,
+    current_year_of_study_max: 4,
+  });
+
 
   const location=useLocation();
   
@@ -142,6 +155,7 @@ export const AuthProvider = ({ children }) => {
   
   useEffect(() => {
     setShowProfileOfId(false);
+    setFilterClicked(false);
   }, [location]);
 
   //* context data and functions
@@ -173,8 +187,12 @@ export const AuthProvider = ({ children }) => {
     setShowProfileOfId,
     isAllStudentPage: isAllStudentPage,
     setIsAllStudentPage: setIsAllStudentPage,
-    filters: filters,
-    setFilters: setFilters
+    Alumnifilters: Alumnifilters,
+    setAlumniFilters: setAlumniFilters,
+    setStudentFilters: setStudentFilters,
+    studentFilters: studentFilters,
+    filterClicked: filterClicked,
+    setFilterClicked: setFilterClicked,
   };
 
  

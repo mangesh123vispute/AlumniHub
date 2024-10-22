@@ -3,7 +3,7 @@ import StudentFilter from "../Filter/StudentFilter";
 import AlumniFilter from "../Filter/AlumniFilter";
 import AuthContext from "../../context/AuthContext.js";
 const Footer = () => {
-  let { userData, isAllStudentPage } = useContext(AuthContext);
+  let { userData, isAllStudentPage, filterClicked } = useContext(AuthContext);
   return (
     <>
       <footer
@@ -32,9 +32,13 @@ const Footer = () => {
         </div>
       </footer>
       {/* Control Sidebar */}
-      <aside className="control-sidebar control-sidebar-dark" style={{borderRadius: "10px"}}>
+      {filterClicked ? ( <aside
+        className="control-sidebar control-sidebar-dark"
+        style={{ borderRadius: "10px" }}
+      >
         {isAllStudentPage ? <StudentFilter /> : <AlumniFilter />}
-      </aside>
+      </aside>): null}
+     
     </>
   );
 };
