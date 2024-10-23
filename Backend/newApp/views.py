@@ -197,12 +197,15 @@ class GETAlumni(APIView):
                     'graduation_year__gte': request.query_params.get('graduation_year_min', None),
                     'graduation_year__lte': request.query_params.get('graduation_year_max', None),
                     'alumniprofile__current_company_name__icontains': request.query_params.get('current_company_name', None),
+                    'alumniprofile__previous_companies__icontains': request.query_params.get('previous_companies', None),
                     'alumniprofile__job_title__icontains': request.query_params.get('job_title', None),
                     'alumniprofile__current_city__icontains': request.query_params.get('current_city', None),
+                    'alumniprofile__Education__icontains': request.query_params.get('Education', None),
                     'alumniprofile__current_country__icontains': request.query_params.get('current_country', None),
                     'alumniprofile__years_of_experience__gte': request.query_params.get('years_of_experience_min', None),
                     'alumniprofile__years_of_experience__lte': request.query_params.get('years_of_experience_max', None),
                     'alumniprofile__industry__icontains': request.query_params.get('industry', None),
+                    'alumniprofile__preferred_contact_method__icontains': request.query_params.get('preferred_contact_method', None),
                 }
                 
                 # Removing None values from filters
@@ -279,24 +282,8 @@ class GETHODs(APIView):
                 # Filtering parameters (including additional fields from both User and HODPrincipalProfile models)
                 filters = {
                     'full_name__icontains': request.query_params.get('full_name', None),
-                    'email__icontains': request.query_params.get('email', None),
                     'Branch__icontains': request.query_params.get('Branch', None),
-                    'mobile__icontains': request.query_params.get('mobile', None),
-                    'skills__icontains': request.query_params.get('skills', None),
-                    'About__icontains': request.query_params.get('About', None),
-                    'Work__icontains': request.query_params.get('Work', None),
-                    'linkedin__icontains': request.query_params.get('linkedin', None),
-                    'Github__icontains': request.query_params.get('Github', None),
-                    'instagram__icontains': request.query_params.get('instagram', None),
-                    'portfolio_link__icontains': request.query_params.get('portfolio_link', None),
-                    'resume_link__icontains': request.query_params.get('resume_link', None),
                     'hodprincipalprofile__designation__icontains': request.query_params.get('designation', None),
-                    'Year_Joined__gte': request.query_params.get('Year_Joined_min', None),
-                    'Year_Joined__lte': request.query_params.get('Year_Joined_max', None),
-                    'graduation_year__gte': request.query_params.get('graduation_year_min', None),
-                    'graduation_year__lte': request.query_params.get('graduation_year_max', None),
-                    'graduation_month__gte': request.query_params.get('graduation_month_min', None),
-                    'graduation_month__lte': request.query_params.get('graduation_month_max', None),
                 }
 
                 # Removing None values from filters
@@ -310,13 +297,8 @@ class GETHODs(APIView):
                 if search_query:
                     hod_users = hod_users.filter(
                         Q(full_name__icontains=search_query) |
-                        Q(email__icontains=search_query) |
-                        Q(skills__icontains=search_query) |
                         Q(Branch__icontains=search_query) |
-                        Q(mobile__icontains=search_query) |
-                        Q(hodprincipalprofile__designation__icontains=search_query) |
-                        Q(linkedin__icontains=search_query) |
-                        Q(Work__icontains=search_query)
+                        Q(hodprincipalprofile__designation__icontains=search_query) 
                     )
 
                 # Sorting functionality (optional)

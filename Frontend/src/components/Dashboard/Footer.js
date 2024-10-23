@@ -1,9 +1,10 @@
 import React ,{ useContext, useState }from "react";
 import StudentFilter from "../Filter/StudentFilter";
 import AlumniFilter from "../Filter/AlumniFilter";
+import AdminFilter from "../Filter/AdminFilter";
 import AuthContext from "../../context/AuthContext.js";
 const Footer = () => {
-  let { userData, isAllStudentPage, filterClicked } = useContext(AuthContext);
+  let { userData, isAllStudentPage,isAllAdminPage,isAllAlumniPage, filterClicked } = useContext(AuthContext);
   return (
     <>
       <footer
@@ -36,7 +37,9 @@ const Footer = () => {
         className="control-sidebar control-sidebar-dark"
         style={{ borderRadius: "10px" }}
       >
-        {isAllStudentPage ? <StudentFilter /> : <AlumniFilter />}
+        {isAllStudentPage && <StudentFilter />}
+        {isAllAlumniPage && <AlumniFilter />}
+        {isAllAdminPage && <AdminFilter />}
       </aside>): null}
      
     </>

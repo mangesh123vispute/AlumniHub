@@ -72,7 +72,20 @@ const StudentFilter = () => {
           />
         </div>
 
-    
+        {/* Education */}
+        <div>
+          <label>Education:</label>
+          <input
+            type="text"
+            className="form-control"
+            name="Education"
+            value={studentFilters.Education || ""}
+            onChange={handleChange}
+            placeholder="Enter Education"
+            style={{ marginBottom: "0.5em" }}
+          />
+        </div>
+
         {/* Graduation Year */}
         <div className="form-row" style={{ marginBottom: "0.5em" }}>
           <label className="ml-1">Graduation Year:</label>
@@ -108,6 +121,7 @@ const StudentFilter = () => {
             value={studentFilters.skills || ""}
             onChange={handleChange}
             placeholder="Enter Skills"
+            style={{ marginBottom: "0.5em" }}
           />
         </div>
 
@@ -121,20 +135,6 @@ const StudentFilter = () => {
             value={studentFilters.Heading || ""}
             onChange={handleChange}
             placeholder="Enter Heading"
-            style={{ marginBottom: "0.5em" }}
-          />
-        </div>
-
-        {/* Education */}
-        <div>
-          <label>Education:</label>
-          <input
-            type="text"
-            className="form-control"
-            name="Education"
-            value={studentFilters.Education || ""}
-            onChange={handleChange}
-            placeholder="Enter Education"
             style={{ marginBottom: "0.5em" }}
           />
         </div>
@@ -161,7 +161,6 @@ const StudentFilter = () => {
             placeholder="Max"
             min={1}
             max={4}
-
           />
         </div>
         <hr

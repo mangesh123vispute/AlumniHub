@@ -22,9 +22,11 @@ const AllAlumnisContent = () => {
     handleClose,
     setFilter,
     setShowProfileOfId,
-    setIsAllStudentPage,
     Alumnifilters,
     setAlumniFilters,
+    setIsAllStudentPage,
+    setIsAllAlumniPage,
+    setIsAllAdminPage,
   } = useContext(AuthContext);
   setFilter(true);
   
@@ -94,6 +96,8 @@ const AllAlumnisContent = () => {
 
   useEffect(() => {
     setIsAllStudentPage(false);
+    setIsAllAdminPage(false);
+    setIsAllAlumniPage(true);
   }, []);
 
   console.log("Als=umni data ", alumniData);

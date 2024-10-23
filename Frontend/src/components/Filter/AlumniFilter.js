@@ -18,7 +18,10 @@ const AlumniFilter = () => {
   };
 
   return (
-    <div className="p-3" style={{ height: "90%", overflowY: "auto", overflowX: "hidden" }}>
+    <div
+      className="p-3"
+      style={{ height: "90%", overflowY: "auto", overflowX: "hidden" }}
+    >
       <div
         style={{
           backgroundColor: "#fff",
@@ -81,8 +84,22 @@ const AlumniFilter = () => {
           />
         </div>
 
+        {/* Education */}
+        <div>
+          <label>Education:</label>
+          <input
+            type="text"
+            className="form-control"
+            name="Education"
+            value={Alumnifilters.Education || ""}
+            onChange={handleChange}
+            style={{ marginBottom: "0.5em" }}
+            placeholder="Enter Education"
+          />
+        </div>
+
         <div className="form-row">
-          <label>Graduation Year</label>
+          <label className="ml-1">Graduation Year</label>
           <input
             type="number"
             className="form-control col-5 mr-2 ml-1"
@@ -106,9 +123,6 @@ const AlumniFilter = () => {
             max={2100}
           />
         </div>
-
-        
-
         {/* Current Company */}
         <div>
           <label>Current Company:</label>
@@ -119,7 +133,19 @@ const AlumniFilter = () => {
             value={Alumnifilters.current_company_name || ""}
             onChange={handleChange}
             style={{ marginBottom: "0.5em" }}
-            placeholder="Enter Current Company Name"
+            placeholder="Enter Current Company "
+          />
+        </div>
+        <div>
+          <label>Previous companies:</label>
+          <input
+            type="text"
+            className="form-control"
+            name="previous_companies"
+            value={Alumnifilters.previous_companies || ""}
+            onChange={handleChange}
+            style={{ marginBottom: "0.5em" }}
+            placeholder="Enter Previous Companies"
           />
         </div>
 
@@ -139,7 +165,7 @@ const AlumniFilter = () => {
 
         {/* Years of Experience Max */}
         <div className="form-row ">
-          <label>Years of Experience</label>
+          <label className="ml-1">Years of Experience</label>
           <input
             type="number"
             className="form-control col-5 mr-2 ml-1"
@@ -177,20 +203,6 @@ const AlumniFilter = () => {
             placeholder="Enter Current City"
           />
         </div>
-        {/* Industry */}
-        <div>
-          <label>Industry:</label>
-          <input
-            type="text"
-            className="form-control"
-            name="industry"
-            value={Alumnifilters.industry || ""}
-            onChange={handleChange}
-            style={{ marginBottom: "0.5em" }}
-            placeholder="Enter Industry"
-          />
-        </div>
-
         {/* Current Country */}
         <div>
           <label>Current Country:</label>
@@ -204,17 +216,17 @@ const AlumniFilter = () => {
             placeholder="Enter Current Country"
           />
         </div>
-        {/* Cities (Normal Input) */}
+        {/* Industry */}
         <div>
-          <label>Current Cities:</label>
+          <label>Industry:</label>
           <input
-            className="form-control"
             type="text"
-            name="cities"
-            value={Alumnifilters.cities || ""}
+            className="form-control"
+            name="industry"
+            value={Alumnifilters.industry || ""}
             onChange={handleChange}
             style={{ marginBottom: "0.5em" }}
-            placeholder="Enter Current Cities"
+            placeholder="Enter Industry"
           />
         </div>
 
@@ -230,6 +242,27 @@ const AlumniFilter = () => {
             style={{ marginBottom: "0.5em" }}
             placeholder="Enter Skills"
           />
+        </div>
+
+        <div>
+          <label htmlFor="preferred_contact_method">Preferred Contact:</label>
+          <div>
+            <select
+              className="form-control"
+              id="preferred_contact_method"
+              name="preferred_contact_method"
+              value={Alumnifilters.preferred_contact_method || ""}
+              onChange={handleChange}
+            >
+              <option value="" disabled>
+                Preferred Contact
+              </option>
+              <option value="email">Email</option>
+              <option value="mobile">Mobile</option>
+              <option value="linkedin">LinkedIn</option>
+              <option value="instagram">Instagram</option>
+            </select>
+          </div>
         </div>
 
         <hr

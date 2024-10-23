@@ -18,14 +18,19 @@ export const AuthProvider = ({ children }) => {
   const [Loading, setLoading] = useState(false);
   const [ShowProfileOfId, setShowProfileOfId] = useState(false);
   const [isAllStudentPage, setIsAllStudentPage] = useState(false);
+  const [isAllAlumniPage, setIsAllAlumniPage] = useState(false);
+  const [isAllAdminPage, setIsAllAdminPage] = useState(false);
   const [filterClicked, setFilterClicked] = useState(false);
  const [Alumnifilters, setAlumniFilters] = useState({
    full_name: "",
    Branch: "",
+   Education: "",
    graduation_year_min: 1981,
    graduation_year_max: 2100,
    current_company_name: "",
+   previous_companies: "",
    job_title: "",
+   preferred_contact_method : '',
    years_of_experience_min: 0,
    years_of_experience_max: 100,
    current_city: "",
@@ -44,6 +49,12 @@ export const AuthProvider = ({ children }) => {
     Education: "",
     current_year_of_study_min: 1,
     current_year_of_study_max: 4,
+  });
+
+  const [hodFilters, setHODFilters] = useState({
+    full_name: "", // For filtering by full name
+    Branch: "", // For filtering by Branch
+    designation: "", // For filtering by designation from HODPrincipalProfile
   });
 
 
@@ -193,6 +204,12 @@ export const AuthProvider = ({ children }) => {
     studentFilters: studentFilters,
     filterClicked: filterClicked,
     setFilterClicked: setFilterClicked,
+    isAllAdminPage: isAllAdminPage,
+    setIsAllAdminPage: setIsAllAdminPage,
+    isAllAlumniPage: isAllAlumniPage,
+    setIsAllAlumniPage: setIsAllAlumniPage,
+    hodFilters: hodFilters,
+    setHODFilters: setHODFilters,
   };
 
  

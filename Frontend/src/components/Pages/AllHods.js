@@ -19,8 +19,14 @@ const AllAlumnisContent = () => {
     handleClose,
     setFilter,
     setShowProfileOfId,
+    setIsAllStudentPage,
+    setIsAllAlumniPage,
+    setIsAllAdminPage,
+    hodFilters,
+    setHodFilters,
   } = useContext(AuthContext);
-  
+
+ 
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -51,34 +57,51 @@ const AllAlumnisContent = () => {
     navigate("/profile", { state: userData });
   };
 
-  const fetchAdmins = async (pageNumber) => {
-    setLoading(true);
-    const token = localStorage.getItem("authTokens")
-      ? JSON.parse(localStorage.getItem("authTokens"))
-      : null;
-    try {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/hods/?page=${pageNumber}&page_size=${pageSize}`,
-        {
-          headers: { Authorization: `Bearer ${token?.access}` },
-        }
-      );
-      if (response.status === 200) {
-        setAdminData(response.data);
-        const totalItems = response.data.count;
-        setTotalPages(Math.ceil(totalItems / pageSize));
-        setLoading(false);
+const fetchAdmins = async (pageNumber) => {
+  setLoading(true);
+  const token = localStorage.getItem("authTokens")
+    ? JSON.parse(localStorage.getItem("authTokens"))
+    : null;
+
+  // Construct query parameters from hodFilters
+  const queryParams = new URLSearchParams({
+    page: pageNumber,
+    page_size: pageSize,
+    ...hodFilters, // Spread the hodFilters into the query params
+  }).toString();
+
+  try {
+    const response = await axios.get(
+      `http://127.0.0.1:8000/hods/?${queryParams}`,
+      {
+        headers: { Authorization: `Bearer ${token?.access}` },
       }
-    } catch (err) {
-      console.error("Error fetching alumni: ", err);
+    );
+    if (response.status === 200) {
+      setAdminData(response.data);
+      const totalItems = response.data.count;
+      setTotalPages(Math.ceil(totalItems / pageSize));
       setLoading(false);
     }
-  };
+  } catch (err) {
+    console.error("Error fetching admins: ", err);
+    setLoading(false);
+  }
+};
+
 
   // Fetch alumni on component mount
   useEffect(() => {
     fetchAdmins(pageNumber);
-  }, [pageNumber]);
+  }, [pageNumber, hodFilters]);
+
+  useEffect(() => {
+    setIsAllAdminPage(true);
+    setIsAllStudentPage(false);
+    setIsAllAlumniPage(false);
+    setFilter(true);
+  }
+  ,[]);
 
   return (
     <div>

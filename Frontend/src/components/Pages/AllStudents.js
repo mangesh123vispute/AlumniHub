@@ -22,8 +22,10 @@ const AllStudentsContent = () => {
     handleClose,
     setFilter,
     setShowProfileOfId,
-    setIsAllStudentPage,
     studentFilters,
+    setIsAllStudentPage,
+    setIsAllAlumniPage,
+    setIsAllAdminPage,
   } = useContext(AuthContext);
   setFilter(true);
   
@@ -95,6 +97,8 @@ const AllStudentsContent = () => {
 
   useEffect(() => {
     setIsAllStudentPage(true);
+    setIsAllAlumniPage(false);
+    setIsAllAdminPage(false);
   }, []);
   return (
     <div>
