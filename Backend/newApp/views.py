@@ -17,6 +17,11 @@ from rest_framework.decorators import api_view
 from .editserialisers import HODPrincipalProfileSerializer, UserSerializer, AlumniProfileSerializer, StudentProfileSerializer,UserImageUploadSerializer
 from django.db.models import Q
 
+class HodPrincipalPostPagination(PageNumberPagination):
+    page_size = 10  # Number of posts per page
+    page_size_query_param = 'page_size'
+    max_page_size = 100 
+
 class HodPrincipalPostAPIView(APIView):
     permission_classes = [IsAuthenticated]  # Require authentication for all actions
 
@@ -40,10 +45,12 @@ class HodPrincipalPostAPIView(APIView):
             serializer = HodPrincipalPostSerializer(post)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
-        # If pk is not provided, return all posts
-        posts = HodPrincipalPost.objects.all()  # Fetch all posts
-        serializer = HodPrincipalPostSerializer(posts, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        # If pk is not provided, return paginated posts
+        posts = HodPrincipalPost.objects.all()
+        paginator = HodPrincipalPostPagination()
+        paginated_posts = paginator.paginate_queryset(posts, request)
+        serializer = HodPrincipalPostSerializer(paginated_posts, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
     # PUT method: Update an existing post
     def put(self, request, pk):
@@ -104,6 +111,7 @@ class HodAuthorPostListView(generics.ListAPIView):
         return HodPrincipalPost.objects.filter(author_id=author_id)
 
 
+
 class AlumniPostAPIView(APIView):
     permission_classes = [IsAuthenticated]  # Require authentication for all actions
 
@@ -119,7 +127,6 @@ class AlumniPostAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    # GET method: Retrieve a single post if pk is given, else list all posts
     def get(self, request, pk=None):
         if pk is not None:
             # Get the specific post by pk
@@ -127,10 +134,12 @@ class AlumniPostAPIView(APIView):
             serializer = AlumniPostSerializer(post)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
-        # If pk is not provided, return all posts
-        posts = AlumniPost.objects.all()  # Fetch all posts
-        serializer = AlumniPostSerializer(posts, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        # If pk is not provided, return paginated posts
+        posts = AlumniPost.objects.all()
+        paginator = AlumniPostPagination()
+        paginated_posts = paginator.paginate_queryset(posts, request)
+        serializer = AlumniPostSerializer(paginated_posts, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
     # PUT method: Update an existing post
     def put(self, request, pk):
