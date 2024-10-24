@@ -2,7 +2,7 @@ import React, { useContext ,useState , useEffect, useRef , useCallback } from "r
 import "./profile.css"
 import axios from 'axios'
 import AuthContext from "../../context/AuthContext.js";
-
+ 
 
 const SuperUserProfileContent = () => {
     let { userData, setLoading, showNotification, ShowProfileOfId } =
@@ -17,8 +17,8 @@ const SuperUserProfileContent = () => {
     const [page, setPage] = useState(1);     // Keep track of the page number
     const [hasMore, setHasMore] = useState(true);
     const [totalPages,setTotalPages] = useState(1)
-    
-    
+
+   
   
     const [superUserData, setSuperUserData] = useState({
       user: {
@@ -318,7 +318,7 @@ const SuperUserProfileContent = () => {
                           }
                           alt="User profile picture"
                         />
-                      </div>
+                      </div>                     
                       <h3 className="profile-username text-center">
                         {user ? user?.full_name || user?.username : "User"}
                       </h3>
