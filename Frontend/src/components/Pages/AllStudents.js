@@ -116,29 +116,43 @@ const AllStudentsContent = () => {
           <div className="card-body pb-0">
             <div className="row">
               {studentData?.results?.length === 0 ? (
-                <div className="col-12" style={{ textAlign: "center" ,height:"200vh"}}>
-                  <h3 className="text-center" style={{ marginTop: "50px" ,fontSize:"30px"}}>No students found !! </h3>
+                <div
+                  className="col-12"
+                  style={{ textAlign: "center", height: "200vh" }}
+                >
+                  <h3
+                    className="text-center"
+                    style={{ marginTop: "50px", fontSize: "30px" }}
+                  >
+                    No students found !!{" "}
+                  </h3>
                 </div>
               ) : (
-                  <>
-                   
+                <>
                   {studentData?.results?.map((students) => (
                     <div
                       key={students.id}
                       className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column"
-                      
                     >
                       <div className="card bg-light d-flex flex-fill">
                         <div className="card-header text-muted border-bottom-0">
                           <b>{students?.full_name || "N/A"} </b>
-                          <small className="text-muted float-right">
-                            Grad Year: {students.graduation_year || "N/A"}
+                          <br />
+                          <small className="text-muted float-left">
+                            <b>
+                              {" "}
+                              Branch: {students?.Branch || "N/A"} | Yr. of
+                              Study:{" "}
+                              {students?.student_profile
+                                ?.current_year_of_study || "N/A"}{" "} 
+                              | Grad Year: {students.graduation_year || "N/A"}
+                            </b>
                           </small>
                         </div>
 
                         <hr
                           style={{
-                            border: "1px solid #d2d6df",
+                            border: "2px solid #d2d6df",
                             marginBottom: "10px",
                           }}
                         />

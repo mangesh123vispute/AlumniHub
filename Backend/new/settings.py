@@ -1,6 +1,7 @@
 
 import os
 from datetime import timedelta
+from decouple import config
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -141,11 +142,11 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 # Email settings 
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'mangesh2003vispute@gmail.com'
-EMAIL_HOST_PASSWORD = 'bxnd nvlx eazh nbcz'
-EMAIL_PORT = 587    
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD') 
+EMAIL_PORT = config('EMAIL_PORT', cast=int)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 SITE_URL = 'http://localhost:8000' 
 

@@ -140,8 +140,16 @@ const AllAlumnisContent = () => {
                         <div className="card bg-light d-flex flex-fill">
                           <div className="card-header text-muted border-bottom-0">
                             <b>{alumnus?.full_name || "N/A"} </b>
-                            <small className="text-muted float-right">
-                              Grad Year: {alumnus.graduation_year || "N/A"}
+                            <br />
+                            <small className="text-muted float-left">
+                              <b>
+                                Branch: {alumnus?.Branch || "N/A"} | Grad Year:{" "}
+                                {alumnus?.graduation_year || "N/A"} |
+                                Experience:{" "}
+                                {alumnus?.alumni_profile?.years_of_experience ||
+                                  "N/A"}{" "}
+                                Yr.
+                              </b>
                             </small>
                           </div>
 
