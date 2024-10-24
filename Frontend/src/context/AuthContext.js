@@ -147,7 +147,10 @@ export const AuthProvider = ({ children }) => {
 
    //* useEffect
   useEffect(() => {
-       verifyaccessToken();
+    verifyaccessToken();
+    setIsAllStudentPage(false);
+    setIsAllAlumniPage(false);
+    setIsAllAdminPage(false);
        const tokenData = JSON.parse(localStorage.getItem("authTokens")); 
        if (tokenData && tokenData.access) {
          const decodedToken = jwtDecode(tokenData.access);     
@@ -156,7 +159,8 @@ export const AuthProvider = ({ children }) => {
     
   }, []);
 
-   useEffect(() => {
+  useEffect(() => {
+     
      const tokenData = JSON.parse(localStorage.getItem("authTokens"));
      if (tokenData && tokenData.access) {
        const decodedToken = jwtDecode(tokenData.access);

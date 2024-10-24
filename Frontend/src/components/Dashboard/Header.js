@@ -16,6 +16,8 @@ const Header = () => {
     handleClose,
     filter,
     setFilterClicked,
+    isAllAdminPage,
+    userData,
   } = useContext(AuthContext);
   return (
     <div className="wrapper">
@@ -110,6 +112,16 @@ const Header = () => {
             </div>
           </li> */}
           {/* Messages Dropdown Menu */}
+          {(isAllAdminPage && userData.is_superuser)  && (
+            <li className="nav-item">
+              <button
+                type="button"
+                className="btn btn-outline-success btn-sm mt-1.5"
+              >
+                <i className="fas fa-user-plus mr-1" /> Add Admin
+              </button>
+            </li>
+          )}
 
           {filter ? (
             <>
@@ -124,7 +136,6 @@ const Header = () => {
                   <i class="fas fa-filter  text-sm"></i>
                 </a>
               </li>
-              
             </>
           ) : null}
 
