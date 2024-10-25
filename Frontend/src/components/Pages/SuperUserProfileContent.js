@@ -2,7 +2,7 @@ import React, { useContext ,useState , useEffect, useRef , useCallback } from "r
 import "./profile.css"
 import axios from 'axios'
 import AuthContext from "../../context/AuthContext.js";
-
+ 
 
 const SuperUserProfileContent = () => {
     let { userData, setLoading, showNotification, ShowProfileOfId } =
@@ -17,8 +17,15 @@ const SuperUserProfileContent = () => {
     const [page, setPage] = useState(1);     // Keep track of the page number
     const [hasMore, setHasMore] = useState(true);
     const [totalPages,setTotalPages] = useState(1)
-    
-    
+    const [selectedPost, setSelectedPost] = useState(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+const handleEditClick = (post) => {
+  setSelectedPost(post);
+  setIsEditModalOpen(true);  // Open the modal
+};
+
+   
   
     const [superUserData, setSuperUserData] = useState({
       user: {
@@ -266,6 +273,15 @@ const SuperUserProfileContent = () => {
       });
     };
 
+    const handleUpdateSubmit = (e) => {
+        e.preventDefault();
+      
+        // Update the post logic (e.g., API call to update the post)
+        
+        // Close the modal after updating
+        setIsEditModalOpen(false);
+      };
+
    
     return (
       <>
@@ -318,7 +334,7 @@ const SuperUserProfileContent = () => {
                           }
                           alt="User profile picture"
                         />
-                      </div>
+                      </div>                     
                       <h3 className="profile-username text-center">
                         {user ? user?.full_name || user?.username : "User"}
                       </h3>
@@ -491,6 +507,82 @@ const SuperUserProfileContent = () => {
                                       </span>
                                     </span>
                                   </div>
+
+                                  {/* Add Edit Icon Here */}
+                            <div className="edit-icon" style={{ float: 'right', cursor: 'pointer' }}>
+                            <i
+                                className="fas fa-edit"
+                                onClick={() => handleEditClick(post)}
+                                style={{ fontSize: '1.5em', color: '#007bff' }}
+                            />
+                            </div>
+
+                            {isEditModalOpen && (
+  <div className="modal">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h3 className="modal-title">Edit Post</h3>
+        <span className="close" onClick={() => setIsEditModalOpen(false)}>&times;</span>
+      </div>
+      <form onSubmit={handleUpdateSubmit}>
+        <div className="modal-body">
+          <div className="form-group">
+            <label>Title</label>
+            <input
+              type="text"
+              className="form-control"
+              value={selectedPost?.title || ""}
+              onChange={(e) => setSelectedPost({ ...selectedPost, title: e.target.value })}
+            />
+          </div>
+          <div className="form-group">
+            <label>Content</label>
+            <textarea
+              className="form-control"
+              value={selectedPost?.content || ""}
+              onChange={(e) => setSelectedPost({ ...selectedPost, content: e.target.value })}
+            />
+          </div>
+          <div className="form-group">
+            <label>Tag</label>
+            <input
+              type="text"
+              className="form-control"
+              value={selectedPost?.tag || ""}
+              onChange={(e) => setSelectedPost({ ...selectedPost, tag: e.target.value })}
+            />
+          </div>
+          <div className="form-group">
+                  <label>Image Upload </label>
+                  <div className="input-group">
+                  <input
+                    type="file"
+                    className="form-control"                   
+                    // onChange={(e)=>setImage(e.target.files[0])}
+                    
+                  />                   
+            </div>
+            </div>
+          <div className="form-group">
+            <label>Document URL</label>
+            <input
+              type="url"
+              className="form-control"
+              value={selectedPost?.DocUrl || ""}
+              onChange={(e) => setSelectedPost({ ...selectedPost, DocUrl: e.target.value })}
+            />
+          </div>
+        </div>
+        <div className="modal-footer">
+          <button type="submit" className="btn btn-primary">
+            Update Post
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
+
 
                                   <span
                                     style={{
