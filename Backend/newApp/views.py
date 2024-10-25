@@ -16,6 +16,7 @@ from rest_framework import generics
 from rest_framework.decorators import api_view
 from .editserialisers import HODPrincipalProfileSerializer, UserSerializer, AlumniProfileSerializer, StudentProfileSerializer,UserImageUploadSerializer
 from django.db.models import Q
+from .allPostSerializers import AlumniGETPostSerializer, HodPrincipalGETPostSerializer
 
 class HodPrincipalPostPagination(PageNumberPagination):
     page_size = 10  # Number of posts per page
@@ -489,3 +490,28 @@ class UserImageUploadView(APIView):
             return Response({"image_url": image_url}, status=status.HTTP_200_OK)
         else:
             return Response({"detail": "User has no image."}, status=status.HTTP_404_NOT_FOUND)
+
+
+class PostListPagination(PageNumberPagination):
+    page_size = 10  
+    page_size_query_param = 'page_size' 
+    max_page_size = 100 
+
+class PostListView(APIView):
+    pagination_class = PostListPagination
+
+    def get(self, request, *args, **kwargs):
+        alumni_posts = AlumniPost.objects.all()
+        hod_posts = HodPrincipalPost.objects.all()
+
+        alumni_serializer = AlumniGETPostSerializer(alumni_posts, many=True)
+        hod_serializer = HodPrincipalGETPostSerializer(hod_posts, many=True)
+
+        # Combine the posts and paginate
+        combined_posts = alumni_serializer.data + hod_serializer.data
+        
+        # Paginate combined posts
+        paginator = self.pagination_class()
+        page = paginator.paginate_queryset(combined_posts, request)
+        
+        return paginator.get_paginated_response(page)
