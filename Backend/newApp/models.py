@@ -197,11 +197,25 @@ class HodPrincipalPost(models.Model):
     title = models.CharField(max_length=255,blank=True, default="N/A")
     content = models.TextField(blank=True,default="N/A")
     tag = models.CharField(max_length=255,blank=True, default="N/A")
+    Image = models.ImageField(
+        upload_to='images',
+        default='default/def.jpeg',
+        blank=True
+    )
     image_url = models.URLField(max_length=500,blank=True,default="N/A")  
     DocUrl = models.URLField(max_length=500, blank=True,default="N/A")  
     created_at = models.DateTimeField(default=timezone.now, blank=True)  
     updated_at = models.DateTimeField(auto_now=True, blank=True) 
+
     
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        img = Image.open(self.Image.path)
+        if img.height > 500 or img.width > 500:
+            output_size = (300, 300)
+            img.thumbnail(output_size)
+            img.thumbnail(output_size)
+            img.save(self.Image.path)
     def __str__(self):
         return f"{self.title} by {self.author.full_name}"
 

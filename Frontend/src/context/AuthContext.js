@@ -61,6 +61,11 @@ export const AuthProvider = ({ children }) => {
   const location=useLocation();
   
    
+  const refresh=()=>{
+    setIsAllStudentPage(false);
+    setIsAllAlumniPage(false);
+    setIsAllAdminPage(false);
+  }
   const showNotification = async (msg, iconType, titleText) => {
     
     setMessage(msg);
@@ -148,9 +153,7 @@ export const AuthProvider = ({ children }) => {
    //* useEffect
   useEffect(() => {
     verifyaccessToken();
-    setIsAllStudentPage(false);
-    setIsAllAlumniPage(false);
-    setIsAllAdminPage(false);
+    
        const tokenData = JSON.parse(localStorage.getItem("authTokens")); 
        if (tokenData && tokenData.access) {
          const decodedToken = jwtDecode(tokenData.access);     
@@ -171,6 +174,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     setShowProfileOfId(false);
     setFilterClicked(false);
+    refresh();
   }, [location]);
 
   //* context data and functions
@@ -214,6 +218,7 @@ export const AuthProvider = ({ children }) => {
     setIsAllAlumniPage: setIsAllAlumniPage,
     hodFilters: hodFilters,
     setHODFilters: setHODFilters,
+    refresh: refresh
   };
 
  

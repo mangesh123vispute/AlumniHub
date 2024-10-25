@@ -1,7 +1,10 @@
 from import_export import resources, fields
 from import_export.widgets import BooleanWidget
 from .models import User
-from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
+
+
+
 
 class UserResource(resources.ModelResource):
     # Use BooleanWidget to correctly interpret TRUE/FALSE values
@@ -31,3 +34,31 @@ class UserResource(resources.ModelResource):
         else:
             # If the field is missing in the data, set it to a blank value
             setattr(obj, field.attribute, '')
+    
+    def after_import(self, dataset, **kwargs):
+        # Get the imported users
+        print("Running after_import")
+        user_emails = [row['email'] for row in dataset.dict if row.get('email')]
+        # Send activation emails
+        self.send_activation_emails(user_emails)
+
+    def send_activation_emails(self, user_emails):
+        for email in user_emails:
+            user = User.objects.filter(email=email).first()
+            if user and not user.is_active:
+                activation_link = "http://localhost:3000/activate_email"
+                email_subject = "Activate Your AlumniHub Account"
+                email_content = (
+                    f"Dear {user.full_name},\n\n"
+                    "Your account is currently inactive. To activate your account, please click the link below:\n\n"
+                    f"Click here: {activation_link}\n\n"
+                    "Best regards,\n"
+                    "The AlumniHub Team"
+                )
+                send_mail(
+                    email_subject,
+                    email_content,
+                    'mangesh2003vispute@gmail.com',  # Sender email
+                    [user.email],  # Recipient email
+                    fail_silently=False,
+                )
