@@ -14,7 +14,7 @@ from django.conf import settings
 import urllib.parse
 from django.utils.encoding import force_str
 from django.shortcuts import render
-
+from django.shortcuts import get_object_or_404
 User=get_user_model()
 
 class UserRegisterAPIView(APIView):
@@ -219,3 +219,49 @@ class ResetPasswordAPIView(APIView):
                 return Response({"detail": "Invalid token."}, status=status.HTTP_400_BAD_REQUEST)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist) as e:
             return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class SendActivationEmailView(APIView):
+    """
+    API view to send activation email to inactive users.
+    """
+
+    def post(self, request, *args, **kwargs):
+        email = request.data.get('email')
+        if not email:
+            return Response({"detail": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = get_object_or_404(User, email=email)
+
+        if user.is_active:
+            return Response({"detail": "User account is already active."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Call the send_activation_email function
+        self.send_activation_email(user)
+        
+        return Response({"detail": "Activation email sent successfully."}, status=status.HTTP_200_OK)
+
+    def send_activation_email(self, user):
+        """Sends a simple activation email to the user."""
+        subject = "Activate Your Account"
+        message = "Please activate your account by clicking the link below."
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [user.email]
+
+        # Static activation URL (replace with the actual URL)
+        activation_link = "http://localhost:3000/activate_email"
+
+        html_message = f"""
+            <p>{message}</p>
+            <p><a href="{activation_link}">Activate Your Account</a></p>
+        """
+
+        send_mail(
+            subject,
+            message,
+            email_from,
+            recipient_list,
+            html_message=html_message,
+            fail_silently=False,
+        )

@@ -515,3 +515,4 @@ class PostListView(APIView):
         page = paginator.paginate_queryset(combined_posts, request)
         
         return paginator.get_paginated_response(page)
+

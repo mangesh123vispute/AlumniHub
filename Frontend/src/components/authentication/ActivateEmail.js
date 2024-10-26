@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext,useEffect } from "react";
 import AuthContext from "../../context/AuthContext.js";
 import LoadingSpinner from "../Loading/Loading.js";
 import Notification from "../Notification/Notification.js";
@@ -21,10 +21,15 @@ const ActivateEmail = () => {
     showNotification,
     handleClose,
     setFilter,
+    setIsForgotPassPageOrActivateAccountPage,
   } = useContext(AuthContext);
-  setFilter(false);
+  
   const [Loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    setIsForgotPassPageOrActivateAccountPage(true);
+    setFilter(false);
+  }, []);
   const handleSubmit = async (event) => {
     setLoading(true);
     event.preventDefault();

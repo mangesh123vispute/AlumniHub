@@ -1,11 +1,11 @@
-// ForgotPassword.js
-import React, { useState, useContext ,useEffect} from "react";
+
+import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext.js";
 import { Link } from "react-router-dom";
 import Notification from "../Notification/Notification.js";
 import LoadingSpinner from "../Loading/Loading.js";
-const ForgotPassword = () => {
+const GetActivationEmail = () => {
   const [email, setEmail] = useState("");
   let {
     isOpen,
@@ -18,8 +18,6 @@ const ForgotPassword = () => {
     setIsForgotPassPageOrActivateAccountPage,
   } = useContext(AuthContext);
 
-  
-  
   const [Loading, setLoading] = useState(false);
   useEffect(function () {
     setIsForgotPassPageOrActivateAccountPage(true);
@@ -28,26 +26,25 @@ const ForgotPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-   setLoading(true);
+    setLoading(true);
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/forgot-password/",
+        "http://127.0.0.1:8000/send-activation-email/",
         { email }
       );
       if (response.status === 200) {
         setLoading(false);
         showNotification(response.data.detail, "success", "Success");
-      }
-      else {
+      } else {
         setLoading(false);
         showNotification(response.data.detail, "error", "Error");
       }
-
     } catch (error) {
       setLoading(false);
       console.log(error);
       showNotification(
-        error.response.data.detail || "Failed to reset password, Please try again",
+        error.response.data.detail ||
+          "Failed to reset password, Please try again",
         "error",
         "Error"
       );
@@ -75,7 +72,7 @@ const ForgotPassword = () => {
           <div className="card">
             <div className="card-body login-card-body">
               <p className="login-box-msg">
-                Forgot your password? Easily reset it here.
+                Enter your email here to activate your account.
               </p>
               <hr
                 style={{
@@ -103,7 +100,7 @@ const ForgotPassword = () => {
                 <div className="row">
                   <div className="col-12">
                     <button type="submit" className="btn btn-primary btn-block">
-                      Request new password
+                      Send Activation Email
                     </button>
                   </div>
                   {/* /.col */}
@@ -142,4 +139,4 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword;
+export default GetActivationEmail;

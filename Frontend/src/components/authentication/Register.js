@@ -202,7 +202,6 @@ const handleSubmit = async (e) => {
               <p className="login-box-msg">
                 {" "}
                 Register as a <b>Alumni</b>
-                <b>/Student</b>
               </p>
 
               <hr
@@ -341,38 +340,7 @@ const handleSubmit = async (e) => {
                 </div>
 
                 <div className="row">
-                  <div className="col-8">
-                    <div
-                      class="btn-group btn-group-toggle"
-                      data-toggle="buttons"
-                    >
-                      {/* <label class="btn bg-olive active">
-                    <input type="radio" name="options" id="option_b1" autocomplete="off" checked/> Active
-                  </label> */}
-                      <label class="btn bg-olive">
-                        <input
-                          type="radio"
-                          name="role"
-                          value="Student"
-                          checked={formData.role === "Student"}
-                          onChange={handleRadioChange}
-                        />{" "}
-                        <span className="fas fa-graduation-cap mr-1" />
-                        Student
-                      </label>
-                      <label class="btn bg-olive ">
-                        <input
-                          type="radio"
-                          name="role"
-                          value="Alumni"
-                          checked={formData.role === "Alumni"}
-                          onChange={handleRadioChange}
-                        />{" "}
-                        <span className="fas fa-users mr-1" /> Alumni
-                      </label>
-                    </div>
-                  </div>
-                  <div className="col-4">
+                  <div className="col-12">
                     <button type="submit" className="btn btn-primary btn-block">
                       Register
                     </button>
@@ -395,8 +363,11 @@ const handleSubmit = async (e) => {
                   </Link>
                 </div>
                 <div className="col-4">
-                  <Link to="/activate_email" style={{ color: "#007bff" }}>
-                    <i className="fas fa-check-circle"></i> Activate
+                  <Link
+                    to="/send_activation_Email"
+                    style={{ color: "#007bff" }}
+                  >
+                    <i className="fas fa-check-circle"></i> Activate 
                   </Link>
                 </div>
 

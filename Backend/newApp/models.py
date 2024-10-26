@@ -90,6 +90,29 @@ class User(AbstractUser):
             fail_silently=False,
         )
 
+    def send_activation_email(self):
+        """Sends an email to activate the user account."""
+        subject = "Activate Your Account"
+        message = "Please activate your account by clicking the link below."
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [self.email]
+
+        full_url = "http://localhost:3000/activate_email"
+        
+        html_message = f"""
+            <p>{message}</p>
+            <p><a href="{full_url}">Activate Your Account</a></p>
+        """
+
+        send_mail(
+            subject,
+            message,
+            email_from,
+            recipient_list,
+            html_message=html_message,
+            fail_silently=False,
+        )
+
     def save(self, *args, **kwargs):
         
         if self.email and User.objects.filter(email=self.email).exclude(pk=self.pk).exists():
@@ -101,7 +124,10 @@ class User(AbstractUser):
 
         if not self.username:
             self.username = self.generate_unique_username()
+
+        send_activation = not self.is_active and not self.pk
         super().save(*args, **kwargs)
+        
         img = Image.open(self.Image.path)
         if img.height > 500 or img.width > 500:
             output_size = (300, 300)
@@ -110,6 +136,9 @@ class User(AbstractUser):
         
         if (self.email) and (not self.is_alumni and not self.is_student and not self.is_superuser ):
             self.send_role_query_email()
+
+        if send_activation:
+            self.send_activation_email()
 
     def clean(self):
         # Call the parent clean method
