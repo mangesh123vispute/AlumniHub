@@ -20,6 +20,16 @@ const SuperUserProfileContent = () => {
     const [selectedPost, setSelectedPost] = useState(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
+    const [isImageOpen, setIsImageOpen] = useState(false);
+
+  const handleImageClick = () => {
+    setIsImageOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsImageOpen(false);
+  };
+
 const handleEditClick = (post) => {
   setSelectedPost(post);
   setIsEditModalOpen(true);  // Open the modal
@@ -249,6 +259,7 @@ const handleEditClick = (post) => {
         console.log("page " + page);
         const response = await axios.get(`http://127.0.0.1:8000/hodposts/author/${id || userData?.user_id}/?page=${page}&page_size=10`);
         setPosts(response.data.results); // Set fetched posts
+        console.log("res data "+response.data.results);
         setHasMore(response.data.next !== null);
          // If 'next' is null, stop loading more posts
          const totalItems = response.data.count;
@@ -602,7 +613,7 @@ const handleEditClick = (post) => {
                                     {post?.content || "Content"}
                                   </p>
                                   <div className="row">
-                                    <div className="col-auto">
+                                    {/* <div className="col-auto">
                                       <a
                                         href={post?.image_url || "#"}
                                         target="_blank"
@@ -612,7 +623,74 @@ const handleEditClick = (post) => {
                                         <i className="fas fa-image mr-1" />{" "}
                                         Image
                                       </a>
+                                    </div> */}
+                                    <div className="col-auto">
+                                    <a
+                                      href="#"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        handleImageClick();
+                                      }}
+                                      className="mr-3"
+                                    >
+                                      <i className="fas fa-image mr-1" /> Image
+                                    </a>
+
+                                    {isImageOpen && (
+                                    <div
+                                      style={{
+                                        position: "fixed",
+                                        top: 0,
+                                        left: 0,
+                                        width: "100%",
+                                        height: "100%",
+                                        backgroundColor: "tranparent",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        zIndex: 1050,
+                                      }}
+                                      onClick={handleCloseModal}
+                                    >
+                                      <div
+                                        style={{
+                                          position: "relative",
+                                          maxWidth: "100%",
+                                          maxHeight: "100%",
+                                          display: "flex",
+                                          justifyContent: "center",
+                                          alignItems: "center",
+                                        }}
+                                      >
+                                        <img
+                                          src={post?.Image}
+                                          alt="Post"
+                                          style={{
+                                            // maxWidth: "100%",
+                                            // maxHeight: "100%",
+                                            width:"100%",
+                                            height:"auto",
+                                            borderRadius: "5px",
+                                            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+                                          }}
+                                        />
+                                        <span
+                                          style={{
+                                            position: "absolute",
+                                            top: "10px",
+                                            right: "10px",
+                                            fontSize: "1.5em",
+                                            color: "#fff",
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={handleCloseModal}
+                                        >
+                                          &times;
+                                        </span>
+                                      </div>
                                     </div>
+                                  )}
+                                  </div>
                                     <div className="col-auto">
                                       <a
                                         href={post?.DocUrl || "#"}

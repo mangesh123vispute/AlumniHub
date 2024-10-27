@@ -27,6 +27,16 @@ const AlumniProfileContent = () => {
   const id = localStorage.getItem("id") ? JSON.parse(localStorage.getItem("id")) : null
   
   const [reload, setReload] = useState(false);
+
+  const [isImageOpen, setIsImageOpen] = useState(false);
+
+  const handleImageClick = () => {
+    setIsImageOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsImageOpen(false);
+  };
    
     const [alumniData, setAlumniData] = useState({
       user: {
@@ -276,9 +286,9 @@ const AlumniProfileContent = () => {
       try {
         console.log("page " + page);
         const response = await axios.get(
-          `http://127.0.0.1:8000/hodposts/author/${
+          `http://127.0.0.1:8000/alumniPosts/author/${
             id || userData?.user_id
-          }/?page=${page}&page_size=10`
+          }/?page=${page}&page_size=10`        
         );
         setPosts(response.data.results); // Set fetched posts
         setHasMore(response.data.next !== null);
@@ -463,9 +473,9 @@ const AlumniProfileContent = () => {
                     <div className="ribbon-wrapper ribbon-lg">
                       <div className="ribbon bg-primary">
                         {user
-                          ? user.is_alumni
+                          ? user?.is_alumni
                             ? "Alumni"
-                            : user.is_student
+                            : user?.is_student
                             ? "Student"
                             : "Admin"
                           : "User"}
@@ -769,8 +779,8 @@ const AlumniProfileContent = () => {
                           ) : (
                             <>
                               {" "}
-                              {posts.map((post) => (
-                                <div key={post.id} className="post">
+                              {posts?.map((post,ind) => (
+                                <div key={ind} className="post">
                                   <div className="user-block">
                                     <img
                                       className="img-circle img-bordered-sm"
@@ -823,7 +833,7 @@ const AlumniProfileContent = () => {
                                     {post?.content || "Content"}
                                   </p>
                                   <div className="row">
-                                    <div className="col-auto">
+                                    {/* <div className="col-auto">
                                       <a
                                         href={post?.image_url || "#"}
                                         target="_blank"
@@ -833,7 +843,74 @@ const AlumniProfileContent = () => {
                                         <i className="fas fa-image mr-1" />{" "}
                                         Image
                                       </a>
+                                    </div> */}
+                                    <div className="col-auto">
+                                    <a
+                                      href="#"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        handleImageClick();
+                                      }}
+                                      className="mr-3"
+                                    >
+                                      <i className="fas fa-image mr-1" /> Image
+                                    </a>
+
+                                    {isImageOpen && (
+                                    <div
+                                      style={{
+                                        position: "fixed",
+                                        top: 0,
+                                        left: 0,
+                                        width: "100%",
+                                        height: "100%",
+                                        backgroundColor: "tranparent",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        zIndex: 1050,
+                                      }}
+                                      onClick={handleCloseModal}
+                                    >
+                                      <div
+                                        style={{
+                                          position: "relative",
+                                          maxWidth: "100%",
+                                          maxHeight: "100%",
+                                          display: "flex",
+                                          justifyContent: "center",
+                                          alignItems: "center",
+                                        }}
+                                      >
+                                        <img
+                                          src={post?.Image}
+                                          alt="Post"
+                                          style={{
+                                            // maxWidth: "100%",
+                                            // maxHeight: "100%",
+                                            width:"100%",
+                                            height:"auto",
+                                            borderRadius: "5px",
+                                            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+                                          }}
+                                        />
+                                        <span
+                                          style={{
+                                            position: "absolute",
+                                            top: "10px",
+                                            right: "10px",
+                                            fontSize: "1.5em",
+                                            color: "#fff",
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={handleCloseModal}
+                                        >
+                                          &times;
+                                        </span>
+                                      </div>
                                     </div>
+                                  )}
+                                  </div>
                                     <div className="col-auto">
                                       <a
                                         href={post?.DocUrl || "#"}
@@ -860,6 +937,64 @@ const AlumniProfileContent = () => {
                               ))}
                             </>
                           )}
+
+                           {/* Pagination controls */}
+                           <div className="card-footer">
+                            <nav aria-label="Page Navigation">
+                              <ul className="pagination justify-content-center m-0">
+                                {/* Previous button */}
+                                <li
+                                  className={`page-item ${
+                                    page === 1 ? "disabled" : ""
+                                  }`}
+                                >
+                                  <button
+                                    className={`page-link ${
+                                      page === 1
+                                        ? "opacity-50 cursor-not-allowed"
+                                        : ""
+                                    }`}
+                                    onClick={() => setPage(page - 1)}
+                                    disabled={page === 1}
+                                  >
+                                    <i
+                                      className="fas fa-arrow-left"
+                                      style={{ fontSize: "1em" }}
+                                    />
+                                  </button>
+                                </li>
+
+                                {/* Current page */}
+                                <li className="page-item active">
+                                  <button className="page-link" disabled>
+                                    {page}
+                                  </button>
+                                </li>
+
+                                {/* Next button */}
+                                <li
+                                  className={`page-item ${
+                                    page === totalPages ? "disabled" : ""
+                                  }`}
+                                >
+                                  <button
+                                    className={`page-link ${
+                                      page === totalPages
+                                        ? "opacity-50 cursor-not-allowed"
+                                        : ""
+                                    }`}
+                                    onClick={() => setPage(page + 1)}
+                                    disabled={page === totalPages}
+                                  >
+                                    <i
+                                      className="fas fa-arrow-right"
+                                      style={{ fontSize: "1em" }}
+                                    />
+                                  </button>
+                                </li>
+                              </ul>
+                            </nav>
+                          </div>
                         </div>
                         {/* /.tab-pane */}
                         <div className="active tab-pane" id="timeline">
