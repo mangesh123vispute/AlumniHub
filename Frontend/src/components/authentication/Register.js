@@ -199,10 +199,9 @@ const handleSubmit = async (e) => {
           </div>
           <div className="card">
             <div className="card-body register-card-body">
-              <p className="login-box-msg">
+              <p className="login-box-msg" style={{ marginBottom: "0px" }}>
                 {" "}
                 Register as a <b>Alumni</b>
-                <b>/Student</b>
               </p>
 
               <hr
@@ -213,7 +212,14 @@ const handleSubmit = async (e) => {
                 }}
               />
 
-              <form onSubmit={handleSubmit}>
+              <form
+                onSubmit={handleSubmit}
+                style={{
+                  height: "40vh",
+                  overflowY: "auto",
+                  overflowX: "hidden",
+                }}
+              >
                 <div className="input-group mb-3">
                   <input
                     type="text"
@@ -341,50 +347,29 @@ const handleSubmit = async (e) => {
                 </div>
 
                 <div className="row">
-                  <div className="col-8">
-                    <div
-                      class="btn-group btn-group-toggle"
-                      data-toggle="buttons"
-                    >
-                      {/* <label class="btn bg-olive active">
-                    <input type="radio" name="options" id="option_b1" autocomplete="off" checked/> Active
-                  </label> */}
-                      <label class="btn bg-olive">
-                        <input
-                          type="radio"
-                          name="role"
-                          value="Student"
-                          checked={formData.role === "Student"}
-                          onChange={handleRadioChange}
-                        />{" "}
-                        <span className="fas fa-graduation-cap mr-1" />
-                        Student
-                      </label>
-                      <label class="btn bg-olive ">
-                        <input
-                          type="radio"
-                          name="role"
-                          value="Alumni"
-                          checked={formData.role === "Alumni"}
-                          onChange={handleRadioChange}
-                        />{" "}
-                        <span className="fas fa-users mr-1" /> Alumni
-                      </label>
-                    </div>
-                  </div>
-                  <div className="col-4">
+                  <div className="col-12">
                     <button type="submit" className="btn btn-primary btn-block">
                       Register
                     </button>
                   </div>
                 </div>
               </form>
-
               <hr
                 style={{
                   border: "1px solid #d2d6df",
-                  marginTop: "20px",
-                  marginBottom: "20px",
+                  marginTop: "10px",
+                  marginBottom: "10px",
+                }}
+              />
+              <i style={{ fontSize: "12px", color: "red" }}>
+                If you're a student of SSBT COET and would like to register,
+                please contact your class teacher or HOD to register yourself.
+              </i>
+              <hr
+                style={{
+                  border: "1px solid #d2d6df",
+                  marginTop: "10px",
+                  marginBottom: "10px",
                 }}
               />
 
@@ -395,7 +380,10 @@ const handleSubmit = async (e) => {
                   </Link>
                 </div>
                 <div className="col-4">
-                  <Link to="/activate_email" style={{ color: "#007bff" }}>
+                  <Link
+                    to="/send_activation_Email"
+                    style={{ color: "#007bff" }}
+                  >
                     <i className="fas fa-check-circle"></i> Activate
                   </Link>
                 </div>

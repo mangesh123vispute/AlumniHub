@@ -21,6 +21,7 @@ export const AuthProvider = ({ children }) => {
   const [isAllAlumniPage, setIsAllAlumniPage] = useState(false);
   const [isAllAdminPage, setIsAllAdminPage] = useState(false);
   const [filterClicked, setFilterClicked] = useState(false);
+  const [isForgotPassPageOrActivateAccountPage, setIsForgotPassPageOrActivateAccountPage] = useState(false);
  const [Alumnifilters, setAlumniFilters] = useState({
    full_name: "",
    Branch: "",
@@ -65,6 +66,7 @@ export const AuthProvider = ({ children }) => {
     setIsAllStudentPage(false);
     setIsAllAlumniPage(false);
     setIsAllAdminPage(false);
+    setIsForgotPassPageOrActivateAccountPage(false);
   }
   const showNotification = async (msg, iconType, titleText) => {
     
@@ -116,7 +118,7 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem("authTokens") ? JSON.parse(localStorage.getItem("authTokens")) : null;
     try {
       if (!token) {
-        navigate("/login");
+      //  navigate("/login")
         return -1;
       }
       // Verify access token
@@ -134,7 +136,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem("authTokens");
         setAuthTokens(null);
         setUser(null);
-        navigate("/login");
+        // navigate("/login");
         return -1;
       }  
       else {
@@ -218,7 +220,9 @@ export const AuthProvider = ({ children }) => {
     setIsAllAlumniPage: setIsAllAlumniPage,
     hodFilters: hodFilters,
     setHODFilters: setHODFilters,
-    refresh: refresh
+    refresh: refresh,
+    isForgotPassPageOrActivateAccountPage: isForgotPassPageOrActivateAccountPage,
+    setIsForgotPassPageOrActivateAccountPage: setIsForgotPassPageOrActivateAccountPage
   };
 
  
