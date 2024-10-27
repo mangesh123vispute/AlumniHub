@@ -18,6 +18,7 @@ class HodPrincipalPostSerializer(serializers.ModelSerializer):
             'title',
             'content',
             'tag',
+            "Image",
             'image_url',
             'DocUrl',
             'created_at',

@@ -199,7 +199,7 @@ const handleSubmit = async (e) => {
           </div>
           <div className="card">
             <div className="card-body register-card-body">
-              <p className="login-box-msg">
+              <p className="login-box-msg" style={{ marginBottom: "0px" }}>
                 {" "}
                 Register as a <b>Alumni</b>
               </p>
@@ -212,7 +212,14 @@ const handleSubmit = async (e) => {
                 }}
               />
 
-              <form onSubmit={handleSubmit}>
+              <form
+                onSubmit={handleSubmit}
+                style={{
+                  height: "40vh",
+                  overflowY: "auto",
+                  overflowX: "hidden",
+                }}
+              >
                 <div className="input-group mb-3">
                   <input
                     type="text"
@@ -347,12 +354,22 @@ const handleSubmit = async (e) => {
                   </div>
                 </div>
               </form>
-
               <hr
                 style={{
                   border: "1px solid #d2d6df",
-                  marginTop: "20px",
-                  marginBottom: "20px",
+                  marginTop: "10px",
+                  marginBottom: "10px",
+                }}
+              />
+              <i style={{ fontSize: "12px", color: "red" }}>
+                If you're a student of SSBT COET and would like to register,
+                please contact your class teacher or HOD to register yourself.
+              </i>
+              <hr
+                style={{
+                  border: "1px solid #d2d6df",
+                  marginTop: "10px",
+                  marginBottom: "10px",
                 }}
               />
 
@@ -367,7 +384,7 @@ const handleSubmit = async (e) => {
                     to="/send_activation_Email"
                     style={{ color: "#007bff" }}
                   >
-                    <i className="fas fa-check-circle"></i> Activate 
+                    <i className="fas fa-check-circle"></i> Activate
                   </Link>
                 </div>
 
