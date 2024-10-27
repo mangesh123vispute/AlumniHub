@@ -48,18 +48,27 @@ const AddHodPostContent = () => {
       return;
     }
 
-    const postData = {
-      title:Title,
-      content,
-      tag,
-      Image,
-      DocUrl: docUrl,
-    };
+    // const postData = {
+    //   title:Title,
+    //   content,
+    //   tag,
+    //   Image,
+    //   DocUrl: docUrl,
+    // };
 
-    axios
-      .post("http://127.0.0.1:8000/hodposts/", postData, {
+       // Create FormData object
+  const formData = new FormData();
+  formData.append("title", Title);
+  formData.append("content", content);
+  formData.append("tag", tag);
+  formData.append("Image", Image); // Assuming `Image` is the file object
+  formData.append("DocUrl", docUrl);
+
+    await axios
+      .post("http://127.0.0.1:8000/hodposts/", formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "multipart/form-data"
         },
       })
       .then((response) => {
@@ -78,7 +87,9 @@ const AddHodPostContent = () => {
       })
       .catch((error) => {
         console.error("Error during submission:", error);
+        console.log("err msg ",error.message);
         showNotification(
+          error.response.data.detail ||
           "Error submitting the post.",
           "warning",
           "Submission failed"
@@ -140,7 +151,7 @@ const AddHodPostContent = () => {
                   <input
                     type="file"
                     className="form-control"
-                    
+                  
                     onChange={(e)=>setImage(e.target.files[0])}
                     required
                   />

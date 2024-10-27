@@ -12,7 +12,7 @@ import StudentProfileContent from "./StudentProfileContent.js";
 import SuperUserProfileContent from "./SuperUserProfileContent.js";
 
 
-const Profile = () => {
+const MyProfile = () => {
   const location = useLocation();
   const { state } = location;
   let {
@@ -29,10 +29,10 @@ const Profile = () => {
   setFilter(false);
   console.log("state", state);
   
-  if (state) {
-    userData = state;
-    localStorage.setItem("id", JSON.stringify(state?.id));
-  }
+//   if (state) {
+//     userData = state;
+//     localStorage.setItem("id", JSON.stringify(state?.id));
+//   }
   console.log(" userData", userData);
   const getProfileContent = () => {
     if (userData.is_student) {
@@ -62,4 +62,4 @@ const Profile = () => {
   ): <LoadingSpinner isLoading={loading} />;
 };
 
-export default Profile;
+export default MyProfile;

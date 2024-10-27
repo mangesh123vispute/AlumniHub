@@ -39,13 +39,13 @@ const SideNav = () => {
             </div>
             <div className="info">
               <Link
-                to="/profile"
+                to="/myprofile"
                 className="d-block"
                 style={{ textDecoration: "none" }}
               >
                 Welcome!!
                 <span style={{ textTransform: "uppercase" }}>{` ${
-                  userData ? userData.username : "User"
+                  userData ? userData?.username : "User"
                 }`}</span>{" "}
               </Link>
             </div>
@@ -280,7 +280,7 @@ const SideNav = () => {
                             <p style={{ fontSize: "1em" }}>All Posts</p>
                           </Link>
                         </li>
-                        <li className="nav-item">
+                        {/* <li className="nav-item">
                           <Link to="/your_posts" className="nav-link">
                             <i
                               className="fas fa-newspaper mr-2"
@@ -288,7 +288,7 @@ const SideNav = () => {
                             />
                             <p style={{ fontSize: "1em" }}>Your Posts</p>
                           </Link>
-                        </li>
+                        </li> */}
                         <li className="nav-item">
                           <Link to="/add_alumni_post" className="nav-link">
                             <i
@@ -404,7 +404,7 @@ const SideNav = () => {
                             <p style={{ fontSize: "1em" }}>All Posts</p>
                           </Link>
                         </li>
-                        <li className="nav-item">
+                        {/* <li className="nav-item">
                           <Link to="/your_posts" className="nav-link">
                             <i
                               className="fas fa-newspaper mr-2"
@@ -412,7 +412,7 @@ const SideNav = () => {
                             />
                             <p style={{ fontSize: "1em" }}>Your Posts</p>
                           </Link>
-                        </li>
+                        </li> */}
                         <li className="nav-item">
                           <Link to="/add_hod_post" className="nav-link">
                             <i

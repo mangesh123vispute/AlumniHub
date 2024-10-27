@@ -56,7 +56,7 @@ const AddAlumniPostContent = () => {
   formData.append("Image", Image); // Assuming `Image` is the file object
   formData.append("DocUrl", docUrl);
 
-    axios
+   await axios
       .post("http://127.0.0.1:8000/alumni/posts/", formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,

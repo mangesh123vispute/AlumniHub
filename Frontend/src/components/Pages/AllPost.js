@@ -11,8 +11,8 @@ const AllPostContent = () => {
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState(null);
   const [page, setPage] = useState(1);     // Keep track of the page number
-    const [hasMore, setHasMore] = useState(true);
-    const [totalPages,setTotalPages] = useState(1)
+  const [hasMore, setHasMore] = useState(true);
+  const [totalPages,setTotalPages] = useState(1)
   const [singlePost, setSinglePost] = useState(null);
   const {
     verifyaccessToken,
@@ -26,29 +26,62 @@ const AllPostContent = () => {
   } = useContext(AuthContext);
 setFilter(true);
 
+const [isImageOpen, setIsImageOpen] = useState(false);
 
-  const getAllPosts = async () => {
-    const token = localStorage.getItem("authTokens") ? JSON.parse(localStorage.getItem("authTokens")) : null;
+  const handleImageClick = () => {
+    setIsImageOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsImageOpen(false);
+  };
+
+
+  // const getAllPosts = async () => {
+  //   const token = localStorage.getItem("authTokens") ? JSON.parse(localStorage.getItem("authTokens")) : null;
+  //   setLoading(true);
+  //   try {
+  //     // const urls = [
+  //     //   `http://127.0.0.1:8000/hodposts/?page=${page}&page_size=10`,
+  //     //   `http://127.0.0.1:8000/alumni/posts/?page=${page}&page_size=10`,
+  //     // ];
+
+  //     const responses = await axios.get(`http://127.0.0.1:8000/posts?page=${page}&page_size=10`, {
+  //           headers: { Authorization: `Bearer ${token?.access}` },
+  //         })
+        
+      
+
+  //     const combinedData = responses.flatMap((response) => response.data);
+  //     setPosts(combinedData);
+  //   } catch (error) {
+  //     console.error("Error fetching posts:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  useEffect(() => {   
+    getAllPosts(page); // Fetch the first page of posts when the component mounts
+  }, [page]);
+
+ 
+
+  const getAllPosts = async (page) => {
     setLoading(true);
     try {
-      const urls = [
-        `http://127.0.0.1:8000/hodposts/?page=${page}&page_size=10`,
-        `http://127.0.0.1:8000/alumni/posts/?page=${page}&page_size=10`,
-      ];
-
-      const responses = await Promise.all(
-        urls.map((url) =>
-          axios.get(url, {
-            headers: { Authorization: `Bearer ${token?.access}` },
-          })
-        )
-      );
-
-      const combinedData = responses.flatMap((response) => response.data);
-      setPosts(combinedData);
+      console.log("page " + page);
+      if(page===undefined){setPage(1);}
+      const response = await axios.get(`http://127.0.0.1:8000/posts?page=${page}&page_size=10`);
+      setPosts(response.data.results); // Set fetched posts
+      setHasMore(response.data.next !== null);
+       // If 'next' is null, stop loading more posts
+       const totalItems = response.data.count;
+       setTotalPages(Math.ceil(totalItems / 10));
+       setLoading(false);
     } catch (error) {
-      console.error("Error fetching posts:", error);
-    } finally {
+      console.error('Error fetching posts:', error);
+      showNotification("Error fetching posts, please try again.", "error", "Error");
       setLoading(false);
     }
   };
@@ -67,40 +100,40 @@ setFilter(true);
   };
 
 
-  const getSinglePost = async (postId, e) => {
-    if (e) e.preventDefault();
+  // const getSinglePost = async (postId, e) => {
+  //   if (e) e.preventDefault();
 
-    const token = localStorage.getItem("authTokens")
-      ? JSON.parse(localStorage.getItem("authTokens"))
-      : null;
+  //   const token = localStorage.getItem("authTokens")
+  //     ? JSON.parse(localStorage.getItem("authTokens"))
+  //     : null;
 
-    setLoading(true);
+  //   setLoading(true);
 
-    if ((await verifyaccessToken()) === -1) {
-      setLoading(false);
-      return;
-    }
+  //   if ((await verifyaccessToken()) === -1) {
+  //     setLoading(false);
+  //     return;
+  //   }
 
-    try {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/hodposts/${postId}/`,
-        {
-          headers: {
-            Authorization: `Bearer ${token?.access}`,
-          },
-        }
-      );
-      setSinglePost(response.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  //   try {
+  //     const response = await axios.get(
+  //       `http://127.0.0.1:8000/hodposts/${postId}/`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token?.access}`,
+  //         },
+  //       }
+  //     );
+  //     setSinglePost(response.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    getAllPosts();
-  }, []);
+  // useEffect(() => {
+  //   getAllPosts();
+  // }, []);
 
 
   //user , formatDate page setPage totalPages
@@ -232,8 +265,9 @@ setFilter(true);
       ) : (
         <p className="text-center text-gray-500" style={{ fontSize: "1.5em", fontWeight: "bold",height:"100vh" }}>No posts available.</p>
       )} */}
-
-                         <div
+      <div className="card">
+          <div className="card-body">
+          <div
                           className="tab-pane"
                           id="activity"
                           style={{
@@ -242,6 +276,7 @@ setFilter(true);
                             overflowX: "hidden",
                             padding: "15px",
                             boxSizing: "border-box",
+                            width:"auto"
                           }}
                         >
                           {/* Post */}
@@ -259,21 +294,21 @@ setFilter(true);
                           ) : (
                             <>
                               {" "}
-                              {posts.map((post) => (
-                                <div key={post.id} className="post">
+                              {posts?.map((post,ind) => (
+                                <div key={ind} className="post">
                                   <div className="user-block">
-                                    {/* <img
+                                    <img
                                       className="img-circle img-bordered-sm"
                                       src={`http://127.0.0.1:8000/${
-                                        user?.Image || "#"
+                                        post?.author?.Image || "#"
                                       }`}
                                       alt="user image"
-                                    /> */}
+                                    />
                                     <span className="username">
                                       <a href="#">
-                                        {post?.author_name ||
-                                          (post?.author_username
-                                            ? post?.author_username
+                                        {post?.author?.full_name ||
+                                          (post?.author?.full_name
+                                            ? post?.author?.full_name
                                             : "Author")}
                                       </a>
                                     </span>
@@ -312,7 +347,7 @@ setFilter(true);
                                     {post?.content || "Content"}
                                   </p>
                                   <div className="row">
-                                    <div className="col-auto">
+                                    {/* <div className="col-auto">
                                       <a
                                         href={post?.image_url || "#"}
                                         target="_blank"
@@ -322,7 +357,74 @@ setFilter(true);
                                         <i className="fas fa-image mr-1" />{" "}
                                         Image
                                       </a>
+                                    </div> */}
+                                    <div className="col-auto">
+                                    <a
+                                      href="#"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        handleImageClick();
+                                      }}
+                                      className="mr-3"
+                                    >
+                                      <i className="fas fa-image mr-1" /> Image
+                                    </a>
+
+                                    {isImageOpen && (
+                                    <div
+                                      style={{
+                                        position: "fixed",
+                                        top: 0,
+                                        left: 0,
+                                        width: "100%",
+                                        height: "100%",
+                                        backgroundColor: "tranparent",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        zIndex: 1050,
+                                      }}
+                                      onClick={handleCloseModal}
+                                    >
+                                      <div
+                                        style={{
+                                          position: "relative",
+                                          maxWidth: "100%",
+                                          maxHeight: "100%",
+                                          display: "flex",
+                                          justifyContent: "center",
+                                          alignItems: "center",
+                                        }}
+                                      >
+                                        <img
+                                          src={post?.Image}
+                                          alt="Post"
+                                          style={{
+                                            // maxWidth: "100%",
+                                            // maxHeight: "100%",
+                                            width:"100%",
+                                            height:"auto",
+                                            borderRadius: "5px",
+                                            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+                                          }}
+                                        />
+                                        <span
+                                          style={{
+                                            position: "absolute",
+                                            top: "10px",
+                                            right: "10px",
+                                            fontSize: "1.5em",
+                                            color: "#fff",
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={handleCloseModal}
+                                        >
+                                          &times;
+                                        </span>
+                                      </div>
                                     </div>
+                                  )}
+                                  </div>
                                     <div className="col-auto">
                                       <a
                                         href={post?.DocUrl || "#"}
@@ -408,9 +510,11 @@ setFilter(true);
                             </nav>
                           </div>
                           {/* /.post */}
-              </div>
-    </div>
-  </section>
+                          </div>
+                      </div>
+                  </div>                        
+                </div>  
+        </section>
   
   );
 };

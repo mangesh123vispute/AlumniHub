@@ -183,8 +183,8 @@ class AlumniPost(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         img = Image.open(self.Image.path)
-        if img.height > 500 or img.width > 500:
-            output_size = (300, 300)
+        if img.height > 1200 or img.width > 1200:
+            output_size = (1000, 1000)
             img.thumbnail(output_size)
             img.save(self.Image.path)
 
@@ -211,8 +211,8 @@ class HodPrincipalPost(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         img = Image.open(self.Image.path)
-        if img.height > 500 or img.width > 500:
-            output_size = (300, 300)
+        if img.height > 1200 or img.width > 1200:
+            output_size = (1000, 1000)
             img.thumbnail(output_size)
             img.thumbnail(output_size)
             img.save(self.Image.path)

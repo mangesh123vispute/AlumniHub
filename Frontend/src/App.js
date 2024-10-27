@@ -20,6 +20,7 @@ import AllPost from "./components/Pages/AllPost.js";
 import YourPosts from "./components/Pages/YourPosts.js";
 import ForgotPassword from "./components/authentication/Forgot_password.js";
 import ResetPassword from "./components/authentication/Reset_password.js";
+import MyProfile from "./components/Pages/MyProfile.js";
 
 function App() {
   return (
@@ -44,6 +45,10 @@ function App() {
           <Route
             path="/profile"
             element={<ProtectedRoute element={<Profile />} />}
+          />
+          <Route
+            path="/myprofile"
+            element={<ProtectedRoute element={<MyProfile />} />}
           />
           <Route
             path="/all_alumnis"
