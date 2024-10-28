@@ -12,7 +12,7 @@ import Home2 from "./components/Pages/Home2.js";
 import Error from "./components/Pages/Error.js";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import LandingPage from "./components/LandingPage.js";
-
+import Landing from "./components/Landing.js";
 import ProtectedRoute from "./components/ProtectedRoute.js";
 import AddHodPost from "./components/Pages/HOD/AddHodPost.js";
 import AddAlumniPost from './components/Pages/AddAlumniPost.js'
@@ -29,7 +29,7 @@ function App() {
       <AuthProvider>
         <Routes>
           {/* <Route path="/" element={<Layout />}> */}
-          <Route path="/" element={<LandingPage />} />
+          <Route path="/" element={<Landing />} />
 
           <Route path="/login" element={<Login />} />
           <Route path="/activate_email" element={<ActivateEmail />} />
