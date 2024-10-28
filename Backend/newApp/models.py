@@ -66,30 +66,7 @@ class User(AbstractUser):
             unique_username = str(uuid.uuid4())[:8]
         return unique_username
         
-    def send_role_query_email(self):
-        """Sends an email to the user asking for their role."""
-        subject = "Please Confirm Your Role"
-        message = "Are you an alumni, student, or college faculty? Please select your role."
-        email_from = settings.EMAIL_HOST_USER
-        recipient_list = [self.email]
-
-        role_selection_url = reverse('role_selection', args=[self.id])
-        full_url = f"{settings.SITE_URL}{role_selection_url}"
-
-        html_message = f"""
-            <p>{message}</p>
-            <p><a href="{full_url}">Click here to select your role</a></p>
-        """
-
-        send_mail(
-            subject,
-            message,
-            email_from,
-            recipient_list,
-            html_message=html_message,
-            fail_silently=False,
-        )
-
+    
     def send_activation_email(self):
         """Sends an email to activate the user account."""
         subject = "Activate Your Account"
@@ -126,20 +103,20 @@ class User(AbstractUser):
             self.username = self.generate_unique_username()
 
         send_activation = not self.is_active and not self.pk
-        super().save(*args, **kwargs)
         
         img = Image.open(self.Image.path)
         if img.height > 500 or img.width > 500:
             output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.Image.path)
-        
-        if (self.email) and (not self.is_alumni and not self.is_student and not self.is_superuser ):
-            self.send_role_query_email()
+
 
         if send_activation:
             self.send_activation_email()
 
+        super().save(*args, **kwargs)
+
+        
     def clean(self):
         # Call the parent clean method
         super().clean()

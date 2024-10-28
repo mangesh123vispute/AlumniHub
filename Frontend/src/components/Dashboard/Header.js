@@ -1,159 +1,162 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useContext } from "react";
-import { Link } from "react-router-dom";
-import AuthContext from "../../context/AuthContext.js";
-import Notification from "../Notification/Notification.js";
+  /* eslint-disable jsx-a11y/anchor-is-valid */
+  import React, { useContext } from "react";
+  import { Link } from "react-router-dom";
+  import AuthContext from "../../context/AuthContext.js";
+  import Notification from "../Notification/Notification.js";
 
-const Header = () => {
-  // console.log("i am user", useContext(AuthContext));
-  let {
-    user,
-    logoutUser,
-    isOpen,
-    message,
-    icon,
-    title,
-    handleClose,
-    filter,
-    setFilterClicked,
-    isAllAdminPage,
-    userData,
-  } = useContext(AuthContext);
-  return (
-    <div className="wrapper">
-      <Notification
-        message={message}
-        isOpen={isOpen}
-        onClose={handleClose}
-        icon={icon}
-        title={title}
-      />{" "}
-      {/* Navbar */}
-      <nav className="main-header navbar navbar-expand navbar-white navbar-light">
-        {/* Left navbar links */}
-        <ul className="navbar-nav">
-          <li className="nav-item">
-            <a
-              className="nav-link"
-              data-widget="pushmenu"
-              href="#"
-              role="button"
-            >
-              <i className="fas fa-bars" />
-            </a>
-          </li>
-          <li className="nav-item d-none d-sm-inline-block">
-            {" "}
-            <Link to="/home2" className="nav-link">
-              Home
-            </Link>
-          </li>
-          {user ? (
-            <li className="nav-item d-none d-sm-inline-block">
+
+  const Header = () => {
+    // console.log("i am user", useContext(AuthContext));
+    let {
+      user,
+      logoutUser,
+      isOpen,
+      message,
+      icon,
+      title,
+      handleClose,
+      filter,
+      setFilterClicked,
+      isAllAdminPage,
+      userData,
+      toggleModal,
+    } = useContext(AuthContext);
+    return (
+      <div className="wrapper">
+        <Notification
+          message={message}
+          isOpen={isOpen}
+          onClose={handleClose}
+          icon={icon}
+          title={title}
+        />{" "}
+        {/* Navbar */}
+        <nav className="main-header navbar navbar-expand navbar-white navbar-light">
+          {/* Left navbar links */}
+          <ul className="navbar-nav">
+            <li className="nav-item">
               <a
-                onClick={logoutUser}
                 className="nav-link"
-                style={{ cursor: "pointer" }}
+                data-widget="pushmenu"
+                href="#"
+                role="button"
               >
-                Logout
+                <i className="fas fa-bars" />
               </a>
             </li>
-          ) : (
-            <div>
-              <li className="nav-item d-none d-sm-inline-block">
-                {" "}
-                <Link to="/login" className="nav-link">
-                  Login
-                </Link>
-              </li>
-              <li className="nav-item d-none d-sm-inline-block">
-                <Link to="/register" className="nav-link">
-                  Register
-                </Link>
-              </li>
-            </div>
-          )}
-        </ul>
-        {/* Right navbar links */}
-        <ul className="navbar-nav ml-auto">
-          {/* Navbar Search */}
-          {/* <li className="nav-item">
-            <a
-              className="nav-link"
-              data-widget="navbar-search"
-              href="#"
-              role="button"
-            >
-              <i className="fas fa-search" />
-            </a>
-            <div className="navbar-search-block">
-              <form className="form-inline">
-                <div className="input-group input-group-sm">
-                  <input
-                    className="form-control form-control-navbar"
-                    type="search"
-                    placeholder="Search"
-                    aria-label="Search"
-                  />
-                  <div className="input-group-append">
-                    <button className="btn btn-navbar" type="submit">
-                      <i className="fas fa-search" />
-                    </button>
-                    <button
-                      className="btn btn-navbar"
-                      type="button"
-                      data-widget="navbar-search"
-                    >
-                      <i className="fas fa-times" />
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </li> */}
-          {/* Messages Dropdown Menu */}
-          {(isAllAdminPage && userData.is_superuser)  && (
-            <li className="nav-item">
-              <button
-                type="button"
-                className="btn btn-outline-success btn-sm mt-1.5"
-              >
-                <i className="fas fa-user-plus mr-1" /> Add Admin
-              </button>
+            <li className="nav-item d-none d-sm-inline-block">
+              {" "}
+              <Link to="/home2" className="nav-link">
+                Home
+              </Link>
             </li>
-          )}
-
-          {filter ? (
-            <>
-              <li className="nav-item">
+            {user ? (
+              <li className="nav-item d-none d-sm-inline-block">
                 <a
+                  onClick={logoutUser}
                   className="nav-link"
-                  data-widget="control-sidebar"
-                  href="#"
-                  role="button"
-                  onClick={() => setFilterClicked(true)}
+                  style={{ cursor: "pointer" }}
                 >
-                  <i class="fas fa-filter  text-sm"></i>
+                  Logout
                 </a>
               </li>
-            </>
-          ) : null}
+            ) : (
+              <div>
+                <li className="nav-item d-none d-sm-inline-block">
+                  {" "}
+                  <Link to="/login" className="nav-link">
+                    Login
+                  </Link>
+                </li>
+                <li className="nav-item d-none d-sm-inline-block">
+                  <Link to="/register" className="nav-link">
+                    Register
+                  </Link>
+                </li>
+              </div>
+            )}
+          </ul>
+          {/* Right navbar links */}
+          <ul className="navbar-nav ml-auto">
+            {/* Navbar Search */}
+            {/* <li className="nav-item">
+              <a
+                className="nav-link"
+                data-widget="navbar-search"
+                href="#"
+                role="button"
+              >
+                <i className="fas fa-search" />
+              </a>
+              <div className="navbar-search-block">
+                <form className="form-inline">
+                  <div className="input-group input-group-sm">
+                    <input
+                      className="form-control form-control-navbar"
+                      type="search"
+                      placeholder="Search"
+                      aria-label="Search"
+                    />
+                    <div className="input-group-append">
+                      <button className="btn btn-navbar" type="submit">
+                        <i className="fas fa-search" />
+                      </button>
+                      <button
+                        className="btn btn-navbar"
+                        type="button"
+                        data-widget="navbar-search"
+                      >
+                        <i className="fas fa-times" />
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </li> */}
+            {/* Messages Dropdown Menu */}
+            {isAllAdminPage && userData.is_superuser && (
+              <li className="nav-item">
+                <button
+                  type="button"
+                  className="btn btn-outline-success btn-sm mt-1.5"
+                  onClick={toggleModal}
+                >
+                  <i className="fas fa-user-plus mr-1" /> Add
+                </button>
+              </li>
+            )}
 
-          <li className="nav-item">
-            <a
-              className="nav-link"
-              data-widget="fullscreen"
-              href="#"
-              role="button"
-            >
-              <i className="fas fa-expand-arrows-alt" />
-            </a>
-          </li>
-        </ul>
-      </nav>
-      {/* /.navbar */}
-    </div>
-  );
-};
+            {filter ? (
+              <>
+                <li className="nav-item">
+                  <a
+                    className="nav-link"
+                    data-widget="control-sidebar"
+                    href="#"
+                    role="button"
+                    onClick={() => setFilterClicked(true)}
+                  >
+                    <i class="fas fa-filter  text-sm"></i>
+                  </a>
+                </li>
+              </>
+            ) : null}
 
-export default Header;
+            <li className="nav-item">
+              <a
+                className="nav-link"
+                data-widget="fullscreen"
+                href="#"
+                role="button"
+              >
+                <i className="fas fa-expand-arrows-alt" />
+              </a>
+            </li>
+          </ul>
+        </nav>
+        {/* /.navbar */}
+      </div>
+    );
+  };
+
+  export default Header;

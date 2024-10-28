@@ -24,6 +24,7 @@ import ResetPassword from "./components/authentication/Reset_password.js";
 import MyProfile from "./components/Pages/MyProfile.js";
 
 function App() {
+  
   return (
     <BrowserRouter>
       <AuthProvider>

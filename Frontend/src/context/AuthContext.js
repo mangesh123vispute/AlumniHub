@@ -22,6 +22,8 @@ export const AuthProvider = ({ children }) => {
   const [isAllAdminPage, setIsAllAdminPage] = useState(false);
   const [filterClicked, setFilterClicked] = useState(false);
   const [isForgotPassPageOrActivateAccountPage, setIsForgotPassPageOrActivateAccountPage] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+   
  const [Alumnifilters, setAlumniFilters] = useState({
    full_name: "",
    Branch: "",
@@ -59,15 +61,13 @@ export const AuthProvider = ({ children }) => {
   });
 
 
-  const location=useLocation();
+  const location = useLocation();
   
+  const toggleModal = () => {
+    setIsModalOpen((prev) => !prev);
+  };
    
-  const refresh=()=>{
-    setIsAllStudentPage(false);
-    setIsAllAlumniPage(false);
-    setIsAllAdminPage(false);
-    setIsForgotPassPageOrActivateAccountPage(false);
-  }
+  
   const showNotification = async (msg, iconType, titleText) => {
     
     setMessage(msg);
@@ -110,8 +110,6 @@ export const AuthProvider = ({ children }) => {
       // Handle the error here, e.g., show a message to the user
     }
   };
-
-  
 
   //* verify access tokens 
   const verifyaccessToken = async () => {
@@ -176,7 +174,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     setShowProfileOfId(false);
     setFilterClicked(false);
-    refresh();
+  
   }, [location]);
 
   //* context data and functions
@@ -220,12 +218,15 @@ export const AuthProvider = ({ children }) => {
     setIsAllAlumniPage: setIsAllAlumniPage,
     hodFilters: hodFilters,
     setHODFilters: setHODFilters,
-    refresh: refresh,
-    isForgotPassPageOrActivateAccountPage: isForgotPassPageOrActivateAccountPage,
-    setIsForgotPassPageOrActivateAccountPage: setIsForgotPassPageOrActivateAccountPage
+    isForgotPassPageOrActivateAccountPage:
+    isForgotPassPageOrActivateAccountPage,
+    setIsForgotPassPageOrActivateAccountPage:
+    setIsForgotPassPageOrActivateAccountPage,
+    isModalOpen: isModalOpen,
+    toggleModal: toggleModal,
   };
 
- 
+
 
   return (
     <AuthContext.Provider value={contextData}>{children}</AuthContext.Provider>
