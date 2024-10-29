@@ -101,17 +101,32 @@ function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
           <div className="flex items-center space-x-2">
             <img src="/logo.png" alt="Logo" className="w-8 h-8" /> {/* Logo */}
-            <Link to="/" className="text-lg md:text-2xl font-bold">Alumni Hub</Link>
+            <Link to="/" className="text-lg md:text-2xl font-bold">
+              Alumni Hub
+            </Link>
           </div>
           <div className="hidden md:flex space-x-6">
-            <a href="/" className="hover:text-blue-700">Home</a>
-            <a href="#about" className="hover:text-blue-700">About</a>
-            <a href="#team" className="hover:text-blue-700">Team</a>
-            <a href="#contact" className="hover:text-blue-700">Contact</a>
+            <a href="/" className="hover:text-blue-700">
+              Home
+            </a>
+            <a href="#about" className="hover:text-blue-700">
+              About
+            </a>
+            <a href="#team" className="hover:text-blue-700">
+              Team
+            </a>
+            <a href="#contact" className="hover:text-blue-700">
+              Contact
+            </a>
           </div>
           <div className="hidden md:flex space-x-2">
-            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Register</button>
-            
+            <Link
+              to="/register"
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+            >
+              Register / Login
+            </Link>
+           
           </div>
           <div className="md:hidden">
             <button
@@ -129,7 +144,9 @@ function Landing() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
-                  d={navOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+                  d={
+                    navOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"
+                  }
                 />
               </svg>
             </button>
@@ -137,13 +154,38 @@ function Landing() {
         </div>
         {navOpen && (
           <div className="md:hidden bg-white">
-            <a href="/" className="block px-4 py-2 text-black hover:bg-blue-100" onClick={() => setNavOpen(false)}>Home</a>
-            <a href="#about" className="block px-4 py-2 text-black hover:bg-blue-100" onClick={() => setNavOpen(false)}>About</a>
-            <a href="#team" className="block px-4 py-2 text-black hover:bg-blue-100" onClick={() => setNavOpen(false)}>Team</a>
-            <a href="#contact" className="block px-4 py-2 text-black hover:bg-blue-100" onClick={() => setNavOpen(false)}>Contact</a>
+            <a
+              href="/"
+              className="block px-4 py-2 text-black hover:bg-blue-100"
+              onClick={() => setNavOpen(false)}
+            >
+              Home
+            </a>
+            <a
+              href="#about"
+              className="block px-4 py-2 text-black hover:bg-blue-100"
+              onClick={() => setNavOpen(false)}
+            >
+              About
+            </a>
+            <a
+              href="#team"
+              className="block px-4 py-2 text-black hover:bg-blue-100"
+              onClick={() => setNavOpen(false)}
+            >
+              Team
+            </a>
+            <a
+              href="#contact"
+              className="block px-4 py-2 text-black hover:bg-blue-100"
+              onClick={() => setNavOpen(false)}
+            >
+              Contact
+            </a>
             <div className="px-4 py-2 space-y-2">
-              <button className="w-full  bg-blue-500 text-white px-4 py-2 rounde hover:bg-blue-600 transition">Register</button>
-            
+              <button className="w-full  bg-blue-500 text-white px-4 py-2 rounde hover:bg-blue-600 transition">
+                Register
+              </button>
             </div>
           </div>
         )}
@@ -161,28 +203,44 @@ function Landing() {
       >
         <div ref={textDivRef} className="text-center space-y-2 px-4 sm:px-0">
           <h1 className="text-3xl md:text-4xl font-bold">Welcome To</h1>
-          <h1 className="text-4xl md:text-5xl font-bold text-blue-500">Alumni Hub</h1>
-          <h3 ref={h3Ref} className="text-center text-sm md:text-base font-semibold mt-2">
+          <h1 className="text-4xl md:text-5xl font-bold text-blue-500">
+            Alumni Hub
+          </h1>
+          <h3
+            ref={h3Ref}
+            className="text-center text-sm md:text-base font-semibold mt-2"
+          >
             Here Meets Future Hands
           </h3>
         </div>
       </div>
 
       {/* About Section */}
-      <div id="about" ref={aboutSectionRef} className="w-full min-h-screen flex justify-center items-center px-4">
+      <div
+        id="about"
+        ref={aboutSectionRef}
+        className="w-full min-h-screen flex justify-center items-center px-4"
+      >
         <AboutSection />
       </div>
 
       {/* Team Section */}
-      <div id="team" ref={teamSectionRef} className="w-full min-h-screen flex justify-center items-center px-4">
+      <div
+        id="team"
+        ref={teamSectionRef}
+        className="w-full min-h-screen flex justify-center items-center px-4"
+      >
         <TeamSection />
       </div>
 
       {/* Contact Section */}
-      <div id="contact" className="w-full min-h-screen flex justify-center items-center px-4">
+      <div
+        id="contact"
+        className="w-full min-h-screen flex justify-center items-center px-4"
+      >
         <ContactSection />
       </div>
-      <FooterSection/>
+      <FooterSection />
     </div>
   );
 }
