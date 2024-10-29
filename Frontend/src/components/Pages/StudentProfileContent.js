@@ -218,74 +218,74 @@ const StudentProfileContent = () => {
         }
       };
 
-    // const handleGradSubmit = async (e) => {
-    //   e.preventDefault();
-    //   setLoading(true);
+    const handleGradSubmit = async (e) => {
+      e.preventDefault();
+      setLoading(true);
      
-    //   const token = localStorage.getItem("authTokens")
-    //     ? JSON.parse(localStorage.getItem("authTokens"))
-    //     : null;
+      const token = localStorage.getItem("authTokens")
+        ? JSON.parse(localStorage.getItem("authTokens"))
+        : null;
 
-    //   const currentDate = new Date();
-    //   const currentYear = currentDate.getFullYear();
-    //   const currentMonth = currentDate.getMonth() + 1; // getMonth() is zero-based
-    //   if(studentData?.user?.graduation_year === "" || studentData?.user?.graduation_month === "") {
-    //     showNotification(
-    //       "Please enter graduation year and month.",
-    //       "warning",
-    //       "Warning"
-    //     );
-    //     setLoading(false);
-    //     return;
-    //   }
-    //   const gradYear = parseInt(studentData?.user?.graduation_year);
-    //   const gradMonth = parseInt(studentData?.user?.graduation_month);
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth() + 1; // getMonth() is zero-based
+      if(studentData?.user?.graduation_year === "" || studentData?.user?.graduation_month === "") {
+        showNotification(
+          "Please enter graduation year and month.",
+          "warning",
+          "Warning"
+        );
+        setLoading(false);
+        return;
+      }
+      const gradYear = parseInt(studentData?.user?.graduation_year);
+      const gradMonth = parseInt(studentData?.user?.graduation_month);
 
-    //   try {
-    //     const response = await axios.put(
-    //       `http://127.0.0.1:8000/edit-student-profile/${
-    //         id || userData?.user_id
-    //       }/`,
-    //       studentData,
-    //       {
-    //         headers: {
-    //           Authorization: `Bearer ${token?.access}`,
-    //         },
-    //       }
-    //     );
+      try {
+        const response = await axios.put(
+          `http://127.0.0.1:8000/edit-student-profile/${
+            id || userData?.user_id
+          }/`,
+          studentData,
+          {
+            headers: {
+              Authorization: `Bearer ${token?.access}`,
+            },
+          }
+        );
 
-    //     if (response.status === 200) {
-    //       setLoading(false);
-    //       setReload(!reload);
+        if (response.status === 200) {
+          setLoading(false);
+          setReload(!reload);
 
-    //       // Check graduation year and month logic
-    //       if (
-    //         gradYear > currentYear ||
-    //         (gradYear === currentYear && gradMonth >= currentMonth)
-    //       ) {
-    //         showNotification(
-    //           "You are assigned with a Student profile.",
-    //           "success",
-    //           "Profile Updated to Student"
-    //         );
-    //       } else {
-    //         showNotification(
-    //           "You are assigned with the Alumni profile.",
-    //           "success",
-    //           "Profile Updated to Alumni"
-    //         );
-    //       }
-    //     }
-    //   } catch (error) {
-    //     console.error("Error updating profile:", error.message);
-    //     showNotification(
-    //       "Error updating profile, please try again.",
-    //       "error",
-    //       "Error"
-    //     );
-    //     setLoading(false);
-    //   }
-    // };
+          // Check graduation year and month logic
+          if (
+            gradYear > currentYear ||
+            (gradYear === currentYear && gradMonth >= currentMonth)
+          ) {
+            showNotification(
+              "You are assigned with a Student profile.",
+              "success",
+              "Profile Updated to Student"
+            );
+          } else {
+            showNotification(
+              "You are assigned with the Alumni profile.",
+              "success",
+              "Profile Updated to Alumni"
+            );
+          }
+        }
+      } catch (error) {
+        console.error("Error updating profile:", error.message);
+        showNotification(
+          "Error updating profile, please try again.",
+          "error",
+          "Error"
+        );
+        setLoading(false);
+      }
+    };
 
     
       // Handle input changes for user data
@@ -530,7 +530,7 @@ const StudentProfileContent = () => {
                           </li>
                         )}
 
-                        {/* {userData?.user_id === user?.id && (
+                        {userData?.user_id === user?.id && (
                           <li className="nav-item">
                             <a
                               className="nav-link"
@@ -547,7 +547,7 @@ const StudentProfileContent = () => {
                               Graduation Details
                             </a>
                           </li>
-                        )} */}
+                        )}
                       </ul>
                     </div>
                     {/* /.card-header */}
@@ -1043,7 +1043,7 @@ const StudentProfileContent = () => {
                             </div>
                           </form>
                         </div>
-                        {/* 
+                        
                         <div
                           className="tab-pane"
                           id="updateGraduation"
@@ -1137,7 +1137,7 @@ const StudentProfileContent = () => {
                               </div>
                             </div>
                           </form>
-                        </div> */}
+                        </div>
                         {/* /.tab-pane */}
                       </div>
                       {/* /.tab-content */}
