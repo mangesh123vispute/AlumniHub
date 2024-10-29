@@ -11,7 +11,12 @@ const AlumniProfileContent = () => {
       setLoading,
       showNotification,
       ShowProfileOfId,
+      setIsAllAdminPage,
     } = useContext(AuthContext);
+
+   useEffect(() => {
+     setIsAllAdminPage(false);
+   }, []);
     console.log("userData", userData);
     const [user, setUser] = useState(null);
     const [show, setShow] = useState(false);

@@ -115,7 +115,7 @@
               </div>
             </li> */}
             {/* Messages Dropdown Menu */}
-            {isAllAdminPage && userData.is_superuser && (
+            {(isAllAdminPage && userData.is_superuser )&& (
               <li className="nav-item dropdown">
                 <button
                   className="btn btn-outline-success btn-sm mt-1.5 dropdown-toggle"

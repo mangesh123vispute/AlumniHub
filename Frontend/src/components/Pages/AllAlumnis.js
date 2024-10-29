@@ -115,7 +115,10 @@ const AllAlumnisContent = () => {
       <section className="content">
         {/* Default box */}
         <div className="card card-solid">
-          <div className="card-body pb-0">
+          <div
+            className="card-body pb-0"
+            style={{ height: "150vh", overflowY: "auto" }}
+          >
             <div className="row">
               <>
                 {alumniData?.results?.length === 0 ? (

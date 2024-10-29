@@ -113,7 +113,10 @@ const AllStudentsContent = () => {
       <section className="content">
         {/* Default box */}
         <div className="card card-solid">
-          <div className="card-body pb-0">
+          <div
+            className="card-body pb-0"
+            style={{ height: "150vh", overflowY: "auto" }}
+          >
             <div className="row">
               {studentData?.results?.length === 0 ? (
                 <div
@@ -144,7 +147,7 @@ const AllStudentsContent = () => {
                               Branch: {students?.Branch || "N/A"} | Yr. of
                               Study:{" "}
                               {students?.student_profile
-                                ?.current_year_of_study || "N/A"}{" "} 
+                                ?.current_year_of_study || "N/A"}{" "}
                               | Grad Year: {students.graduation_year || "N/A"}
                             </b>
                           </small>
