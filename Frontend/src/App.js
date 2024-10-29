@@ -4,6 +4,7 @@ import Login from "./components/authentication/Login.js";
 import ActivateEmail from "./components/authentication/ActivateEmail.js";
 import Register from "./components/authentication/Register.js";
 import Profile from "./components/Pages/Profile.js";
+import Requests from "./components/Pages/Requests.js";
 import AllAlumnis from "./components/Pages/AllAlumnis.js";
 import AllHods from "./components/Pages/AllHods.js";
 import AllStudent from "./components/Pages/AllStudents.js";
@@ -44,6 +45,7 @@ function App() {
             element={<ResetPassword />}
           />
           <Route path="/home" element={<ProtectedRoute element={<Home />} />} />
+          <Route path="/requests" element={<ProtectedRoute element={<Requests />} />} />
           <Route
             path="/home2"
             element={<ProtectedRoute element={<Home2 />} />}

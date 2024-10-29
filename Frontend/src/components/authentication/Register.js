@@ -26,6 +26,11 @@ const Register = () => {
     role: "",
     graduation_year: "",
     graduation_month: "",
+    linkedin: "", // LinkedIn ID
+    fourthYearMarksheet: "",
+    lc: "",
+    idCard: "",
+    graduationCertificate: "",
   });
   // const [message, setMessage] = useState("");
   const handleChange = (e) => {
@@ -37,6 +42,22 @@ const Register = () => {
 const handleSubmit = async (e) => {
   e.preventDefault();
   setLoading(true);
+  const { linkedin, fourthYearMarksheet, lc, idCard, graduationCertificate } =
+    formData;
+   if (!linkedin) {
+     await showNotification("LinkedIn ID is required!", "warning", "Warning");
+     setLoading(false);
+     return;
+  }
+  if (!fourthYearMarksheet && !lc && !idCard && !graduationCertificate) {
+    await showNotification(
+      "At least one of the required documents must be provided!",
+      "warning",
+      "Warning"
+    );
+    setLoading(false);
+    return;
+  }
   if (
     !(formData.username &&
     formData.password &&
@@ -311,6 +332,71 @@ const handleSubmit = async (e) => {
                       </div>
                     </div>
                   </div>
+                </div>
+
+                {/* Credentials Section */}
+                <hr style={{ border: "1px solid #d2d6df", margin: "20px 0" }} />
+                <h5>Credentials</h5>
+
+                <div className="input-group mb-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="LinkedIn ID"
+                    name="linkedin"
+                    value={formData.linkedin}
+                    onChange={handleChange}
+                    required
+                  />
+                  <div className="input-group-append">
+                    <div className="input-group-text">
+                      <span className="fab fa-linkedin" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="input-group mb-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Fourth Year Marksheet (Optional)"
+                    name="fourthYearMarksheet"
+                    value={formData.fourthYearMarksheet}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="input-group mb-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Leaving Certificate (LC) (Optional)"
+                    name="lc"
+                    value={formData.lc}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="input-group mb-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="ID Card (Optional)"
+                    name="idCard"
+                    value={formData.idCard}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="input-group mb-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Graduation Certificate (Optional)"
+                    name="graduationCertificate"
+                    value={formData.graduationCertificate}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 <div className="input-group mb-3">

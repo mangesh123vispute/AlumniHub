@@ -15,12 +15,25 @@ const SideNav = () => {
       <aside className="main-sidebar sidebar-dark-primary elevation-4">
         {/* Brand Logo */}
         <Link to="/" className="brand-link" style={{ textDecoration: "none" }}>
-         <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style={{opacity: .8}}></img>
-          <span className="brand-text font-weight-light">
-            <span style={{  color: "red" }}>
-              Alumni
-            </span>Hub
-          </span>
+          <img
+            src="./Logo.jfif"
+            alt="SSBT COET"
+            class="brand-image img-circle elevation-3"
+            style={{
+              marginTop: "5px",
+            }}
+          ></img>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <span
+              className="brand-text font-weight-light"
+              style={{ fontSize: "18px", color: "#FFF" }}
+            >
+              <span style={{ color: "red" }}>Alumni</span>Hub -
+            </span>
+            <small style={{ fontSize: "0.6em", color: "white" }}>
+              SSBT COET
+            </small>
+          </div>
         </Link>
         {/* Sidebar */}
         <div className="sidebar">
@@ -48,22 +61,6 @@ const SideNav = () => {
                   userData ? userData?.username : "User"
                 }`}</span>{" "}
               </Link>
-            </div>
-          </div>
-          {/* SidebarSearch Form */}
-          <div className="form-inline">
-            <div className="input-group" data-widget="sidebar-search">
-              <input
-                className="form-control form-control-sidebar"
-                type="search"
-                placeholder="Search"
-                aria-label="Search"
-              />
-              <div className="input-group-append">
-                <button className="btn btn-sidebar">
-                  <i className="fas fa-search fa-fw" />
-                </button>
-              </div>
             </div>
           </div>
 
@@ -95,7 +92,7 @@ const SideNav = () => {
                         style={{ fontSize: "1em" }}
                       />
                       <p style={{ fontSize: "1em" }}>
-                        USER
+                        Users
                         <i
                           className={`right fas ${
                             activeDropdown === "user"
@@ -154,7 +151,7 @@ const SideNav = () => {
                         style={{ fontSize: "1em" }}
                       ></i>
                       <p style={{ fontSize: "1em" }}>
-                        POST
+                        Posts
                         <i
                           className={`right fas ${
                             activeDropdown === "post"
@@ -200,7 +197,7 @@ const SideNav = () => {
                         style={{ fontSize: "1em" }}
                       />
                       <p style={{ fontSize: "1em" }}>
-                        USER
+                        Users
                         <i
                           className={`right fas ${
                             activeDropdown === "user"
@@ -259,7 +256,7 @@ const SideNav = () => {
                         style={{ fontSize: "1em" }}
                       ></i>
                       <p style={{ fontSize: "1em" }}>
-                        POST
+                        Posts
                         <i
                           className={`right fas ${
                             activeDropdown === "post"
@@ -324,7 +321,7 @@ const SideNav = () => {
                         style={{ fontSize: "1em" }}
                       />
                       <p style={{ fontSize: "1em" }}>
-                        USER
+                        Users
                         <i
                           className={`right fas ${
                             activeDropdown === "user"
@@ -383,7 +380,7 @@ const SideNav = () => {
                         style={{ fontSize: "1em" }}
                       ></i>
                       <p style={{ fontSize: "1em" }}>
-                        POST
+                        Posts
                         <i
                           className={`right fas ${
                             activeDropdown === "post"
@@ -426,68 +423,21 @@ const SideNav = () => {
                     )}
                   </li>
 
-                  {/* 
                   <li className="nav-item">
                     <Link
-                      to="http://127.0.0.1:8000/admin/"
+                      to="/requests"
                       className="nav-link"
                     >
                       <p style={{ fontSize: "1em" }}>
                         <i
-                          className="fas fa-comments nav-icon"
+                          className="fas fa-user-plus nav-icon"
                           style={{ fontSize: "1em" }}
+                          title="Request to Join"
                         ></i>
-                        Feedbacks
+                        Join Requests
                       </p>
                     </Link>
                   </li>
-
-                  <li className="nav-item">
-                    <Link
-                      to="http://127.0.0.1:8000/admin/"
-                      className="nav-link"
-                    >
-                      <p style={{ fontSize: "1em" }}>
-                        <i
-                          className="fas fa-clipboard nav-icon"
-                          style={{ fontSize: "1em" }}
-                        ></i>
-                        Requests
-                      </p>
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link
-                      to="http://127.0.0.1:8000/admin/"
-                      className="nav-link"
-                    >
-                      <p style={{ fontSize: "1em" }}>
-                        <i
-                          className="fas fa-chart-line nav-icon"
-                          style={{ fontSize: "1em" }}
-                        ></i>
-                        Analytics
-                      </p>
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link to="/dashboard/career-resources" className="nav-link">
-                      <i
-                        className="fas fa-briefcase nav-icon"
-                        style={{ fontSize: "1em" }}
-                      ></i>
-                      <p style={{ fontSize: "1em" }}>Resources</p>
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link to="/dashboard/user-roles" className="nav-link">
-                      <i
-                        className="fas fa-user-lock nav-icon"
-                        style={{ fontSize: "1em" }}
-                      ></i>
-                      <p style={{ fontSize: "1em" }}>User Roles</p>
-                    </Link>
-                  </li> */}
                   <li className="nav-item">
                     <Link
                       to="http://127.0.0.1:8000/admin/"
