@@ -15,6 +15,10 @@ import urllib.parse
 from django.utils.encoding import force_str
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
+from .createStaffSerializers import StaffUserSerializer
+from rest_framework.permissions import IsAuthenticated
+from django.db import IntegrityError
+
 User=get_user_model()
 
 class UserRegisterAPIView(APIView):
@@ -265,3 +269,42 @@ class SendActivationEmailView(APIView):
             html_message=html_message,
             fail_silently=False,
         )
+
+
+
+
+
+class CreateStaffUserView(APIView):
+    permission_classes = [IsAuthenticated] 
+
+    def post(self, request, *args, **kwargs):
+        # Check if the user is superuser
+        if not request.user.is_superuser:
+            return Response(
+                {"detail": "You do not have permission to perform this action."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        # Check if email already exists
+        email = request.data.get('email')
+        if User.objects.filter(email=email).exists():
+            return Response(
+                {"detail": "A user with this email already exists."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Proceed with staff user creation
+        serializer = StaffUserSerializer(data=request.data)
+        if serializer.is_valid():
+            try:
+                user = serializer.save()
+                return Response(
+                    {"detail": "Staff user created successfully.", "user_id": user.id},
+                    status=status.HTTP_201_CREATED
+                )
+            except IntegrityError:
+                return Response(
+                    {"detail": "A profile for this user already exists."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

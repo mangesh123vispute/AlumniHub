@@ -6,6 +6,7 @@ import LoadingSpinner from "../Loading/Loading.js";
 import Notification from "../Notification/Notification.js";
 import { useNavigate } from "react-router-dom";
 
+
 const AllAlumnisContent = () => {
   const [adminData, setAdminData] = useState(null); // Changed to hold the entire data object
   const navigate = useNavigate();
@@ -24,9 +25,10 @@ const AllAlumnisContent = () => {
     setIsAllAdminPage,
     hodFilters,
     setHodFilters,
+    isModalOpen,
+    toggleModal,
   } = useContext(AuthContext);
 
- 
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -57,38 +59,37 @@ const AllAlumnisContent = () => {
     navigate("/profile", { state: userData });
   };
 
-const fetchAdmins = async (pageNumber) => {
-  setLoading(true);
-  const token = localStorage.getItem("authTokens")
-    ? JSON.parse(localStorage.getItem("authTokens"))
-    : null;
+  const fetchAdmins = async (pageNumber) => {
+    setLoading(true);
+    const token = localStorage.getItem("authTokens")
+      ? JSON.parse(localStorage.getItem("authTokens"))
+      : null;
 
-  // Construct query parameters from hodFilters
-  const queryParams = new URLSearchParams({
-    page: pageNumber,
-    page_size: pageSize,
-    ...hodFilters, // Spread the hodFilters into the query params
-  }).toString();
+    // Construct query parameters from hodFilters
+    const queryParams = new URLSearchParams({
+      page: pageNumber,
+      page_size: pageSize,
+      ...hodFilters, // Spread the hodFilters into the query params
+    }).toString();
 
-  try {
-    const response = await axios.get(
-      `http://127.0.0.1:8000/hods/?${queryParams}`,
-      {
-        headers: { Authorization: `Bearer ${token?.access}` },
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/hods/?${queryParams}`,
+        {
+          headers: { Authorization: `Bearer ${token?.access}` },
+        }
+      );
+      if (response.status === 200) {
+        setAdminData(response.data);
+        const totalItems = response.data.count;
+        setTotalPages(Math.ceil(totalItems / pageSize));
+        setLoading(false);
       }
-    );
-    if (response.status === 200) {
-      setAdminData(response.data);
-      const totalItems = response.data.count;
-      setTotalPages(Math.ceil(totalItems / pageSize));
+    } catch (err) {
+      console.error("Error fetching admins: ", err);
       setLoading(false);
     }
-  } catch (err) {
-    console.error("Error fetching admins: ", err);
-    setLoading(false);
-  }
-};
-
+  };
 
   // Fetch alumni on component mount
   useEffect(() => {
@@ -100,8 +101,7 @@ const fetchAdmins = async (pageNumber) => {
     setIsAllStudentPage(false);
     setIsAllAlumniPage(false);
     setFilter(true);
-  }
-  ,[]);
+  }, []);
 
   return (
     <div>
@@ -130,7 +130,7 @@ const fetchAdmins = async (pageNumber) => {
                   </h3>
                 </div>
               ) : (
-                < >
+                <>
                   {adminData?.results?.map((admins) => (
                     <div
                       key={admins.id}
@@ -202,6 +202,7 @@ const fetchAdmins = async (pageNumber) => {
             </div>
           </div>
           {/* /.card-body */}
+
           <div className="card-footer">
             <nav aria-label="Page Navigation">
               <ul className="pagination justify-content-center m-0">
@@ -258,9 +259,101 @@ const fetchAdmins = async (pageNumber) => {
         </div>
         {/* /.card */}
       </section>
+      {isModalOpen && (
+        <div
+          className="modal fade show"
+          style={{
+            display: "block",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+           
+           
+          }}
+        >
+          <div className="modal-dialog modal-lg">
+            <div className="modal-content">
+              {/* Modal Header */}
+              <div className="modal-header bg-primary">
+                <h5 className="modal-title text-white">Add New Staff</h5>
+                <button
+                  type="button"
+                  className="close"
+                  onClick={toggleModal}
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+
+              {/* Modal Body */}
+              <div className="modal-body">
+                <form>
+                  {/* Full Name Field */}
+                  <div className="form-group">
+                    <label htmlFor="fullName">Full Name</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="fullName"
+                      placeholder="Enter Full Name"
+                    />
+                  </div>
+
+                  {/* Email Field */}
+                  <div className="form-group">
+                    <label htmlFor="email">Email</label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      id="email"
+                      placeholder="Enter Email"
+                    />
+                  </div>
+
+                  {/* Designation Field */}
+                  <div className="form-group">
+                    <label htmlFor="designation">Designation</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="designation"
+                      placeholder="Enter Designation"
+                    />
+                  </div>
+
+                  {/* Branch Field */}
+                  <div className="form-group">
+                    <label htmlFor="branch">Branch</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="branch"
+                      placeholder="Enter Branch"
+                    />
+                  </div>
+                </form>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="modal-footer justify-content-between">
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary"
+                  onClick={toggleModal}
+                >
+                  Close
+                </button>
+                <button type="button" className="btn btn-primary">
+                  Save changes
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
 
 const AllAlumnis = () => {
   return (
