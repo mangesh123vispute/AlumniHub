@@ -6,7 +6,7 @@ from import_export.admin import ImportExportModelAdmin
 from django.utils import timezone
 from .models import User, AlumniPost, AlumniProfile, StudentProfile,HODPrincipalProfile,HodPrincipalPost
 from .resources import UserResource
-
+from django.contrib.auth.models import Permission
 admin.site.site_header = "AlumniHub Settings"
 admin.site.site_title = "AlumniHub Configuration"
 admin.site.index_title = "Manage Your Settings Here"

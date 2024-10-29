@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from .serializers import RegisterSerializer,ActivationEmailSerializer,ForgotPasswordSerializer
+from .superuserCreateSerializers import AdminRegistrationSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -18,6 +19,7 @@ from django.shortcuts import get_object_or_404
 from .createStaffSerializers import StaffUserSerializer
 from rest_framework.permissions import IsAuthenticated
 from django.db import IntegrityError
+from rest_framework.permissions import IsAdminUser
 
 User=get_user_model()
 
@@ -308,3 +310,63 @@ class CreateStaffUserView(APIView):
                     status=status.HTTP_400_BAD_REQUEST
                 )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AdminRegistrationView(APIView):
+    def post(self, request, *args, **kwargs):
+
+        if not request.user.is_superuser:
+            return Response({'detail': 'You do not have permission to perform this action.'}, 
+                            status=status.HTTP_403_FORBIDDEN)
+        
+        serializer = AdminRegistrationSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        validated_data = serializer.validated_data
+        branch = validated_data.pop('Branch', None)
+        designation = validated_data.pop('designation', None)
+
+        email = validated_data.get('email')
+        username = validated_data.get('username')
+        
+        
+        # Check if the email already exists
+        if User.objects.filter(email=email).exists():
+            return Response({
+                'detail': 'Email already exists.',
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Check if the username already exists
+        if User.objects.filter(username=username).exists():
+            return Response({
+                'detail': 'Username already exists.',
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        
+        user = User.objects.create(
+            username=username,
+            email=email,
+            full_name=validated_data.get('full_name'),
+            is_superuser=True,
+            is_active=True,
+        )
+        user.set_password(validated_data.get('password'))
+        user.save()
+
+        # Set the branch if provided
+        if branch:
+            user.Branch = branch
+            user.save()
+        
+        # Set the designation in the profile if created by signals
+        if designation and hasattr(user, 'hodprincipalprofile'):
+            user.hodprincipalprofile.designation = designation
+            user.hodprincipalprofile.save()
+        
+        return Response({
+            'detail': 'Admin registered successfully',
+            'user_id': user.id,
+            'username': user.username
+        }, status=status.HTTP_201_CREATED)
+
+

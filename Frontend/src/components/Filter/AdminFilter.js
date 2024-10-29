@@ -7,7 +7,7 @@ const AdminFilter = () => {
   const handleChange = (e) => {
     setHODFilters({ ...hodFilters, [e.target.name]: e.target.value });
   };
-  
+
   const handleReset = () => {
     setHODFilters({});
   };
