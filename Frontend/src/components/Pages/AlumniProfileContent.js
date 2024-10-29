@@ -1276,7 +1276,7 @@ const AlumniProfileContent = () => {
                                 />
                               </div>
                             </div>
-                            <div className="form-group row">
+                            {/* <div className="form-group row">
                               <label
                                 htmlFor="inputLinkedIn"
                                 className="col-sm-2 col-form-label"
@@ -1294,7 +1294,7 @@ const AlumniProfileContent = () => {
                                   placeholder="Graduation Year "
                                 />
                               </div>
-                            </div>
+                            </div> */}
                             <hr
                               style={{
                                 border: "1px solid black",

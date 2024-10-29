@@ -97,6 +97,8 @@ export const AuthProvider = ({ children }) => {
   //* logout
   let logoutUser = async () => {
     console.log("logging out");
+    if(!window.confirm("Are You Sure Want to Logout ?"))
+      return;
     try {
       setAuthTokens(null);
       setUser(null);
