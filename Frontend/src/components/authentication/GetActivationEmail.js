@@ -64,9 +64,9 @@ const GetActivationEmail = () => {
       <div className="hold-transition login-page">
         <div className="login-box">
           <div className="login-logo">
-            <a href="../../index2.html">
-              <b>Alumni</b>Hub
-            </a>
+            <Link  to="/" style={{color: "#007bff"}}>
+              AlumniHub | <span style={{marginLeft: "2px",fontSize: "23px"}}>SSBT COET</span>
+            </Link>
           </div>
           {/* /.login-logo */}
           <div className="card">

@@ -118,10 +118,22 @@ const handleSubmit = async (e) => {
       />
       <div className="hold-transition login-page">
         <div className="login-box">
-          <div className="login-logo">
-            <a href="/home">
-              <b>ALumni</b>Hub
-            </a>
+          <div
+            className="login-logo"
+            style={{ fontSize: "30px", fontWeight: 100 }}
+          >
+            <Link to="/" style={{ color: "#007bff" }}>
+              AlumniHub |
+              <span
+                style={{
+                  fontSize: "21px",
+                  marginLeft: "3px",
+                  color: "#007bff",
+                }}
+              >
+                SSBT COET
+              </span>
+            </Link>
           </div>
           {/* /.login-logo */}
           <div className="card">
@@ -178,7 +190,7 @@ const handleSubmit = async (e) => {
                   {/* /.col */}
                 </div>
               </form>
-              
+
               <hr
                 style={{
                   border: "1px solid #d2d6df",

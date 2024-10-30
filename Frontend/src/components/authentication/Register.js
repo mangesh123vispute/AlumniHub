@@ -18,178 +18,187 @@ const Register = () => {
   } = useContext(AuthContext);
  setFilter(false);
   const [Loading, setLoading] = useState(false);
-  const [selectedDocument, setSelectedDocument] = useState(null);
+  const [selectedDocument, setSelectedDocument] = useState("");
+
   const handleDocumentSelect = (e) => {
     setSelectedDocument(e.target.value);
+    setFormData({ ...formData, document_type: e.target.value });
   };
   const handleFileChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.files[0] });
+    setFormData({ ...formData, document_file: e.target.files[0] });
   };
    const [formData, setFormData] = useState({
      username: "",
      email: "",
      password: "",
      confirmPassword: "",
-     role: "",
      graduation_year: "",
      graduation_month: "",
      linkedin: "",
-     fourthYearMarksheet: "",
-     lc: "",
-     idCard: "",
-     graduationCertificate: "",
+     document_type: "",
+     document_file: null,
    });
-  // const [message, setMessage] = useState("");
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
- const handleRadioChange = (e) => {
-   setFormData({ ...formData, role: e.target.value });
-  };
-  
+
+ 
   const validateForm = () => {
-     if (!selectedDocument || !formData[selectedDocument]) {
-       showNotification(
-         "At least one document is required!",
-         "warning",
-         "Warning"
-       );
-       return false;
-     }
-     const {
-       username,
-       email,
-       password,
-       confirmPassword,
-       role,
-       graduation_year,
-       graduation_month,
-       linkedin,
-     } = formData;
+    const {
+      username,
+      email,
+      password,
+      confirmPassword,
+      graduation_year,
+      graduation_month,
+      linkedin,
+      document_type,
+      document_file,
+    } = formData;
 
-     if (
-       !username ||
-       !email ||
-       !password ||
-       !confirmPassword ||
-       !role ||
-       !graduation_year ||
-       !graduation_month ||
-       !linkedin
-     ) {
-       showNotification("All fields are required!", "warning", "Warning");
-       return false;
-     }
-     if (password !== confirmPassword) {
-       showNotification("Passwords do not match!", "warning", "Warning");
-       return false;
-     }
-     if (password.length < 8) {
-       showNotification(
-         "Password must be at least 8 characters long!",
-         "warning",
-         "Warning"
-       );
-       return false;
-     }
-
-     const currentYear = new Date().getFullYear();
-     const currentMonth = new Date().getMonth() + 1;
-     const gradYear = parseInt(graduation_year);
-     const gradMonth = parseInt(graduation_month);
-
-     if (
-       role === "Student" &&
-       (gradYear < currentYear ||
-         (gradYear === currentYear && gradMonth <= currentMonth))
-     ) {
-       showNotification(
-         "Graduation date must be in the future for students!",
-         "warning",
-         "Warning"
-       );
-       return false;
-     }
-     if (
-       role === "Alumni" &&
-       (gradYear > currentYear ||
-         (gradYear === currentYear && gradMonth >= currentMonth))
-     ) {
-       showNotification(
-         "Graduation date must be in the past for alumni!",
-         "warning",
-         "Warning"
-       );
-       return false;
-     }
-     return true;
-  };
-  
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-
-  if (!validateForm()) {
-    setLoading(false);
-    return;
-  }
-  try {
-    
-const response = await fetch("http://127.0.0.1:8000/register/", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(formData),
-});
-    const data = await response.json();
-setLoading(false);
-    if (response.ok) {
-      
-      if (response.status === 201) {
-        
-        await showNotification('Registration successful !', 'success', 'Success')
-        navigate("/login"); 
-      }
-    } else {
-      
-      const errorMessage = data.email
-        ? `Email: ${data.email[0]}`
-        : data.username
-        ? `Username: ${data.username[0]}`
-        : data.detail || "Something went wrong.";
-      await showNotification(errorMessage, "error", "Error");
+    if (
+      !username ||
+      !email ||
+      !password ||
+      !confirmPassword ||
+      !graduation_year ||
+      !graduation_month ||
+      !linkedin ||
+      !document_type ||
+      !document_file
+    ) {
+      showNotification("All fields are required!", "warning", "Warning");
+      return false;
     }
 
-  }catch (error) {
-    // Check for specific error messages
-    if (error.response && error.response.data) {
-      const errorData = error.response.data;
-      let errorMessage = "";
+    if (password !== confirmPassword) {
+      showNotification("Passwords do not match!", "warning", "Warning");
+      return false;
+    }
 
-      // If there's a detail message, use it directly
-      if (errorData.detail) {
-        errorMessage = errorData.detail;
-      } else {
-        // Otherwise, collect specific field errors
-        for (const key in errorData) {
-          if (Array.isArray(errorData[key])) {
-            errorMessage += `${errorData[key][0]}\n`;
-          }
-        }
-      }
-
+    if (password.length < 8) {
       showNotification(
-        errorMessage.trim() || "Failed to add Admin",
-        "error",
-        "Error"
+        "Password must be at least 8 characters long!",
+        "warning",
+        "Warning"
       );
-    } else {
-      showNotification("Failed to add Admin", "error", "Error");
+      return false;
     }
-    console.error("Error adding Admin:", error);
+   const linkedinPattern =
+     /^https:\/\/(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+\/?$/;
+   if (!linkedinPattern.test(linkedin)) {
+     showNotification(
+       "Please enter a valid LinkedIn profile URL!",
+       "warning",
+       "Warning"
+     );
+     return false;
+   }
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth() + 1;
+    const gradYear = parseInt(graduation_year);
+    const gradMonth = parseInt(graduation_month);
+    if (
+      gradYear > currentYear ||
+      (gradYear === currentYear && gradMonth >= currentMonth)
+    ) {
+      showNotification(
+        "Graduation date must be in the past for alumni!",
+        "warning",
+        "Warning"
+      );
+      return false;
+    }
 
-    setLoading(false);
-  } };
+    return true;
+  };
+
+
+ const handleSubmit = async (e) => {
+   e.preventDefault();
+   setLoading(true);
+
+   if (!validateForm()) {
+     setLoading(false);
+     return;
+   }
+
+   const formDataToSend = new FormData();
+   Object.entries(formData).forEach(([key, value]) => {
+     if (value) {
+       formDataToSend.append(key, value);
+     }
+   });
+
+   try {
+     const response = await fetch("http://127.0.0.1:8000/register-alumni/", {
+       method: "POST",
+       body: formDataToSend,
+     });
+
+     const data = await response.json();
+     setLoading(false);
+
+     if (response.ok && response.status === 201) {
+       await showNotification(
+         response.data.detail || "Registration successful!",
+         "success",
+         "Success"
+       );
+     } else {
+       let errorMessage = "";
+       for (const key in data) {
+         if (Array.isArray(data[key]) && data[key].length > 0) {
+           errorMessage += `${key.charAt(0).toUpperCase() + key.slice(1)}: ${
+             data[key][0]
+           }\n`;
+         } else if (typeof data[key] === "string") {
+           errorMessage += `${key.charAt(0).toUpperCase() + key.slice(1)}: ${
+             data[key]
+           }\n`;
+         }
+       }
+
+       // Fallback message if no specific field errors found
+       if (!errorMessage) {
+         errorMessage = "Something went wrong.";
+       }
+
+       await showNotification(errorMessage.trim(), "error", "Error");
+     }
+
+   } catch (error) {
+     // Check for specific error messages
+     if (error.response && error.response.data) {
+       const errorData = error.response.data;
+       let errorMessage = "";
+
+       // If there's a detail message, use it directly
+       if (errorData.detail) {
+         errorMessage = errorData.detail;
+       } else {
+         // Otherwise, collect specific field errors
+         for (const key in errorData) {
+           if (Array.isArray(errorData[key])) {
+             errorMessage += `${errorData[key][0]}\n`;
+           }
+         }
+       }
+
+       showNotification(
+         errorMessage.trim() || "Failed to add Alumni",
+         "error",
+         "Error"
+       );
+     } else {
+       showNotification("Failed to add Alumni", "error", "Error");
+     }
+     console.error("Error adding alumni:", error);
+     setLoading(false);
+   }
+ };
+
 
   return (
     <>
@@ -224,18 +233,19 @@ setLoading(false);
         <link rel="stylesheet" href="../../dist/css/adminlte.min.css" />
         <div className="register-box">
           <div className="register-logo">
-            <a href="../../index2.html">
-              <b>Alumni</b>Hub |
-              <span
-                style={{
-                  fontSize: "25px",
-                  marginLeft: "5px",
-                  color: "#007bff",
-                }}
-              >
-                SSBT COET
-              </span>
-            </a>
+            <Link to="/" style={{ color: "#007bff" }}>
+              <b>
+                AlumniHub |
+                <span
+                  style={{
+                    fontSize: "25px",
+                    marginLeft: "5px",
+                  }}
+                >
+                  SSBT COET
+                </span>
+              </b>
+            </Link>
           </div>
           <div className="card">
             <div className="card-body register-card-body">
@@ -251,8 +261,14 @@ setLoading(false);
                   marginTop: "0px",
                 }}
               />
-              <div style={{height:"50vh",overflowY:"auto", overflowX:"hidden"}}>
-                <form onSubmit={handleSubmit}>
+              <div
+                style={{
+                  height: "50vh",
+                  overflowY: "auto",
+                  overflowX: "hidden",
+                }}
+              >
+                <form onSubmit={handleSubmit} style={{ padding: "10px" }}>
                   {/* Basic Information Section */}
                   <h5
                     style={{
@@ -303,7 +319,7 @@ setLoading(false);
                         <input
                           type="number"
                           className="form-control"
-                          placeholder="Grad Month"
+                          placeholder="Grad Mth."
                           name="graduation_month"
                           value={formData.graduation_month}
                           onChange={handleChange}
@@ -327,7 +343,7 @@ setLoading(false);
                         <input
                           type="number"
                           className="form-control"
-                          placeholder="Grad Year"
+                          placeholder="Grad Yr."
                           name="graduation_year"
                           value={formData.graduation_year}
                           onChange={handleChange}
@@ -386,33 +402,30 @@ setLoading(false);
                     >
                       <option value="">Select a Document</option>
                       <option value="lc">Leaving Certificate (LC)</option>
-                      <option value="idCard">ID Card</option>
-                      <option value="fourthYearMarksheet">
+                      <option value="id_card">ID Card</option>
+                      <option value="fourth_year_marksheet">
                         Fourth Year Marksheet
                       </option>
-                      <option value="graduationCertificate">
+                      <option value="graduation_certificate">
                         Graduation Certificate
                       </option>
                     </select>
                   </div>
 
                   {selectedDocument && (
-                    <>
-                      <span className="text-muted">
-                        {" "}
-                        Select Document: {selectedDocument}
+                    <div className="form-group">
+                      <span>
+                        Select Document: <b>{selectedDocument}</b>
                       </span>
-                      <div className="form-group">
-                        <input
-                          type="file"
-                          className="form-control"
-                          name={selectedDocument}
-                          accept="image/*"
-                          onChange={handleFileChange}
-                          required
-                        />
-                      </div>
-                    </>
+                      <input
+                        type="file"
+                        className="form-control"
+                        name="document_file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        required
+                      />
+                    </div>
                   )}
                   <hr
                     style={{
@@ -471,11 +484,13 @@ setLoading(false);
                 <hr
                   style={{
                     border: "1px solid #d2d6df",
-                    marginTop: "10px",
-                    marginBottom: "10px",
+                    marginTop: "20px",
+                    marginBottom: "20px",
                   }}
                 />
-                <i style={{ fontSize: "15px", color: "red" }}>Note:</i>
+                <span>
+                  <i style={{ fontSize: "15px", color: "red" }}>Note:</i>
+                </span>
                 <br></br>
                 <i style={{ fontSize: "12px", color: "red" }}>
                   1. Submit at least one document for verification.

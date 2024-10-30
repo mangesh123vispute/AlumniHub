@@ -1721,21 +1721,6 @@
 												},
 												{
 													"_type": "ERDColumnView",
-													"_id": "AAAAAAGS2ATuwj4YE4M=",
-													"_parent": {
-														"$ref": "AAAAAAGS2APTsj36N+g="
-													},
-													"model": {
-														"$ref": "AAAAAAGS2ATuvD4VOuQ="
-													},
-													"font": "Arial;13;0",
-													"left": 45,
-													"top": 466,
-													"width": 277.6640625,
-													"height": 13
-												},
-												{
-													"_type": "ERDColumnView",
 													"_id": "AAAAAAGS2ATwoz4eses=",
 													"_parent": {
 														"$ref": "AAAAAAGS2APTsj36N+g="
@@ -1745,7 +1730,7 @@
 													},
 													"font": "Arial;13;0",
 													"left": 45,
-													"top": 481,
+													"top": 466,
 													"width": 277.6640625,
 													"height": 13
 												},
@@ -1760,7 +1745,7 @@
 													},
 													"font": "Arial;13;0",
 													"left": 45,
-													"top": 496,
+													"top": 481,
 													"width": 277.6640625,
 													"height": 13
 												},
@@ -1775,7 +1760,7 @@
 													},
 													"font": "Arial;13;0",
 													"left": 45,
-													"top": 511,
+													"top": 496,
 													"width": 277.6640625,
 													"height": 13
 												},
@@ -1790,7 +1775,7 @@
 													},
 													"font": "Arial;13;0",
 													"left": 45,
-													"top": 526,
+													"top": 511,
 													"width": 277.6640625,
 													"height": 13
 												}
@@ -1799,7 +1784,7 @@
 											"left": 40,
 											"top": 431,
 											"width": 287.6640625,
-											"height": 113
+											"height": 98
 										}
 									],
 									"font": "Arial;13;0",
@@ -3357,16 +3342,6 @@
 									},
 									"name": "user",
 									"type": "OneToOneField",
-									"length": 0
-								},
-								{
-									"_type": "ERDColumn",
-									"_id": "AAAAAAGS2ATuvD4VOuQ=",
-									"_parent": {
-										"$ref": "AAAAAAGS2APTsT322gU="
-									},
-									"name": "linkedin_id",
-									"type": "CharField",
 									"length": 0
 								},
 								{

@@ -29,7 +29,7 @@ class User(AbstractUser):
 #    Other info
     About = models.TextField(max_length=1000,blank=True, default="N/A")        
     Work = models.TextField(max_length=1000,blank=True, default="N/A")
-    Year_Joined = models.IntegerField(blank=True, default=0, validators=[MinValueValidator(1983), MaxValueValidator(2100)] )
+    Year_Joined = models.IntegerField(blank=True, default=0 )
     Branch = models.CharField(max_length=50,blank=True, default="N/A")
     Image = models.ImageField(
         upload_to='images', 
@@ -103,7 +103,7 @@ class User(AbstractUser):
         if not self.username:
             self.username = self.generate_unique_username()
 
-        send_activation = not self.is_active and not self.pk
+        send_activation = (not self.is_active and not self.is_superuser and not self.is_alumni) and not self.pk
         
         img = Image.open(self.Image.path)
         if img.height > 500 or img.width > 500:
@@ -228,7 +228,6 @@ class HodPrincipalPost(models.Model):
 
 class AlumniCredentials(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='alumni_credentials')
-    linkedin_id = models.CharField(max_length=255)
     fourth_year_marksheet = models.ImageField(upload_to='documents/marksheets/', blank=True, null=True)
     lc = models.ImageField(upload_to='documents/lc/', blank=True, null=True)
     id_card = models.ImageField(upload_to='documents/id_cards/', blank=True, null=True)

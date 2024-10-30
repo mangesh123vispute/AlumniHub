@@ -152,9 +152,9 @@ const ActivateEmail = () => {
         <div className="login-box">
           <div className="card card-outline card-primary">
             <div className="card-header text-center">
-              <a href="/" className="h1" style={{ fontSize: "2em" }}>
-                <b>Alumni</b>Hub
-              </a>
+              <Link to="/" style={{ color: "#007bff" }}>
+                AlumniHub | <span style={{ marginLeft: "3px",fontSize: "22px" }}>SSBT COET</span>
+              </Link>
             </div>
             <div className="card-body">
               <p className="login-box-msg" style={{ fontSize: "1.2em" }}>
@@ -202,7 +202,7 @@ const ActivateEmail = () => {
                         placeholder="Grad Month "
                         name="graduation_month"
                         value={graduation_month}
-                        onChange={(e)=>setGraduation_month(e.target.value)}
+                        onChange={(e) => setGraduation_month(e.target.value)}
                         min="1"
                         max="12"
                         required
@@ -231,7 +231,7 @@ const ActivateEmail = () => {
                         placeholder="Grad Year"
                         name="graduation_year"
                         value={graduation_year}
-                        onChange={(e)=>setGraduation_year(e.target.value)}
+                        onChange={(e) => setGraduation_year(e.target.value)}
                         min="1983"
                         max="2100"
                         required
