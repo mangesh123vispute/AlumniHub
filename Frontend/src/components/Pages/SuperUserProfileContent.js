@@ -128,6 +128,7 @@ const handleEditClick = (post) => {
         )
         .then((response) => {
           setUser(response.data);
+          console.log("This is user",response.data);
           if (response.data) {
             setSuperUserData({
               user: {
@@ -383,11 +384,11 @@ const handleEditClick = (post) => {
                     <div className="ribbon-wrapper ribbon-lg">
                       <div className="ribbon bg-primary">
                         {user
-                          ? user.is_alumni
-                            ? "Alumni"
-                            : user.is_student
-                            ? "Student"
-                            : "Admin"
+                          ? (!user?.is_superuser && user?.is_staff)
+                            ? "Staff"
+                            : user.is_superuser 
+                            ? "Admin"
+                            : "User"
                           : "User"}
                       </div>
                     </div>

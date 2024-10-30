@@ -27,11 +27,21 @@ const AllAlumnisContent = () => {
     setHodFilters,
     isModalOpen,
     toggleModal,
+    toggleAddAdminModal,
+    isAddAdminModalOpen,
+    userData,
   } = useContext(AuthContext);
 
-  const [pageNumber, setPageNumber] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-
+const [pageNumber, setPageNumber] = useState(1);
+const [totalPages, setTotalPages] = useState(1);
+ const [fullName, setFullName] = useState("");
+ const [email, setEmail] = useState("");
+ const [designation, setDesignation] = useState("");
+  const [branch, setBranch] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const[reload, setReload] = useState(false);
   const pageSize = 10;
   const isValidGitHubUrl = (url) => {
     const githubUrlPattern =
@@ -59,6 +69,77 @@ const AllAlumnisContent = () => {
     navigate("/profile", { state: userData });
   };
 
+  const handleEdit = (userData) => {
+  }
+  const handleDelete = (userData) => {
+  }
+  const handleAddAdmin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const newStaff = { full_name: fullName, email, designation, Branch: branch, username, password };
+    const token = localStorage.getItem("authTokens")
+      ? JSON.parse(localStorage.getItem("authTokens"))
+      : null;
+    if(fullName === "" || email === "" || designation === "" || branch === "" || username === "" || password === "" || confirmPassword === ""){
+      showNotification("All fields are required", "error", "Error");
+      setLoading(false);
+      return;
+    }
+    if(password !== confirmPassword){
+      showNotification("Passwords do not match", "error", "Error");
+      setLoading(false);
+      return;
+    }
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/register-admin/",
+        newStaff,
+        { headers: { Authorization: `Bearer ${token?.access}` } }
+      );
+      if (response.status === 201) {
+        showNotification("Admin added successfully", "success", "Success");
+        setFullName("");
+        setEmail("");
+        setDesignation("");
+        setUsername("");
+        setBranch("");
+        setPassword("");
+        setConfirmPassword("");
+        toggleModal();
+        setReload(true);
+      }
+    } catch (error) {
+      // Check for specific error messages
+      if (error.response && error.response.data) {
+        const errorData = error.response.data;
+        let errorMessage = "";
+
+        // If there's a detail message, use it directly
+        if (errorData.detail) {
+          errorMessage = errorData.detail;
+        } else {
+          // Otherwise, collect specific field errors
+          for (const key in errorData) {
+            if (Array.isArray(errorData[key])) {
+              errorMessage += `${errorData[key][0]}\n`;
+            }
+          }
+        }
+
+        showNotification(
+          errorMessage.trim() || "Failed to add Admin",
+          "error",
+          "Error"
+        );
+      } else {
+        showNotification("Failed to add Admin", "error", "Error");
+      }
+      console.error("Error adding Admin:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const fetchAdmins = async (pageNumber) => {
     setLoading(true);
     const token = localStorage.getItem("authTokens")
@@ -94,7 +175,7 @@ const AllAlumnisContent = () => {
   // Fetch alumni on component mount
   useEffect(() => {
     fetchAdmins(pageNumber);
-  }, [pageNumber, hodFilters]);
+  }, [pageNumber, hodFilters, reload]);
 
   useEffect(() => {
     setIsAllAdminPage(true);
@@ -115,7 +196,10 @@ const AllAlumnisContent = () => {
       />
       <section className="content">
         <div className="card card-solid">
-          <div className="card-body pb-0">
+          <div
+            className="card-body pb-0"
+            style={{ height: "150vh", overflowY: "auto" }}
+          >
             <div className="row">
               {adminData?.results?.length === 0 ? (
                 <div
@@ -135,7 +219,6 @@ const AllAlumnisContent = () => {
                     <div
                       key={admins.id}
                       className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column"
-                      style={{ height: "150vh", overflowY: "auto" }}
                     >
                       <div className="card card-widget widget-user">
                         {/* Add the bg color to the header using any of the bg-* classes */}
@@ -175,7 +258,6 @@ const AllAlumnisContent = () => {
                             alt="User Avatar"
                           />
                         </div>
-
                         <div
                           className="card-footer"
                           style={{ marginTop: "1.5rem" }}
@@ -259,91 +341,146 @@ const AllAlumnisContent = () => {
         </div>
         {/* /.card */}
       </section>
-      {isModalOpen && (
+      {isAddAdminModalOpen && (
         <div
           className="modal fade show"
           style={{
             display: "block",
             backgroundColor: "rgba(0, 0, 0, 0.5)",
-           
-           
           }}
         >
-          <div className="modal-dialog modal-lg">
+          <div
+            className="modal-dialog modal-dialog-centered modal-lg"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              maxWidth: "95%", // Adjust width for smaller screens
+            }}
+          >
             <div className="modal-content">
               {/* Modal Header */}
               <div className="modal-header bg-primary">
-                <h5 className="modal-title text-white">Add New Staff</h5>
+                <h5 className="modal-title text-white">Add New Admin</h5>
                 <button
                   type="button"
                   className="close"
-                  onClick={toggleModal}
+                  onClick={toggleAddAdminModal}
                   aria-label="Close"
                 >
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
 
-              {/* Modal Body */}
-              <div className="modal-body">
-                <form>
-                  {/* Full Name Field */}
-                  <div className="form-group">
-                    <label htmlFor="fullName">Full Name</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="fullName"
-                      placeholder="Enter Full Name"
-                    />
-                  </div>
-
-                  {/* Email Field */}
-                  <div className="form-group">
-                    <label htmlFor="email">Email</label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      id="email"
-                      placeholder="Enter Email"
-                    />
-                  </div>
-
-                  {/* Designation Field */}
-                  <div className="form-group">
-                    <label htmlFor="designation">Designation</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="designation"
-                      placeholder="Enter Designation"
-                    />
-                  </div>
-
-                  {/* Branch Field */}
-                  <div className="form-group">
-                    <label htmlFor="branch">Branch</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="branch"
-                      placeholder="Enter Branch"
-                    />
+              {/* Scrollable Modal Body */}
+              <div
+                className="modal-body"
+                style={{
+                  maxHeight: "50vh", // Set maximum height
+                  overflowY: "auto", // Enable vertical scrolling
+                }}
+              >
+                <form onSubmit={handleAddAdmin}>
+                  <div className="form-row">
+                    <div className="form-group col-md-12">
+                      <label htmlFor="fullName">Full Name</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="fullName"
+                        placeholder="Enter Full Name"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                      />
+                    </div>
+                    <div className="form-group col-md-12">
+                      <label htmlFor="username">Username</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="username"
+                        placeholder="Enter Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                      />
+                    </div>
+                    <div className="form-group col-md-12">
+                      <label htmlFor="email">Email</label>
+                      <input
+                        type="email"
+                        className="form-control"
+                        id="email"
+                        placeholder="Enter Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                      />
+                    </div>
+                    <div className="form-group col-md-12">
+                      <label htmlFor="designation">Designation</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="designation"
+                        placeholder="Enter Designation"
+                        value={designation}
+                        onChange={(e) => setDesignation(e.target.value)}
+                      />
+                    </div>
+                    <div className="form-group col-md-12">
+                      <label htmlFor="branch">Branch</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="branch"
+                        placeholder="Enter Branch"
+                        value={branch}
+                        onChange={(e) => setBranch(e.target.value)}
+                      />
+                    </div>
+                    <div className="form-group col-md-12">
+                      <label htmlFor="password">Password</label>
+                      <input
+                        type="password"
+                        className="form-control"
+                        id="password"
+                        placeholder="Enter Password"
+                        value={password}
+                        max={"20"}
+                        min={"8"}
+                        onChange={(e) => setPassword(e.target.value)}
+                      />
+                    </div>
+                    <div className="form-group col-md-12">
+                      <label htmlFor="confirmPassword">Confirm Password</label>
+                      <input
+                        type="password"
+                        className="form-control"
+                        id="confirmPassword"
+                        placeholder="Confirm Password"
+                        value={confirmPassword}
+                        max={"20"}
+                        min={"8"}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                      />
+                    </div>
                   </div>
                 </form>
               </div>
 
-              {/* Modal Footer */}
               <div className="modal-footer justify-content-between">
                 <button
                   type="button"
                   className="btn btn-outline-secondary"
-                  onClick={toggleModal}
+                  onClick={toggleAddAdminModal}
                 >
                   Close
                 </button>
-                <button type="button" className="btn btn-primary">
-                  Save changes
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  onClick={handleAddAdmin}
+                >
+                  Add Admin
                 </button>
               </div>
             </div>

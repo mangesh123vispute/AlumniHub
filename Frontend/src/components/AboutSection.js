@@ -2,14 +2,15 @@ import React from 'react';
 
 const AboutSection = () => {
   return (
-    <section id="about" className="about section py-28 ">
-      <div className="container mx-auto" >
-        <div className="flex flex-col lg:flex-row gap-8">          
+    <section id="about" className="about section py-16 md:py-28 px-4 md:px-8">
+      <div className="container mx-auto">
+        <div className="flex flex-col lg:flex-row gap-8">
+          
           {/* Left Text Content */}
-          <div className="lg:w-1/2 flex flex-col justify-center" >
-            <div className="content  lg:text-left px-4">
-              <h3 className="text-lg font-semibold text-blue-600">Who We Are</h3>
-              <h2 className="text-3xl text-black lg:text-4xl font-bold mt-6">
+          <div className="lg:w-1/2 flex flex-col justify-center text-center lg:text-left">
+            <div className="content px-4">
+              <h3 className="text-lg font-semibold text-blue-600">About Us</h3>
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mt-4 md:mt-6 text-black">
                 Expedita voluptas omnis cupiditate totam eveniet nobis sint iste.
               </h2>
               <p className="mt-4 text-gray-700 leading-relaxed">
@@ -28,14 +29,13 @@ const AboutSection = () => {
           </div>
 
           {/* Right Image Content */}
-          <div className="lg:w-1/2 flex justify-center items-center" data-aos="zoom-out" data-aos-delay="200">
+          <div className="lg:w-1/2 flex justify-center items-center">
             <img
               src="https://bootstrapmade.com/content/demo/FlexStart/assets/img/about.jpg"
               alt="About Us"
-              className="img-fluid rounded-lg shadow-lg w-full object-cover"
+              className="rounded-lg shadow-lg w-full md:w-3/4 lg:w-full object-cover"
             />
           </div>
-
         </div>
       </div>
     </section>

@@ -24,6 +24,7 @@ const Profile = () => {
     title,
     handleClose,
     loading,
+    setIsAllAdminPage,
   } = useContext(AuthContext);
   
   setFilter(false);
@@ -43,6 +44,7 @@ const Profile = () => {
       return SuperUserProfileContent;
     }
   };
+
   return userData ? (
     <>
       <LoadingSpinner isLoading={loading} />

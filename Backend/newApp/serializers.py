@@ -99,7 +99,7 @@ class UserHODSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id', 'username', 'full_name', 'email','portfolio_link','resume_link',"Image",
-            'About', 'Work', 'Year_Joined', "skills",'graduation_month', 'graduation_year',
+            'About', 'Work', 'Year_Joined', "skills",'graduation_month', 'graduation_year','is_superuser','is_staff',
             'Branch', 'mobile', 'linkedin', 'Github', 'instagram', 'is_alumni', 'is_student',
             'hod_profile'  
         ]

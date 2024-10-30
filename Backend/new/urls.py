@@ -7,7 +7,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from rest_framework_simplejwt.views import TokenVerifyView
-from .views import UserRegisterAPIView,ActivationEmailView, ActivateAccountView,ForgotPasswordAPIView,ResetPasswordAPIView,SendActivationEmailView
+from .views import UserRegisterAPIView,ActivationEmailView, ActivateAccountView,ForgotPasswordAPIView,ResetPasswordAPIView,SendActivationEmailView,AdminRegistrationView
 from .serializers import CustomTokenObtainPairSerializer
 from .views import CreateStaffUserView
 
@@ -42,6 +42,6 @@ urlpatterns = [
     path('reset-password/<uidb64>/<token>/', ResetPasswordAPIView.as_view(), name='reset_password'),
     path('send-activation-email/', SendActivationEmailView.as_view(), name='send_activation_email'),
     path('api/create-staff-user/', CreateStaffUserView.as_view(), name='create-staff-user'),
-    
-            
+    path('register-admin/', AdminRegistrationView.as_view(), name='register-admin'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

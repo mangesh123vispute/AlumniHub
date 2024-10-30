@@ -20,6 +20,7 @@
       isAllAdminPage,
       userData,
       toggleModal,
+      toggleAddAdminModal,
     } = useContext(AuthContext);
     return (
       <div className="wrapper">
@@ -114,15 +115,42 @@
               </div>
             </li> */}
             {/* Messages Dropdown Menu */}
-            {isAllAdminPage && userData.is_superuser && (
-              <li className="nav-item">
+            {(isAllAdminPage && userData.is_superuser )&& (
+              <li className="nav-item dropdown">
                 <button
+                  className="btn btn-outline-success btn-sm mt-1.5 dropdown-toggle"
                   type="button"
-                  className="btn btn-outline-success btn-sm mt-1.5"
-                  onClick={toggleModal}
+                  id="dropdownMenuButton"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
                 >
                   <i className="fas fa-user-plus mr-1" /> Add
                 </button>
+                <div
+                  className="dropdown-menu"
+                  aria-labelledby="dropdownMenuButton"
+                >
+                  <button
+                    className="dropdown-item btn-sm"
+                    type="button"
+                    onClick={() => {
+                      toggleAddAdminModal();
+                    }}
+                  >
+                    Add Admin
+                  </button>
+                  {/* <hr style={{ border: "1px solid black" }} /> */}
+                  {/* <button
+                    className="dropdown-item btn-sm"
+                    type="button"
+                    onClick={() => {
+                      toggleModal();
+                    }}
+                  >
+                    Add Staff
+                  </button> */}
+                </div>
               </li>
             )}
 

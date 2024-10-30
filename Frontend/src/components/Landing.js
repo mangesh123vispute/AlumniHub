@@ -6,6 +6,7 @@ import AuthContext from "../context/AuthContext";
 import AboutSection from "./AboutSection";
 import TeamSection from "./TeamSection";
 import ContactSection from "./ContactSection";
+import FooterSection from "./FooterSection";
 gsap.registerPlugin(ScrollTrigger);
 
 function Landing() {
@@ -96,45 +97,96 @@ function Landing() {
 
   return (
     <div>
-      <nav className="bg-blue-500 text-white w-full fixed top-0 z-50 shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link to="/" className="text-2xl font-bold">
+      <nav className="bg-white text-black w-full fixed top-0 z-50 shadow-lg">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
+          <div className="flex items-center space-x-2">
+            <img src="/logo.png" alt="Logo" className="w-8 h-8" /> {/* Logo */}
+            <Link to="/" className="text-lg md:text-2xl font-bold">
               Alumni Hub
             </Link>
-            <div className="hidden md:flex space-x-6">
-              <Link to="/" className="hover:text-blue-200">Home</Link>
-              <Link to="/about" className="hover:text-blue-200">About</Link>
-              <Link to="/contact" className="hover:text-blue-200">Contact</Link>
-            </div>
-            <div className="md:hidden">
-              <button
-                onClick={() => setNavOpen(!navOpen)}
-                className="text-white focus:outline-none"
+          </div>
+          <div className="hidden md:flex space-x-6">
+            <a href="/" className="hover:text-blue-700">
+              Home
+            </a>
+            <a href="#about" className="hover:text-blue-700">
+              About
+            </a>
+            <a href="#team" className="hover:text-blue-700">
+              Team
+            </a>
+            <a href="#contact" className="hover:text-blue-700">
+              Contact
+            </a>
+          </div>
+          <div className="hidden md:flex space-x-2">
+            <Link
+              to="/register"
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+            >
+              Register / Login
+            </Link>
+           
+          </div>
+          <div className="md:hidden">
+            <button
+              onClick={() => setNavOpen(!navOpen)}
+              className="text-black focus:outline-none"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d={navOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
-                  />
-                </svg>
-              </button>
-            </div>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d={
+                    navOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"
+                  }
+                />
+              </svg>
+            </button>
           </div>
         </div>
         {navOpen && (
-          <div className="md:hidden bg-blue-600">
-            <Link to="/" className="block px-4 py-2 text-white hover:bg-blue-700" onClick={() => setNavOpen(false)}>Home</Link>
-            <Link to="/about" className="block px-4 py-2 text-white hover:bg-blue-700" onClick={() => setNavOpen(false)}>About</Link>
-            <Link to="/contact" className="block px-4 py-2 text-white hover:bg-blue-700" onClick={() => setNavOpen(false)}>Contact</Link>
+          <div className="md:hidden bg-white">
+            <a
+              href="/"
+              className="block px-4 py-2 text-black hover:bg-blue-100"
+              onClick={() => setNavOpen(false)}
+            >
+              Home
+            </a>
+            <a
+              href="#about"
+              className="block px-4 py-2 text-black hover:bg-blue-100"
+              onClick={() => setNavOpen(false)}
+            >
+              About
+            </a>
+            <a
+              href="#team"
+              className="block px-4 py-2 text-black hover:bg-blue-100"
+              onClick={() => setNavOpen(false)}
+            >
+              Team
+            </a>
+            <a
+              href="#contact"
+              className="block px-4 py-2 text-black hover:bg-blue-100"
+              onClick={() => setNavOpen(false)}
+            >
+              Contact
+            </a>
+            <div className="px-4 py-2 space-y-2">
+              <button className="w-full  bg-blue-500 text-white px-4 py-2 rounde hover:bg-blue-600 transition">
+                Register
+              </button>
+            </div>
           </div>
         )}
       </nav>
@@ -143,53 +195,54 @@ function Landing() {
         className="w-full h-screen flex justify-center items-center pt-16 transition-opacity duration-1000"
         style={{
           backgroundImage: backgroundImages[bgIndex],
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          backgroundSize: "80%", // Make the image width less
+          backgroundPosition: "center", // Center the image horizontally
           backgroundAttachment: "fixed",
           backgroundRepeat: "no-repeat",
-          opacity: 0.7,
-          zIndex: -1,
         }}
       >
-        <div ref={textDivRef} className="Text-div z-3 text-center space-y-2 relative">
-          <h1 className="text-4xl font-bold">Welcome To</h1>
-          <h1 className="text-5xl font-bold text-blue-500">Alumni Hub</h1>
-          <h3 ref={h3Ref} className="text-center text-sm font-semibold mt-2">
+        <div ref={textDivRef} className="text-center space-y-2 px-4 sm:px-0">
+          <h1 className="text-3xl md:text-4xl font-bold">Welcome To</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-blue-500">
+            Alumni Hub
+          </h1>
+          <h3
+            ref={h3Ref}
+            className="text-center text-sm md:text-base font-semibold mt-2"
+          >
             Here Meets Future Hands
           </h3>
-          <div className="btn-div text-white flex flex-row justify-center items-center gap-3">
-            <button className="btn relative inline-flex bg-blue-200 items-center justify-start overflow-hidden transition-all rounded-lg group">
-              <span className="w-0 h-0 rounded bg-blue-500 absolute top-0 left-0 ease-out duration-500 transition-all group-hover:w-full group-hover:h-full -z-1"></span>
-              <span className="w-full transition-colors duration-300 ease-in-out group-hover:text-white z-10">
-                Login
-              </span>
-            </button>
-            <button className="btn relative inline-flex bg-blue-200 items-center justify-start overflow-hidden transition-all rounded-lg group">
-              <span className="w-0 h-0 rounded bg-blue-500 absolute top-0 left-0 ease-out duration-500 transition-all group-hover:w-full group-hover:h-full -z-1"></span>
-              <span className="w-full transition-colors duration-300 ease-in-out group-hover:text-white z-10">
-                Register
-              </span>
-            </button>
-          </div>
         </div>
       </div>
 
       {/* About Section */}
-      <div ref={aboutSectionRef} className="w-full h-screen flex justify-center items-center ">
+      <div
+        id="about"
+        ref={aboutSectionRef}
+        className="w-full min-h-screen flex justify-center items-center px-4"
+      >
         <AboutSection />
       </div>
 
       {/* Team Section */}
-      <div ref={teamSectionRef} className="w-full h-screen flex justify-center items-center">
+      <div
+        id="team"
+        ref={teamSectionRef}
+        className="w-full min-h-screen flex justify-center items-center px-4"
+      >
         <TeamSection />
       </div>
+
       {/* Contact Section */}
-      <div className="w-full mt-5 h-screen flex justify-center items-center">
+      <div
+        id="contact"
+        className="w-full min-h-screen flex justify-center items-center px-4"
+      >
         <ContactSection />
       </div>
+      <FooterSection />
     </div>
   );
 }
 
 export default Landing;
-

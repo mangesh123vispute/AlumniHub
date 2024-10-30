@@ -12,6 +12,7 @@ const StudentProfileContent = () => {
       showNotification,
       setLoading,
       ShowProfileOfId,
+      setIsAllAdminPage,
     } = useContext(AuthContext);
     console.log("userData", userData);
     const id = localStorage.getItem("id")
@@ -20,6 +21,9 @@ const StudentProfileContent = () => {
     const [user, setUser] = useState(null);
   const [reload, setReload] = useState(false);
 
+    useEffect(() => {
+      setIsAllAdminPage(false);
+    }, []);
   
     const [studentData, setStudentData] = useState({
       user: {

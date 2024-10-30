@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }) => {
   const [filterClicked, setFilterClicked] = useState(false);
   const [isForgotPassPageOrActivateAccountPage, setIsForgotPassPageOrActivateAccountPage] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddAdminModalOpen, setIsAddAdminModalOpen] = useState(false);
    
  const [Alumnifilters, setAlumniFilters] = useState({
    full_name: "",
@@ -57,7 +58,7 @@ export const AuthProvider = ({ children }) => {
   const [hodFilters, setHODFilters] = useState({
     full_name: "", // For filtering by full name
     Branch: "", // For filtering by Branch
-    designation: "", // For filtering by designation from HODPrincipalProfile
+    designation: "",
   });
 
 
@@ -67,6 +68,9 @@ export const AuthProvider = ({ children }) => {
     setIsModalOpen((prev) => !prev);
   };
    
+  const toggleAddAdminModal = () => {
+    setIsAddAdminModalOpen((prev) => !prev);
+  };
   
   const showNotification = async (msg, iconType, titleText) => {
     
@@ -221,11 +225,14 @@ export const AuthProvider = ({ children }) => {
     hodFilters: hodFilters,
     setHODFilters: setHODFilters,
     isForgotPassPageOrActivateAccountPage:
-    isForgotPassPageOrActivateAccountPage,
+      isForgotPassPageOrActivateAccountPage,
     setIsForgotPassPageOrActivateAccountPage:
-    setIsForgotPassPageOrActivateAccountPage,
+      setIsForgotPassPageOrActivateAccountPage,
     isModalOpen: isModalOpen,
     toggleModal: toggleModal,
+    toggleAddAdminModal,
+    isAddAdminModalOpen,
+    setIsAddAdminModalOpen,
   };
 
 
