@@ -17,6 +17,8 @@ from rest_framework.decorators import api_view
 from .editserialisers import HODPrincipalProfileSerializer, UserSerializer, AlumniProfileSerializer, StudentProfileSerializer,UserImageUploadSerializer
 from django.db.models import Q
 from .allPostSerializers import AlumniGETPostSerializer, HodPrincipalGETPostSerializer
+from .authenticateAlumniSerializers import InactiveAlumniSerializer
+from rest_framework.exceptions import PermissionDenied
 
 class HodPrincipalPostPagination(PageNumberPagination):
     page_size = 10  # Number of posts per page
@@ -516,3 +518,81 @@ class PostListView(APIView):
         
         return paginator.get_paginated_response(page)
 
+class InactiveAlumniListView(generics.ListAPIView):
+    serializer_class = InactiveAlumniSerializer
+
+    def get_queryset(self):
+        # Check if the request user is a superuser
+        if not self.request.user.is_superuser:
+            raise PermissionDenied("You do not have permission to access this resource.")
+        return User.objects.filter(is_alumni=True, is_active=False)
+
+
+class AlumniActivationAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def check_superuser(self, request):
+        # Check if the user making the request is a superuser
+        if not request.user.is_superuser:
+            raise PermissionDenied("You do not have permission to perform this action.")
+
+    def put(self, request, user_id):
+        self.check_superuser(request)
+        user = get_object_or_404(User, id=user_id)
+
+        # Check if the user is an alumni
+        if not user.is_alumni:
+            return Response({"detail": "User is not an alumni."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Activate the alumni user
+        user.is_active = True
+        user.save()
+
+        return Response({"detail": "Alumni account activated successfully."}, status=status.HTTP_200_OK)
+
+    def delete(self, request, user_id):
+        self.check_superuser(request)
+        user = get_object_or_404(User, id=user_id)
+
+        # Check if the user is an alumni
+        if not user.is_alumni:
+            return Response({"detail": "User is not an alumni."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Delete the alumni user
+        user.delete()
+
+        return Response({"detail": "Alumni account deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+
+class AcceptAllAlumni(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, *args, **kwargs):
+        # Check if the requesting user is a superuser
+        if not request.user.is_superuser:
+            return Response(
+                {"error": "You do not have permission to perform this action."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        
+        try:
+            # Filter for inactive alumni
+            inactive_alumni = User.objects.filter(is_alumni=True, is_active=False)
+
+            # Update is_active status for each matching user
+            updated_count = inactive_alumni.update(is_active=True)
+
+            return Response(
+                {
+                    "message": f"{updated_count} alumni have been activated successfully."
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        except Exception as e:
+            return Response(
+                {
+                    "error": "An error occurred while activating alumni.",
+                    "details": str(e)
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )

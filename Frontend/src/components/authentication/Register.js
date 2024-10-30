@@ -27,7 +27,8 @@ const Register = () => {
   const handleFileChange = (e) => {
     setFormData({ ...formData, document_file: e.target.files[0] });
   };
-   const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
+     full_name: "",
      username: "",
      email: "",
      password: "",
@@ -46,6 +47,7 @@ const Register = () => {
  
   const validateForm = () => {
     const {
+      full_name,
       username,
       email,
       password,
@@ -58,6 +60,7 @@ const Register = () => {
     } = formData;
 
     if (
+      !full_name ||
       !username ||
       !email ||
       !password ||
@@ -142,7 +145,7 @@ const Register = () => {
 
      if (response.ok && response.status === 201) {
        await showNotification(
-         response.data.detail || "Registration successful!",
+         data?.detail || "Registration successful!",
          "success",
          "Success"
        );
@@ -160,7 +163,6 @@ const Register = () => {
          }
        }
 
-       // Fallback message if no specific field errors found
        if (!errorMessage) {
          errorMessage = "Something went wrong.";
        }
@@ -169,31 +171,13 @@ const Register = () => {
      }
 
    } catch (error) {
-     // Check for specific error messages
-     if (error.response && error.response.data) {
-       const errorData = error.response.data;
-       let errorMessage = "";
-
-       // If there's a detail message, use it directly
-       if (errorData.detail) {
-         errorMessage = errorData.detail;
-       } else {
-         // Otherwise, collect specific field errors
-         for (const key in errorData) {
-           if (Array.isArray(errorData[key])) {
-             errorMessage += `${errorData[key][0]}\n`;
-           }
-         }
-       }
-
+      console.error("Error:", error);
        showNotification(
-         errorMessage.trim() || "Failed to add Alumni",
+         error?.response?.data?.detail || "Something went wrong",
          "error",
          "Error"
        );
-     } else {
-       showNotification("Failed to add Alumni", "error", "Error");
-     }
+    
      console.error("Error adding alumni:", error);
      setLoading(false);
    }
@@ -279,6 +263,22 @@ const Register = () => {
                   >
                     Basic Information
                   </h5>
+                  <div className="input-group mb-3">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Full Name"
+                      name="full_name"
+                      value={formData.full_name}
+                      onChange={handleChange}
+                      required
+                    />
+                    <div className="input-group-append">
+                      <div className="input-group-text">
+                        <span className="fas fa-user" />
+                      </div>
+                    </div>
+                  </div>
                   <div className="input-group mb-3">
                     <input
                       type="text"

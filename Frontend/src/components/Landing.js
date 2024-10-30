@@ -19,6 +19,7 @@ function Landing() {
   const h3Ref = useRef(null);
   const [navOpen, setNavOpen] = useState(false);
   const [bgIndex, setBgIndex] = useState(0);
+  const [isLoggedin, setIsLoggedin] = useState(false);
 
   const backgroundImages = [
     "url('https://www.sscoetjalgaon.ac.in/public/images/slider/snap105.jpg')",
@@ -30,6 +31,7 @@ function Landing() {
     const interval = setInterval(() => {
       setBgIndex((prevIndex) => (prevIndex + 1) % backgroundImages.length);
     }, 4000);
+    localStorage.getItem("authTokens") ? setIsLoggedin(true) : setIsLoggedin(false);
     return () => clearInterval(interval);
   }, []);
 
@@ -100,33 +102,58 @@ function Landing() {
       <nav className="bg-yellow-500 text-white w-full fixed top-0 z-50 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
           <div className="flex items-center space-x-2">
-            <img src="/Logo.jfif" alt="Logo" className="w-12 h-18 rounded-3xl" /> {/* Logo */}
+            <img
+              src="/Logo.jfif"
+              alt="Logo"
+              className="w-12 h-18 rounded-3xl"
+            />{" "}
+            {/* Logo */}
             <Link to="/" className="text-lg md:text-2xl font-bold">
               Alumni Hub
             </Link>
           </div>
           <div className="hidden md:flex space-x-6">
-            <a href="/" className=" text-white px-2 py-1 rounded-2xl hover:bg-red-900">
+            <a
+              href="/"
+              className=" text-white px-2 py-1 rounded-2xl hover:bg-red-900"
+            >
               Home
             </a>
-            <a href="#about" className="text-white px-2 py-1 rounded-2xl hover:bg-red-900">
+            <a
+              href="#about"
+              className="text-white px-2 py-1 rounded-2xl hover:bg-red-900"
+            >
               About
             </a>
-            <a href="#team" className="text-white px-2 py-1 rounded-2xl hover:bg-red-900">
+            <a
+              href="#team"
+              className="text-white px-2 py-1 rounded-2xl hover:bg-red-900"
+            >
               Team
             </a>
-            <a href="#contact" className="text-white px-2 py-1 rounded-2xl hover:bg-red-900">
+            <a
+              href="#contact"
+              className="text-white px-2 py-1 rounded-2xl hover:bg-red-900"
+            >
               Contact
             </a>
           </div>
           <div className="hidden md:flex space-x-2">
-            <Link
-              to="/register"
-              className="bg-red-900 text-white px-4 py-2 rounded "
-            >
-              Register / Login
-            </Link>
-           
+            {isLoggedin ? (
+              <Link
+                to="/home2"
+                className="bg-red-900 text-white px-4 py-2 rounded "
+              >
+                Dashboard
+              </Link>
+            ) : (
+              <Link
+                to="/register"
+                className="bg-red-900 text-white px-4 py-2 rounded "
+              >
+                Register 
+              </Link>
+            )}
           </div>
           <div className="md:hidden text-white">
             <button
@@ -192,42 +219,52 @@ function Landing() {
       </nav>
 
       <div
-  className="w-full h-screen flex justify-center items-center pt-16 transition-opacity duration-1000"
-  style={{
-    backgroundImage: backgroundImages[bgIndex],
-    backgroundSize: window.innerWidth < 768 ? "cover" : "90%", // 'cover' for small screens
-    backgroundPosition: "center",
-    backgroundAttachment: "fixed",
-    backgroundRepeat: "no-repeat",
-  }}
->
-  <div ref={textDivRef} className="text-center space-y-2 px-4 sm:px-0">
-    <h1 className="text-3xl md:text-4xl font-bold">Welcome To</h1>
-    <h1 className="text-4xl md:text-5xl font-bold">
-      Alumni Hub
-    </h1>
-    <h3
-      ref={h3Ref}
-      className="text-center text-sm md:text-base font-semibold mt-2"
-    >
-      Here Meets Future Hands
-    </h3>
-  </div>
-</div>
+        className="w-full h-screen flex justify-center items-center pt-16 transition-opacity duration-1000"
+        style={{
+          backgroundImage: backgroundImages[bgIndex],
+          backgroundSize: window.innerWidth < 768 ? "cover" : "90%", // 'cover' for small screens
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <div ref={textDivRef} className="text-center space-y-2 px-4 sm:px-0">
+          <h1 className="text-3xl md:text-4xl font-bold">Welcome To</h1>
+          <h1 className="text-4xl md:text-5xl font-bold">Alumni Hub</h1>
+          <h3
+            ref={h3Ref}
+            className="text-center text-sm md:text-base font-semibold mt-2"
+          >
+            Here Meets Future Hands
+          </h3>
+        </div>
+      </div>
 
       <div
-        
         ref={aboutSectionRef}
         className="w-full  flex justify-center items-center px-4"
       >
-        <AboutSection title={"Our Inspiration"} secondTitle={"Hon. Sau. Pratibhatai Patil"} desc={"I am deeply committed to the cause of education and would like to see every person, man and woman, boy and girl, be touched by the light of modern education."} imgSrc={"https://www.sscoetjalgaon.ac.in/public/images/management/pratibhatai-patil.jpg"} />
+        <AboutSection
+          title={"Our Inspiration"}
+          secondTitle={"Hon. Sau. Pratibhatai Patil"}
+          desc={
+            "I am deeply committed to the cause of education and would like to see every person, man and woman, boy and girl, be touched by the light of modern education."
+          }
+          imgSrc={
+            "https://www.sscoetjalgaon.ac.in/public/images/management/pratibhatai-patil.jpg"
+          }
+        />
       </div>
 
       {/* About Section */}
- 
 
-        <AboutSection title={"About Us"} desc={"Something"} imgSrc={"https://bootstrapmade.com/content/demo/FlexStart/assets/img/about.jpg"} />
-  
+      <AboutSection
+        title={"About Us"}
+        desc={"Something"}
+        imgSrc={
+          "https://bootstrapmade.com/content/demo/FlexStart/assets/img/about.jpg"
+        }
+      />
 
       {/* Team Section */}
       <div
