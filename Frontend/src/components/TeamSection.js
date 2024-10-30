@@ -30,10 +30,10 @@ const TeamSection = () => {
   ];
 
   return (
-    <section id="team" className="team section py-12">
+    <section id="team" className="team  section py-12">
       {/* Section Title */}
       <div className="container mx-auto text-center mb-12 px-4" data-aos="fade-up">
-        <h2 className="text-3xl font-bold text-blue-600">Our Team</h2>
+        <h2 className="text-3xl font-bold text-black">Our Team</h2>
       </div>
 
       <div className="container mx-auto px-4">
