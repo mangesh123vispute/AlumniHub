@@ -21,6 +21,8 @@ const SuperUserProfileContent = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     const [isImageOpen, setIsImageOpen] = useState(false);
+    const [Image,setImage] = useState(null)
+    
 
   const handleImageClick = () => {
     setIsImageOpen(true);
@@ -284,13 +286,69 @@ const handleEditClick = (post) => {
       });
     };
 
-    const handleUpdateSubmit = (e) => {
-        e.preventDefault();
-      
-        // Update the post logic (e.g., API call to update the post)
-        
-        // Close the modal after updating
-        setIsEditModalOpen(false);
+    const handleUpdateSubmit = async (e) => {
+      e.preventDefault();
+      const accessToken = localStorage.getItem("authTokens")
+  ? JSON.parse(localStorage.getItem("authTokens")).access
+  : null;
+      setLoading(true);
+    
+      // if ((await verifyaccessToken()) === -1) {
+      //   setLoading(false);
+      //   return;
+      // }
+
+      console.log("post  ",selectedPost?.title ,selectedPost?.content ,selectedPost?.tag);
+    
+      if (!selectedPost?.title || !selectedPost?.content || !selectedPost?.tag ) {
+        showNotification(
+          "Please fill in all fields and upload an image.",
+          "warning",
+          "Missing fields"
+        );
+        setLoading(false);
+        return;
+      }
+    
+      // Create FormData object for updating
+      const formData = new FormData();
+      formData.append("title", selectedPost?.title);
+      formData.append("content", selectedPost?.content);
+      formData.append("tag", selectedPost?.tag);
+      formData.append("Image", selectedPost?.Image); // Assuming `Image` is the updated file object
+      formData.append("DocUrl", selectedPost?.DocUrl);
+    
+      await axios
+        .put(`http://127.0.0.1:8000/hodposts/${selectedPost?.id}/`, formData, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((response) => {
+          
+          setSelectedPost(null)
+    
+          showNotification(
+            "Post updated successfully.",
+            "success",
+            "Update successful"
+          );
+    
+          // Close modal and reset loading
+          setIsEditModalOpen(false);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error during update:", error);
+          showNotification(
+            error.response?.data?.detail || "Error updating the post.",
+            "warning",
+            "Update failed"
+          );
+          setSelectedPost(null)
+          setLoading(false);
+        });
       };
 
    
@@ -569,7 +627,7 @@ const handleEditClick = (post) => {
                   <input
                     type="file"
                     className="form-control"                   
-                    // onChange={(e)=>setImage(e.target.files[0])}
+                    onChange={(e)=>setImage(e.target.files[0])}
                     
                   />                   
             </div>
