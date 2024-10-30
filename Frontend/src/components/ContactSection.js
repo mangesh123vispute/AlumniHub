@@ -5,8 +5,7 @@ const ContactSection = () => {
     <section id="contact" className="contact py-12 md:py-16 bg-gray-100">
       {/* Section Title */}
       <div className="container mx-auto text-center mb-8 md:mb-12">
-        <h2 className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">Contact</h2>
-        <p className="text-gray-600 text-sm md:text-base">Contact Us</p>
+        <h2 className="text-3xl md:text-4xl font-bold text-black mb-2">Contact</h2>
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -95,7 +94,7 @@ const ContactSection = () => {
                 <div className="w-full px-4 text-center">
                   <button
                     type="submit"
-                    className="w-full md:w-auto py-2 md:py-3 px-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 focus:outline-none focus:bg-indigo-700 transition duration-200"
+                    className="w-full md:w-auto py-2 md:py-3 px-4 bg-red-900 text-white font-semibold rounded-lg hover:bg-yellow-700 focus:outline-none focus:bg-yellow-700 transition duration-200"
                   >
                     Send Message
                   </button>
