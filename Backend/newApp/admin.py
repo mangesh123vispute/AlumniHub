@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportExportModelAdmin
 from django.utils import timezone
-from .models import User, AlumniPost, AlumniProfile, StudentProfile,HODPrincipalProfile,HodPrincipalPost
+from .models import User, AlumniPost, AlumniProfile, StudentProfile,HODPrincipalProfile,HodPrincipalPost,AlumniCredentials
 from .resources import UserResource
 from django.contrib.auth.models import Permission
 admin.site.site_header = "AlumniHub Settings"
@@ -336,8 +336,20 @@ class HodPrincipalPostAdmin(admin.ModelAdmin):
     search_fields = ('title', 'author__full_name', 'tag')
     list_filter = ('created_at', 'updated_at')
 
+class AlumniCredentialsAdmin(admin.ModelAdmin):
+    list_display = ('user', 'fourth_year_marksheet', 'lc', 'id_card', 'graduation_certificate')
+    search_fields = ('user__username', 'user__email')  # Allow searching by username and email
+    list_filter = ('user__is_active',)  # Filter by user activity status
 
+    def has_change_permission(self, request, obj=None):
+        # Optionally restrict permissions based on custom logic
+        return super().has_change_permission(request, obj)
 
+    def has_delete_permission(self, request, obj=None):
+        # Optionally restrict delete permissions based on custom logic
+        return super().has_delete_permission(request, obj)
+
+admin.site.register(AlumniCredentials, AlumniCredentialsAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(AlumniProfile, AlumniProfileAdmin)
 admin.site.register(StudentProfile, StudentProfileAdmin)

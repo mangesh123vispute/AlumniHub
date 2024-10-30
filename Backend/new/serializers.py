@@ -71,7 +71,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         # Check if the user credentials are correct
         user = authenticate(username=attrs['username'], password=attrs['password'])
-        
+    
         if user is None:
             raise AuthenticationFailed(
                 detail='Credentials are not correct, please try again.', 
