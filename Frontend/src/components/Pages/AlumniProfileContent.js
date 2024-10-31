@@ -8,6 +8,7 @@ import React, {
 import "./profile.css";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext.js";
+import baseurl from "../const.js";
 
 const AlumniProfileContent = () => {
   let {
@@ -205,7 +206,7 @@ setIsDropdownOpen(null);  // Open the modal
 
     axios
       .get(
-        `http://127.0.0.1:8000/getalumni/${
+        `${baseurl}/getalumni/${
           ShowProfileOfId ? id : userData?.user_id
         }`,
         {
@@ -298,7 +299,7 @@ setIsDropdownOpen(null);  // Open the modal
 
     try {
       const response = await axios.put(
-        `http://127.0.0.1:8000/edit-alumni-profile/${id || userData?.user_id}/`,
+        `${baseurl}/edit-alumni-profile/${id || userData?.user_id}/`,
         alumniData,
         {
           headers: {
@@ -336,7 +337,7 @@ setIsDropdownOpen(null);  // Open the modal
     try {
       console.log("page " + page);
       const response = await axios.get(
-        `http://127.0.0.1:8000/alumniPosts/author/${
+        `${baseurl}/alumniPosts/author/${
           id || userData?.user_id
         }/?page=${page}&page_size=10`
       );
@@ -466,7 +467,7 @@ setIsDropdownOpen(null);  // Open the modal
 
     try {
       const response = await axios.put(
-        `http://127.0.0.1:8000/update-image/${userData?.user_id}/`,
+        `${baseurl}/update-image/${userData?.user_id}/`,
         formData,
         {
           headers: {
@@ -530,7 +531,7 @@ setIsDropdownOpen(null);  // Open the modal
     formData.append("DocUrl", selectedPost?.DocUrl);
   
     await axios
-      .put(`http://127.0.0.1:8000/alumni/posts/${selectedPost?.id}/`, formData, {
+      .put(`${baseurl}/alumni/posts/${selectedPost?.id}/`, formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "multipart/form-data",
@@ -576,7 +577,7 @@ setIsDropdownOpen(null);  // Open the modal
           setLoading(true);
        
           try {
-           await axios.delete(`http://127.0.0.1:8000/alumni/posts/${post?.id}/`,{
+           await axios.delete(`${baseurl}/alumni/posts/${post?.id}/`,{
              headers: {
                Authorization: `Bearer ${accessToken}`,
               
@@ -666,7 +667,7 @@ setIsDropdownOpen(null);  // Open the modal
                         className="profile-user-img img-fluid img-circle"
                         src={
                           user?.Image
-                            ? `http://127.0.0.1:8000/${user?.Image}`
+                            ? `${baseurl}/${user?.Image}`
                             : `../../dist/img/user1-128x128.jpg`
                         }
                         alt="User profile"
@@ -951,7 +952,7 @@ setIsDropdownOpen(null);  // Open the modal
                                 <div className="user-block">
                                   <img
                                     className="img-circle img-bordered-sm"
-                                    src={`http://127.0.0.1:8000/${
+                                    src={`${baseurl}/${
                                       user?.Image || "#"
                                     }`}
                                     alt="user image"

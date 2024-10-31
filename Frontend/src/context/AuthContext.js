@@ -3,7 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-
+import baseurl from "../components/const";
 const AuthContext = createContext();
 
 export default AuthContext;
@@ -107,7 +107,7 @@ export const AuthProvider = ({ children }) => {
 
      try {
        const response = await axios.get(
-         "http://127.0.0.1:8000/inactive-alumni/",
+         `${baseurl}/inactive-alumni/`,
          {
            headers: {
              Authorization: `Bearer ${token?.access}`,
@@ -156,7 +156,7 @@ export const AuthProvider = ({ children }) => {
         return -1;
       }
       // Verify access token
-      const response = await fetch("http://127.0.0.1:8000/api/token/verify/", {
+      const response = await fetch(`${baseurl}/api/token/verify/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

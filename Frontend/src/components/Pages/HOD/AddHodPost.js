@@ -4,6 +4,7 @@ import axios from "axios";
 import AuthContext from "../../../context/AuthContext";
 import LoadingSpinner from "../../Loading/Loading";
 import Notification from "../../Notification/Notification";
+import baseurl from "../../const";
 
 const accessToken = localStorage.getItem("authTokens")
   ? JSON.parse(localStorage.getItem("authTokens")).access
@@ -65,7 +66,7 @@ const AddHodPostContent = () => {
   formData.append("DocUrl", docUrl);
 
     await axios
-      .post("http://127.0.0.1:8000/hodposts/", formData, {
+      .post(`${baseurl}/hodposts/`, formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "multipart/form-data"

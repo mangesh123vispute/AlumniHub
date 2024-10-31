@@ -2,7 +2,7 @@ import React, { useContext ,useState , useEffect, useRef , useCallback } from "r
 import "./profile.css"
 import axios from 'axios'
 import AuthContext from "../../context/AuthContext.js";
- 
+import baseurl from "../const.js";
 
 const SuperUserProfileContent = () => {
     let { userData, setLoading, showNotification, ShowProfileOfId } =
@@ -128,7 +128,7 @@ const handleEditClick = (post) => {
   
       axios
         .get(
-          `http://127.0.0.1:8000/hods/${
+          `${baseurl}/hods/${
             ShowProfileOfId? id : userData?.user_id
           }`,
           {
@@ -195,7 +195,7 @@ const handleEditClick = (post) => {
         ? JSON.parse(localStorage.getItem("authTokens"))
         : null;
       try {
-        const response = await axios.put(`http://127.0.0.1:8000/edit-hod-profile/${id || userData?.user_id}/`, superUserData,{
+        const response = await axios.put(`${baseurl}/edit-hod-profile/${id || userData?.user_id}/`, superUserData,{
           headers: {
             Authorization: `Bearer ${token?.access}`,
           },
@@ -271,7 +271,7 @@ const handleEditClick = (post) => {
        
       try {
         console.log("page " + page);
-        const response = await axios.get(`http://127.0.0.1:8000/hodposts/author/${id || userData?.user_id}/?page=${page}&page_size=10`);
+        const response = await axios.get(`${baseurl}/hodposts/author/${id || userData?.user_id}/?page=${page}&page_size=10`);
         setPosts(response.data.results); // Set fetched posts
         console.log("res data "+response.data.results);
         setHasMore(response.data.next !== null);
@@ -332,7 +332,7 @@ const handleEditClick = (post) => {
       formData.append("DocUrl", selectedPost?.DocUrl);
     
       await axios
-        .put(`http://127.0.0.1:8000/hodposts/${selectedPost?.id}/`, formData, {
+        .put(`${baseurl}/hodposts/${selectedPost?.id}/`, formData, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": "multipart/form-data",
@@ -378,7 +378,7 @@ const handleEditClick = (post) => {
             setLoading(true);
          
             try {
-             await axios.delete(`http://127.0.0.1:8000/hodposts/${post?.id}/`,{
+             await axios.delete(`${baseurl}/hodposts/${post?.id}/`,{
                headers: {
                  Authorization: `Bearer ${accessToken}`,
                 
@@ -455,7 +455,7 @@ const handleEditClick = (post) => {
                           className="profile-user-img img-fluid img-circle"
                           src={
                             user?.Image
-                              ? `http://127.0.0.1:8000/${user?.Image}`
+                              ? `${baseurl}/${user?.Image}`
                               : `../../dist/img/user1-128x128.jpg`
                           }
                           alt="User profile picture"
@@ -603,7 +603,7 @@ const handleEditClick = (post) => {
                                   <div className="user-block">
                                     <img
                                       className="img-circle img-bordered-sm"
-                                      src={`http://127.0.0.1:8000/${
+                                      src={`${baseurl}/${
                                         user?.Image || "#"
                                       }`}
                                       alt="user image"

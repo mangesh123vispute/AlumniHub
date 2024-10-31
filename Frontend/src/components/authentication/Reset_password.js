@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import AuthContext from "../../context/AuthContext.js";
 import { Link } from "react-router-dom";
 import Notification from "../Notification/Notification.js";
+import baseurl from "../const.js";
 import LoadingSpinner from "../Loading/Loading.js";
 const ResetPassword = () => {
   const { uidb64, token } = useParams();
@@ -34,7 +35,7 @@ setFilter(false);
 
     try {
       const response = await axios.post(
-        `http://127.0.0.1:8000/reset-password/${uidb64}/${token}/`,
+        `${baseurl}/reset-password/${uidb64}/${token}/`,
         { new_password: newPassword }
       );
       if (response.status === 200) {
