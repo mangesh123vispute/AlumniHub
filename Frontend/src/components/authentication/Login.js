@@ -5,6 +5,7 @@ import LoadingSpinner from "../Loading/Loading.js";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import Notification from "../Notification/Notification.js";
+import baseurl from "../const.js";
 import { Link } from "react-router-dom";
 
 const Login = () => {
@@ -52,7 +53,7 @@ const handleSubmit = async (e) => {
   try {
     console.log(formData);
 
-    const response = await fetch("http://127.0.0.1:8000/login/", {
+    const response = await fetch(`${baseurl}/login/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

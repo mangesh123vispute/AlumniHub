@@ -5,7 +5,7 @@ import AuthContext from "../../context/AuthContext.js";
 import LoadingSpinner from "../Loading/Loading.js";
 import Notification from "../Notification/Notification.js";
 import { useNavigate } from "react-router-dom";
-
+import baseurl from "../const.js";
 
 const AllAlumnisContent = () => {
   const [adminData, setAdminData] = useState(null); // Changed to hold the entire data object
@@ -93,7 +93,7 @@ const [totalPages, setTotalPages] = useState(1);
     }
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/register-admin/",
+        `${baseurl}/register-admin/`,
         newStaff,
         { headers: { Authorization: `Bearer ${token?.access}` } }
       );
@@ -155,7 +155,7 @@ const [totalPages, setTotalPages] = useState(1);
 
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/hods/?${queryParams}`,
+        `${baseurl}/hods/?${queryParams}`,
         {
           headers: { Authorization: `Bearer ${token?.access}` },
         }
@@ -252,7 +252,7 @@ const [totalPages, setTotalPages] = useState(1);
                             className="img-circle elevation-2"
                             src={
                               admins?.Image
-                                ? `http://127.0.0.1:8000/${admins?.Image}`
+                                ? `${baseurl}/${admins?.Image}`
                                 : `../../dist/img/user1-128x128.jpg`
                             }
                             alt="User Avatar"

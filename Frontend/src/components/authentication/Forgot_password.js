@@ -5,6 +5,7 @@ import AuthContext from "../../context/AuthContext.js";
 import { Link } from "react-router-dom";
 import Notification from "../Notification/Notification.js";
 import LoadingSpinner from "../Loading/Loading.js";
+import baseurl from "../const.js";
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   let {
@@ -31,7 +32,7 @@ const ForgotPassword = () => {
    setLoading(true);
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/forgot-password/",
+        `${baseurl}/forgot-password/`,
         { email }
       );
       if (response.status === 200) {

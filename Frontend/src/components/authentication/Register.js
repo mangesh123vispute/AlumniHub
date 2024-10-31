@@ -4,6 +4,7 @@ import AuthContext from "../../context/AuthContext.js";
 import LoadingSpinner from "../Loading/Loading.js";
 import { useNavigate } from "react-router-dom";
 import Notification from "../Notification/Notification.js"
+import baseurl from "../const.js";
 import { Link } from "react-router-dom";
 const Register = () => {
   const navigate = useNavigate();
@@ -135,7 +136,7 @@ const Register = () => {
    });
 
    try {
-     const response = await fetch("http://127.0.0.1:8000/register-alumni/", {
+     const response = await fetch(`${baseurl}/register-alumni/`, {
        method: "POST",
        body: formDataToSend,
      });

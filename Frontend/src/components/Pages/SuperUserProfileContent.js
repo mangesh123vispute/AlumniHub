@@ -23,11 +23,20 @@ const SuperUserProfileContent = () => {
     const [isImageOpen, setIsImageOpen] = useState(false);
     const [Image,setImage] = useState(null)
     const [load,setload] = useState(false)
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    
+
+  
+    const toggleDropdown = (postId) => {
+     
+      setIsDropdownOpen(isDropdownOpen === postId ? null : postId);
+      
+    };
   const [croppedImage, setCroppedImage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
    const handleCropComplete = (croppedImageUrl) => {
      setCroppedImage(croppedImageUrl);
-     
+ 
      setIsModalOpen(false);
    };
 
@@ -41,7 +50,8 @@ const SuperUserProfileContent = () => {
 
 const handleEditClick = (post) => {
   setSelectedPost(post);
-  setIsEditModalOpen(true);  // Open the modal
+  setIsEditModalOpen(true);
+  setIsDropdownOpen(null);  // Open the modal
 };
 
    
@@ -124,7 +134,7 @@ const handleEditClick = (post) => {
   
       axios
         .get(
-          `http://127.0.0.1:8000/hods/${
+          `${baseurl}/hods/${
             ShowProfileOfId? id : userData?.user_id
           }`,
           {
@@ -191,7 +201,7 @@ const handleEditClick = (post) => {
         ? JSON.parse(localStorage.getItem("authTokens"))
         : null;
       try {
-        const response = await axios.put(`http://127.0.0.1:8000/edit-hod-profile/${id || userData?.user_id}/`, superUserData,{
+        const response = await axios.put(`${baseurl}/edit-hod-profile/${id || userData?.user_id}/`, superUserData,{
           headers: {
             Authorization: `Bearer ${token?.access}`,
           },
@@ -267,7 +277,7 @@ const handleEditClick = (post) => {
        
       try {
         console.log("page " + page);
-        const response = await axios.get(`http://127.0.0.1:8000/hodposts/author/${id || userData?.user_id}/?page=${page}&page_size=10`);
+        const response = await axios.get(`${baseurl}/hodposts/author/${id || userData?.user_id}/?page=${page}&page_size=10`);
         setPosts(response.data.results); // Set fetched posts
         console.log("res data "+response.data.results);
         setHasMore(response.data.next !== null);
@@ -328,7 +338,7 @@ const handleEditClick = (post) => {
       formData.append("DocUrl", selectedPost?.DocUrl);
     
       await axios
-        .put(`http://127.0.0.1:8000/hodposts/${selectedPost?.id}/`, formData, {
+        .put(`${baseurl}/hodposts/${selectedPost?.id}/`, formData, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": "multipart/form-data",
@@ -347,6 +357,7 @@ const handleEditClick = (post) => {
           );
     
           // Close modal and reset loading
+          
           setIsEditModalOpen(false);
           setLoading(false);
          
@@ -361,6 +372,7 @@ const handleEditClick = (post) => {
           setSelectedPost(null)
           setLoading(false);
         });
+        window.location.reload()
       };
 
       const handleDeleteClick = async (post)=>{
@@ -372,7 +384,7 @@ const handleEditClick = (post) => {
             setLoading(true);
          
             try {
-             await axios.delete(`http://127.0.0.1:8000/hodposts/${post?.id}/`,{
+             await axios.delete(`${baseurl}/hodposts/${post?.id}/`,{
                headers: {
                  Authorization: `Bearer ${accessToken}`,
                 
@@ -398,8 +410,8 @@ const handleEditClick = (post) => {
        
  
        setLoading(false);
- 
- 
+       setIsDropdownOpen(null);
+       window.location.reload()
      }
 
    
@@ -453,7 +465,7 @@ const handleEditClick = (post) => {
                           className="profile-user-img img-fluid img-circle"
                           src={
                             user?.Image
-                              ? `http://127.0.0.1:8000/${user?.Image}`
+                              ? `${baseurl}/${user?.Image}`
                               : `../../dist/img/user1-128x128.jpg`
                           }
                           alt="User profile picture"
@@ -722,7 +734,7 @@ const handleEditClick = (post) => {
                                   <div className="user-block">
                                     <img
                                       className="img-circle img-bordered-sm"
-                                      src={`http://127.0.0.1:8000/${
+                                      src={`${baseurl}/${
                                         user?.Image || "#"
                                       }`}
                                       alt="user image"
@@ -753,41 +765,46 @@ const handleEditClick = (post) => {
                                     </span>
                                   </div>
 
-                                  {/* Add Edit Icon Here */}
-                                  <div
-                                    className="edit-icon"
-                                    style={{
-                                      float: "right",
-                                      cursor: "pointer",
-                                    }}
+                                  {/* Dropdown Button */}
+                              {userData?.user_id === user?.id && (
+                                <div className="dropdown">
+                                  <button
+                                    className="btn btn-link dropdown-toggle"
+                                    type="button"
+                                    onClick={()=>toggleDropdown(post?.id)}
                                   >
-                                    <i
-                                      className="fas fa-edit"
-                                      onClick={() => handleEditClick(post)}
-                                      style={{
-                                        fontSize: "1.5em",
-                                        color: "#007bff",
-                                      }}
-                                    />
-                                  </div>
+                                    <i className="fas fa-ellipsis-v" style={{ fontSize: "1.5em", cursor: "pointer" }} />
+                                  </button>
+                                  {isDropdownOpen === post?.id && (
+                                    <div className="dropdown-menu show">
+                                      <span onClick={() => handleEditClick(post)} className="dropdown-item">
+                                        Edit
+                                      </span>
+                                      <span onClick={() => handleDeleteClick(post)} className="dropdown-item">
+                                        Delete
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>)}
+                                  
 
-                                  {/* Add Delete Icon Here */}
-                                  <div
-                                    className="edit-icon"
-                                    style={{
-                                      float: "right",
-                                      cursor: "pointer",
-                                    }}
-                                  >
-                                    <i
-                                      className="fas fa-trash"
-                                      onClick={() => handleDeleteClick(post)}
-                                      style={{
-                                        fontSize: "1.5em",
-                                        color: "#007bff",
-                                      }}
-                                    />
-                                  </div>
+                                  {/* Add Edit Icon Here */}
+                            {/* <div className="edit-icon" style={{ float: 'right', cursor: 'pointer' }}>
+                            <i
+                                className="fas fa-edit"
+                                onClick={() => handleEditClick(post)}
+                                style={{ fontSize: '1.5em', color: '#007bff' }}
+                            />
+                            </div> */}
+
+                             {/* Add Delete Icon Here */}
+                             {/* <div className="edit-icon" style={{ float: 'right', cursor: 'pointer' }}>
+                            <i
+                                className="fas fa-trash"
+                                onClick={() => handleDeleteClick(post)}
+                                style={{ fontSize: '1.5em', color: '#007bff' }}
+                            />
+                            </div> */}
 
                                   {isEditModalOpen && (
                                     <div className="modal">
