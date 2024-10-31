@@ -22,6 +22,7 @@ const SuperUserProfileContent = () => {
 
     const [isImageOpen, setIsImageOpen] = useState(false);
     const [Image,setImage] = useState(null)
+    const [load,setload] = useState(false)
     
 
   const handleImageClick = () => {
@@ -299,7 +300,7 @@ const handleEditClick = (post) => {
       //   return;
       // }
 
-      console.log("post  ",selectedPost?.title ,selectedPost?.content ,selectedPost?.tag);
+      console.log("post  ",selectedPost?.title ,selectedPost?.content ,selectedPost?.tag, selectedPost?.Image);
     
       if (!selectedPost?.title || !selectedPost?.content || !selectedPost?.tag ) {
         showNotification(
@@ -316,7 +317,8 @@ const handleEditClick = (post) => {
       formData.append("title", selectedPost?.title);
       formData.append("content", selectedPost?.content);
       formData.append("tag", selectedPost?.tag);
-      formData.append("Image", selectedPost?.Image); // Assuming `Image` is the updated file object
+        if(Image !== null)
+      formData.append("Image", Image); // Assuming `Image` is the updated file object
       formData.append("DocUrl", selectedPost?.DocUrl);
     
       await axios
@@ -328,8 +330,10 @@ const handleEditClick = (post) => {
         })
         .then((response) => {
           
+          
           setSelectedPost(null)
-    
+          
+          
           showNotification(
             "Post updated successfully.",
             "success",
@@ -339,6 +343,7 @@ const handleEditClick = (post) => {
           // Close modal and reset loading
           setIsEditModalOpen(false);
           setLoading(false);
+         
         })
         .catch((error) => {
           console.error("Error during update:", error);
@@ -351,6 +356,45 @@ const handleEditClick = (post) => {
           setLoading(false);
         });
       };
+
+      const handleDeleteClick = async (post)=>{
+        if(!window.confirm('Are You Sure want to Delete Post'))return;
+ 
+        const accessToken = localStorage.getItem("authTokens")
+        ? JSON.parse(localStorage.getItem("authTokens")).access
+        : null;
+            setLoading(true);
+         
+            try {
+             await axios.delete(`http://127.0.0.1:8000/hodposts/${post?.id}/`,{
+               headers: {
+                 Authorization: `Bearer ${accessToken}`,
+                
+               },
+             })
+ 
+             showNotification(
+               "Post Deleted successfully.",
+               "success",
+               "Delete successful"
+             );
+ 
+             fetchPosts()
+ 
+            } catch (error) {
+             console.error("Error during Delete:", error);
+             showNotification(
+               error.response?.data?.detail || "Error Deleting the post.",
+               "warning",
+               "Delete failed"
+             );
+            }
+       
+ 
+       setLoading(false);
+ 
+ 
+     }
 
    
     return (
@@ -587,6 +631,15 @@ const handleEditClick = (post) => {
                             />
                             </div>
 
+                             {/* Add Delete Icon Here */}
+                             <div className="edit-icon" style={{ float: 'right', cursor: 'pointer' }}>
+                            <i
+                                className="fas fa-trash"
+                                onClick={() => handleDeleteClick(post)}
+                                style={{ fontSize: '1.5em', color: '#007bff' }}
+                            />
+                            </div>
+
                             {isEditModalOpen && (
   <div className="modal">
     <div className="modal-content">
@@ -622,6 +675,75 @@ const handleEditClick = (post) => {
               onChange={(e) => setSelectedPost({ ...selectedPost, tag: e.target.value })}
             />
           </div>
+          <div><label>Previous Image</label></div>
+          <div className="col-auto">
+            
+                                    <a
+                                      href="#"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        handleImageClick();
+                                      }}
+                                      className="mr-3"
+                                    >
+                                      <i className="fas fa-image mr-1" /> Image
+                                    </a>
+
+                                    {isImageOpen && (
+                                    <div
+                                      style={{
+                                        position: "fixed",
+                                        top: 0,
+                                        left: 0,
+                                        width: "100%",
+                                        height: "100%",
+                                        backgroundColor: "tranparent",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        zIndex: 1050,
+                                      }}
+                                      onClick={handleCloseModal}
+                                    >
+                                      <div
+                                        style={{
+                                          position: "relative",
+                                          maxWidth: "100%",
+                                          maxHeight: "100%",
+                                          display: "flex",
+                                          justifyContent: "center",
+                                          alignItems: "center",
+                                        }}
+                                      >
+                                        <img
+                                          src={selectedPost?.Image}
+                                          alt="Post"
+                                          style={{
+                                            // maxWidth: "100%",
+                                            // maxHeight: "100%",
+                                            width:"100%",
+                                            height:"auto",
+                                            borderRadius: "5px",
+                                            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+                                          }}
+                                        />
+                                        <span
+                                          style={{
+                                            position: "absolute",
+                                            top: "10px",
+                                            right: "10px",
+                                            fontSize: "1.5em",
+                                            color: "#fff",
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={handleCloseModal}
+                                        >
+                                          &times;
+                                        </span>
+                                      </div>
+                                    </div>
+                                  )}
+                                  </div>
           <div className="form-group">
                   <label>Image Upload </label>
                   <div className="input-group">
