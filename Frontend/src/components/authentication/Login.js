@@ -199,22 +199,40 @@ const handleSubmit = async (e) => {
                 }}
               />
               {/* /.social-auth-links */}
-              <div className="row">
-                <div className="col-3">
+              <div className="row text-center text-md-left">
+                <div className="col-12 col-md-3 mb-2">
                   <Link to="/" style={{ color: "#007bff", fontSize: "0.8em" }}>
                     <i className="fas fa-home"></i> Home
                   </Link>
                 </div>
 
-                <div className="col-5">
-                  <Link
-                    to="/forgot_password"
-                    style={{ color: "#007bff", fontSize: "0.8em" }}
-                  >
-                    <i className="fas fa-lock mr-1"></i> Forgot-Password
-                  </Link>
+                <div className="col-12 col-md-5 mb-2 mr-3">
+                  <div className="dropdown">
+                    <a
+                      href="#"
+                      className="dropdown-toggle"
+                      data-toggle="dropdown"
+                      style={{ color: "#007bff", fontSize: "0.8em" }}
+                    >
+                      <i className="fas fa-user-lock mr-1"></i> Forgot
+                      Credentials
+                    </a>
+                    <div
+                      className="dropdown-menu p-1"
+                      style={{ fontSize: "0.9em", minWidth: "150px" }}
+                    >
+                      <Link to="/forgot_password" className="dropdown-item">
+                        <i className="fas fa-unlock-alt mr-1"></i> Forgot
+                        Password
+                      </Link>
+                      <Link to="/forgot_username" className="dropdown-item">
+                        <i className="fas fa-user mr-1"></i> Forgot Username
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-                <div className="col-3">
+
+                <div className="col-12 col-md-3 mb-2">
                   <Link
                     to="/register"
                     style={{ color: "#007bff", fontSize: "0.8em" }}
@@ -224,13 +242,10 @@ const handleSubmit = async (e) => {
                 </div>
               </div>
             </div>
-            {/* /.login-card-body */}
+            
           </div>
         </div>
-        {/* /.login-box */}
-        {/* jQuery */}
-        {/* Bootstrap 4 */}
-        {/* AdminLTE App */}
+        
       </div>
     </>
   );

@@ -20,8 +20,10 @@ import AddAlumniPost from './components/Pages/AddAlumniPost.js'
 import AllPost from "./components/Pages/AllPost.js";
 import YourPosts from "./components/Pages/YourPosts.js";
 import ForgotPassword from "./components/authentication/Forgot_password.js";
+import ForgotUsername from "./components/authentication/Forgot_username.js";
 import GetActivationEmail from "./components/authentication/GetActivationEmail.js";
 import ResetPassword from "./components/authentication/Reset_password.js";
+import ResetUsername from "./components/authentication/Reset_username.js";
 import MyProfile from "./components/Pages/MyProfile.js";
 
 function App() {
@@ -36,6 +38,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/activate_email" element={<ActivateEmail />} />
           <Route path="/forgot_password" element={<ForgotPassword />} />
+          <Route path="/forgot_username" element={<ForgotUsername />} />
           <Route
             path="/send_activation_Email"
             element={<GetActivationEmail />}
@@ -43,6 +46,10 @@ function App() {
           <Route
             path="/reset-password/:uidb64/:token"
             element={<ResetPassword />}
+          />
+          <Route
+            path="/reset-username/:uidb64/:token"
+            element={<ResetUsername />}
           />
           <Route path="/home" element={<ProtectedRoute element={<Home />} />} />
           <Route path="/requests" element={<ProtectedRoute element={<Requests />} />} />
