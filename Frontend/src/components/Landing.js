@@ -8,13 +8,14 @@ import TeamSection from "./TeamSection";
 import ContactSection from "./ContactSection";
 import FooterSection from "./FooterSection";
 import TopAlumni from "./TopAlumni";
+import {HashLink} from "react-router-hash-link";
 gsap.registerPlugin(ScrollTrigger);
 
 function Landing() {
   const navigate = useNavigate();
   const { userData } = useContext(AuthContext);
   const textDivRef = useRef(null);
-  const aboutSectionRef1 = useRef(null); // Changed to separate refs
+  const aboutSectionRef1 = useRef(null);
   const aboutSectionRef2 = useRef(null);
   const teamSectionRef = useRef(null);
   const h3Ref = useRef(null);
@@ -97,23 +98,23 @@ function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
           <div className="flex items-center space-x-2">
             <img src="/Logo.jfif" alt="Logo" className="w-10 h-10 rounded-full" />
-            <Link to="/" className="text-lg md:text-2xl font-bold">
+            <Link to="/" className="text-lg md:text-2xl font-bold hover:text-red-800">
               Alumni Hub
             </Link>
           </div>
           <div className="hidden md:flex space-x-6">
-            <a href="/" className="text-white px-2 py-1 rounded hover:bg-red-800">
+            <HashLink to="/#home" className="text-white px-2 py-1 rounded hover:bg-red-800">
               Home
-            </a>
-            <a href="#about" className="text-white px-2 py-1 rounded hover:bg-red-800">
+            </HashLink>
+            <HashLink to="#about" className="text-white px-2 py-1 rounded hover:bg-red-800">
               About
-            </a>
-            <a href="#team" className="text-white px-2 py-1 rounded hover:bg-red-800">
+            </HashLink>
+            <HashLink to="#team" className="text-white px-2 py-1 rounded hover:bg-red-800">
               Team
-            </a>
-            <a href="#contact" className="text-white px-2 py-1 rounded hover:bg-red-800">
+            </HashLink>
+            <HashLink to="#contact" className="text-white px-2 py-1 rounded hover:bg-red-800">
               Contact
-            </a>
+            </HashLink>
           </div>
           <div className="hidden md:flex">
             <Link to="/register" className="hover:bg-red-800 text-white px-4 py-2 rounded">
@@ -130,29 +131,29 @@ function Landing() {
         </div>
         {navOpen && (
           <div className="md:hidden bg-white text-black">
-            <a href="/" className="block px-2 py-1 hover:bg-red-800 text-white" onClick={() => setNavOpen(false)}>
+            <HashLink to="/#home" className="block px-2 py-1 hover:bg-red-800 text-white" onClick={() => setNavOpen(false)}>
               Home
-            </a>
-            <a href="#about" className="block px-2 py-1 hover:bg-red-800 text-white" onClick={() => setNavOpen(false)}>
+            </HashLink>
+            <HashLink to="#about" className="block px-2 py-1 hover:bg-red-800 text-white" onClick={() => setNavOpen(false)}>
               About
-            </a>
-            <a href="#team" className="block px-2 py-1 hover:bg-red-800 text-white" onClick={() => setNavOpen(false)}>
+            </HashLink>
+            <HashLink to="#team" className="block px-2 py-1 hover:bg-red-800 text-white" onClick={() => setNavOpen(false)}>
               Team
-            </a>
-            <a href="#contact" className="block px-2 py-1 hover:bg-red-800 text-white" onClick={() => setNavOpen(false)}>
+            </HashLink>
+            <HashLink to="#contact" className="block px-2 py-1 hover:bg-red-800 text-white" onClick={() => setNavOpen(false)}>
               Contact
-            </a>
+            </HashLink>
             <div className="px-4 py-2">
-              <button className="w-full hover:bg-red-800 text-white px-4 py-2 rounded">
+              <Link to="/register" className="w-full hover:bg-red-800 text-white px-4 py-2 rounded block text-center">
                 Register
-              </button>
+              </Link>
             </div>
           </div>
         )}
       </nav>
 
       {/* Image Section with Marquee */}
-      <div
+      <div id="home"
         className="w-full h-[90vh] flex justify-center items-center pt-16 relative transition-opacity duration-1000"
         style={{
           backgroundImage: backgroundImages[bgIndex],
@@ -183,10 +184,12 @@ function Landing() {
           title="Our Objective"
           secondTitle="Our Vision"
           desc="To create an environment that nurtures the growth of our students in all dimensions, leading to their all-round development."
-          imgSrc="https://www.sscoetjalgaon.ac.in/public/images/management/vision.jpg"
+          imgSrc="https://www.sscoetjalgaon.ac.in/public/images/home-page/undergraduate1.jpg"
         />
       </div>
-        <TopAlumni/>
+      <div id="topalumini">
+      <TopAlumni/>
+      </div>
       <div ref={teamSectionRef}>
         <TeamSection />
       </div>
