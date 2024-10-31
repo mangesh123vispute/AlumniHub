@@ -12,6 +12,7 @@ import {HashLink} from "react-router-hash-link";
 gsap.registerPlugin(ScrollTrigger);
 
 function Landing() {
+  const [isLoggedin, setIsLoggedin] = useState(false);
   const navigate = useNavigate();
   const { userData } = useContext(AuthContext);
   const textDivRef = useRef(null);
@@ -27,7 +28,13 @@ function Landing() {
     "url('https://www.sscoetjalgaon.ac.in/public/images/slider/slide21.jpg')",
     "url('https://www.sscoetjalgaon.ac.in/public/images/slider/snap1041.jpg')"
   ];
-
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBgIndex((prevIndex) => (prevIndex + 1) % backgroundImages.length);
+    }, 4000);
+    localStorage.getItem("authTokens") ? setIsLoggedin(true) : setIsLoggedin(false);
+    return () => clearInterval(interval);
+  }, []);
   useEffect(() => {
     const interval = setInterval(() => {
       setBgIndex((prevIndex) => (prevIndex + 1) % backgroundImages.length);
@@ -70,7 +77,7 @@ function Landing() {
         }
       );
     };
-
+   
     aboutSectionAnimation(aboutSectionRef1);
     aboutSectionAnimation(aboutSectionRef2);
 
@@ -97,29 +104,41 @@ function Landing() {
       <nav className="bg-yellow-500 text-white w-full fixed top-0 z-50 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
           <div className="flex items-center space-x-2">
-            <img src="/Logo.jfif" alt="Logo" className="w-10 h-10 rounded-full" />
-            <Link to="/" className="text-lg md:text-2xl font-bold hover:text-red-800">
-              Alumni Hub
-            </Link>
+            <img src="/Logo.jfif" alt="Logo" className="w-10 h-10 -ml-8 rounded-full" />
+            <Link to="/" className="text-[15vh] md:text-2xl font-bold hover:text-red-800">
+              AlumniHub |
+            </Link> <span className="text-[3vh] mt-1  text-red-800">SSBT COET</span>
           </div>
           <div className="hidden md:flex space-x-6">
-            <HashLink to="/#home" className="text-white px-2 py-1 rounded hover:bg-red-800">
+            <HashLink to="/#home" className="text-white px-3 py-1 rounded-[5vh] hover:bg-red-800">
               Home
             </HashLink>
-            <HashLink to="#about" className="text-white px-2 py-1 rounded hover:bg-red-800">
+            <HashLink to="#about" className="text-white px-3 py-1 rounded-[5vh] hover:bg-red-800">
               About
             </HashLink>
-            <HashLink to="#team" className="text-white px-2 py-1 rounded hover:bg-red-800">
+            <HashLink to="#team" className="text-white px-3 py-1 rounded-[5vh] hover:bg-red-800">
               Team
             </HashLink>
-            <HashLink to="#contact" className="text-white px-2 py-1 rounded hover:bg-red-800">
+            <HashLink to="#contact" className="text-white px-3 py-1 rounded-[5vh] hover:bg-red-800">
               Contact
             </HashLink>
           </div>
           <div className="hidden md:flex">
-            <Link to="/register" className="hover:bg-red-800 text-white px-4 py-2 rounded">
-              Register / Login
-            </Link>
+          {isLoggedin ? (
+              <Link
+                to="/home2"
+                className="hover:bg-red-900 rounded-[5vh] text-white px-4 py-2  "
+              >
+                Dashboard
+              </Link>
+            ) : (
+              <Link
+                to="/register"
+                className="bg-red-900 text-white px-4 py-2  "
+              >
+                Register 
+              </Link>
+            )}
           </div>
           <div className="md:hidden">
             <button onClick={() => setNavOpen(!navOpen)} className="focus:outline-none">

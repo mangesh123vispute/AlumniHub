@@ -7,10 +7,10 @@ const FooterSection = () => {
         className="absolute inset-0 bg-cover bg-center"
         style={{
           backgroundImage: 'url(https://www.sscoetjalgaon.ac.in/public/images/backgrounds/footer-section-background.png)',
-          opacity: 0.5, // Adjust the opacity as needed
+          opacity: 0.5,
         }}
       ></div>
-      <div className="container mx-auto relative z-10">
+      <div className="container mx-auto relative z-10 px-4 md:px-8">
         <div className="border-b border-gray-700 pb-5">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-white">
@@ -37,7 +37,7 @@ const FooterSection = () => {
             </div>
             <div className="text-white">
               <h4 className="font-bold text-lg mb-4">Useful Links</h4>
-              <ul className="list-none">
+              <ul className="list-none space-y-2">
                 <li><a className="text-gray-400" href="https://www.sscoetjalgaon.ac.in/aicte/">AICTE</a></li>
                 <li><a className="text-gray-400" href="https://www.sscoetjalgaon.ac.in/naac/">NAAC</a></li>
                 <li><a className="text-gray-400" href="https://www.sscoetjalgaon.ac.in/nirf/">NIRF</a></li>
@@ -49,7 +49,7 @@ const FooterSection = () => {
             </div>
             <div className="text-white">
               <h4 className="font-bold text-lg mb-4">Mandatory Disclosures</h4>
-              <ul className="list-none">
+              <ul className="list-none space-y-2">
                 <li><a className="text-gray-400" href="https://www.sscoetjalgaon.ac.in/iqac/">IQAC</a></li>
                 <li><a className="text-gray-400" href="https://www.sscoetjalgaon.ac.in/aqar/">AQAR</a></li>
                 <li><a className="text-gray-400" href="https://www.sscoetjalgaon.ac.in/audit-reports/">Audit Reports</a></li>
@@ -95,13 +95,13 @@ const FooterSection = () => {
         </div>
       </div>
       <div className="bg-black-333 pt-5 pb-5">
-        <div className="container mx-auto">
-          <div className="flex justify-between items-center">
-            <div className="text-gray-500 text-sm">
+        <div className="container mx-auto px-4 md:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="text-gray-500 text-sm text-center md:text-left">
               <p>Copyright © 1983-2024. All Rights Reserved</p>
             </div>
             <div>
-              <ul className="flex space-x-2 text-gray-500 text-sm">
+              <ul className="flex space-x-2 text-gray-500 text-sm justify-center md:justify-end">
                 <li>
                   <a href="https://www.sscoetjalgaon.ac.in/privacy-policy/">Privacy Policy</a>
                 </li>
