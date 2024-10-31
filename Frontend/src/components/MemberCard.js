@@ -2,6 +2,12 @@ import React from 'react';
 
 function MemberCard({ name, title, description, imgSrc }) {
   return (
+    <>
+    <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+/>
+
     <div className="relative group bg-white rounded-lg shadow-md p-6 flex flex-col items-center text-center transition-transform duration-300 ease-in-out transform hover:scale-105">
       <div className="member-img relative mb-4 w-3/4 sm:w-full">
         <img
@@ -19,19 +25,20 @@ function MemberCard({ name, title, description, imgSrc }) {
       {/* Vertical Bar for Social Icons */}
       <div className="social-bar absolute top-0 right-0 h-full w-0 overflow-hidden transition-all duration-300 ease-in-out bg-white group-hover:w-24 flex flex-col items-center justify-center">
         <a href="#" className="text-black hover:text-blue-500 mb-2">
-          <i className="bi bi-twitter"></i>
+          <i className="fab fa-twitter"></i>
         </a>
         <a href="#" className="text-black hover:text-blue-500 mb-2">
-          <i className="bi bi-facebook"></i>
+          <i className="fab fa-facebook"></i>
         </a>
         <a href="#" className="text-black hover:text-pink-500 mb-2">
-          <i className="bi bi-instagram"></i>
+          <i className="fab fa-instagram"></i>
         </a>
         <a href="#" className="text-black hover:text-blue-600">
-          <i className="bi bi-linkedin"></i>
+          <i className="fab fa-linkedin"></i>
         </a>
       </div>
     </div>
+    </>
   );
 }
 

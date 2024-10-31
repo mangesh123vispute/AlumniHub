@@ -2,7 +2,7 @@ import React from 'react';
 
 const AboutSection = ({title,desc,imgSrc,secondTitle}) => {
   return (
-    <section id="about" className="about section py-16 md:py-28 px-4 md:px-8">
+    <section id="about" className="about  py-16 md:py-28 px-4 md:px-8">
       <div className="container mx-auto">
         <div className="flex flex-col lg:flex-row gap-8">
           
