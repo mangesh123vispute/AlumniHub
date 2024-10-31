@@ -1,4 +1,4 @@
-
+// ForgotPassword.js
 import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext.js";
@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import Notification from "../Notification/Notification.js";
 import LoadingSpinner from "../Loading/Loading.js";
 import baseurl from "../const.js";
-const GetActivationEmail = () => {
+const ForgotUsername = () => {
   const [email, setEmail] = useState("");
   let {
     isOpen,
@@ -30,7 +30,7 @@ const GetActivationEmail = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `${baseurl}/send-activation-email/`,
+        `${baseurl}/forgot-username/`,
         { email }
       );
       if (response.status === 200) {
@@ -45,7 +45,7 @@ const GetActivationEmail = () => {
       console.log(error);
       showNotification(
         error.response.data.detail ||
-          "Failed to reset password, Please try again",
+          "Failed to reset username, Please try again",
         "error",
         "Error"
       );
@@ -65,15 +65,18 @@ const GetActivationEmail = () => {
       <div className="hold-transition login-page">
         <div className="login-box">
           <div className="login-logo">
-            <Link  to="/" style={{color: "#007bff"}}>
-              AlumniHub | <span style={{marginLeft: "2px",fontSize: "23px"}}>SSBT COET</span>
+            <Link to="/" style={{ color: "#007bff" }}>
+              AlumniHub |{" "}
+              <span style={{ fontSize: "25px", marginLeft: "5px" }}>
+                SSBT COET
+              </span>
             </Link>
           </div>
           {/* /.login-logo */}
           <div className="card">
             <div className="card-body login-card-body">
               <p className="login-box-msg">
-                Enter your email here to activate your account.
+                Forgot your username ? Easily reset it here.
               </p>
               <hr
                 style={{
@@ -101,7 +104,7 @@ const GetActivationEmail = () => {
                 <div className="row">
                   <div className="col-12">
                     <button type="submit" className="btn btn-primary btn-block">
-                      Send Activation Email
+                      Request new username
                     </button>
                   </div>
                   {/* /.col */}
@@ -140,4 +143,4 @@ const GetActivationEmail = () => {
   );
 };
 
-export default GetActivationEmail;
+export default ForgotUsername;

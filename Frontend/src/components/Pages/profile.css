@@ -67,10 +67,12 @@
 
 .modal-content {
   background-color: white;
-  padding: 20px;
+  padding: 20px; /* Increased padding for better spacing */
   border-radius: 5px;
   width: 50%;
   max-width: 600px; /* Optional: limit max width */
+  max-height: 80%; /* Limit max height for scrolling */
+  overflow-y: auto; /* Enable vertical scrolling */
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Optional: add shadow for better visibility */
 }
 
@@ -83,4 +85,70 @@
 .close {
   font-size: 1.5em;
   cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    width: 90%; /* Use a larger width on smaller screens */
+  }
+}
+
+
+.post {
+  position: relative; /* Ensure dropdown is positioned relative to the post */
+}
+
+.dropdown {
+  position: absolute; /* Position the dropdown in the top right */
+  top: 10px; /* Adjust based on your layout */
+  right: 10px; /* Adjust based on your layout */
+  z-index: 1000; /* Ensure dropdown appears above other elements */
+}
+
+/* Dropdown Menu Styles */
+.dropdown-menu {
+  display: none; /* Hide dropdown menu by default */
+}
+
+.dropdown-menu.show {
+  display: block; /* Show dropdown when the state indicates it's open */
+  position: absolute;
+  background-color: white; /* Set background color for visibility */
+  left: -100px; /* Align to the left side */
+  top: 100%; /* Position below the button */
+  border: 1px solid #ccc; /* Add a border for definition */
+  border-radius: 4px; /* Round corners */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add a shadow for depth */
+}
+
+.dropdown-item {
+  padding: 10px 15px; /* Add padding for clickable area */
+  cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa; /* Change background on hover */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .dropdown {
+    top: 20px; /* Move the dropdown icon down for small devices */
+    right: 5px; /* Adjust the right position for better alignment */
+  }
+
+  .dropdown-menu {
+    left: -80px; /* Adjust to fit the screen better */
+  }
+}
+
+@media (max-width: 480px) {
+  .dropdown {
+    top: 30px; /* Further adjust the dropdown icon down for very small devices */
+    right: 0; /* Align to the right edge */
+  }
+
+  .dropdown-menu {
+    left: -60px; /* Adjust for even smaller screens */
+  }
 }

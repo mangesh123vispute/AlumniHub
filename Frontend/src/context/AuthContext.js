@@ -2,7 +2,8 @@ import { createContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-
+import axios from "axios";
+import baseurl from "../components/const";
 const AuthContext = createContext();
 
 export default AuthContext;
@@ -24,6 +25,7 @@ export const AuthProvider = ({ children }) => {
   const [isForgotPassPageOrActivateAccountPage, setIsForgotPassPageOrActivateAccountPage] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddAdminModalOpen, setIsAddAdminModalOpen] = useState(false);
+  const [numberOfInactiveAlumni, setNumberOfInactiveAlumni] = useState(0);
    
  const [Alumnifilters, setAlumniFilters] = useState({
    full_name: "",
@@ -96,6 +98,34 @@ export const AuthProvider = ({ children }) => {
       ? jwtDecode(localStorage.getItem("authTokens"))
       : null
   );
+
+   const fetchAlumniData = async () => {
+     setLoading(true);
+     const token = localStorage.getItem("authTokens")
+       ? JSON.parse(localStorage.getItem("authTokens"))
+       : null;
+
+     try {
+       const response = await axios.get(
+         `${baseurl}/inactive-alumni/`,
+         {
+           headers: {
+             Authorization: `Bearer ${token?.access}`,
+           },
+         }
+       );
+
+       if (response.status === 200) {
+        
+         setNumberOfInactiveAlumni(response.data.length); 
+       }
+     } catch (error) {
+       console.error("Error fetching alumni data:", error.message);
+      
+     } finally {
+       setLoading(false);
+     }
+   };
   
   
   //* logout
@@ -126,7 +156,7 @@ export const AuthProvider = ({ children }) => {
         return -1;
       }
       // Verify access token
-      const response = await fetch("http://127.0.0.1:8000/api/token/verify/", {
+      const response = await fetch(`${baseurl}/api/token/verify/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -159,7 +189,7 @@ export const AuthProvider = ({ children }) => {
    //* useEffect
   useEffect(() => {
     verifyaccessToken();
-    
+    fetchAlumniData();
        const tokenData = JSON.parse(localStorage.getItem("authTokens")); 
        if (tokenData && tokenData.access) {
          const decodedToken = jwtDecode(tokenData.access);     
@@ -233,6 +263,8 @@ export const AuthProvider = ({ children }) => {
     toggleAddAdminModal,
     isAddAdminModalOpen,
     setIsAddAdminModalOpen,
+    numberOfInactiveAlumni,
+    setNumberOfInactiveAlumni,
   };
 
 

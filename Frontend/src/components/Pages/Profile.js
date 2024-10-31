@@ -24,6 +24,8 @@ const Profile = () => {
     title,
     handleClose,
     loading,
+    setIsAllStudentPage,
+    setIsAllAlumniPage,
     setIsAllAdminPage,
   } = useContext(AuthContext);
   
@@ -45,6 +47,12 @@ const Profile = () => {
     }
   };
 
+  useEffect(() => {
+    setIsAllStudentPage(false);
+    setIsAllAlumniPage(false);
+    setIsAllAdminPage(false);
+    setFilter(false);
+  }, []);
   return userData ? (
     <>
       <LoadingSpinner isLoading={loading} />

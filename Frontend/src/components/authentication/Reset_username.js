@@ -1,13 +1,16 @@
-
-import React, { useState, useContext, useEffect } from "react";
+// ResetPassword.js
+import React, { useState, useContext } from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 import AuthContext from "../../context/AuthContext.js";
 import { Link } from "react-router-dom";
 import Notification from "../Notification/Notification.js";
 import LoadingSpinner from "../Loading/Loading.js";
 import baseurl from "../const.js";
-const GetActivationEmail = () => {
-  const [email, setEmail] = useState("");
+const ResetUsername = () => {
+  const { uidb64, token } = useParams();
+  const [newUsername, setnewUsername] = useState("");
+
   let {
     isOpen,
     message,
@@ -16,36 +19,33 @@ const GetActivationEmail = () => {
     showNotification,
     handleClose,
     setFilter,
-    setIsForgotPassPageOrActivateAccountPage,
   } = useContext(AuthContext);
-
   const [Loading, setLoading] = useState(false);
-  useEffect(function () {
-    setIsForgotPassPageOrActivateAccountPage(true);
-    setFilter(false);
-  }, []);
-
+  setFilter(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setLoading(true);
+
+    if (!newUsername) {
+      setLoading(false);
+      showNotification("Please enter a new Username", "warning", "Warning");
+      return;
+    }
+
     try {
       const response = await axios.post(
-        `${baseurl}/send-activation-email/`,
-        { email }
+        `${baseurl}/reset-username/${uidb64}/${token}/`,
+        { new_username: newUsername }
       );
       if (response.status === 200) {
         setLoading(false);
         showNotification(response.data.detail, "success", "Success");
-      } else {
-        setLoading(false);
-        showNotification(response.data.detail, "error", "Error");
       }
     } catch (error) {
       setLoading(false);
-      console.log(error);
       showNotification(
-        error.response.data.detail ||
-          "Failed to reset password, Please try again",
+        "Failed to reset username, Please try again",
         "error",
         "Error"
       );
@@ -65,15 +65,15 @@ const GetActivationEmail = () => {
       <div className="hold-transition login-page">
         <div className="login-box">
           <div className="login-logo">
-            <Link  to="/" style={{color: "#007bff"}}>
-              AlumniHub | <span style={{marginLeft: "2px",fontSize: "23px"}}>SSBT COET</span>
+            <Link to="/" style={{ color: "#007bff" }}>
+              AlumniHub | <span style={{ color: "#007bff",fontSize:"22px" }}>SSBT COET</span>
             </Link>
           </div>
           {/* /.login-logo */}
           <div className="card">
             <div className="card-body login-card-body">
               <p className="login-box-msg">
-                Enter your email here to activate your account.
+                Recover your username in one step!
               </p>
               <hr
                 style={{
@@ -85,23 +85,23 @@ const GetActivationEmail = () => {
               <form onSubmit={handleSubmit}>
                 <div className="input-group mb-3">
                   <input
-                    type="email"
-                    value={email}
-                    class="form-control"
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
+                    type="password"
+                    value={newUsername}
+                    className="form-control"
+                    onChange={(e) => setnewUsername(e.target.value)}
+                    placeholder="Enter new username"
                     required
                   />
                   <div className="input-group-append">
                     <div className="input-group-text">
-                      <span className="fas fa-envelope" />
+                      <span className="fas fa-user" />
                     </div>
                   </div>
                 </div>
                 <div className="row">
                   <div className="col-12">
                     <button type="submit" className="btn btn-primary btn-block">
-                      Send Activation Email
+                      Request new username
                     </button>
                   </div>
                   {/* /.col */}
@@ -140,4 +140,4 @@ const GetActivationEmail = () => {
   );
 };
 
-export default GetActivationEmail;
+export default ResetUsername;

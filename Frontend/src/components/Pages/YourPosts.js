@@ -5,6 +5,7 @@ import AuthContext from "../../context/AuthContext";
 import LoadingSpinner from "../Loading/Loading";
 import Notification from "../Notification/Notification";
 import moment from "moment"; // Optional library for better date formatting
+import baseurl from "../const";
 
 const YourPostContent = () => {
   const [loading, setLoading] = useState(false);
@@ -40,7 +41,7 @@ setFilter(true);
       const authorId = userData.user_id;
       const response = await axios.get(
         // eslint-disable-next-line no-template-curly-in-string
-        `http://127.0.0.1:8000/posts/author/${authorId}`,
+        `${baseurl}/posts/author/${authorId}`,
         {
           headers: {
             Authorization: `Bearer ${token?.access}`,
@@ -71,7 +72,7 @@ setFilter(true);
 
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/hodposts/${postId}/`,
+        `${baseurl}/hodposts/${postId}/`,
         {
           headers: {
             Authorization: `Bearer ${token?.access}`,

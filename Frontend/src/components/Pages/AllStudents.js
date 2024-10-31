@@ -5,6 +5,7 @@ import AuthContext from "../../context/AuthContext.js";
 import LoadingSpinner from "../Loading/Loading.js";
 import Notification from "../Notification/Notification.js";
 import { useNavigate } from "react-router-dom";
+import baseurl from "../const.js";
 
 const AllStudentsContent = () => {
   const [studentData, setStudentData] = useState(null); // Changed to hold the entire data object
@@ -71,7 +72,7 @@ const AllStudentsContent = () => {
 
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/students/?${queryParams}`,
+        `${baseurl}/students/?${queryParams}`,
         {
           headers: { Authorization: `Bearer ${token?.access}` },
         }
@@ -174,7 +175,7 @@ const AllStudentsContent = () => {
                               <img
                                 src={
                                   students?.Image
-                                    ? `http://127.0.0.1:8000/${students?.Image}`
+                                    ? `${baseurl}/${students?.Image}`
                                     : `../../dist/img/user1-128x128.jpg`
                                 } // Replace with dynamic image path if needed
                                 alt="user-avatar"

@@ -24,10 +24,19 @@ const MyProfile = () => {
     title,
     handleClose,
     loading,
+    setIsAllStudentPage,
+    setIsAllAlumniPage,
+    setIsAllAdminPage,
   } = useContext(AuthContext);
   
-  setFilter(false);
-  console.log("state", state);
+  useEffect(() => {
+    setIsAllStudentPage(false);
+    setIsAllAlumniPage(false);
+    setIsAllAdminPage(false);
+    setFilter(false);
+  }, []);
+
+
   
 //   if (state) {
 //     userData = state;

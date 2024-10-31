@@ -21,6 +21,7 @@ function Landing() {
   const h3Ref = useRef(null);
   const [navOpen, setNavOpen] = useState(false);
   const [bgIndex, setBgIndex] = useState(0);
+  const [isLoggedin, setIsLoggedin] = useState(false);
 
   const backgroundImages = [
     "url('https://www.sscoetjalgaon.ac.in/public/images/slider/snap105.jpg')",
@@ -32,6 +33,7 @@ function Landing() {
     const interval = setInterval(() => {
       setBgIndex((prevIndex) => (prevIndex + 1) % backgroundImages.length);
     }, 4000);
+    localStorage.getItem("authTokens") ? setIsLoggedin(true) : setIsLoggedin(false);
     return () => clearInterval(interval);
   }, []);
 
@@ -116,10 +118,22 @@ function Landing() {
               Contact
             </HashLink>
           </div>
-          <div className="hidden md:flex">
-            <Link to="/register" className="hover:bg-red-800 text-white px-4 py-2 rounded">
-              Register / Login
-            </Link>
+          <div className="hidden md:flex space-x-2">
+            {isLoggedin ? (
+              <Link
+                to="/home2"
+                className="bg-red-900 text-white px-4 py-2 rounded "
+              >
+                Dashboard
+              </Link>
+            ) : (
+              <Link
+                to="/register"
+                className="bg-red-900 text-white px-4 py-2 rounded "
+              >
+                Register 
+              </Link>
+            )}
           </div>
           <div className="md:hidden">
             <button onClick={() => setNavOpen(!navOpen)} className="focus:outline-none">

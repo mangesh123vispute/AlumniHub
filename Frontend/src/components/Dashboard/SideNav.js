@@ -2,10 +2,11 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useContext, useState } from "react";
 import AuthContext from "../../context/AuthContext.js";
+import baseurl from "../const.js";
 import { Link } from "react-router-dom";
 
 const SideNav = () => {
-  let { userData } = useContext(AuthContext);
+  let { userData, numberOfInactiveAlumni } = useContext(AuthContext);
   console.log("userData", userData);
   const [activeDropdown, setActiveDropdown] = useState(null);
   // const [isOpen, setIsOpen] = useState(false); // State to control dropdown visibility
@@ -28,7 +29,7 @@ const SideNav = () => {
               className="brand-text font-weight-light"
               style={{ fontSize: "18px", color: "#FFF" }}
             >
-              <span style={{ color: "red" }}>Alumni</span>Hub -
+              <span style={{ color: "red" }}>Alumni</span>Hub
             </span>
             <small style={{ fontSize: "0.6em", color: "white" }}>
               SSBT COET
@@ -43,7 +44,7 @@ const SideNav = () => {
               <img
                 src={
                   userData?.image
-                    ? `http://127.0.0.1:8000/${userData?.image}`
+                    ? `${baseurl}/${userData?.image}`
                     : `../../dist/img/user1-128x128.jpg`
                 }
                 className="img-circle elevation-2 mt-1"
@@ -424,10 +425,7 @@ const SideNav = () => {
                   </li>
 
                   <li className="nav-item">
-                    <Link
-                      to="/requests"
-                      className="nav-link"
-                    >
+                    <Link to="/requests" className="nav-link">
                       <p style={{ fontSize: "1em" }}>
                         <i
                           className="fas fa-user-plus nav-icon"
@@ -435,12 +433,25 @@ const SideNav = () => {
                           title="Request to Join"
                         ></i>
                         Join Requests
+                        {numberOfInactiveAlumni ? ( <span
+                          className="left badge badge-danger "
+                          style={{
+                            fontSize: "0.6em",
+                            position: "relative",
+                            bottom: "1em",
+                            left: "0.5em",
+                          }}
+                        >
+                          
+                          {numberOfInactiveAlumni}
+                        </span>) : null}
+                       
                       </p>
                     </Link>
                   </li>
                   <li className="nav-item">
                     <Link
-                      to="http://127.0.0.1:8000/admin/"
+                      to={`${baseurl}/admin/`}
                       className="nav-link"
                       target="_blank"
                       rel="noopener noreferrer"

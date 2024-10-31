@@ -2,7 +2,7 @@ import React, { useContext ,useState , useEffect, useRef , useCallback } from "r
 import "./profile.css"
 import axios from 'axios'
 import AuthContext from "../../context/AuthContext.js";
- 
+import baseurl from "../const.js";
 
 const SuperUserProfileContent = () => {
     let { userData, setLoading, showNotification, ShowProfileOfId } =
@@ -21,6 +21,18 @@ const SuperUserProfileContent = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     const [isImageOpen, setIsImageOpen] = useState(false);
+    const [Image,setImage] = useState(null)
+    const [load,setload] = useState(false)
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    
+
+  
+    const toggleDropdown = (postId) => {
+     
+      setIsDropdownOpen(isDropdownOpen === postId ? null : postId);
+      
+    };
+
 
   const handleImageClick = () => {
     setIsImageOpen(true);
@@ -32,7 +44,8 @@ const SuperUserProfileContent = () => {
 
 const handleEditClick = (post) => {
   setSelectedPost(post);
-  setIsEditModalOpen(true);  // Open the modal
+  setIsEditModalOpen(true);
+  setIsDropdownOpen(null);  // Open the modal
 };
 
    
@@ -115,7 +128,7 @@ const handleEditClick = (post) => {
   
       axios
         .get(
-          `http://127.0.0.1:8000/hods/${
+          `${baseurl}/hods/${
             ShowProfileOfId? id : userData?.user_id
           }`,
           {
@@ -182,7 +195,7 @@ const handleEditClick = (post) => {
         ? JSON.parse(localStorage.getItem("authTokens"))
         : null;
       try {
-        const response = await axios.put(`http://127.0.0.1:8000/edit-hod-profile/${id || userData?.user_id}/`, superUserData,{
+        const response = await axios.put(`${baseurl}/edit-hod-profile/${id || userData?.user_id}/`, superUserData,{
           headers: {
             Authorization: `Bearer ${token?.access}`,
           },
@@ -258,7 +271,7 @@ const handleEditClick = (post) => {
        
       try {
         console.log("page " + page);
-        const response = await axios.get(`http://127.0.0.1:8000/hodposts/author/${id || userData?.user_id}/?page=${page}&page_size=10`);
+        const response = await axios.get(`${baseurl}/hodposts/author/${id || userData?.user_id}/?page=${page}&page_size=10`);
         setPosts(response.data.results); // Set fetched posts
         console.log("res data "+response.data.results);
         setHasMore(response.data.next !== null);
@@ -285,14 +298,115 @@ const handleEditClick = (post) => {
       });
     };
 
-    const handleUpdateSubmit = (e) => {
-        e.preventDefault();
-      
-        // Update the post logic (e.g., API call to update the post)
-        
-        // Close the modal after updating
-        setIsEditModalOpen(false);
+    const handleUpdateSubmit = async (e) => {
+      e.preventDefault();
+      const accessToken = localStorage.getItem("authTokens")
+  ? JSON.parse(localStorage.getItem("authTokens")).access
+  : null;
+      setLoading(true);
+    
+      // if ((await verifyaccessToken()) === -1) {
+      //   setLoading(false);
+      //   return;
+      // }
+
+      console.log("post  ",selectedPost?.title ,selectedPost?.content ,selectedPost?.tag, selectedPost?.Image);
+    
+      if (!selectedPost?.title || !selectedPost?.content || !selectedPost?.tag ) {
+        showNotification(
+          "Please fill in all fields and upload an image.",
+          "warning",
+          "Missing fields"
+        );
+        setLoading(false);
+        return;
+      }
+    
+      // Create FormData object for updating
+      const formData = new FormData();
+      formData.append("title", selectedPost?.title);
+      formData.append("content", selectedPost?.content);
+      formData.append("tag", selectedPost?.tag);
+        if(Image !== null)
+      formData.append("Image", Image); // Assuming `Image` is the updated file object
+      formData.append("DocUrl", selectedPost?.DocUrl);
+    
+      await axios
+        .put(`${baseurl}/hodposts/${selectedPost?.id}/`, formData, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((response) => {
+          
+          
+          setSelectedPost(null)
+          
+          
+          showNotification(
+            "Post updated successfully.",
+            "success",
+            "Update successful"
+          );
+    
+          // Close modal and reset loading
+          
+          setIsEditModalOpen(false);
+          setLoading(false);
+         
+        })
+        .catch((error) => {
+          console.error("Error during update:", error);
+          showNotification(
+            error.response?.data?.detail || "Error updating the post.",
+            "warning",
+            "Update failed"
+          );
+          setSelectedPost(null)
+          setLoading(false);
+        });
+        window.location.reload()
       };
+
+      const handleDeleteClick = async (post)=>{
+        if(!window.confirm('Are You Sure want to Delete Post'))return;
+ 
+        const accessToken = localStorage.getItem("authTokens")
+        ? JSON.parse(localStorage.getItem("authTokens")).access
+        : null;
+            setLoading(true);
+         
+            try {
+             await axios.delete(`${baseurl}/hodposts/${post?.id}/`,{
+               headers: {
+                 Authorization: `Bearer ${accessToken}`,
+                
+               },
+             })
+ 
+             showNotification(
+               "Post Deleted successfully.",
+               "success",
+               "Delete successful"
+             );
+ 
+             fetchPosts()
+ 
+            } catch (error) {
+             console.error("Error during Delete:", error);
+             showNotification(
+               error.response?.data?.detail || "Error Deleting the post.",
+               "warning",
+               "Delete failed"
+             );
+            }
+       
+ 
+       setLoading(false);
+       setIsDropdownOpen(null);
+       window.location.reload()
+     }
 
    
     return (
@@ -341,7 +455,7 @@ const handleEditClick = (post) => {
                           className="profile-user-img img-fluid img-circle"
                           src={
                             user?.Image
-                              ? `http://127.0.0.1:8000/${user?.Image}`
+                              ? `${baseurl}/${user?.Image}`
                               : `../../dist/img/user1-128x128.jpg`
                           }
                           alt="User profile picture"
@@ -489,7 +603,7 @@ const handleEditClick = (post) => {
                                   <div className="user-block">
                                     <img
                                       className="img-circle img-bordered-sm"
-                                      src={`http://127.0.0.1:8000/${
+                                      src={`${baseurl}/${
                                         user?.Image || "#"
                                       }`}
                                       alt="user image"
@@ -520,14 +634,46 @@ const handleEditClick = (post) => {
                                     </span>
                                   </div>
 
+                                  {/* Dropdown Button */}
+                              {userData?.user_id === user?.id && (
+                                <div className="dropdown">
+                                  <button
+                                    className="btn btn-link dropdown-toggle"
+                                    type="button"
+                                    onClick={()=>toggleDropdown(post?.id)}
+                                  >
+                                    <i className="fas fa-ellipsis-v" style={{ fontSize: "1.5em", cursor: "pointer" }} />
+                                  </button>
+                                  {isDropdownOpen === post?.id && (
+                                    <div className="dropdown-menu show">
+                                      <span onClick={() => handleEditClick(post)} className="dropdown-item">
+                                        Edit
+                                      </span>
+                                      <span onClick={() => handleDeleteClick(post)} className="dropdown-item">
+                                        Delete
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>)}
+                                  
+
                                   {/* Add Edit Icon Here */}
-                            <div className="edit-icon" style={{ float: 'right', cursor: 'pointer' }}>
+                            {/* <div className="edit-icon" style={{ float: 'right', cursor: 'pointer' }}>
                             <i
                                 className="fas fa-edit"
                                 onClick={() => handleEditClick(post)}
                                 style={{ fontSize: '1.5em', color: '#007bff' }}
                             />
-                            </div>
+                            </div> */}
+
+                             {/* Add Delete Icon Here */}
+                             {/* <div className="edit-icon" style={{ float: 'right', cursor: 'pointer' }}>
+                            <i
+                                className="fas fa-trash"
+                                onClick={() => handleDeleteClick(post)}
+                                style={{ fontSize: '1.5em', color: '#007bff' }}
+                            />
+                            </div> */}
 
                             {isEditModalOpen && (
   <div className="modal">
@@ -564,13 +710,82 @@ const handleEditClick = (post) => {
               onChange={(e) => setSelectedPost({ ...selectedPost, tag: e.target.value })}
             />
           </div>
+          <div><label>Previous Image</label></div>
+          <div className="col-auto">
+            
+                                    <a
+                                      href="#"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        handleImageClick();
+                                      }}
+                                      className="mr-3"
+                                    >
+                                      <i className="fas fa-image mr-1" /> Image
+                                    </a>
+
+                                    {isImageOpen && (
+                                    <div
+                                      style={{
+                                        position: "fixed",
+                                        top: 0,
+                                        left: 0,
+                                        width: "100%",
+                                        height: "100%",
+                                        backgroundColor: "tranparent",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        zIndex: 1050,
+                                      }}
+                                      onClick={handleCloseModal}
+                                    >
+                                      <div
+                                        style={{
+                                          position: "relative",
+                                          maxWidth: "100%",
+                                          maxHeight: "100%",
+                                          display: "flex",
+                                          justifyContent: "center",
+                                          alignItems: "center",
+                                        }}
+                                      >
+                                        <img
+                                          src={selectedPost?.Image}
+                                          alt="Post"
+                                          style={{
+                                            // maxWidth: "100%",
+                                            // maxHeight: "100%",
+                                            width:"100%",
+                                            height:"auto",
+                                            borderRadius: "5px",
+                                            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+                                          }}
+                                        />
+                                        <span
+                                          style={{
+                                            position: "absolute",
+                                            top: "10px",
+                                            right: "10px",
+                                            fontSize: "1.5em",
+                                            color: "#fff",
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={handleCloseModal}
+                                        >
+                                          &times;
+                                        </span>
+                                      </div>
+                                    </div>
+                                  )}
+                                  </div>
           <div className="form-group">
                   <label>Image Upload </label>
                   <div className="input-group">
                   <input
                     type="file"
                     className="form-control"                   
-                    // onChange={(e)=>setImage(e.target.files[0])}
+                    onChange={(e)=>setImage(e.target.files[0])}
                     
                   />                   
             </div>
