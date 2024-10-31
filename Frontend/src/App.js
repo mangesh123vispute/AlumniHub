@@ -1,4 +1,5 @@
 import Home from "./components/Dashboard/Home.js";
+import Error from "./components/ErrorPage/Error.js";
 import { AuthProvider } from "./context/AuthContext";
 import Login from "./components/authentication/Login.js";
 import ActivateEmail from "./components/authentication/ActivateEmail.js";
@@ -10,7 +11,6 @@ import AllHods from "./components/Pages/AllHods.js";
 import AllStudent from "./components/Pages/AllStudents.js";
 import AboutUs from "./components/Pages/Aboutus.js";
 import Home2 from "./components/Pages/Home2.js";
-import Error from "./components/Pages/Error.js";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import LandingPage from "./components/LandingPage.js";
 import Landing from "./components/Landing.js";
