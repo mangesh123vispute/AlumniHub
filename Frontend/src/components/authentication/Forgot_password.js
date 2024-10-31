@@ -67,9 +67,12 @@ const ForgotPassword = () => {
       <div className="hold-transition login-page">
         <div className="login-box">
           <div className="login-logo">
-            <a href="../../index2.html">
-              <b>Alumni</b>Hub
-            </a>
+            <Link to="/" style={{ color: "#007bff" }}>
+              AlumniHub |{" "}
+              <span style={{ fontSize: "25px", marginLeft: "5px" }}>
+                SSBT COET
+              </span>
+            </Link>
           </div>
           {/* /.login-logo */}
           <div className="card">

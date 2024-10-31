@@ -7,7 +7,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from rest_framework_simplejwt.views import TokenVerifyView
-from .views import UserRegisterAPIView,ActivationEmailView, ActivateAccountView,ForgotPasswordAPIView,ResetPasswordAPIView,SendActivationEmailView,AdminRegistrationView
+from .views import UserRegisterAPIView,ActivationEmailView, ActivateAccountView,ForgotPasswordAPIView,ResetPasswordAPIView,SendActivationEmailView,AdminRegistrationView, AlumniRegistrationView
 from .serializers import CustomTokenObtainPairSerializer
 from .views import CreateStaffUserView
 
@@ -29,8 +29,10 @@ urlpatterns = [
    
 #^ DRF Authentication   
 
+    path('register-admin/', AdminRegistrationView.as_view(), name='register-admin'),
+    path('register-alumni/', AlumniRegistrationView.as_view(), name='alumni-registration'),
 
-    # & rest_framework_simple jwt authentication 
+    # & rest_framework_simple jwt authentication  path
     path('register/', UserRegisterAPIView.as_view(), name='registeruser'),
     path('login/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
@@ -42,6 +44,5 @@ urlpatterns = [
     path('reset-password/<uidb64>/<token>/', ResetPasswordAPIView.as_view(), name='reset_password'),
     path('send-activation-email/', SendActivationEmailView.as_view(), name='send_activation_email'),
     path('api/create-staff-user/', CreateStaffUserView.as_view(), name='create-staff-user'),
-    path('register-admin/', AdminRegistrationView.as_view(), name='register-admin'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -20,6 +20,7 @@ from .createStaffSerializers import StaffUserSerializer
 from rest_framework.permissions import IsAuthenticated
 from django.db import IntegrityError
 from rest_framework.permissions import IsAdminUser
+from  .AlumniRegisterSerializers import AlumniRegistrationSerializer
 
 User=get_user_model()
 
@@ -370,3 +371,22 @@ class AdminRegistrationView(APIView):
         }, status=status.HTTP_201_CREATED)
 
 
+class AlumniRegistrationView(APIView):
+    def post(self, request, *args, **kwargs):
+        # Check if the email or username already exists
+        username = request.data.get('username')
+        email = request.data.get('email')
+
+        if User.objects.filter(username=username).exists():
+            return Response({"detail": "Username already exists."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if User.objects.filter(email=email).exists():
+            return Response({"detail": "Email already exists."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Proceed with serializer validation and saving the user if no errors found
+        serializer = AlumniRegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"detail": "Registration successful. Your account will be verified by college authority. After verification, you will receive an email, and then you can log in.."}, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
