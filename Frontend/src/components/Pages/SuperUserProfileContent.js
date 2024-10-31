@@ -23,7 +23,16 @@ const SuperUserProfileContent = () => {
     const [isImageOpen, setIsImageOpen] = useState(false);
     const [Image,setImage] = useState(null)
     const [load,setload] = useState(false)
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     
+
+  
+    const toggleDropdown = (postId) => {
+     
+      setIsDropdownOpen(isDropdownOpen === postId ? null : postId);
+      
+    };
+
 
   const handleImageClick = () => {
     setIsImageOpen(true);
@@ -35,7 +44,8 @@ const SuperUserProfileContent = () => {
 
 const handleEditClick = (post) => {
   setSelectedPost(post);
-  setIsEditModalOpen(true);  // Open the modal
+  setIsEditModalOpen(true);
+  setIsDropdownOpen(null);  // Open the modal
 };
 
    
@@ -341,6 +351,7 @@ const handleEditClick = (post) => {
           );
     
           // Close modal and reset loading
+          
           setIsEditModalOpen(false);
           setLoading(false);
          
@@ -355,6 +366,7 @@ const handleEditClick = (post) => {
           setSelectedPost(null)
           setLoading(false);
         });
+        window.location.reload()
       };
 
       const handleDeleteClick = async (post)=>{
@@ -392,8 +404,8 @@ const handleEditClick = (post) => {
        
  
        setLoading(false);
- 
- 
+       setIsDropdownOpen(null);
+       window.location.reload()
      }
 
    
@@ -622,23 +634,46 @@ const handleEditClick = (post) => {
                                     </span>
                                   </div>
 
+                                  {/* Dropdown Button */}
+                              {userData?.user_id === user?.id && (
+                                <div className="dropdown">
+                                  <button
+                                    className="btn btn-link dropdown-toggle"
+                                    type="button"
+                                    onClick={()=>toggleDropdown(post?.id)}
+                                  >
+                                    <i className="fas fa-ellipsis-v" style={{ fontSize: "1.5em", cursor: "pointer" }} />
+                                  </button>
+                                  {isDropdownOpen === post?.id && (
+                                    <div className="dropdown-menu show">
+                                      <span onClick={() => handleEditClick(post)} className="dropdown-item">
+                                        Edit
+                                      </span>
+                                      <span onClick={() => handleDeleteClick(post)} className="dropdown-item">
+                                        Delete
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>)}
+                                  
+
                                   {/* Add Edit Icon Here */}
-                            <div className="edit-icon" style={{ float: 'right', cursor: 'pointer' }}>
+                            {/* <div className="edit-icon" style={{ float: 'right', cursor: 'pointer' }}>
                             <i
                                 className="fas fa-edit"
                                 onClick={() => handleEditClick(post)}
                                 style={{ fontSize: '1.5em', color: '#007bff' }}
                             />
-                            </div>
+                            </div> */}
 
                              {/* Add Delete Icon Here */}
-                             <div className="edit-icon" style={{ float: 'right', cursor: 'pointer' }}>
+                             {/* <div className="edit-icon" style={{ float: 'right', cursor: 'pointer' }}>
                             <i
                                 className="fas fa-trash"
                                 onClick={() => handleDeleteClick(post)}
                                 style={{ fontSize: '1.5em', color: '#007bff' }}
                             />
-                            </div>
+                            </div> */}
 
                             {isEditModalOpen && (
   <div className="modal">
