@@ -67,10 +67,12 @@
 
 .modal-content {
   background-color: white;
-  padding: 20px;
+  padding: 20px; /* Increased padding for better spacing */
   border-radius: 5px;
   width: 50%;
   max-width: 600px; /* Optional: limit max width */
+  max-height: 80%; /* Limit max height for scrolling */
+  overflow-y: auto; /* Enable vertical scrolling */
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Optional: add shadow for better visibility */
 }
 
@@ -83,4 +85,10 @@
 .close {
   font-size: 1.5em;
   cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    width: 90%; /* Use a larger width on smaller screens */
+  }
 }
