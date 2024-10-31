@@ -2,7 +2,7 @@ import React, { useContext ,useState , useEffect } from "react";
 import "./profile.css"
 import axios from 'axios'
 import AuthContext from "../../context/AuthContext.js";
-
+import baseurl from "../const.js";
 
 
 
@@ -124,7 +124,7 @@ const StudentProfileContent = () => {
         : null;
       
       axios
-        .get(`http://127.0.0.1:8000/students/${ShowProfileOfId ? id : userData?.user_id}`, {
+        .get(`${baseurl}/students/${ShowProfileOfId ? id : userData?.user_id}`, {
           headers: {
             Authorization: `Bearer ${token?.access}`,
           },
@@ -200,7 +200,7 @@ const StudentProfileContent = () => {
           ? JSON.parse(localStorage.getItem("authTokens"))
           : null;
         try {
-          const response = await axios.put(`http://127.0.0.1:8000/edit-student-profile/${id || userData?.user_id}/`, studentData,{
+          const response = await axios.put(`${baseurl}/edit-student-profile/${id || userData?.user_id}/`, studentData,{
             headers: {
               Authorization: `Bearer ${token?.access}`,
             },
@@ -247,7 +247,7 @@ const StudentProfileContent = () => {
 
       try {
         const response = await axios.put(
-          `http://127.0.0.1:8000/edit-student-profile/${
+          `${baseurl}/edit-student-profile/${
             id || userData?.user_id
           }/`,
           studentData,
@@ -373,7 +373,7 @@ const StudentProfileContent = () => {
                           className="profile-user-img img-fluid img-circle"
                           src={
                             user?.Image
-                              ? `http://127.0.0.1:8000/${user?.Image}`
+                              ? `${baseurl}/${user?.Image}`
                               : `../../dist/img/user1-128x128.jpg`
                           }
                           alt="User profile picture"

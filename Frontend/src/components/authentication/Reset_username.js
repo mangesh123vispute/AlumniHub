@@ -6,6 +6,7 @@ import AuthContext from "../../context/AuthContext.js";
 import { Link } from "react-router-dom";
 import Notification from "../Notification/Notification.js";
 import LoadingSpinner from "../Loading/Loading.js";
+import baseurl from "../const.js";
 const ResetUsername = () => {
   const { uidb64, token } = useParams();
   const [newUsername, setnewUsername] = useState("");
@@ -34,7 +35,7 @@ const ResetUsername = () => {
 
     try {
       const response = await axios.post(
-        `http://127.0.0.1:8000/reset-username/${uidb64}/${token}/`,
+        `${baseurl}/reset-username/${uidb64}/${token}/`,
         { new_username: newUsername }
       );
       if (response.status === 200) {

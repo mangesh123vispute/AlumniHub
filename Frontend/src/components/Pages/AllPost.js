@@ -5,6 +5,7 @@ import AuthContext from "../../context/AuthContext";
 import LoadingSpinner from "../Loading/Loading";
 import Notification from "../Notification/Notification";
 import moment from "moment"; // Optional library for better date formatting
+import baseurl from "../const";
 
 const AllPostContent = () => {
   const [loading, setLoading] = useState(false);
@@ -72,7 +73,7 @@ const [isImageOpen, setIsImageOpen] = useState(false);
     try {
       console.log("page " + page);
       if(page===undefined){setPage(1);}
-      const response = await axios.get(`http://127.0.0.1:8000/posts?page=${page}&page_size=10`);
+      const response = await axios.get(`${baseurl}/posts?page=${page}&page_size=10`);
       setPosts(response.data.results); // Set fetched posts
       setHasMore(response.data.next !== null);
        // If 'next' is null, stop loading more posts
@@ -299,7 +300,7 @@ const [isImageOpen, setIsImageOpen] = useState(false);
                                   <div className="user-block">
                                     <img
                                       className="img-circle img-bordered-sm"
-                                      src={`http://127.0.0.1:8000/${
+                                      src={`${baseurl}/${
                                         post?.author?.Image || "#"
                                       }`}
                                       alt="user image"

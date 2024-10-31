@@ -4,6 +4,7 @@ import Home from "../Dashboard/Home.js";
 import LoadingSpinner from "../Loading/Loading.js";
 import Notification from "../Notification/Notification.js";
 import axios from "axios";
+import baseurl from "../const.js";
 
 const Requests = () => {
   const {
@@ -34,7 +35,7 @@ const Requests = () => {
 
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/inactive-alumni/",
+          `${baseurl}/inactive-alumni/`,
           {
             headers: {
               Authorization: `Bearer ${token?.access}`,
@@ -68,7 +69,7 @@ const Requests = () => {
 
      try {
        const response = await axios.put(
-         `http://127.0.0.1:8000/alumni/${alumniId}/activate/`,
+         `${baseurl}/alumni/${alumniId}/activate/`,
          {},
          {
            headers: {
@@ -104,7 +105,7 @@ const Requests = () => {
 
      try {
        const response = await axios.delete(
-         `http://127.0.0.1:8000/alumni/${alumniId}/delete/`,
+         `${baseurl}/alumni/${alumniId}/delete/`,
          {
            headers: {
              Authorization: `Bearer ${token?.access}`,
@@ -136,7 +137,7 @@ const Requests = () => {
 
     try {
       const response = await axios.put(
-        `http://127.0.0.1:8000/alumni/accept-all/`,
+        `${baseurl}/alumni/accept-all/`,
         {},
         { 
           headers: {
