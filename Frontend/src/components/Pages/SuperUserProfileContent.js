@@ -2,7 +2,7 @@ import React, { useContext ,useState , useEffect, useRef , useCallback } from "r
 import "./profile.css"
 import axios from 'axios'
 import AuthContext from "../../context/AuthContext.js";
- 
+import ImageCropper from "../../components/ImageCropper/ImageCropper.js";
 
 const SuperUserProfileContent = () => {
     let { userData, setLoading, showNotification, ShowProfileOfId } =
@@ -23,7 +23,13 @@ const SuperUserProfileContent = () => {
     const [isImageOpen, setIsImageOpen] = useState(false);
     const [Image,setImage] = useState(null)
     const [load,setload] = useState(false)
-    
+  const [croppedImage, setCroppedImage] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+   const handleCropComplete = (croppedImageUrl) => {
+     setCroppedImage(croppedImageUrl);
+     
+     setIsModalOpen(false);
+   };
 
   const handleImageClick = () => {
     setIsImageOpen(true);
@@ -408,7 +414,9 @@ const handleEditClick = (post) => {
               <div className="row">
                 {userData?.user_id === user?.id && (
                   <div className="col-12 mb-3">
-                    <div>Profile Completed : {calculateAdminProfileCompletion()}%</div>
+                    <div>
+                      Profile Completed : {calculateAdminProfileCompletion()}%
+                    </div>
                     <div className="progress progress-sm active">
                       <div
                         className="progress-bar bg-success progress-bar-striped"
@@ -416,7 +424,9 @@ const handleEditClick = (post) => {
                         aria-valuenow={20}
                         aria-valuemin={0}
                         aria-valuemax={100}
-                        style={{ width: `${calculateAdminProfileCompletion()}%` }}
+                        style={{
+                          width: `${calculateAdminProfileCompletion()}%`,
+                        }}
                       ></div>
                     </div>
                   </div>
@@ -428,9 +438,9 @@ const handleEditClick = (post) => {
                     <div className="ribbon-wrapper ribbon-lg">
                       <div className="ribbon bg-primary">
                         {user
-                          ? (!user?.is_superuser && user?.is_staff)
+                          ? !user?.is_superuser && user?.is_staff
                             ? "Staff"
-                            : user.is_superuser 
+                            : user.is_superuser
                             ? "Admin"
                             : "User"
                           : "User"}
@@ -438,7 +448,7 @@ const handleEditClick = (post) => {
                     </div>
 
                     <div className="card-body box-profile">
-                      <div className="text-center">
+                      <div className="text-center position-relative">
                         <img
                           className="profile-user-img img-fluid img-circle"
                           src={
@@ -448,10 +458,131 @@ const handleEditClick = (post) => {
                           }
                           alt="User profile picture"
                         />
-                      </div>                     
+
+                        {/* Edit Button Overlay */}
+                        <button
+                          className="btn btn-primary btn-xs position-absolute elevation-2"
+                          style={{
+                            top: "0px", // Positioning from the top
+                            left: "0px", // Positioning from the left
+                            borderRadius: "50%",
+                            cursor: "pointer", // Pointer cursor
+                            zIndex: 10, // Ensure it is above other elements
+                          }}
+                          onClick={() => setIsModalOpen(true)}
+                        >
+                          <i
+                            className="fas fa-pencil-alt"
+                            style={{ cursor: "pointer" }}
+                          ></i>
+                        </button>
+                      </div>
+
+                      {isModalOpen && (
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            position: "fixed",
+                            zIndex: 2000,
+                            left: 0,
+                            top: 0,
+                            width: "100%",
+                            height: "100%",
+                            backgroundColor: "rgba(0, 0, 0, 0.3)",
+                          }}
+                        >
+                          <div
+                            style={{
+                              backgroundColor: "#fefefe",
+                              borderRadius: "8px",
+                              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.3)",
+                              maxWidth: "400px",
+                              width: "90%",
+                              position: "relative",
+                              overflow: "hidden",
+                            }}
+                          >
+                            {/* Header Section */}
+                            <div
+                              style={{
+                                backgroundColor: "#343a40", // Dark background for header
+                                color: "#fefefe", // Light color for text
+                                padding: "10px 20px",
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                              }}
+                            >
+                              <p
+                                style={{
+                                  margin: 0,
+                                  fontSize: "1.5rem",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                Edit Image
+                              </p>
+                              <span
+                                style={{
+                                  cursor: "pointer",
+                                  fontSize: "24px",
+                                  lineHeight: "24px",
+                                  color: "#fefefe",
+                                }}
+                                onClick={() => setIsModalOpen(false)}
+                              >
+                                &times; {/* Close button */}
+                              </span>
+                            </div>
+
+                            {/* Image Cropper Component */}
+                            <div
+                              style={{ padding: "20px", textAlign: "center" }}
+                            >
+                              <ImageCropper
+                                imageSrc={
+                                  user?.Image
+                                    ? `http://127.0.0.1:8000/${user?.Image}`
+                                    : `../../dist/img/user1-128x128.jpg`
+                                }
+                                onCropComplete={handleCropComplete}
+                                cropWidth={200}
+                                cropHeight={200}
+                              />
+                            </div>
+
+                            {/* Footer Section */}
+                            <div
+                              style={{
+                                backgroundColor: "#343a40", // Light background for footer
+                                color: "#333333", // Dark color for text
+                                padding: "10px",
+                                textAlign: "center",
+                              }}
+                            >
+                              <h3
+                                className="profile-username text-center"
+                                style={{
+                                  margin: "10px 0",
+                                  fontSize: "1.2rem",
+                                  color: "white",
+                                }}
+                              >
+                                {user
+                                  ? user?.full_name || user?.username
+                                  : "User"}
+                              </h3>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
                       <h3 className="profile-username text-center">
                         {user ? user?.full_name || user?.username : "User"}
                       </h3>
+
                       <hr
                         style={{
                           border: "1px solid #888888",
@@ -623,158 +754,218 @@ const handleEditClick = (post) => {
                                   </div>
 
                                   {/* Add Edit Icon Here */}
-                            <div className="edit-icon" style={{ float: 'right', cursor: 'pointer' }}>
-                            <i
-                                className="fas fa-edit"
-                                onClick={() => handleEditClick(post)}
-                                style={{ fontSize: '1.5em', color: '#007bff' }}
-                            />
-                            </div>
-
-                             {/* Add Delete Icon Here */}
-                             <div className="edit-icon" style={{ float: 'right', cursor: 'pointer' }}>
-                            <i
-                                className="fas fa-trash"
-                                onClick={() => handleDeleteClick(post)}
-                                style={{ fontSize: '1.5em', color: '#007bff' }}
-                            />
-                            </div>
-
-                            {isEditModalOpen && (
-  <div className="modal">
-    <div className="modal-content">
-      <div className="modal-header">
-        <h3 className="modal-title">Edit Post</h3>
-        <span className="close" onClick={() => setIsEditModalOpen(false)}>&times;</span>
-      </div>
-      <form onSubmit={handleUpdateSubmit}>
-        <div className="modal-body">
-          <div className="form-group">
-            <label>Title</label>
-            <input
-              type="text"
-              className="form-control"
-              value={selectedPost?.title || ""}
-              onChange={(e) => setSelectedPost({ ...selectedPost, title: e.target.value })}
-            />
-          </div>
-          <div className="form-group">
-            <label>Content</label>
-            <textarea
-              className="form-control"
-              value={selectedPost?.content || ""}
-              onChange={(e) => setSelectedPost({ ...selectedPost, content: e.target.value })}
-            />
-          </div>
-          <div className="form-group">
-            <label>Tag</label>
-            <input
-              type="text"
-              className="form-control"
-              value={selectedPost?.tag || ""}
-              onChange={(e) => setSelectedPost({ ...selectedPost, tag: e.target.value })}
-            />
-          </div>
-          <div><label>Previous Image</label></div>
-          <div className="col-auto">
-            
-                                    <a
-                                      href="#"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        handleImageClick();
-                                      }}
-                                      className="mr-3"
-                                    >
-                                      <i className="fas fa-image mr-1" /> Image
-                                    </a>
-
-                                    {isImageOpen && (
-                                    <div
+                                  <div
+                                    className="edit-icon"
+                                    style={{
+                                      float: "right",
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    <i
+                                      className="fas fa-edit"
+                                      onClick={() => handleEditClick(post)}
                                       style={{
-                                        position: "fixed",
-                                        top: 0,
-                                        left: 0,
-                                        width: "100%",
-                                        height: "100%",
-                                        backgroundColor: "tranparent",
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        zIndex: 1050,
+                                        fontSize: "1.5em",
+                                        color: "#007bff",
                                       }}
-                                      onClick={handleCloseModal}
-                                    >
-                                      <div
-                                        style={{
-                                          position: "relative",
-                                          maxWidth: "100%",
-                                          maxHeight: "100%",
-                                          display: "flex",
-                                          justifyContent: "center",
-                                          alignItems: "center",
-                                        }}
-                                      >
-                                        <img
-                                          src={selectedPost?.Image}
-                                          alt="Post"
-                                          style={{
-                                            // maxWidth: "100%",
-                                            // maxHeight: "100%",
-                                            width:"100%",
-                                            height:"auto",
-                                            borderRadius: "5px",
-                                            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
-                                          }}
-                                        />
-                                        <span
-                                          style={{
-                                            position: "absolute",
-                                            top: "10px",
-                                            right: "10px",
-                                            fontSize: "1.5em",
-                                            color: "#fff",
-                                            cursor: "pointer",
-                                          }}
-                                          onClick={handleCloseModal}
-                                        >
-                                          &times;
-                                        </span>
+                                    />
+                                  </div>
+
+                                  {/* Add Delete Icon Here */}
+                                  <div
+                                    className="edit-icon"
+                                    style={{
+                                      float: "right",
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    <i
+                                      className="fas fa-trash"
+                                      onClick={() => handleDeleteClick(post)}
+                                      style={{
+                                        fontSize: "1.5em",
+                                        color: "#007bff",
+                                      }}
+                                    />
+                                  </div>
+
+                                  {isEditModalOpen && (
+                                    <div className="modal">
+                                      <div className="modal-content">
+                                        <div className="modal-header">
+                                          <h3 className="modal-title">
+                                            Edit Post
+                                          </h3>
+                                          <span
+                                            className="close"
+                                            onClick={() =>
+                                              setIsEditModalOpen(false)
+                                            }
+                                          >
+                                            &times;
+                                          </span>
+                                        </div>
+                                        <form onSubmit={handleUpdateSubmit}>
+                                          <div className="modal-body">
+                                            <div className="form-group">
+                                              <label>Title</label>
+                                              <input
+                                                type="text"
+                                                className="form-control"
+                                                value={
+                                                  selectedPost?.title || ""
+                                                }
+                                                onChange={(e) =>
+                                                  setSelectedPost({
+                                                    ...selectedPost,
+                                                    title: e.target.value,
+                                                  })
+                                                }
+                                              />
+                                            </div>
+                                            <div className="form-group">
+                                              <label>Content</label>
+                                              <textarea
+                                                className="form-control"
+                                                value={
+                                                  selectedPost?.content || ""
+                                                }
+                                                onChange={(e) =>
+                                                  setSelectedPost({
+                                                    ...selectedPost,
+                                                    content: e.target.value,
+                                                  })
+                                                }
+                                              />
+                                            </div>
+                                            <div className="form-group">
+                                              <label>Tag</label>
+                                              <input
+                                                type="text"
+                                                className="form-control"
+                                                value={selectedPost?.tag || ""}
+                                                onChange={(e) =>
+                                                  setSelectedPost({
+                                                    ...selectedPost,
+                                                    tag: e.target.value,
+                                                  })
+                                                }
+                                              />
+                                            </div>
+                                            <div>
+                                              <label>Previous Image</label>
+                                            </div>
+                                            <div className="col-auto">
+                                              <a
+                                                href="#"
+                                                onClick={(e) => {
+                                                  e.preventDefault();
+                                                  handleImageClick();
+                                                }}
+                                                className="mr-3"
+                                              >
+                                                <i className="fas fa-image mr-1" />{" "}
+                                                Image
+                                              </a>
+
+                                              {isImageOpen && (
+                                                <div
+                                                  style={{
+                                                    position: "fixed",
+                                                    top: 0,
+                                                    left: 0,
+                                                    width: "100%",
+                                                    height: "100%",
+                                                    backgroundColor:
+                                                      "tranparent",
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                    alignItems: "center",
+                                                    zIndex: 1050,
+                                                  }}
+                                                  onClick={handleCloseModal}
+                                                >
+                                                  <div
+                                                    style={{
+                                                      position: "relative",
+                                                      maxWidth: "100%",
+                                                      maxHeight: "100%",
+                                                      display: "flex",
+                                                      justifyContent: "center",
+                                                      alignItems: "center",
+                                                    }}
+                                                  >
+                                                    <img
+                                                      src={selectedPost?.Image}
+                                                      alt="Post"
+                                                      style={{
+                                                        // maxWidth: "100%",
+                                                        // maxHeight: "100%",
+                                                        width: "100%",
+                                                        height: "auto",
+                                                        borderRadius: "5px",
+                                                        boxShadow:
+                                                          "0 4px 12px rgba(0, 0, 0, 0.3)",
+                                                      }}
+                                                    />
+                                                    <span
+                                                      style={{
+                                                        position: "absolute",
+                                                        top: "10px",
+                                                        right: "10px",
+                                                        fontSize: "1.5em",
+                                                        color: "#fff",
+                                                        cursor: "pointer",
+                                                      }}
+                                                      onClick={handleCloseModal}
+                                                    >
+                                                      &times;
+                                                    </span>
+                                                  </div>
+                                                </div>
+                                              )}
+                                            </div>
+                                            <div className="form-group">
+                                              <label>Image Upload </label>
+                                              <div className="input-group">
+                                                <input
+                                                  type="file"
+                                                  className="form-control"
+                                                  onChange={(e) =>
+                                                    setImage(e.target.files[0])
+                                                  }
+                                                />
+                                              </div>
+                                            </div>
+                                            <div className="form-group">
+                                              <label>Document URL</label>
+                                              <input
+                                                type="url"
+                                                className="form-control"
+                                                value={
+                                                  selectedPost?.DocUrl || ""
+                                                }
+                                                onChange={(e) =>
+                                                  setSelectedPost({
+                                                    ...selectedPost,
+                                                    DocUrl: e.target.value,
+                                                  })
+                                                }
+                                              />
+                                            </div>
+                                          </div>
+                                          <div className="modal-footer">
+                                            <button
+                                              type="submit"
+                                              className="btn btn-primary"
+                                            >
+                                              Update Post
+                                            </button>
+                                          </div>
+                                        </form>
                                       </div>
                                     </div>
                                   )}
-                                  </div>
-          <div className="form-group">
-                  <label>Image Upload </label>
-                  <div className="input-group">
-                  <input
-                    type="file"
-                    className="form-control"                   
-                    onChange={(e)=>setImage(e.target.files[0])}
-                    
-                  />                   
-            </div>
-            </div>
-          <div className="form-group">
-            <label>Document URL</label>
-            <input
-              type="url"
-              className="form-control"
-              value={selectedPost?.DocUrl || ""}
-              onChange={(e) => setSelectedPost({ ...selectedPost, DocUrl: e.target.value })}
-            />
-          </div>
-        </div>
-        <div className="modal-footer">
-          <button type="submit" className="btn btn-primary">
-            Update Post
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-)}
-
 
                                   <span
                                     style={{
@@ -806,72 +997,74 @@ const handleEditClick = (post) => {
                                       </a>
                                     </div> */}
                                     <div className="col-auto">
-                                    <a
-                                      href="#"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        handleImageClick();
-                                      }}
-                                      className="mr-3"
-                                    >
-                                      <i className="fas fa-image mr-1" /> Image
-                                    </a>
-
-                                    {isImageOpen && (
-                                    <div
-                                      style={{
-                                        position: "fixed",
-                                        top: 0,
-                                        left: 0,
-                                        width: "100%",
-                                        height: "100%",
-                                        backgroundColor: "tranparent",
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        zIndex: 1050,
-                                      }}
-                                      onClick={handleCloseModal}
-                                    >
-                                      <div
-                                        style={{
-                                          position: "relative",
-                                          maxWidth: "100%",
-                                          maxHeight: "100%",
-                                          display: "flex",
-                                          justifyContent: "center",
-                                          alignItems: "center",
+                                      <a
+                                        href="#"
+                                        onClick={(e) => {
+                                          e.preventDefault();
+                                          handleImageClick();
                                         }}
+                                        className="mr-3"
                                       >
-                                        <img
-                                          src={post?.Image}
-                                          alt="Post"
+                                        <i className="fas fa-image mr-1" />{" "}
+                                        Image
+                                      </a>
+
+                                      {isImageOpen && (
+                                        <div
                                           style={{
-                                            // maxWidth: "100%",
-                                            // maxHeight: "100%",
-                                            width:"100%",
-                                            height:"auto",
-                                            borderRadius: "5px",
-                                            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
-                                          }}
-                                        />
-                                        <span
-                                          style={{
-                                            position: "absolute",
-                                            top: "10px",
-                                            right: "10px",
-                                            fontSize: "1.5em",
-                                            color: "#fff",
-                                            cursor: "pointer",
+                                            position: "fixed",
+                                            top: 0,
+                                            left: 0,
+                                            width: "100%",
+                                            height: "100%",
+                                            backgroundColor: "tranparent",
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            zIndex: 1050,
                                           }}
                                           onClick={handleCloseModal}
                                         >
-                                          &times;
-                                        </span>
-                                      </div>
+                                          <div
+                                            style={{
+                                              position: "relative",
+                                              maxWidth: "100%",
+                                              maxHeight: "100%",
+                                              display: "flex",
+                                              justifyContent: "center",
+                                              alignItems: "center",
+                                            }}
+                                          >
+                                            <img
+                                              src={post?.Image}
+                                              alt="Post"
+                                              style={{
+                                                // maxWidth: "100%",
+                                                // maxHeight: "100%",
+                                                width: "100%",
+                                                height: "auto",
+                                                borderRadius: "5px",
+                                                boxShadow:
+                                                  "0 4px 12px rgba(0, 0, 0, 0.3)",
+                                              }}
+                                            />
+                                            <span
+                                              style={{
+                                                position: "absolute",
+                                                top: "10px",
+                                                right: "10px",
+                                                fontSize: "1.5em",
+                                                color: "#fff",
+                                                cursor: "pointer",
+                                              }}
+                                              onClick={handleCloseModal}
+                                            >
+                                              &times;
+                                            </span>
+                                          </div>
+                                        </div>
+                                      )}
                                     </div>
-                                  )}
-                                  </div>
                                     <div className="col-auto">
                                       <a
                                         href={post?.DocUrl || "#"}

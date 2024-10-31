@@ -105,13 +105,6 @@ class User(AbstractUser):
 
         send_activation = (not self.is_active and not self.is_superuser and not self.is_alumni) and not self.pk
         
-        img = Image.open(self.Image.path)
-        if img.height > 500 or img.width > 500:
-            output_size = (300, 300)
-            img.thumbnail(output_size)
-            img.save(self.Image.path)
-
-
         if send_activation:
             self.send_activation_email()
 
