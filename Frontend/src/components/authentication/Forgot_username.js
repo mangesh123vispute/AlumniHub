@@ -1,49 +1,53 @@
-// ResetPassword.js
-import React, { useState , useContext} from "react";
+// ForgotPassword.js
+import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 import AuthContext from "../../context/AuthContext.js";
 import { Link } from "react-router-dom";
 import Notification from "../Notification/Notification.js";
 import LoadingSpinner from "../Loading/Loading.js";
-const ResetPassword = () => {
-  const { uidb64, token } = useParams();
-  const [newPassword, setNewPassword] = useState("");
- 
-   let {
-     isOpen,
-     message,
-     icon,
-     title,
-     showNotification,
-     handleClose,
-     setFilter,
-   } = useContext(AuthContext);
-   const [Loading, setLoading] = useState(false);
-setFilter(false);
+const ForgotUsername = () => {
+  const [email, setEmail] = useState("");
+  let {
+    isOpen,
+    message,
+    icon,
+    title,
+    showNotification,
+    handleClose,
+    setFilter,
+    setIsForgotPassPageOrActivateAccountPage,
+  } = useContext(AuthContext);
+
+  const [Loading, setLoading] = useState(false);
+  useEffect(function () {
+    setIsForgotPassPageOrActivateAccountPage(true);
+    setFilter(false);
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setLoading(true);
-
-    if (!newPassword) {
-      setLoading(false);
-      showNotification("Please enter a new password", "warning", "Warning");
-      return;
-    }
-
     try {
       const response = await axios.post(
-        `http://127.0.0.1:8000/reset-password/${uidb64}/${token}/`,
-        { new_password: newPassword }
+        "http://127.0.0.1:8000/forgot-username/",
+        { email }
       );
       if (response.status === 200) {
         setLoading(false);
         showNotification(response.data.detail, "success", "Success");
+      } else {
+        setLoading(false);
+        showNotification(response.data.detail, "error", "Error");
       }
     } catch (error) {
       setLoading(false);
-      showNotification("Failed to reset password, Please try again", "error", "Error");
+      console.log(error);
+      showNotification(
+        error.response.data.detail ||
+          "Failed to reset username, Please try again",
+        "error",
+        "Error"
+      );
     }
   };
 
@@ -62,7 +66,7 @@ setFilter(false);
           <div className="login-logo">
             <Link to="/" style={{ color: "#007bff" }}>
               AlumniHub |{" "}
-              <span style={{ color: "#007bff", fontSize: "22px" }}>
+              <span style={{ fontSize: "25px", marginLeft: "5px" }}>
                 SSBT COET
               </span>
             </Link>
@@ -71,7 +75,7 @@ setFilter(false);
           <div className="card">
             <div className="card-body login-card-body">
               <p className="login-box-msg">
-                Recover your password in one step!
+                Forgot your username ? Easily reset it here.
               </p>
               <hr
                 style={{
@@ -83,23 +87,23 @@ setFilter(false);
               <form onSubmit={handleSubmit}>
                 <div className="input-group mb-3">
                   <input
-                    type="password"
-                    value={newPassword}
-                    className="form-control"
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="Enter new password"
+                    type="email"
+                    value={email}
+                    class="form-control"
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
                     required
                   />
                   <div className="input-group-append">
                     <div className="input-group-text">
-                      <span className="fas fa-key" />
+                      <span className="fas fa-envelope" />
                     </div>
                   </div>
                 </div>
                 <div className="row">
                   <div className="col-12">
                     <button type="submit" className="btn btn-primary btn-block">
-                      Request new password
+                      Request new username
                     </button>
                   </div>
                   {/* /.col */}
@@ -138,4 +142,4 @@ setFilter(false);
   );
 };
 
-export default ResetPassword;
+export default ForgotUsername;
