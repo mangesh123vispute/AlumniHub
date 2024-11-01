@@ -1,7 +1,7 @@
 from django.shortcuts import  get_object_or_404
 from django.shortcuts import get_object_or_404
 from .models import User,AlumniPost,HodPrincipalPost,StudentProfile, AlumniProfile, HODPrincipalProfile 
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -483,16 +483,18 @@ class UserImageUploadView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     
+class UserImageRetrieveView(APIView):
+    permission_classes = [AllowAny]
+
     def get(self, request, user_id, *args, **kwargs):
         user = get_object_or_404(User, id=user_id)
-        
-        
+
         if user.Image:
             image_url = request.build_absolute_uri(user.Image.url)
             return Response({"image_url": image_url}, status=status.HTTP_200_OK)
         else:
             return Response({"detail": "User has no image."}, status=status.HTTP_404_NOT_FOUND)
-
+            
 
 class PostListPagination(PageNumberPagination):
     page_size = 10  

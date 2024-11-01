@@ -26,6 +26,9 @@ export const AuthProvider = ({ children }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddAdminModalOpen, setIsAddAdminModalOpen] = useState(false);
   const [numberOfInactiveAlumni, setNumberOfInactiveAlumni] = useState(0);
+  const [imageRefresh, setImageRefresh] = useState(false);
+  const [ProfileImage, setProfileImage] = useState("");
+  
    
  const [Alumnifilters, setAlumniFilters] = useState({
    full_name: "",
@@ -62,9 +65,12 @@ export const AuthProvider = ({ children }) => {
     Branch: "", // For filtering by Branch
     designation: "",
   });
-
-
+ 
   const location = useLocation();
+
+  const toggleimageRefresh = () => {
+    setImageRefresh((prev) => !prev);
+  }
   
   const toggleModal = () => {
     setIsModalOpen((prev) => !prev);
@@ -72,6 +78,9 @@ export const AuthProvider = ({ children }) => {
    
   const toggleAddAdminModal = () => {
     setIsAddAdminModalOpen((prev) => !prev);
+  };
+  const toggleLogin = () => {
+    setLogin((prev) => !prev);
   };
   
   const showNotification = async (msg, iconType, titleText) => {
@@ -139,7 +148,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem("authTokens");
       // alert("Logout successful!");
       await showNotification("Logout successful!", "success", "Success");
-      setLogin(false);
+      toggleLogin();
       navigate("/");
     } catch (error) {
       console.error("An error occurred while logging out:", error);
@@ -147,12 +156,29 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const getImage = async () => {
+    console.log("Fetching profile image...", userData);
+
+    try {
+        const response = await axios.get(
+            `${baseurl}/get-image/${userData?.user_id}/`
+        );
+        
+        if (response.status === 200) {
+            setProfileImage(response.data["image_url"]);
+        }
+    } catch (error) {
+        console.error("Error fetching profile image:", error);
+    }
+};
+
   //* verify access tokens 
   const verifyaccessToken = async () => {
     const token = localStorage.getItem("authTokens") ? JSON.parse(localStorage.getItem("authTokens")) : null;
     try {
       if (!token) {
-      //  navigate("/login")
+        //  navigate("/login")
+        console.log("1.Token not found");
         return -1;
       }
       // Verify access token
@@ -171,9 +197,11 @@ export const AuthProvider = ({ children }) => {
         setAuthTokens(null);
         setUser(null);
         // navigate("/login");
+        console.log("2. Access token verification failed");
         return -1;
       }  
       else {
+        console.log("3. Access token verification successful");
         return 1;
       }
     } catch (error) {
@@ -181,6 +209,7 @@ export const AuthProvider = ({ children }) => {
         "An error occurred while verifying access token",
         error
       );
+      console.log("4. Access token verification failed");
       return -1;
     }
   };
@@ -190,28 +219,34 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     verifyaccessToken();
     fetchAlumniData();
-       const tokenData = JSON.parse(localStorage.getItem("authTokens")); 
-       if (tokenData && tokenData.access) {
-         const decodedToken = jwtDecode(tokenData.access);     
-         setUserData(decodedToken);
-    }
     
+    const tokenData = JSON.parse(localStorage.getItem("authTokens")); 
+    if (tokenData && tokenData.access) {
+      const decodedToken = jwtDecode(tokenData.access);     
+      setUserData(decodedToken);
+    }
   }, []);
 
   useEffect(() => {
-     
-     const tokenData = JSON.parse(localStorage.getItem("authTokens"));
-     if (tokenData && tokenData.access) {
-       const decodedToken = jwtDecode(tokenData.access);
-       setUserData(decodedToken);
-     }
-   }, [Login]);
-  
+    setProfileImage("");
+    const tokenData = JSON.parse(localStorage.getItem("authTokens"));
+    if (tokenData && tokenData.access) {
+      const decodedToken = jwtDecode(tokenData.access);
+      setUserData(decodedToken);
+    }
+    
+  }, [Login]);
+
   useEffect(() => {
     setShowProfileOfId(false);
     setFilterClicked(false);
   
   }, [location]);
+  
+  useEffect(() => {
+         getImage();
+  }, [userData, imageRefresh]);
+  
 
   //* context data and functions
   let contextData = {
@@ -265,6 +300,12 @@ export const AuthProvider = ({ children }) => {
     setIsAddAdminModalOpen,
     numberOfInactiveAlumni,
     setNumberOfInactiveAlumni,
+    imageRefresh,
+    setImageRefresh,
+    toggleimageRefresh,
+    ProfileImage,
+    getImage,
+    toggleLogin,
   };
 
 

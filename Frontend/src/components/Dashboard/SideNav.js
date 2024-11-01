@@ -6,7 +6,8 @@ import baseurl from "../const.js";
 import { Link } from "react-router-dom";
 
 const SideNav = () => {
-  let { userData, numberOfInactiveAlumni } = useContext(AuthContext);
+  let { userData, numberOfInactiveAlumni, ProfileImage } =
+    useContext(AuthContext);
   console.log("userData", userData);
   const [activeDropdown, setActiveDropdown] = useState(null);
   // const [isOpen, setIsOpen] = useState(false); // State to control dropdown visibility
@@ -43,8 +44,8 @@ const SideNav = () => {
             <div className="image">
               <img
                 src={
-                  userData?.image
-                    ? `${baseurl}/${userData?.image}`
+                  ProfileImage
+                    ? `${ProfileImage}`
                     : `../../dist/img/user1-128x128.jpg`
                 }
                 className="img-circle elevation-2 mt-1"
@@ -433,19 +434,19 @@ const SideNav = () => {
                           title="Request to Join"
                         ></i>
                         Join Requests
-                        {numberOfInactiveAlumni ? ( <span
-                          className="left badge badge-danger "
-                          style={{
-                            fontSize: "0.6em",
-                            position: "relative",
-                            bottom: "1em",
-                            left: "0.5em",
-                          }}
-                        >
-                          
-                          {numberOfInactiveAlumni}
-                        </span>) : null}
-                       
+                        {numberOfInactiveAlumni ? (
+                          <span
+                            className="left badge badge-danger "
+                            style={{
+                              fontSize: "0.6em",
+                              position: "relative",
+                              bottom: "1em",
+                              left: "0.5em",
+                            }}
+                          >
+                            {numberOfInactiveAlumni}
+                          </span>
+                        ) : null}
                       </p>
                     </Link>
                   </li>

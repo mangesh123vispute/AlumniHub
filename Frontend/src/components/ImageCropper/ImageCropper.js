@@ -7,7 +7,7 @@ import { getCroppedImg } from "./cropImageUtils";
 const ImageCropper = ({
   imageSrc,
   onCropComplete,
-  aspectRatio = 4 / 3,
+  aspectRatio = 1 / 1,
   cropWidth = 200,
   cropHeight = 200,
 }) => {
@@ -75,12 +75,15 @@ const ImageCropper = ({
       <Slider
         min={1}
         max={3}
+        valueLabelDisplay="auto"
+        marks
         step={0.1}
         value={zoom}
         onChange={(e, newZoom) => setZoom(newZoom)}
         style={{ marginTop: "1em" }}
       />
 
+      
       <div
         style={{
           display: "flex",

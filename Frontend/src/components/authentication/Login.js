@@ -22,6 +22,7 @@ const Login = () => {
     setUser,
     setLogin,
     setFilter,
+    toggleLogin,
   } = useContext(AuthContext);
 
  setFilter(false);
@@ -80,7 +81,7 @@ const handleSubmit = async (e) => {
           })
         );
         await showNotification("Login successful", "success", "Success");
-        setLogin(true);
+        toggleLogin();
         navigate("/home2");
       }
     } else {

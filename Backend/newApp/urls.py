@@ -2,7 +2,7 @@ from django.urls import path
 from django.conf import settings
 from . import views
 from django.conf.urls.static import static
-from .views import HodPrincipalPostAPIView,GETAlumni,HodAuthorPostListView,AlumniPostAPIView,GETHODs,GETStudent,UserImageUploadView,AlumniAuthorPostListView,PostListView,InactiveAlumniListView,AlumniActivationAPIView,AcceptAllAlumni
+from .views import HodPrincipalPostAPIView,GETAlumni,HodAuthorPostListView,AlumniPostAPIView,GETHODs,GETStudent,UserImageUploadView,AlumniAuthorPostListView,PostListView,InactiveAlumniListView,AlumniActivationAPIView,AcceptAllAlumni,UserImageRetrieveView
 
 
 
@@ -35,6 +35,7 @@ urlpatterns = [
     path('edit-student-profile/<int:pk>/', views.update_student_profile, name='edit_student_profile'),
     path('edit-alumni-profile/<int:pk>/', views.update_alumni_profile, name='edit_alumni_profile'),
     path('update-image/<int:user_id>/', UserImageUploadView.as_view(), name='update-image'),
+    path('get-image/<int:user_id>/', UserImageRetrieveView.as_view(), name='get-image'),
  
     # Get all post :Admin+ Alumni 
     path('posts/', PostListView.as_view(), name='post-list'),

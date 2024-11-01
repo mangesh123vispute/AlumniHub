@@ -11,8 +11,13 @@ import AuthContext from "../../context/AuthContext.js";
 import baseurl from "../const.js";
 import ImageCropper from "../../components/ImageCropper/ImageCropper";
 const SuperUserProfileContent = () => {
-  let { userData, setLoading, showNotification, ShowProfileOfId } =
-    useContext(AuthContext);
+  let {
+    userData,
+    setLoading,
+    showNotification,
+    ShowProfileOfId,
+    toggleimageRefresh,
+  } = useContext(AuthContext);
   console.log("userData", userData);
   const id = localStorage.getItem("id")
     ? JSON.parse(localStorage.getItem("id"))
@@ -41,6 +46,10 @@ const SuperUserProfileContent = () => {
 
   const handleCloseModal = () => {
     setIsImageOpen(false);
+  };
+
+  const toggleReload = () => {
+    setReload(!reload); 
   };
 
   const handleCropComplete = async (croppedImageBlob) => {
@@ -77,7 +86,8 @@ const SuperUserProfileContent = () => {
       if (response.ok) {
         console.log("Image uploaded successfully:", data.detail);
         showNotification("Image uploaded successfully", "success", "Success");
-        setReload(true);
+        toggleimageRefresh();
+        toggleReload();
         setIsModalOpen(false); 
       } else {
         console.error("Image upload failed:", data);
@@ -96,7 +106,7 @@ const SuperUserProfileContent = () => {
       // Stop loading state
       setLoading(false);
     }
-  };
+  }; 
 
 
   const handleEditClick = (post) => {
@@ -595,6 +605,7 @@ const SuperUserProfileContent = () => {
                               onCropComplete={handleCropComplete}
                               cropWidth={200}
                               cropHeight={200}
+                              
                             />
                           </div>
 
