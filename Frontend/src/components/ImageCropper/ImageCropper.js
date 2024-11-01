@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from "react";
 import Cropper from "react-easy-crop";
-import Slider from "@mui/material/Slider"; // for zoom control (optional)
-import Button from "@mui/material/Button"; // for cropping action (optional)
-import { getCroppedImg } from "./cropImageUtils"; // utility function for cropping
+import Slider from "@mui/material/Slider";
+import Button from "@mui/material/Button";
+import { getCroppedImg } from "./cropImageUtils";
 
 const ImageCropper = ({
   imageSrc,
@@ -14,6 +14,7 @@ const ImageCropper = ({
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [currentImageSrc, setCurrentImageSrc] = useState(imageSrc); // Track current image
 
   const onCropChange = (crop) => setCrop(crop);
   const onZoomChange = (zoom) => setZoom(zoom);
@@ -28,7 +29,7 @@ const ImageCropper = ({
   const onCropClick = async () => {
     try {
       const croppedImage = await getCroppedImg(
-        imageSrc,
+        currentImageSrc,
         croppedAreaPixels,
         cropWidth,
         cropHeight
@@ -39,30 +40,36 @@ const ImageCropper = ({
     }
   };
 
+  // Handle image upload
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => setCurrentImageSrc(reader.result); // Set the uploaded image as the new image source
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <div>
-      {/* Container with border radius */}
       <div
         style={{
           position: "relative",
           width: "100%",
           height: 400,
-          borderRadius: "16px", // Add border radius here
-          overflow: "hidden", // Ensures content doesn't overflow the rounded corners
-          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.3)", // Optional shadow for better visibility
+          borderRadius: "16px",
+          overflow: "hidden",
+          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.3)",
         }}
       >
         <Cropper
-          image={imageSrc}
+          image={currentImageSrc}
           crop={crop}
           zoom={zoom}
           aspect={aspectRatio}
           onCropChange={onCropChange}
           onCropComplete={onCropCompleteHandler}
           onZoomChange={onZoomChange}
-          style={{
-            borderRadius: "16px", // You can add border radius here if the Cropper supports it
-          }}
         />
       </div>
       <Slider
@@ -73,24 +80,34 @@ const ImageCropper = ({
         onChange={(e, newZoom) => setZoom(newZoom)}
         style={{ marginTop: "1em" }}
       />
-      
-      <Button
-        variant="contained"
-        color="primary"
-        className="btn btn-primary btn-block"
-        style={{ marginTop: "0.5rem" }}
+
+      <div
+        style={{
+          display: "flex",
+          gap: "2em",
+          alignItems: "center",
+          marginTop: "1rem",
+          marginLeft: "0.8rem",
+        }}
       >
-        Upload New Image
-      </Button>
-      <Button
-        variant="contained"
-        color="primary"
-        className="btn btn-primary btn-block"
-        onClick={onCropClick}
-        style={{ marginTop: "10px" }}
-      >
-        Crop Image
-      </Button>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageUpload}
+          style={{ display: "none" }}
+          id="upload-button"
+        />
+        <label htmlFor="upload-button">
+          <Button variant="contained" color="primary" component="span">
+            Upload New Image
+          </Button>
+        </label>
+      <label htmlFor="crop-button">
+        <Button variant="contained" id="crop-button" color="primary" onClick={onCropClick}>
+          Crop & Save
+          </Button>
+        </label>
+      </div>
     </div>
   );
 };

@@ -1,0 +1,5 @@
+/* Notification.css */
+.custom-swal-popup {
+    z-index: 2000;
+    /* Adjust this value to set the desired z-index */
+}
