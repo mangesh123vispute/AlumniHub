@@ -10,7 +10,7 @@ import axios from "axios";
 import AuthContext from "../../context/AuthContext.js";
 import baseurl from "../const.js";
 import ImageCropper from "../../components/ImageCropper/ImageCropper";
-const AlumniProfileContent = () => {
+const AlumniProfileContent = ({userIdd}) => {
   let {
     userData,
     setLoading,
@@ -24,6 +24,7 @@ const AlumniProfileContent = () => {
     setIsAllAdminPage(false);
   }, []);
   console.log("userData", userData);
+  console.log("userId ",userIdd);
   const [user, setUser] = useState(null);
   const [show, setShow] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
