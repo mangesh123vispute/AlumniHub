@@ -313,7 +313,7 @@ const AllStudentsContent = () => {
                                   )}
                                 </a>
                               </li>
-                              <li className="small">
+                              {/* <li className="small">
                                 <span className="fa-li">
                                   <i className="fas fa-lg fa-fax mr-1" />
                                 </span>
@@ -323,7 +323,7 @@ const AllStudentsContent = () => {
                                     ? students.mobile
                                     : "Invalid Mobile Number"
                                   : "N/A"}
-                              </li>
+                              </li> */}
                             </ul>
                           </div>
                         </div>

@@ -33,16 +33,20 @@ const Profile = () => {
   console.log("state", state);
   
   if (state) {
-    userData = state;
     localStorage.setItem("id", JSON.stringify(state?.id));
   }
   console.log(" userData", userData);
   const getProfileContent = () => {
-    if (userData.is_student) {
+    if (state?.is_student || userData?.is_student) {
       return StudentProfileContent;
-    } else if (userData.is_alumni) {
+    } else if (state?.is_alumni || userData.is_alumni) {
       return AlumniProfileContent;
-    } else if (userData.is_superuser || (!userData.is_student && !userData.is_alumni)) {
+    } else if (
+      userData.is_superuser ||
+      state?.is_superuser ||
+      (!userData.is_student && !userData.is_alumni) ||
+      (!state?.is_student && !state?.is_alumni)
+    ) {
       return SuperUserProfileContent;
     }
   };

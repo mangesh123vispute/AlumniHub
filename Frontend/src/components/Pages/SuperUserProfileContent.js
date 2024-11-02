@@ -523,25 +523,27 @@ const SuperUserProfileContent = () => {
                         }
                         alt="User profile picture"
                       />
-                      <button
-                        className="btn btn-primary btn-xs elevation-2"
-                        style={{
-                          backgroundColor: "#007bff",
-                          color: "white",
-                          border: "none",
-                          borderRadius: "50%",
-                          cursor: "pointer",
-                          position: "absolute",
-                          top: "0px", // Position at the top
-                          left: "0px", // Position at the left
-                          zIndex: 10, // Ensure it's on top of the image
-                        }}
-                        onClick={() => {
-                          setIsModalOpen(true);
-                        }}
-                      >
-                        <i className="fas fa-pencil-alt"></i>
-                      </button>
+                      {userData?.user_id === user?.id && (
+                        <button
+                          className="btn btn-primary btn-xs elevation-2"
+                          style={{
+                            backgroundColor: "#007bff",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "50%",
+                            cursor: "pointer",
+                            position: "absolute",
+                            top: "0px", // Position at the top
+                            left: "0px", // Position at the left
+                            zIndex: 10, // Ensure it's on top of the image
+                          }}
+                          onClick={() => {
+                            setIsModalOpen(true);
+                          }}
+                        >
+                          <i className="fas fa-pencil-alt"></i>
+                        </button>
+                      )}
                     </div>
                     <h3 className="profile-username text-center">
                       {user ? user?.full_name || user?.username : "User"}
@@ -610,7 +612,6 @@ const SuperUserProfileContent = () => {
                               onCropComplete={handleCropComplete}
                               cropWidth={200}
                               cropHeight={200}
-                              
                             />
                           </div>
 
@@ -1239,11 +1240,11 @@ const SuperUserProfileContent = () => {
                                   {user?.email || "N/A"}
                                 </p>
 
-                                <strong>Mobile:</strong>
+                                {/* <strong>Mobile:</strong>
                                 <p className="text-muted font">
                                   {" "}
                                   {user?.mobile || "N/A"}
-                                </p>
+                                </p> */}
 
                                 <strong>LinkedIn:</strong>
                                 <p className="text-muted font">

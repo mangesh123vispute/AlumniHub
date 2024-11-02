@@ -28,6 +28,7 @@ class AlumniRegistrationSerializer(serializers.ModelSerializer):
             graduation_month=validated_data['graduation_month'],
             graduation_year=validated_data['graduation_year'],
             linkedin=validated_data.get('linkedin'),
+            isAlumniDirectRegistration=True,
             is_alumni=True,
             is_active=False
         )

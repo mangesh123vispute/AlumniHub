@@ -451,7 +451,8 @@ const StudentProfileContent = () => {
                           }
                           alt="User profile picture"
                         />
-                        <button
+                        {userData?.user_id === user?.id && (
+                          <button
                           className="btn btn-primary btn-xs elevation-2"
                           style={{
                             backgroundColor: "#007bff",
@@ -470,6 +471,8 @@ const StudentProfileContent = () => {
                         >
                           <i className="fas fa-pencil-alt"></i>
                         </button>
+                        ) }
+                        
                       </div>
                       <h3 className="profile-username text-center">
                         {user ? user.full_name || user.username : "User"}
@@ -763,10 +766,10 @@ const StudentProfileContent = () => {
                                     {user?.email || "N/A"}
                                   </p>
 
-                                  <strong>Mobile:</strong>
+                                  {/* <strong>Mobile:</strong>
                                   <p className="text-muted font">
                                     {user?.mobile || "N/A"}
-                                  </p>
+                                  </p> */}
 
                                   <strong>LinkedIn:</strong>
                                   <p className="text-muted font">
