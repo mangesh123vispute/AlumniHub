@@ -10,7 +10,7 @@ import axios from "axios";
 import AuthContext from "../../context/AuthContext.js";
 import baseurl from "../const.js";
 import ImageCropper from "../../components/ImageCropper/ImageCropper";
-const SuperUserProfileContent = () => {
+const SuperUserProfileContent = ({userIdd}) => {
   let {
     userData,
     setLoading,
@@ -19,6 +19,7 @@ const SuperUserProfileContent = () => {
     toggleimageRefresh,
   } = useContext(AuthContext);
   console.log("userData", userData);
+  console.log("userId ",userIdd);
   const id = localStorage.getItem("id")
     ? JSON.parse(localStorage.getItem("id"))
     : null;

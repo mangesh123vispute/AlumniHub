@@ -38,16 +38,16 @@ const Profile = () => {
   console.log(" userData", userData);
   const getProfileContent = () => {
     if (state?.is_student || userData?.is_student) {
-      return StudentProfileContent;
+      return <StudentProfileContent userIdd = {state?.id} />;
     } else if (state?.is_alumni || userData.is_alumni) {
-      return AlumniProfileContent;
+      return <AlumniProfileContent userIdd = {state?.id} />;
     } else if (
       userData.is_superuser ||
       state?.is_superuser ||
       (!userData.is_student && !userData.is_alumni) ||
       (!state?.is_student && !state?.is_alumni)
     ) {
-      return SuperUserProfileContent;
+      return <SuperUserProfileContent userIdd = {state?.id} />;
     }
   };
 
@@ -68,7 +68,7 @@ const Profile = () => {
         title={title}
       />
       <Home
-        DynamicContent={getProfileContent()}
+        DynamicContent={getProfileContent}
         url="profile"
         heading="Profile"
       />

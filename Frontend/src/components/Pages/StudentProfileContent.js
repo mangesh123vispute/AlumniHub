@@ -6,7 +6,7 @@ import baseurl from "../const.js";
 import ImageCropper from "../../components/ImageCropper/ImageCropper";
 
 
-const StudentProfileContent = () => {
+const StudentProfileContent = ({userIdd}) => {
     let {
       userData,
       showNotification,
@@ -16,6 +16,7 @@ const StudentProfileContent = () => {
       toggleimageRefresh,
     } = useContext(AuthContext);
     console.log("userData", userData);
+    console.log("user id ",userIdd);
     const id = localStorage.getItem("id")
       ? JSON.parse(localStorage.getItem("id"))
       : null;
