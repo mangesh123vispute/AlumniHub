@@ -428,18 +428,18 @@ const [isImageOpen, setIsImageOpen] = useState(false);
                                     </div>
                                   )}
                                   </div>
-                                    <div className="col-auto">
-                                      <a
-                                        href={post?.DocUrl || "#"}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="mr-3"
-                                      >
-                                        <i className="fas fa-file-alt mr-1" />{" "}
-                                        Document
-                                      </a>
-                                    </div>
-                                    <div className="col-auto">
+                                   { post?.DocUrl &&  <div className="col-auto">
+                                        <a
+                                          href={post?.DocUrl || "#"}
+                                          target="_blank"
+                                          rel="noreferrer"
+                                          className="mr-3"
+                                        >
+                                          <i className="fas fa-file-alt mr-1" />{" "}
+                                          Document
+                                        </a>
+                                      </div>}
+                                   { post?.link && <div className="col-auto">
                                       <a
                                         href={post?.link || "#"}
                                         target="_blank"
@@ -448,7 +448,7 @@ const [isImageOpen, setIsImageOpen] = useState(false);
                                       >
                                         <i className="fas fa-link mr-1" /> Link
                                       </a>
-                                    </div>
+                                    </div>}
                                   </div>
                                 </div>
                               ))}
