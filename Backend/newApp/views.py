@@ -469,20 +469,38 @@ def update_alumni_profile(request, pk):
 
 # ^edit image 
 
+# class UserImageUploadView(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def put(self, request, user_id, *args, **kwargs):
+#         user = get_object_or_404(User, id=user_id)
+
+#         serializer = UserImageUploadSerializer(user, data=request.data, partial=True) 
+
+#         if serializer.is_valid():
+#             serializer.save() 
+#             return Response({"detail": "Image updated successfully"}, status=status.HTTP_200_OK)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class UserImageUploadView(APIView):
     permission_classes = [IsAuthenticated]
 
     def put(self, request, user_id, *args, **kwargs):
         user = get_object_or_404(User, id=user_id)
+        
+        # Check if the user already has an image (even if it's default) and delete it
+        if user.Image and user.Image.name != 'default/def.jpeg':  # Ensure we don't delete the default image
+            user.Image.delete(save=False)  # Delete the old image file from storage, but don't save yet
 
-        serializer = UserImageUploadSerializer(user, data=request.data, partial=True) 
+        serializer = UserImageUploadSerializer(user, data=request.data, partial=True)
 
         if serializer.is_valid():
-            serializer.save() 
+            serializer.save()  # This will save the new image to the Image field
             return Response({"detail": "Image updated successfully"}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    
+
 class UserImageRetrieveView(APIView):
     permission_classes = [AllowAny]
 

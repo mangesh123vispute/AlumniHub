@@ -57,7 +57,12 @@ const SuperUserProfileContent = () => {
 
     // Create FormData and append the cropped image Blob
     const formData = new FormData();
-    formData.append("Image", croppedImageBlob, "croppedImage.jpg"); // Specify a filename
+    // Append the image to FormData with a correctly formatted filename
+    formData.append(
+      "Image",
+      croppedImageBlob,
+      `${user.username}_${Date.now()}.jpg`
+    );
 
     // Retrieve the token from local storage
     const token = localStorage.getItem("authTokens")
@@ -70,7 +75,7 @@ const SuperUserProfileContent = () => {
 
       // Send PUT request to backend server with FormData
       const response = await fetch(
-        `${baseurl}/update-image/${userData?.user_id}/`, 
+        `${baseurl}/update-image/${userData?.user_id}/`,
         {
           method: "PUT",
           body: formData,
@@ -88,7 +93,7 @@ const SuperUserProfileContent = () => {
         showNotification("Image uploaded successfully", "success", "Success");
         toggleimageRefresh();
         toggleReload();
-        setIsModalOpen(false); 
+        setIsModalOpen(false);
       } else {
         console.error("Image upload failed:", data);
         showNotification("Image upload failed", "error", "Error");

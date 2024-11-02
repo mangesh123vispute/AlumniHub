@@ -42,7 +42,11 @@ const StudentProfileContent = () => {
 
      // Create FormData and append the cropped image Blob
      const formData = new FormData();
-     formData.append("Image", croppedImageBlob, "croppedImage.jpg"); // Specify a filename
+     formData.append(
+        "Image",
+        croppedImageBlob,
+        `${user.username}_${Date.now()}.jpg`
+      );
 
      // Retrieve the token from local storage
      const token = localStorage.getItem("authTokens")

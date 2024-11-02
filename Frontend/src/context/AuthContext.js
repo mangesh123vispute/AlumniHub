@@ -160,15 +160,19 @@ export const AuthProvider = ({ children }) => {
     console.log("Fetching profile image...", userData);
 
     try {
+      if(userData?.user_id ){
         const response = await axios.get(
-            `${baseurl}/get-image/${userData?.user_id}/`
+          `${baseurl}/get-image/${userData?.user_id}/`
         );
-        
+
         if (response.status === 200) {
-            setProfileImage(response.data["image_url"]);
+          setProfileImage(response.data["image_url"]);
         }
+      }
+      
+        
     } catch (error) {
-        console.error("Error fetching profile image:", error);
+        console.log("An error occurred while fetching profile image:", error);
     }
 };
 

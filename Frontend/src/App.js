@@ -10,7 +10,7 @@ import AllAlumnis from "./components/Pages/AllAlumnis.js";
 import AllHods from "./components/Pages/AllHods.js";
 import AllStudent from "./components/Pages/AllStudents.js";
 import AboutUs from "./components/Pages/Aboutus.js";
-import Home2 from "./components/Pages/Home2.js";
+import Home2 from "./components/Pages/DashBoard/Home2.js";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import LandingPage from "./components/LandingPage.js";
 import Landing from "./components/Landing.js";

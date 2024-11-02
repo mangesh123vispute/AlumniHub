@@ -295,7 +295,8 @@ const [isImageOpen, setIsImageOpen] = useState(false);
                           ) : (
                             <>
                               {" "}
-                              {posts?.map((post,ind) => (
+                    {posts?.map((post, ind) => (
+                    
                                 <div key={ind} className="post">
                                   <div className="user-block">
                                     <img
@@ -304,7 +305,8 @@ const [isImageOpen, setIsImageOpen] = useState(false);
                                         post?.author?.Image || "#"
                                       }`}
                                       alt="user image"
-                                    />
+                          />
+                          { console.log("post", post)}
                                     <span className="username">
                                       <a href="#">
                                         {post?.author?.full_name ||

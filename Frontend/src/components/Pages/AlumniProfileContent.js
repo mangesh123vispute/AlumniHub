@@ -76,7 +76,11 @@ const handleCloseModal = () => {
 
     // Create FormData and append the cropped image Blob
     const formData = new FormData();
-    formData.append("Image", croppedImageBlob, "croppedImage.jpg"); // Specify a filename
+     formData.append(
+       "Image",
+       croppedImageBlob,
+       `${user.username}_${Date.now()}.jpg`
+     );
 
     // Retrieve the token from local storage
     const token = localStorage.getItem("authTokens")
@@ -712,7 +716,7 @@ setIsDropdownOpen(null);  // Open the modal
                   </div>
 
                   <div className="card-body box-profile">
-                    <div className="text-center postion-relative">
+                    <div className="text-center postion-relative ">
                       <img
                         className="profile-user-img img-fluid img-circle"
                         src={
@@ -731,8 +735,8 @@ setIsDropdownOpen(null);  // Open the modal
                           borderRadius: "50%",
                           cursor: "pointer",
                           position: "absolute",
-                          top: "6px", // Position at the top
-                          left: "6px", // Position at the left
+                          top: "10px", // Position at the top
+                          left: "10px", // Position at the left
                           zIndex: 10, // Ensure it's on top of the image
                         }}
                         onClick={() => {
