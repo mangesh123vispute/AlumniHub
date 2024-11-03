@@ -38,10 +38,7 @@ const MyProfile = () => {
 
 
   
-//   if (state) {
-//     userData = state;
-//     localStorage.setItem("id", JSON.stringify(state?.id));
-//   }
+localStorage.setItem('id',userData?.user_id);
   console.log(" userData", userData);
   const getProfileContent = () => {
     if (userData.is_student) {
