@@ -8,7 +8,7 @@ const ContactSection = () => {
         <h2 className="text-3xl md:text-4xl font-bold text-black mb-2">Contact</h2>
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container bg-yellow-500 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-wrap -mx-4">
           {/* Contact Info */}
           <div className="w-full lg:w-1/2 px-4 mb-8 lg:mb-0">

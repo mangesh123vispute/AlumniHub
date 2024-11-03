@@ -98,23 +98,26 @@ function Landing() {
     <div>
       <nav className="bg-yellow-500 text-white w-full fixed top-0 z-50 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center -ml-[5vh] space-x-2">
             <img src="/Logo.jfif" alt="Logo" className="w-10 h-10 rounded-full" />
-            <Link to="/" className="text-lg md:text-2xl font-bold hover:text-red-800">
-              Alumni Hub
+            <Link to="/" className=" text-lg md:text-2xl font-bold  hover:text-red-800">
+              Alumni Hub |
             </Link>
+            <span className="text-red-800 text-lg">
+                  SSBT COET
+            </span>
           </div>
           <div className="hidden md:flex space-x-6">
-            <HashLink to="/#home" className="text-white px-2 py-1 rounded hover:bg-red-800">
+            <HashLink to="/#home" className="text-white text-[1.2rem]  px-2 py-1 rounded-[15px] hover:bg-red-800">
               Home
             </HashLink>
-            <HashLink to="#about" className="text-white px-2 py-1 rounded hover:bg-red-800">
+            <HashLink to="#about" className="text-white text-[1.2rem] px-2 py-1 rounded-[15px] hover:bg-red-800">
               About
             </HashLink>
-            <HashLink to="#team" className="text-white px-2 py-1 rounded hover:bg-red-800">
+            <HashLink to="#team" className="text-white text-[1.2rem] px-2 py-1 rounded-[15px] hover:bg-red-800">
               Team
             </HashLink>
-            <HashLink to="#contact" className="text-white px-2 py-1 rounded hover:bg-red-800">
+            <HashLink to="#contact" className="text-white text-[1.2rem] px-2 py-1 rounded-[15px] hover:bg-red-800">
               Contact
             </HashLink>
           </div>
@@ -122,14 +125,14 @@ function Landing() {
             {isLoggedin ? (
               <Link
                 to="/home2"
-                className="bg-red-900 text-white px-4 py-2 rounded "
+                className="hover:bg-red-900 text-[1.2rem] text-white px-4 py-2 rounded-[15px] "
               >
                 Dashboard
               </Link>
             ) : (
               <Link
                 to="/register"
-                className="bg-red-900 text-white px-4 py-2 rounded "
+                className="hover:bg-red-900 text-[1.2rem] text-white px-4 py-2 rounded-[15px] "
               >
                 Register 
               </Link>
@@ -178,13 +181,13 @@ function Landing() {
         }}
       >
         <div className="absolute -bottom-[9vh] z-10 w-full bg-yellow-500 py-3 text-center text-white">
-          <div className="animate-marquee whitespace-nowrap">
+          <div className="animate-marquee text-[1.2rem] whitespace-nowrap">
             Welcome to Alumni Hub! Join us in celebrating achievements and connections.
           </div>
         </div>
       </div>
       
-      <div ref={aboutSectionRef1} className="w-full flex justify-center items-center px-4">
+      <div ref={aboutSectionRef1} className=" mx-5 text-[1.2rem] flex justify-center items-center px-4">
         <AboutSection
           title="Our Inspiration"
           secondTitle="Hon. Sau. Pratibhatai Patil"
@@ -193,7 +196,7 @@ function Landing() {
         />
       </div>
       
-      <div ref={aboutSectionRef2} className="w-full -mt-3 flex justify-center items-center px-4">
+      <div ref={aboutSectionRef2} className="mx-5  text-[1.2rem] -mt-3 flex justify-center items-center px-4">
         <AboutSection 
           title="Our Objective"
           secondTitle="Our Vision"
