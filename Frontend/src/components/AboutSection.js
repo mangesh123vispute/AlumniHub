@@ -8,14 +8,17 @@ const AboutSection = ({ title, desc, imgSrc, secondTitle }) => {
           
           {/* Left Text Content */}
           <div className="lg:w-1/2 flex flex-col justify-center items-center lg:items-start text-center lg:text-left space-y-4 md:space-y-6">
-            <h3 className="text-lg md:text-xl font-semibold text-red-900">
+            <h3 className="text-[2rem] mx-auto font-semibold text-red-900">
               {title}
             </h3>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black">
+            <h2 className="text-2xl mx-auto md:text-3xl lg:text-4xl font-bold text-black">
               {secondTitle}
             </h2>
-            <p className="text-sm md:text-base text-gray-700 leading-relaxed">
-              {desc}
+            <p className="text-[1rem] md:text-base text-gray-700 leading-relaxed">
+            <i>
+            {desc}
+            </i>
+              
             </p>
           </div>
 
@@ -24,7 +27,7 @@ const AboutSection = ({ title, desc, imgSrc, secondTitle }) => {
             <img
               src={imgSrc}
               alt="About Us"
-              className="rounded-lg shadow-lg w-full sm:w-3/4 lg:w-full object-cover max-h-[400px] lg:max-h-[500px]"
+              className="rounded-xl shadow-lg w-full sm:w-3/4 lg:w-full object-cover max-h-[400px] lg:max-h-[500px]"
             />
           </div>
         </div>
