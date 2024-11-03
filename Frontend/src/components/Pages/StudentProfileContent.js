@@ -2,8 +2,8 @@ import React, { useContext ,useState , useEffect } from "react";
 import "./profile.css"
 import axios from 'axios'
 import AuthContext from "../../context/AuthContext.js";
-
-
+import baseurl from "../const.js";
+import ImageCropper from "../../components/ImageCropper/ImageCropper";
 
 
 const StudentProfileContent = () => {
@@ -11,20 +11,82 @@ const StudentProfileContent = () => {
       userData,
       showNotification,
       setLoading,
-      ShowProfileOfId,
       setIsAllAdminPage,
+      toggleimageRefresh,
     } = useContext(AuthContext);
     console.log("userData", userData);
-    const id = localStorage.getItem("id")
-      ? JSON.parse(localStorage.getItem("id"))
-      : null;
+   
+    const id = localStorage.getItem("id");
     const [user, setUser] = useState(null);
   const [reload, setReload] = useState(false);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+ 
+   const toggleReload = () => {
+     setReload(!reload);
+   };
     useEffect(() => {
       setIsAllAdminPage(false);
     }, []);
   
+   const handleCropComplete = async (croppedImageBlob) => {
+     console.log("Cropped Image Data:", croppedImageBlob);
+
+     // Create FormData and append the cropped image Blob
+     const formData = new FormData();
+     formData.append(
+        "Image",
+        croppedImageBlob,
+        `${user.username}_${Date.now()}.jpg`
+      );
+
+     // Retrieve the token from local storage
+     const token = localStorage.getItem("authTokens")
+       ? JSON.parse(localStorage.getItem("authTokens"))
+       : null;
+
+     try {
+       // Show loading state
+       setLoading(true);
+
+       // Send PUT request to backend server with FormData
+       const response = await fetch(
+         `${baseurl}/update-image/${userData?.user_id}/`,
+         {
+           method: "PUT",
+           body: formData,
+           headers: {
+             Authorization: `Bearer ${token?.access}`,
+           },
+         }
+       );
+
+       // Parse response
+       const data = await response.json();
+
+       if (response.ok) {
+         console.log("Image uploaded successfully:", data.detail);
+         showNotification("Image uploaded successfully", "success", "Success");
+         toggleimageRefresh();
+         toggleReload();
+         setIsModalOpen(false);
+       } else {
+         console.error("Image upload failed:", data);
+         showNotification("Image upload failed", "error", "Error");
+         setIsModalOpen(false);
+       }
+     } catch (error) {
+       console.error("Error uploading image:", error.message);
+       showNotification(
+         "Error uploading image, please try again.",
+         "error",
+         "Error"
+       );
+       setIsModalOpen(false);
+     } finally {
+       // Stop loading state
+       setLoading(false);
+     }
+   };
     const [studentData, setStudentData] = useState({
       user: {
         username: "",
@@ -124,7 +186,7 @@ const StudentProfileContent = () => {
         : null;
       
       axios
-        .get(`http://127.0.0.1:8000/students/${ShowProfileOfId ? id : userData?.user_id}`, {
+        .get(`${baseurl}/students/${id || userData?.user_id}`, {
           headers: {
             Authorization: `Bearer ${token?.access}`,
           },
@@ -186,7 +248,7 @@ const StudentProfileContent = () => {
           );
           setLoading(false);
         });
-        localStorage.getItem("id") && localStorage.removeItem("id"); 
+       
     }, [userData?.user_id, reload]);
   
     console.log("user ", user);
@@ -200,7 +262,7 @@ const StudentProfileContent = () => {
           ? JSON.parse(localStorage.getItem("authTokens"))
           : null;
         try {
-          const response = await axios.put(`http://127.0.0.1:8000/edit-student-profile/${id || userData?.user_id}/`, studentData,{
+          const response = await axios.put(`${baseurl}/edit-student-profile/${id || userData?.user_id}/`, studentData,{
             headers: {
               Authorization: `Bearer ${token?.access}`,
             },
@@ -247,7 +309,7 @@ const StudentProfileContent = () => {
 
       try {
         const response = await axios.put(
-          `http://127.0.0.1:8000/edit-student-profile/${
+          `${baseurl}/edit-student-profile/${
             id || userData?.user_id
           }/`,
           studentData,
@@ -346,7 +408,9 @@ const StudentProfileContent = () => {
                         aria-valuenow={20}
                         aria-valuemin={0}
                         aria-valuemax={100}
-                        style={{ width: `${calculateStudentProfileCompletion()}%` }}
+                        style={{
+                          width: `${calculateStudentProfileCompletion()}%`,
+                        }}
                       ></div>
                     </div>
                   </div>
@@ -368,20 +432,137 @@ const StudentProfileContent = () => {
                     </div>
 
                     <div className="card-body box-profile">
-                      <div className="text-center">
+                      <div className="text-center position-relative">
                         <img
                           className="profile-user-img img-fluid img-circle"
                           src={
                             user?.Image
-                              ? `http://127.0.0.1:8000/${user?.Image}`
+                              ? `${baseurl}/${user?.Image}`
                               : `../../dist/img/user1-128x128.jpg`
                           }
                           alt="User profile picture"
                         />
+                        {userData?.user_id === user?.id && (
+                          <button
+                          className="btn btn-primary btn-xs elevation-2"
+                          style={{
+                            backgroundColor: "#007bff",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "50%",
+                            cursor: "pointer",
+                            position: "absolute",
+                            top: "0px", // Position at the top
+                            left: "0px", // Position at the left
+                            zIndex: 10, // Ensure it's on top of the image
+                          }}
+                          onClick={() => {
+                            setIsModalOpen(true);
+                          }}
+                        >
+                          <i className="fas fa-pencil-alt"></i>
+                        </button>
+                        ) }
+                        
                       </div>
                       <h3 className="profile-username text-center">
                         {user ? user.full_name || user.username : "User"}
                       </h3>
+                      {isModalOpen && (
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            position: "fixed",
+                            zIndex: 1200,
+                            left: 0,
+                            top: 0,
+                            width: "100%",
+                            height: "100%",
+                            backgroundColor: "rgba(0, 0, 0, 0.3)",
+                          }}
+                        >
+                          <div
+                            style={{
+                              backgroundColor: "#fefefe",
+                              borderRadius: "8px",
+                              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.5)",
+                              maxWidth: "400px",
+                              width: "90%",
+                              position: "relative",
+                              overflow: "hidden",
+                            }}
+                          >
+                            {/* Header Section */}
+                            <div
+                              style={{
+                                backgroundColor: "#333333", // Dark background for header
+                                color: "#fefefe", // Light color for text
+                                padding: "10px 20px",
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                              }}
+                            >
+                              <h2 style={{ margin: 0, fontSize: "1.5rem" }}>
+                                Crop Image
+                              </h2>
+                              <span
+                                style={{
+                                  cursor: "pointer",
+                                  fontSize: "24px",
+                                  lineHeight: "24px",
+                                  color: "#fefefe",
+                                }}
+                                onClick={() => setIsModalOpen(false)}
+                              >
+                                &times; {/* Close button */}
+                              </span>
+                            </div>
+
+                            {/* Image Cropper Component */}
+                            <div
+                              style={{ padding: "20px", textAlign: "center" }}
+                            >
+                              <ImageCropper
+                                imageSrc={
+                                  user?.Image
+                                    ? `http://127.0.0.1:8000/${user?.Image}`
+                                    : `../../dist/img/user1-128x128.jpg`
+                                }
+                                onCropComplete={handleCropComplete}
+                                cropWidth={200}
+                                cropHeight={200}
+                              />
+                            </div>
+
+                            {/* Footer Section */}
+                            <div
+                              style={{
+                                backgroundColor: "#333333",
+                                color: "#333333", // Dark color for text
+                                padding: "10px",
+                                textAlign: "center",
+                              }}
+                            >
+                              <h3
+                                className="profile-username text-center"
+                                style={{
+                                  margin: "10px 0",
+                                  fontSize: "1.2rem",
+                                  color: "#fefefe",
+                                }}
+                              >
+                                {user
+                                  ? user?.full_name || user?.username
+                                  : "User"}
+                              </h3>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
                       <hr
                         style={{
                           border: "1px solid #888888",
@@ -576,10 +757,10 @@ const StudentProfileContent = () => {
                                     {user?.email || "N/A"}
                                   </p>
 
-                                  <strong>Mobile:</strong>
+                                  {/* <strong>Mobile:</strong>
                                   <p className="text-muted font">
                                     {user?.mobile || "N/A"}
-                                  </p>
+                                  </p> */}
 
                                   <strong>LinkedIn:</strong>
                                   <p className="text-muted font">
@@ -1047,7 +1228,7 @@ const StudentProfileContent = () => {
                             </div>
                           </form>
                         </div>
-                        
+
                         <div
                           className="tab-pane"
                           id="updateGraduation"

@@ -5,6 +5,7 @@ import AuthContext from "../../context/AuthContext.js";
 import LoadingSpinner from "../Loading/Loading.js";
 import Notification from "../Notification/Notification.js";
 import { useNavigate } from "react-router-dom";
+import baseurl from "../const.js";
 
 const AllAlumnisContent = () => {
   const [alumniData, setAlumniData] = useState(null); // Changed to hold the entire data object
@@ -27,6 +28,7 @@ const AllAlumnisContent = () => {
     setIsAllStudentPage,
     setIsAllAlumniPage,
     setIsAllAdminPage,
+    reloadFilter,
   } = useContext(AuthContext);
   setFilter(true);
 
@@ -52,7 +54,7 @@ const AllAlumnisContent = () => {
 
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/getalumni/?${queryParams}`,
+        `${baseurl}/getalumni/?${queryParams}`,
         { headers: { Authorization: `Bearer ${token?.access}` } }
       );
       if (response.status === 200) {
@@ -72,7 +74,7 @@ const AllAlumnisContent = () => {
   // Fetch alumni on component mount
   useEffect(() => {
     fetchAlumni(pageNumber, Alumnifilters);
-  }, [pageNumber, Alumnifilters]);
+  }, [pageNumber, reloadFilter]);
 
   useEffect(() => {
     setIsAllStudentPage(false);
@@ -175,7 +177,7 @@ const AllAlumnisContent = () => {
                                 <img
                                   src={
                                     alumnus?.Image
-                                      ? `http://127.0.0.1:8000/${alumnus?.Image}`
+                                      ? `${baseurl}/${alumnus?.Image}`
                                       : `../../dist/img/user1-128x128.jpg`
                                   } // Replace with dynamic image path if needed
                                   alt="user-avatar"
@@ -283,14 +285,17 @@ const AllAlumnisContent = () => {
                                   )}
 
                                 </li>
-                                <li className="small">
+                                {/* <li className="small">
                                   <span className="fa-li">
                                     <i className="fas fa-lg fa-fax mr-1" />
                                   </span>
                                   Mobile No:{" "}
-                                  {alumnus?.mobile ? alumnus.mobile : "N/A"}
-
-                                </li>
+                                  {alumnus.mobile
+                                    ? isValidMobileNumber(alumnus.mobile)
+                                      ? alumnus.mobile
+                                      : "Invalid Mobile Number"
+                                    : "N/A"}
+                                </li> */}
                               </ul>
                             </div>
                           </div>

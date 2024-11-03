@@ -1,7 +1,7 @@
 from django.shortcuts import  get_object_or_404
 from django.shortcuts import get_object_or_404
 from .models import User,AlumniPost,HodPrincipalPost,StudentProfile, AlumniProfile, HODPrincipalProfile 
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -17,6 +17,8 @@ from rest_framework.decorators import api_view
 from .editserialisers import HODPrincipalProfileSerializer, UserSerializer, AlumniProfileSerializer, StudentProfileSerializer,UserImageUploadSerializer
 from django.db.models import Q
 from .allPostSerializers import AlumniGETPostSerializer, HodPrincipalGETPostSerializer
+from .authenticateAlumniSerializers import InactiveAlumniSerializer
+from rest_framework.exceptions import PermissionDenied
 
 class HodPrincipalPostPagination(PageNumberPagination):
     page_size = 10  # Number of posts per page
@@ -467,30 +469,50 @@ def update_alumni_profile(request, pk):
 
 # ^edit image 
 
+# class UserImageUploadView(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def put(self, request, user_id, *args, **kwargs):
+#         user = get_object_or_404(User, id=user_id)
+
+#         serializer = UserImageUploadSerializer(user, data=request.data, partial=True) 
+
+#         if serializer.is_valid():
+#             serializer.save() 
+#             return Response({"detail": "Image updated successfully"}, status=status.HTTP_200_OK)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class UserImageUploadView(APIView):
     permission_classes = [IsAuthenticated]
 
     def put(self, request, user_id, *args, **kwargs):
         user = get_object_or_404(User, id=user_id)
+        
+        # Check if the user already has an image (even if it's default) and delete it
+        if user.Image and user.Image.name != 'default/def.jpeg':  # Ensure we don't delete the default image
+            user.Image.delete(save=False)  # Delete the old image file from storage, but don't save yet
 
-        serializer = UserImageUploadSerializer(user, data=request.data, partial=True) 
+        serializer = UserImageUploadSerializer(user, data=request.data, partial=True)
 
         if serializer.is_valid():
-            serializer.save() 
+            serializer.save()  # This will save the new image to the Image field
             return Response({"detail": "Image updated successfully"}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    
+
+class UserImageRetrieveView(APIView):
+    permission_classes = [AllowAny]
+
     def get(self, request, user_id, *args, **kwargs):
         user = get_object_or_404(User, id=user_id)
-        
-        
+
         if user.Image:
             image_url = request.build_absolute_uri(user.Image.url)
             return Response({"image_url": image_url}, status=status.HTTP_200_OK)
         else:
             return Response({"detail": "User has no image."}, status=status.HTTP_404_NOT_FOUND)
-
+            
 
 class PostListPagination(PageNumberPagination):
     page_size = 10  
@@ -516,3 +538,81 @@ class PostListView(APIView):
         
         return paginator.get_paginated_response(page)
 
+class InactiveAlumniListView(generics.ListAPIView):
+    serializer_class = InactiveAlumniSerializer
+
+    def get_queryset(self):
+        # Check if the request user is a superuser
+        if not self.request.user.is_superuser:
+            raise PermissionDenied("You do not have permission to access this resource.")
+        return User.objects.filter(is_alumni=True, is_active=False)
+
+
+class AlumniActivationAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def check_superuser(self, request):
+        # Check if the user making the request is a superuser
+        if not request.user.is_superuser:
+            raise PermissionDenied("You do not have permission to perform this action.")
+
+    def put(self, request, user_id):
+        self.check_superuser(request)
+        user = get_object_or_404(User, id=user_id)
+
+        # Check if the user is an alumni
+        if not user.is_alumni:
+            return Response({"detail": "User is not an alumni."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Activate the alumni user
+        user.is_active = True
+        user.save()
+
+        return Response({"detail": "Alumni account activated successfully."}, status=status.HTTP_200_OK)
+
+    def delete(self, request, user_id):
+        self.check_superuser(request)
+        user = get_object_or_404(User, id=user_id)
+
+        # Check if the user is an alumni
+        if not user.is_alumni:
+            return Response({"detail": "User is not an alumni."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Delete the alumni user
+        user.delete()
+
+        return Response({"detail": "Alumni account deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+
+class AcceptAllAlumni(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, *args, **kwargs):
+        # Check if the requesting user is a superuser
+        if not request.user.is_superuser:
+            return Response(
+                {"error": "You do not have permission to perform this action."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        
+        try:
+            # Filter for inactive alumni
+            inactive_alumni = User.objects.filter(is_alumni=True, is_active=False)
+
+            # Update is_active status for each matching user
+            updated_count = inactive_alumni.update(is_active=True)
+
+            return Response(
+                {
+                    "message": f"{updated_count} alumni have been activated successfully."
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        except Exception as e:
+            return Response(
+                {
+                    "error": "An error occurred while activating alumni.",
+                    "details": str(e)
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )

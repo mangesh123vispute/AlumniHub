@@ -2,7 +2,8 @@ import { createContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-
+import axios from "axios";
+import baseurl from "../components/const";
 const AuthContext = createContext();
 
 export default AuthContext;
@@ -24,6 +25,11 @@ export const AuthProvider = ({ children }) => {
   const [isForgotPassPageOrActivateAccountPage, setIsForgotPassPageOrActivateAccountPage] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddAdminModalOpen, setIsAddAdminModalOpen] = useState(false);
+  const [numberOfInactiveAlumni, setNumberOfInactiveAlumni] = useState(0);
+  const [imageRefresh, setImageRefresh] = useState(false);
+  const [ProfileImage, setProfileImage] = useState("");
+  const [reloadFilter, setReloadFilter] = useState(false);
+  
    
  const [Alumnifilters, setAlumniFilters] = useState({
    full_name: "",
@@ -60,16 +66,25 @@ export const AuthProvider = ({ children }) => {
     Branch: "", // For filtering by Branch
     designation: "",
   });
-
-
+ 
   const location = useLocation();
+
+  const toggleimageRefresh = () => {
+    setImageRefresh((prev) => !prev);
+  }
   
   const toggleModal = () => {
     setIsModalOpen((prev) => !prev);
   };
    
+  const toggelFilter = () => {  
+    setReloadFilter((prev) => !prev);
+  };
   const toggleAddAdminModal = () => {
     setIsAddAdminModalOpen((prev) => !prev);
+  };
+  const toggleLogin = () => {
+    setLogin((prev) => !prev);
   };
   
   const showNotification = async (msg, iconType, titleText) => {
@@ -96,6 +111,34 @@ export const AuthProvider = ({ children }) => {
       ? jwtDecode(localStorage.getItem("authTokens"))
       : null
   );
+
+   const fetchAlumniData = async () => {
+     setLoading(true);
+     const token = localStorage.getItem("authTokens")
+       ? JSON.parse(localStorage.getItem("authTokens"))
+       : null;
+
+     try {
+       const response = await axios.get(
+         `${baseurl}/inactive-alumni/`,
+         {
+           headers: {
+             Authorization: `Bearer ${token?.access}`,
+           },
+         }
+       );
+
+       if (response.status === 200) {
+        
+         setNumberOfInactiveAlumni(response.data.length); 
+       }
+     } catch (error) {
+       console.error("Error fetching alumni data:", error.message);
+      
+     } finally {
+       setLoading(false);
+     }
+   };
   
   
   //* logout
@@ -109,7 +152,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem("authTokens");
       // alert("Logout successful!");
       await showNotification("Logout successful!", "success", "Success");
-      setLogin(false);
+      toggleLogin();
       navigate("/");
     } catch (error) {
       console.error("An error occurred while logging out:", error);
@@ -117,16 +160,37 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const getImage = async () => {
+    console.log("Fetching profile image...", userData);
+
+    try {
+      if(userData?.user_id ){
+        const response = await axios.get(
+          `${baseurl}/get-image/${userData?.user_id}/`
+        );
+
+        if (response.status === 200) {
+          setProfileImage(response.data["image_url"]);
+        }
+      }
+      
+        
+    } catch (error) {
+        console.log("An error occurred while fetching profile image:", error);
+    }
+};
+
   //* verify access tokens 
   const verifyaccessToken = async () => {
     const token = localStorage.getItem("authTokens") ? JSON.parse(localStorage.getItem("authTokens")) : null;
     try {
       if (!token) {
-      //  navigate("/login")
+        //  navigate("/login")
+        console.log("1.Token not found");
         return -1;
       }
       // Verify access token
-      const response = await fetch("http://127.0.0.1:8000/api/token/verify/", {
+      const response = await fetch(`${baseurl}/api/token/verify/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -141,9 +205,11 @@ export const AuthProvider = ({ children }) => {
         setAuthTokens(null);
         setUser(null);
         // navigate("/login");
+        console.log("2. Access token verification failed");
         return -1;
       }  
       else {
+        console.log("3. Access token verification successful");
         return 1;
       }
     } catch (error) {
@@ -151,6 +217,7 @@ export const AuthProvider = ({ children }) => {
         "An error occurred while verifying access token",
         error
       );
+      console.log("4. Access token verification failed");
       return -1;
     }
   };
@@ -159,29 +226,35 @@ export const AuthProvider = ({ children }) => {
    //* useEffect
   useEffect(() => {
     verifyaccessToken();
+    fetchAlumniData();
     
-       const tokenData = JSON.parse(localStorage.getItem("authTokens")); 
-       if (tokenData && tokenData.access) {
-         const decodedToken = jwtDecode(tokenData.access);     
-         setUserData(decodedToken);
+    const tokenData = JSON.parse(localStorage.getItem("authTokens")); 
+    if (tokenData && tokenData.access) {
+      const decodedToken = jwtDecode(tokenData.access);     
+      setUserData(decodedToken);
     }
-    
   }, []);
 
   useEffect(() => {
-     
-     const tokenData = JSON.parse(localStorage.getItem("authTokens"));
-     if (tokenData && tokenData.access) {
-       const decodedToken = jwtDecode(tokenData.access);
-       setUserData(decodedToken);
-     }
-   }, [Login]);
-  
+    setProfileImage("");
+    const tokenData = JSON.parse(localStorage.getItem("authTokens"));
+    if (tokenData && tokenData.access) {
+      const decodedToken = jwtDecode(tokenData.access);
+      setUserData(decodedToken);
+    }
+    
+  }, [Login]);
+
   useEffect(() => {
     setShowProfileOfId(false);
     setFilterClicked(false);
   
   }, [location]);
+  
+  useEffect(() => {
+         getImage();
+  }, [userData, imageRefresh]);
+  
 
   //* context data and functions
   let contextData = {
@@ -233,6 +306,16 @@ export const AuthProvider = ({ children }) => {
     toggleAddAdminModal,
     isAddAdminModalOpen,
     setIsAddAdminModalOpen,
+    numberOfInactiveAlumni,
+    setNumberOfInactiveAlumni,
+    imageRefresh,
+    setImageRefresh,
+    toggleimageRefresh,
+    ProfileImage,
+    getImage,
+    toggleLogin,
+    toggelFilter,
+    reloadFilter,
   };
 
 

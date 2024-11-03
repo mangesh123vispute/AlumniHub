@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import AuthContext from "../../context/AuthContext.js";
 
 const AdminFilter = () => {
-  let { setHODFilters, hodFilters } = useContext(AuthContext);
+  let { setHODFilters, hodFilters, toggelFilter } = useContext(AuthContext);
 
   const handleChange = (e) => {
     setHODFilters({ ...hodFilters, [e.target.name]: e.target.value });
@@ -10,6 +10,7 @@ const AdminFilter = () => {
 
   const handleReset = () => {
     setHODFilters({});
+  toggelFilter()
   };
 
   const handleFilter = (e) => {
@@ -93,6 +94,17 @@ const AdminFilter = () => {
             border: "1px solid white",
           }}
         ></hr>
+        <button
+          type="submit"
+          className="btn btn-primary mb-2"
+          onClick={toggelFilter}
+          style={{
+            width: "100%",
+          }}
+        >
+          Filter
+        </button>
+
         <button
           type="button"
           className="btn btn-secondary"

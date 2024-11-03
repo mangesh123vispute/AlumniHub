@@ -2,7 +2,8 @@ import React, { useContext, useState } from "react";
 import AuthContext from "../../context/AuthContext.js";
 
 const StudentFilter = () => {
-  let { setStudentFilters, studentFilters } = useContext(AuthContext);
+  let { setStudentFilters, studentFilters, toggelFilter } =
+    useContext(AuthContext);
 
   const handleChange = (e) => {
     setStudentFilters({ ...studentFilters, [e.target.name]: e.target.value });
@@ -10,6 +11,7 @@ const StudentFilter = () => {
 
   const handleReset = () => {
     setStudentFilters({});
+    toggelFilter();
   };
 
   const handleFilter = (e) => {
@@ -170,6 +172,16 @@ const StudentFilter = () => {
             border: "1px solid white",
           }}
         ></hr>
+        <button
+          type="submit"
+          className="btn btn-primary mb-2"
+          onClick={toggelFilter}
+          style={{
+            width: "100%",
+          }}
+        >
+          Filter
+        </button>
         <button
           type="button"
           className="btn btn-secondary"

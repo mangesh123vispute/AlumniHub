@@ -21,6 +21,7 @@
       userData,
       toggleModal,
       toggleAddAdminModal,
+      showNotification,
     } = useContext(AuthContext);
     return (
       <div className="wrapper">
@@ -45,12 +46,12 @@
                 <i className="fas fa-bars" />
               </a>
             </li>
-            <li className="nav-item d-none d-sm-inline-block">
+            {/* <li className="nav-item d-none d-sm-inline-block">
               {" "}
               <Link to="/home2" className="nav-link">
                 Home
               </Link>
-            </li>
+            </li> */}
             {user ? (
               <li className="nav-item d-none d-sm-inline-block">
                 <a
@@ -79,78 +80,23 @@
           </ul>
           {/* Right navbar links */}
           <ul className="navbar-nav ml-auto">
-            {/* Navbar Search */}
-            {/* <li className="nav-item">
-              <a
-                className="nav-link"
-                data-widget="navbar-search"
-                href="#"
-                role="button"
-              >
-                <i className="fas fa-search" />
-              </a>
-              <div className="navbar-search-block">
-                <form className="form-inline">
-                  <div className="input-group input-group-sm">
-                    <input
-                      className="form-control form-control-navbar"
-                      type="search"
-                      placeholder="Search"
-                      aria-label="Search"
-                    />
-                    <div className="input-group-append">
-                      <button className="btn btn-navbar" type="submit">
-                        <i className="fas fa-search" />
-                      </button>
-                      <button
-                        className="btn btn-navbar"
-                        type="button"
-                        data-widget="navbar-search"
-                      >
-                        <i className="fas fa-times" />
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </li> */}
             {/* Messages Dropdown Menu */}
-            {(isAllAdminPage && userData.is_superuser )&& (
-              <li className="nav-item dropdown">
+            {isAllAdminPage && userData.is_superuser && (
+              <li className="nav-item ">
                 <button
-                  className="btn btn-outline-success btn-sm mt-1.5 dropdown-toggle"
+                  className="btn btn-sm btn-default mt-2"
                   type="button"
-                  id="dropdownMenuButton"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
+                  onClick={() => {
+                   showNotification(
+                     "By adding an admin, you are granting them full authority. Please proceed carefully.",
+                     "info",
+                     "Info"
+                   );
+                    toggleAddAdminModal();
+                  }}
                 >
-                  <i className="fas fa-user-plus mr-1" /> Add
+                 <i class="fas fa-user-plus mr-1"></i> Add Admin
                 </button>
-                <div
-                  className="dropdown-menu"
-                  aria-labelledby="dropdownMenuButton"
-                >
-                  <button
-                    className="dropdown-item btn-sm"
-                    type="button"
-                    onClick={() => {
-                      toggleAddAdminModal();
-                    }}
-                  >
-                    Add Admin
-                  </button>
-                  {/* <hr style={{ border: "1px solid black" }} /> */}
-                  {/* <button
-                    className="dropdown-item btn-sm"
-                    type="button"
-                    onClick={() => {
-                      toggleModal();
-                    }}
-                  >
-                    Add Staff
-                  </button> */}
-                </div>
               </li>
             )}
 

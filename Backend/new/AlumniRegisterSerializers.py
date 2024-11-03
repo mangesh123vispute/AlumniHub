@@ -13,7 +13,7 @@ class AlumniRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'graduation_month', 'graduation_year', 'linkedin', 'password', 'document_type', 'document_file']
+        fields = ['full_name','username', 'email', 'graduation_month', 'graduation_year', 'linkedin', 'password', 'document_type', 'document_file']
 
     def create(self, validated_data):
         # Extract document type and file
@@ -22,11 +22,13 @@ class AlumniRegistrationSerializer(serializers.ModelSerializer):
 
         # Create user with is_alumni=True and is_active=False
         user = User.objects.create_user(
+            full_name=validated_data['full_name'],
             username=validated_data['username'],
             email=validated_data['email'],
             graduation_month=validated_data['graduation_month'],
             graduation_year=validated_data['graduation_year'],
             linkedin=validated_data.get('linkedin'),
+            isAlumniDirectRegistration=True,
             is_alumni=True,
             is_active=False
         )

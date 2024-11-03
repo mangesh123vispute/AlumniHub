@@ -5,6 +5,7 @@ import LoadingSpinner from "../Loading/Loading.js";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import Notification from "../Notification/Notification.js";
+import baseurl from "../const.js";
 import { Link } from "react-router-dom";
 
 const Login = () => {
@@ -21,6 +22,7 @@ const Login = () => {
     setUser,
     setLogin,
     setFilter,
+    toggleLogin,
   } = useContext(AuthContext);
 
  setFilter(false);
@@ -52,7 +54,7 @@ const handleSubmit = async (e) => {
   try {
     console.log(formData);
 
-    const response = await fetch("http://127.0.0.1:8000/login/", {
+    const response = await fetch(`${baseurl}/login/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -79,8 +81,8 @@ const handleSubmit = async (e) => {
           })
         );
         await showNotification("Login successful", "success", "Success");
-        setLogin(true);
-        navigate("/home2");
+        toggleLogin();
+        navigate("/myprofile");
       }
     } else {
       console.log("Login failed:", data);
@@ -199,22 +201,40 @@ const handleSubmit = async (e) => {
                 }}
               />
               {/* /.social-auth-links */}
-              <div className="row">
-                <div className="col-3">
+              <div className="row text-center text-md-left">
+                <div className="col-12 col-md-3 mb-2">
                   <Link to="/" style={{ color: "#007bff", fontSize: "0.8em" }}>
                     <i className="fas fa-home"></i> Home
                   </Link>
                 </div>
 
-                <div className="col-5">
-                  <Link
-                    to="/forgot_password"
-                    style={{ color: "#007bff", fontSize: "0.8em" }}
-                  >
-                    <i className="fas fa-lock mr-1"></i> Forgot-Password
-                  </Link>
+                <div className="col-12 col-md-5 mb-2 mr-3">
+                  <div className="dropdown">
+                    <a
+                      href="#"
+                      className="dropdown-toggle"
+                      data-toggle="dropdown"
+                      style={{ color: "#007bff", fontSize: "0.8em" }}
+                    >
+                      <i className="fas fa-user-lock mr-1"></i> Forgot
+                      Credentials
+                    </a>
+                    <div
+                      className="dropdown-menu p-1"
+                      style={{ fontSize: "0.9em", minWidth: "150px" }}
+                    >
+                      <Link to="/forgot_password" className="dropdown-item">
+                        <i className="fas fa-unlock-alt mr-1"></i> Forgot
+                        Password
+                      </Link>
+                      <Link to="/forgot_username" className="dropdown-item">
+                        <i className="fas fa-user mr-1"></i> Forgot Username
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-                <div className="col-3">
+
+                <div className="col-12 col-md-3 mb-2">
                   <Link
                     to="/register"
                     style={{ color: "#007bff", fontSize: "0.8em" }}
@@ -224,13 +244,10 @@ const handleSubmit = async (e) => {
                 </div>
               </div>
             </div>
-            {/* /.login-card-body */}
+            
           </div>
         </div>
-        {/* /.login-box */}
-        {/* jQuery */}
-        {/* Bootstrap 4 */}
-        {/* AdminLTE App */}
+        
       </div>
     </>
   );

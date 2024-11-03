@@ -95,3 +95,6 @@ class ActivationEmailSerializer(serializers.Serializer):
 
 class ForgotPasswordSerializer(serializers.Serializer):
     email = serializers.EmailField()
+
+class ForgotUsernameSerializer(serializers.Serializer):
+    email=serializers.EmailField()
