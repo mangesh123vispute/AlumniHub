@@ -17,9 +17,9 @@ function MemberCard({ name, title, description, imgSrc }) {
           />
         </div>
         <div className="member-info">
-          <h4 className="text-xl font-semibold">{name}</h4>
-          <span className="text-sm text-gray-500">{title}</span>
-          <p className="text-gray-600 mt-3">{description}</p>
+          <h4 className="text-[1.5rem] font-semibold">{name}</h4>
+          <span className="text-[1rem] text-gray-500">{title}</span>
+          <p className="text-gray-600 text-[1rem] mt-3">{description}</p>
         </div>
         
         {/* Vertical Bar for Social Icons */}

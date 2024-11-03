@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { gsap } from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
@@ -8,133 +8,95 @@ import TeamSection from "./TeamSection";
 import ContactSection from "./ContactSection";
 import FooterSection from "./FooterSection";
 import TopAlumni from "./TopAlumni";
-import {HashLink} from "react-router-hash-link";
+import { HashLink } from "react-router-hash-link";
+
 gsap.registerPlugin(ScrollTrigger);
 
 function Landing() {
   const navigate = useNavigate();
   const { userData } = useContext(AuthContext);
-  const textDivRef = useRef(null);
-  const aboutSectionRef1 = useRef(null);
-  const aboutSectionRef2 = useRef(null);
-  const teamSectionRef = useRef(null);
-  const h3Ref = useRef(null);
   const [navOpen, setNavOpen] = useState(false);
   const [bgIndex, setBgIndex] = useState(0);
   const [isLoggedin, setIsLoggedin] = useState(false);
 
   const backgroundImages = [
-    "url('https://www.sscoetjalgaon.ac.in/public/images/slider/snap105.jpg')",
-    "url('https://www.sscoetjalgaon.ac.in/public/images/slider/slide21.jpg')",
-    "url('https://www.sscoetjalgaon.ac.in/public/images/slider/snap1041.jpg')"
+    "https://www.sscoetjalgaon.ac.in/public/images/slider/snap105.jpg",
+    "https://www.sscoetjalgaon.ac.in/public/images/slider/slide21.jpg",
+    "https://www.sscoetjalgaon.ac.in/public/images/slider/snap1041.jpg"
   ];
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setBgIndex((prevIndex) => (prevIndex + 1) % backgroundImages.length);
-    }, 4000);
     localStorage.getItem("authTokens") ? setIsLoggedin(true) : setIsLoggedin(false);
+  }, []);
+
+  // Carousel effect with buttons and auto-slide every 3 seconds
+  const nextSlide = () => setBgIndex((prevIndex) => (prevIndex + 1) % backgroundImages.length);
+  const prevSlide = () => setBgIndex((prevIndex) => (prevIndex - 1 + backgroundImages.length) % backgroundImages.length);
+
+  useEffect(() => {
+    const interval = setInterval(nextSlide, 3000);
     return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const tl = gsap.timeline();
-    tl.fromTo(
-      textDivRef.current,
-      { y: 150, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1.6, ease: "power4.out" }
-    );
-    tl.fromTo(
-      h3Ref.current,
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, ease: "power4.out" },
-      "-=0.8"
-    );
-    return () => tl.kill();
-  }, []);
-
-  useEffect(() => {
-    const aboutSectionAnimation = (ref) => {
-      gsap.fromTo(
-        ref.current,
-        { y: 50, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1.5,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: ref.current,
-            start: "top 75%",
-            end: "bottom 25%",
-            toggleActions: "play none none reverse",
-          },
-        }
-      );
-    };
-
-    aboutSectionAnimation(aboutSectionRef1);
-    aboutSectionAnimation(aboutSectionRef2);
-
-    gsap.fromTo(
-      teamSectionRef.current,
-      { y: 50, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 1.5,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: teamSectionRef.current,
-          start: "top 50%",
-          end: "bottom 25%",
-          toggleActions: "play none none reverse",
-        },
-      }
-    );
   }, []);
 
   return (
     <div>
-      <nav className="bg-yellow-500 text-white w-full fixed top-0 z-50 shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
-          <div className="flex items-center -ml-[5vh] space-x-2">
+      {/* Static Header (does not stick to the top) */}
+      <div className="bg-white text-black flex justify-between mx-5 py-2 text-center text-[1rem] z-10 relative flex-wrap">
+        <img src="https://www.sscoetjalgaon.ac.in/public/images/logo/logo.jpg" className="w-[40%] h-[8vh] md:w-[25%]" alt="Logo" />
+        <div className="flex w-full justify-evenly flex-wrap">
+          <div className="card-1 flex gap-2 items-center">
+            <div className="img-part">
+              <i className="fa fa-phone-square text-[2rem] text-yellow-500" />
+            </div>
+            <div className="written-part mt-2">
+              <h3 className="text-[1rem] text-black">Call us today!</h3>
+              <h3 className="text-[0.9rem] text-black">0257-225 8393/94/95</h3>
+            </div>
+          </div>
+          <div className="card-2 flex gap-2 items-center">
+            <div className="img-part">
+              <i className="fa fa-map-marker text-[2rem] text-yellow-500" />
+            </div>
+            <div className="written-part mt-2">
+              <h3 className="text-[1rem] text-black">Address!</h3>
+              <h3 className="text-[0.9rem] text-black">PO Box 94, Bambhori, Jalgaon(MS)</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Sticky Navbar */}
+      <nav className="bg-yellow-500 border-b-2 border-red-700 text-white w-full sticky top-0 z-50 shadow-lg">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16 flex-wrap">
+          <div className="flex items-center space-x-2">
             <img src="/Logo.jfif" alt="Logo" className="w-10 h-10 rounded-full" />
-            <Link to="/" className=" text-lg md:text-2xl font-bold  hover:text-red-800">
+            <Link to="/" className="text-lg md:text-2xl font-bold hover:text-red-800">
               Alumni Hub |
             </Link>
-            <span className="text-red-800 text-lg">
-                  SSBT COET
-            </span>
+            <span className="text-red-800 text-lg">SSBT COET</span>
           </div>
           <div className="hidden md:flex space-x-6">
-            <HashLink to="/#home" className="text-white text-[1.2rem]  px-2 py-1 rounded-[15px] hover:bg-red-800">
+            <HashLink to="/#home" className="text-white text-[1rem] md:text-[1.2rem] px-2 py-1 rounded-[15px] hover:bg-red-800">
               Home
             </HashLink>
-            <HashLink to="#about" className="text-white text-[1.2rem] px-2 py-1 rounded-[15px] hover:bg-red-800">
+            <HashLink to="#about" className="text-white text-[1rem] md:text-[1.2rem] px-2 py-1 rounded-[15px] hover:bg-red-800">
               About
             </HashLink>
-            <HashLink to="#team" className="text-white text-[1.2rem] px-2 py-1 rounded-[15px] hover:bg-red-800">
+            <HashLink to="#team" className="text-white text-[1rem] md:text-[1.2rem] px-2 py-1 rounded-[15px] hover:bg-red-800">
               Team
             </HashLink>
-            <HashLink to="#contact" className="text-white text-[1.2rem] px-2 py-1 rounded-[15px] hover:bg-red-800">
+            <HashLink to="#contact" className="text-white text-[1rem] md:text-[1.2rem] px-2 py-1 rounded-[15px] hover:bg-red-800">
               Contact
             </HashLink>
           </div>
           <div className="hidden md:flex space-x-2">
             {isLoggedin ? (
-              <Link
-                to="/home2"
-                className="hover:bg-red-900 text-[1.2rem] text-white px-4 py-2 rounded-[15px] "
-              >
+              <Link to="/home2" className="hover:bg-red-900 text-[1rem] md:text-[1.2rem] text-white px-4 py-2 rounded-[15px]">
                 Dashboard
               </Link>
             ) : (
-              <Link
-                to="/register"
-                className="hover:bg-red-900 text-[1.2rem] text-white px-4 py-2 rounded-[15px] "
-              >
-                Register 
+              <Link to="/register" className="hover:bg-red-900 text-[1rem] md:text-[1.2rem] text-white px-4 py-2 rounded-[15px]">
+                Register
               </Link>
             )}
           </div>
@@ -169,49 +131,38 @@ function Landing() {
         )}
       </nav>
 
-      {/* Image Section with Marquee */}
-      <div id="home"
-        className="w-full h-[90vh] flex justify-center items-center pt-16 relative transition-opacity duration-1000"
-        style={{
-          backgroundImage: backgroundImages[bgIndex],
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed",
-          backgroundRepeat: "no-repeat",
-        }}
-      >
+      {/* Carousel Section */}
+      <div id="home" className="relative w-full h-[90vh]">
+        <div
+          className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000"
+          style={{ backgroundImage: `url(${backgroundImages[bgIndex]})` }}
+        ></div>
+        <button onClick={prevSlide} className="absolute left-5 top-1/2 transform -translate-y-1/2 text-white bg-black bg-opacity-50 rounded-full p-3">
+          &#10094;
+        </button>
+        <button onClick={nextSlide} className="absolute right-5 top-1/2 transform -translate-y-1/2 text-white bg-black bg-opacity-50 rounded-full p-3">
+          &#10095;
+        </button>
         <div className="absolute -bottom-[9vh] z-10 w-full bg-yellow-500 py-3 text-center text-white">
-          <div className="animate-marquee text-[1.2rem] whitespace-nowrap">
+          <div className="animate-marquee text-[1rem] md:text-[1.2rem] whitespace-nowrap">
             Welcome to Alumni Hub! Join us in celebrating achievements and connections.
           </div>
         </div>
       </div>
-      
-      <div ref={aboutSectionRef1} className=" mx-5 text-[1.2rem] flex justify-center items-center px-4">
-        <AboutSection
-          title="Our Inspiration"
-          secondTitle="Hon. Sau. Pratibhatai Patil"
-          desc="I am deeply committed to the cause of education and would like to see every person, man and woman, boy and girl, be touched by the light of modern education."
-          imgSrc="https://www.sscoetjalgaon.ac.in/public/images/management/pratibhatai-patil.jpg"
-        />
-      </div>
-      
-      <div ref={aboutSectionRef2} className="mx-5  text-[1.2rem] -mt-3 flex justify-center items-center px-4">
-        <AboutSection 
-          title="Our Objective"
-          secondTitle="Our Vision"
-          desc="To create an environment that nurtures the growth of our students in all dimensions, leading to their all-round development."
-          imgSrc="https://www.sscoetjalgaon.ac.in/public/images/home-page/undergraduate1.jpg"
-        />
-      </div>
-      <div id="topalumini">
-      <TopAlumni/>
-      </div>
-      <div ref={teamSectionRef}>
+
+      {/* About and Other Sections */}
+      <div className="mx-5 text-[1rem] md:text-[1.2rem] flex justify-center items-center flex-wrap mt-5">
+        <AboutSection />
         <TeamSection />
+        <ContactSection />
       </div>
 
-      <ContactSection />
+      {/* Top Alumni Section */}
+      <div id="team" className="py-10 bg-gray-100">
+        <TopAlumni />
+      </div>
+
+      {/* Footer Section */}
       <FooterSection />
     </div>
   );
