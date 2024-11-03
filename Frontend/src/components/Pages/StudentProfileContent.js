@@ -6,31 +6,21 @@ import baseurl from "../const.js";
 import ImageCropper from "../../components/ImageCropper/ImageCropper";
 
 
-const StudentProfileContent = ({userIdd}) => {
+const StudentProfileContent = () => {
     let {
       userData,
       showNotification,
       setLoading,
-      ShowProfileOfId,
       setIsAllAdminPage,
       toggleimageRefresh,
     } = useContext(AuthContext);
     console.log("userData", userData);
-    console.log("user id ",userIdd);
-    const id = localStorage.getItem("id")
-      ? JSON.parse(localStorage.getItem("id"))
-      : null;
+   
+    const id = localStorage.getItem("id");
     const [user, setUser] = useState(null);
   const [reload, setReload] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isImageOpen, setIsImageOpen] = useState(false);
-  const [Image, setImage] = useState(null);
-  const [load, setload] = useState(false);
-
-   const handleCloseModal = () => {
-     setIsImageOpen(false);
-   };
-
+ 
    const toggleReload = () => {
      setReload(!reload);
    };
@@ -196,7 +186,7 @@ const StudentProfileContent = ({userIdd}) => {
         : null;
       
       axios
-        .get(`${baseurl}/students/${ShowProfileOfId ? id : userData?.user_id}`, {
+        .get(`${baseurl}/students/${id || userData?.user_id}`, {
           headers: {
             Authorization: `Bearer ${token?.access}`,
           },
@@ -258,7 +248,7 @@ const StudentProfileContent = ({userIdd}) => {
           );
           setLoading(false);
         });
-        localStorage.getItem("id") && localStorage.removeItem("id"); 
+       
     }, [userData?.user_id, reload]);
   
     console.log("user ", user);

@@ -2,27 +2,21 @@ import React, {
   useContext,
   useState,
   useEffect,
-  useRef,
-  useCallback,
 } from "react";
 import "./profile.css";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext.js";
 import baseurl from "../const.js";
 import ImageCropper from "../../components/ImageCropper/ImageCropper";
-const SuperUserProfileContent = ({userIdd}) => {
+const SuperUserProfileContent = () => {
   let {
     userData,
     setLoading,
     showNotification,
-    ShowProfileOfId,
     toggleimageRefresh,
   } = useContext(AuthContext);
   console.log("userData", userData);
-  console.log("userId ",userIdd);
-  const id = localStorage.getItem("id")
-    ? JSON.parse(localStorage.getItem("id"))
-    : null;
+  const id = localStorage.getItem("id");
   const [user, setUser] = useState(null);
   const [reload, setReload] = useState(false);
   const [posts, setPosts] = useState([]); // Store posts
@@ -34,7 +28,6 @@ const SuperUserProfileContent = ({userIdd}) => {
  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isImageOpen, setIsImageOpen] = useState(false);
   const [Image, setImage] = useState(null);
-  const [load, setload] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = (postId) => {
@@ -195,7 +188,7 @@ const SuperUserProfileContent = ({userIdd}) => {
       : null;
 
     axios
-      .get(`${baseurl}/hods/${ShowProfileOfId ? id : userData?.user_id}`, {
+      .get(`${baseurl}/hods/${id || userData?.user_id}`, {
         headers: {
           Authorization: `Bearer ${token?.access}`,
         },
@@ -246,7 +239,7 @@ const SuperUserProfileContent = ({userIdd}) => {
     localStorage.getItem("id") && localStorage.removeItem("id");
   }, [userData?.user_id, reload]);
 
-  console.log("user ", user);
+ 
 
   const handleSubmit = async (e) => {
     setLoading(true);
