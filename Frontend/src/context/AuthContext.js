@@ -28,6 +28,7 @@ export const AuthProvider = ({ children }) => {
   const [numberOfInactiveAlumni, setNumberOfInactiveAlumni] = useState(0);
   const [imageRefresh, setImageRefresh] = useState(false);
   const [ProfileImage, setProfileImage] = useState("");
+  const [reloadFilter, setReloadFilter] = useState(false);
   
    
  const [Alumnifilters, setAlumniFilters] = useState({
@@ -76,6 +77,9 @@ export const AuthProvider = ({ children }) => {
     setIsModalOpen((prev) => !prev);
   };
    
+  const toggelFilter = () => {  
+    setReloadFilter((prev) => !prev);
+  };
   const toggleAddAdminModal = () => {
     setIsAddAdminModalOpen((prev) => !prev);
   };
@@ -310,6 +314,8 @@ export const AuthProvider = ({ children }) => {
     ProfileImage,
     getImage,
     toggleLogin,
+    toggelFilter,
+    reloadFilter,
   };
 
 

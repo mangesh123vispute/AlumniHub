@@ -28,6 +28,7 @@ const AllAlumnisContent = () => {
     setIsAllStudentPage,
     setIsAllAlumniPage,
     setIsAllAdminPage,
+    reloadFilter,
   } = useContext(AuthContext);
   setFilter(true);
   
@@ -93,7 +94,7 @@ const AllAlumnisContent = () => {
   // Fetch alumni on component mount
   useEffect(() => {
     fetchAlumni(pageNumber, Alumnifilters);
-  }, [pageNumber, Alumnifilters]);
+  }, [pageNumber, reloadFilter]);
 
   useEffect(() => {
     setIsAllStudentPage(false);
