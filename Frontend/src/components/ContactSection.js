@@ -12,10 +12,12 @@ const ContactSection = () => {
         <div className="flex flex-wrap justify-center lg:justify-between">
           {/* Contact Info */}
           <div className="w-full lg:w-1/2 px-4 mb-8 lg:mb-0">
-            <h3 className="text-2xl text-gray-700 text-center lg:text-left">
+            <h3 className="text-2xl text-gray-700 text-center lg:text-left mb-2">
               Welcome To <span className="text-yellow-500">SSBT's</span> College of Engineering & Technology
             </h3>
-            <p className="text-gray-600 text-base text-center lg:text-left border-b-2 border-red-800 mb-6">EXCELLENCE IN EDUCATION</p>
+            <p className="text-gray-600 text-base text-center lg:text-left border-b-2 border-red-800 mb-6">
+              EXCELLENCE IN EDUCATION
+            </p>
             
             <div className="flex flex-wrap -mx-4">
               {/* Contact Details */}
