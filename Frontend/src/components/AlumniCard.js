@@ -13,7 +13,7 @@ const AlumniCard = ({ name, text1, text2, img, linkedIn, facebook, twitter, inst
 
     {/* Info Section */}
     <div className="member-info p-4 flex flex-col items-center">
-      <h4 className="text-xl sm:text-2xl font-semibold">{name}</h4>       
+      <h4 className="text-[1rem] sm:text-2xl font-semibold">{name}</h4>       
       <span className="text-gray-500 text-sm font-bold text-center mt-1">
         {text1}
       </span>
