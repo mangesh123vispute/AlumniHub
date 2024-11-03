@@ -31,33 +31,13 @@ const AllAlumnisContent = () => {
     reloadFilter,
   } = useContext(AuthContext);
   setFilter(true);
-  
-  setIsAllStudentPage(false);
-  const isValidGitHubUrl = (url) => {
-    const githubUrlPattern =
-      /^(https?:\/\/)?(www\.)?github\.com\/[A-Za-z0-9_-]+\/?$/;
-    return githubUrlPattern.test(url);
-  };
 
-  const isValidLinkedInUrl = (url) => {
-    const linkedinUrlPattern =
-      /^(https?:\/\/)?(www\.)?linkedin\.com\/in\/[A-Za-z0-9_-]+\/?$/;
-    return linkedinUrlPattern.test(url);
-  };
-  const isValidMobileNumber = (number) => {
-    // This regex checks for numbers with 10 digits, with optional country code
-    const mobileNumberPattern = /^(\+\d{1,3}[- ]?)?\d{10}$/;
-    return mobileNumberPattern.test(number);
-  };
-  const isValidEmail = (email) => {
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return emailPattern.test(email);
-  };
+  setIsAllStudentPage(false);
 
   const handleViewProfile = (userData) => {
-     setShowProfileOfId(true);
-     navigate("/profile", { state: userData });
-   };
+    setShowProfileOfId(true);
+    navigate("/profile", { state: userData });
+  };
 
   const fetchAlumni = async (pageNumber, Alumnifilters) => {
     setLoading(true);
@@ -89,7 +69,7 @@ const AllAlumnisContent = () => {
     }
   };
 
-  
+
 
   // Fetch alumni on component mount
   useEffect(() => {
@@ -171,8 +151,8 @@ const AllAlumnisContent = () => {
                                   {alumnus?.alumni_profile?.Heading
                                     ? alumnus.alumni_profile.Heading
                                     : alumnus?.alumni_profile?.job_title
-                                    ? alumnus.alumni_profile.job_title
-                                    : "N/A"}
+                                      ? alumnus.alumni_profile.job_title
+                                      : "N/A"}
                                 </p>
 
                                 <ul className="ml-4 mb-0 fa-ul text-muted">
@@ -222,7 +202,7 @@ const AllAlumnisContent = () => {
                                     <i className="fas fa-lg fa-folder mr-1" />
                                   </span>
                                   Portfolio:{" "}
-                                  {alumnus?.portfolio_link ? (
+                                  {!alumnus?.portfolio_link == 'N/A' ? (
                                     <a
                                       href={alumnus.portfolio_link}
                                       target="_blank"
@@ -239,7 +219,7 @@ const AllAlumnisContent = () => {
                                     <i className="fas fa-lg fa-file-alt mr-1" />
                                   </span>
                                   Resume:{" "}
-                                  {alumnus?.resume_link ? (
+                                  {!alumnus?.resume_link == 'N/A' ? (
                                     <a
                                       href={alumnus.resume_link}
                                       target="_blank"
@@ -271,71 +251,39 @@ const AllAlumnisContent = () => {
                                     <i className="fas fa-lg fa-envelope mr-1" />
                                   </span>
                                   Email:{" "}
-                                  {alumnus.email ? (
-                                    isValidEmail(alumnus.email) ? (
-                                      <a href={`mailto:${alumnus.email}`}>
-                                        {alumnus.email}
-                                      </a>
-                                    ) : (
-                                      "Invalid Email"
-                                    )
+                                  {alumnus?.email && alumnus.email !== 'N/A' ? (
+                                    <a href={`mailto:${alumnus.email}`}>{alumnus.email}</a>
                                   ) : (
                                     "N/A"
                                   )}
+
                                 </li>
                                 <li className="small mt-1">
                                   <span className="fa-li">
                                     <i className="fab fa-lg fa-github mr-1" />
                                   </span>
                                   GitHub:{" "}
-                                  <a
-                                    href={alumnus.Github}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    {alumnus.Github ? (
-                                      isValidGitHubUrl(alumnus.Github) ? (
-                                        <a
-                                          href={alumnus.Github}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                        >
-                                          {alumnus.Github}
-                                        </a>
-                                      ) : (
-                                        "Invalid URL"
-                                      )
-                                    ) : (
-                                      "N/A"
-                                    )}
-                                  </a>
+                                  {alumnus?.Github && alumnus.Github !== "N/A" ? (
+                                    <a href={alumnus.Github} target="_blank" rel="noopener noreferrer">
+                                      Click
+                                    </a>
+                                  ) : (
+                                    "N/A"
+                                  )}
                                 </li>
                                 <li className="small mt-1">
                                   <span className="fa-li">
                                     <i className="fab fa-lg fa-linkedin mr-1" />
                                   </span>
                                   LinkedIn:{" "}
-                                  <a
-                                    href={alumnus.linkedin}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    {alumnus.linkedin ? (
-                                      isValidLinkedInUrl(alumnus.linkedin) ? (
-                                        <a
-                                          href={alumnus.linkedin}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                        >
-                                          {alumnus.linkedin}
-                                        </a>
-                                      ) : (
-                                        "Invalid URL"
-                                      )
-                                    ) : (
-                                      "N/A"
-                                    )}
-                                  </a>
+                                  {alumnus?.linkedin && alumnus.linkedin !== "N/A" ? (
+                                    <a href={alumnus.linkedin} target="_blank" rel="noopener noreferrer">
+                                      {alumnus.linkedin}
+                                    </a>
+                                  ) : (
+                                    "N/A"
+                                  )}
+
                                 </li>
                                 {/* <li className="small">
                                   <span className="fa-li">
@@ -379,9 +327,8 @@ const AllAlumnisContent = () => {
                   className={`page-item ${pageNumber === 1 ? "disabled" : ""}`}
                 >
                   <button
-                    className={`page-link ${
-                      pageNumber === 1 ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                    className={`page-link ${pageNumber === 1 ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                     onClick={() => setPageNumber(pageNumber - 1)}
                     disabled={pageNumber === 1}
                   >
@@ -401,16 +348,14 @@ const AllAlumnisContent = () => {
 
                 {/* Next button */}
                 <li
-                  className={`page-item ${
-                    pageNumber === totalPages ? "disabled" : ""
-                  }`}
+                  className={`page-item ${pageNumber === totalPages ? "disabled" : ""
+                    }`}
                 >
                   <button
-                    className={`page-link ${
-                      pageNumber === totalPages
-                        ? "opacity-50 cursor-not-allowed"
-                        : ""
-                    }`}
+                    className={`page-link ${pageNumber === totalPages
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                      }`}
                     onClick={() => setPageNumber(pageNumber + 1)}
                     disabled={pageNumber === totalPages}
                   >
