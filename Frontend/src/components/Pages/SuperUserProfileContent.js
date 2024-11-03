@@ -2,8 +2,6 @@ import React, {
   useContext,
   useState,
   useEffect,
-  useRef,
-  useCallback,
 } from "react";
 import "./profile.css";
 import axios from "axios";
@@ -15,13 +13,10 @@ const SuperUserProfileContent = () => {
     userData,
     setLoading,
     showNotification,
-    ShowProfileOfId,
     toggleimageRefresh,
   } = useContext(AuthContext);
   console.log("userData", userData);
-  const id = localStorage.getItem("id")
-    ? JSON.parse(localStorage.getItem("id"))
-    : null;
+  const id = localStorage.getItem("id");
   const [user, setUser] = useState(null);
   const [reload, setReload] = useState(false);
   const [posts, setPosts] = useState([]); // Store posts
@@ -33,7 +28,6 @@ const SuperUserProfileContent = () => {
  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isImageOpen, setIsImageOpen] = useState(false);
   const [Image, setImage] = useState(null);
-  const [load, setload] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = (postId) => {
@@ -194,7 +188,7 @@ const SuperUserProfileContent = () => {
       : null;
 
     axios
-      .get(`${baseurl}/hods/${ShowProfileOfId ? id : userData?.user_id}`, {
+      .get(`${baseurl}/hods/${id || userData?.user_id}`, {
         headers: {
           Authorization: `Bearer ${token?.access}`,
         },
@@ -245,7 +239,7 @@ const SuperUserProfileContent = () => {
     localStorage.getItem("id") && localStorage.removeItem("id");
   }, [userData?.user_id, reload]);
 
-  console.log("user ", user);
+ 
 
   const handleSubmit = async (e) => {
     setLoading(true);
@@ -523,25 +517,27 @@ const SuperUserProfileContent = () => {
                         }
                         alt="User profile picture"
                       />
-                      <button
-                        className="btn btn-primary btn-xs elevation-2"
-                        style={{
-                          backgroundColor: "#007bff",
-                          color: "white",
-                          border: "none",
-                          borderRadius: "50%",
-                          cursor: "pointer",
-                          position: "absolute",
-                          top: "0px", // Position at the top
-                          left: "0px", // Position at the left
-                          zIndex: 10, // Ensure it's on top of the image
-                        }}
-                        onClick={() => {
-                          setIsModalOpen(true);
-                        }}
-                      >
-                        <i className="fas fa-pencil-alt"></i>
-                      </button>
+                      {userData?.user_id === user?.id && (
+                        <button
+                          className="btn btn-primary btn-xs elevation-2"
+                          style={{
+                            backgroundColor: "#007bff",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "50%",
+                            cursor: "pointer",
+                            position: "absolute",
+                            top: "0px", // Position at the top
+                            left: "0px", // Position at the left
+                            zIndex: 10, // Ensure it's on top of the image
+                          }}
+                          onClick={() => {
+                            setIsModalOpen(true);
+                          }}
+                        >
+                          <i className="fas fa-pencil-alt"></i>
+                        </button>
+                      )}
                     </div>
                     <h3 className="profile-username text-center">
                       {user ? user?.full_name || user?.username : "User"}
@@ -610,7 +606,6 @@ const SuperUserProfileContent = () => {
                               onCropComplete={handleCropComplete}
                               cropWidth={200}
                               cropHeight={200}
-                              
                             />
                           </div>
 
@@ -1133,7 +1128,7 @@ const SuperUserProfileContent = () => {
                                       </div>
                                     )}
                                   </div>
-                                  <div className="col-auto">
+                                { post?.DocUrl && <div className="col-auto">
                                     <a
                                       href={post?.DocUrl || "#"}
                                       target="_blank"
@@ -1143,8 +1138,9 @@ const SuperUserProfileContent = () => {
                                       <i className="fas fa-file-alt mr-1" />{" "}
                                       Document
                                     </a>
-                                  </div>
-                                  <div className="col-auto">
+                                  </div>}
+
+                                { post?.link && <div className="col-auto">
                                     <a
                                       href={post?.link || "#"}
                                       target="_blank"
@@ -1153,7 +1149,7 @@ const SuperUserProfileContent = () => {
                                     >
                                       <i className="fas fa-link mr-1" /> Link
                                     </a>
-                                  </div>
+                                  </div>}
                                 </div>
                               </div>
                             ))}
@@ -1239,11 +1235,11 @@ const SuperUserProfileContent = () => {
                                   {user?.email || "N/A"}
                                 </p>
 
-                                <strong>Mobile:</strong>
+                                {/* <strong>Mobile:</strong>
                                 <p className="text-muted font">
                                   {" "}
                                   {user?.mobile || "N/A"}
-                                </p>
+                                </p> */}
 
                                 <strong>LinkedIn:</strong>
                                 <p className="text-muted font">

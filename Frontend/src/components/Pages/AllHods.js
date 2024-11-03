@@ -30,6 +30,7 @@ const AllAlumnisContent = () => {
     toggleAddAdminModal,
     isAddAdminModalOpen,
     userData,
+    reloadFilter,
   } = useContext(AuthContext);
 
 const [pageNumber, setPageNumber] = useState(1);
@@ -175,7 +176,7 @@ const [totalPages, setTotalPages] = useState(1);
   // Fetch alumni on component mount
   useEffect(() => {
     fetchAdmins(pageNumber);
-  }, [pageNumber, hodFilters, reload]);
+  }, [pageNumber, reloadFilter, reload]);
 
   useEffect(() => {
     setIsAllAdminPage(true);

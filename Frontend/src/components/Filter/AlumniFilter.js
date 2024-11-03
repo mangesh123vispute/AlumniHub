@@ -2,7 +2,8 @@ import React, { useContext, useState } from "react";
 import AuthContext from "../../context/AuthContext.js";
 
 const AlumniFilter = () => {
-  let { setAlumniFilters, Alumnifilters } = useContext(AuthContext);
+  let { setAlumniFilters, Alumnifilters, toggelFilter } =
+    useContext(AuthContext);
   const handleChange = (e) => {
     setAlumniFilters({ ...Alumnifilters, [e.target.name]: e.target.value });
   };
@@ -10,6 +11,7 @@ const AlumniFilter = () => {
   const handleReset = () => {
     // Reset the Alumnifilters to an empty object or default values
     setAlumniFilters({});
+    toggelFilter();
   };
 
   const handleFilter = (e) => {
@@ -272,6 +274,17 @@ const AlumniFilter = () => {
             border: "1px solid white",
           }}
         ></hr>
+        <button
+          type="submit"
+          className="btn btn-primary mb-2"
+          onClick={toggelFilter}
+          style={{
+            width: "100%",
+          }}
+        >
+          Filter
+        </button>
+        
         <button
           type="button"
           className="btn btn-secondary"

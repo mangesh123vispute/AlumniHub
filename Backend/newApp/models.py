@@ -44,7 +44,7 @@ class User(AbstractUser):
     portfolio_link=models.CharField(max_length=500,blank=True,default="N/A")
     resume_link=models.CharField(max_length=500,blank=True,default="N/A")
     skills = models.TextField(blank=True,default="N/A") 
-
+    isAlumniDirectRegistration=models.BooleanField(default=False)
     graduation_month = models.IntegerField(
         blank=True,  # Allow blank for superuser in the validation
         null=True,   # Allow null for superuser in the validation
@@ -103,7 +103,12 @@ class User(AbstractUser):
         if not self.username:
             self.username = self.generate_unique_username()
 
-        send_activation = (not self.is_active and not self.is_superuser and not self.is_alumni) and not self.pk
+        send_activation = (
+             (self.is_student and not self.is_active) 
+            ) or (
+              (self.is_alumni and not self.isAlumniDirectRegistration and not self.is_active) 
+                )   
+
         
         if send_activation:
             self.send_activation_email()

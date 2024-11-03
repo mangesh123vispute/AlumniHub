@@ -11,25 +11,16 @@ const StudentProfileContent = () => {
       userData,
       showNotification,
       setLoading,
-      ShowProfileOfId,
       setIsAllAdminPage,
       toggleimageRefresh,
     } = useContext(AuthContext);
     console.log("userData", userData);
-    const id = localStorage.getItem("id")
-      ? JSON.parse(localStorage.getItem("id"))
-      : null;
+   
+    const id = localStorage.getItem("id");
     const [user, setUser] = useState(null);
   const [reload, setReload] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isImageOpen, setIsImageOpen] = useState(false);
-  const [Image, setImage] = useState(null);
-  const [load, setload] = useState(false);
-
-   const handleCloseModal = () => {
-     setIsImageOpen(false);
-   };
-
+ 
    const toggleReload = () => {
      setReload(!reload);
    };
@@ -195,7 +186,7 @@ const StudentProfileContent = () => {
         : null;
       
       axios
-        .get(`${baseurl}/students/${ShowProfileOfId ? id : userData?.user_id}`, {
+        .get(`${baseurl}/students/${id || userData?.user_id}`, {
           headers: {
             Authorization: `Bearer ${token?.access}`,
           },
@@ -257,7 +248,7 @@ const StudentProfileContent = () => {
           );
           setLoading(false);
         });
-        localStorage.getItem("id") && localStorage.removeItem("id"); 
+       
     }, [userData?.user_id, reload]);
   
     console.log("user ", user);
@@ -451,7 +442,8 @@ const StudentProfileContent = () => {
                           }
                           alt="User profile picture"
                         />
-                        <button
+                        {userData?.user_id === user?.id && (
+                          <button
                           className="btn btn-primary btn-xs elevation-2"
                           style={{
                             backgroundColor: "#007bff",
@@ -470,6 +462,8 @@ const StudentProfileContent = () => {
                         >
                           <i className="fas fa-pencil-alt"></i>
                         </button>
+                        ) }
+                        
                       </div>
                       <h3 className="profile-username text-center">
                         {user ? user.full_name || user.username : "User"}
@@ -763,10 +757,10 @@ const StudentProfileContent = () => {
                                     {user?.email || "N/A"}
                                   </p>
 
-                                  <strong>Mobile:</strong>
+                                  {/* <strong>Mobile:</strong>
                                   <p className="text-muted font">
                                     {user?.mobile || "N/A"}
-                                  </p>
+                                  </p> */}
 
                                   <strong>LinkedIn:</strong>
                                   <p className="text-muted font">

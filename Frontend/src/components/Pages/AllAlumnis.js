@@ -28,6 +28,7 @@ const AllAlumnisContent = () => {
     setIsAllStudentPage,
     setIsAllAlumniPage,
     setIsAllAdminPage,
+    reloadFilter,
   } = useContext(AuthContext);
   setFilter(true);
   
@@ -93,7 +94,7 @@ const AllAlumnisContent = () => {
   // Fetch alumni on component mount
   useEffect(() => {
     fetchAlumni(pageNumber, Alumnifilters);
-  }, [pageNumber, Alumnifilters]);
+  }, [pageNumber, reloadFilter]);
 
   useEffect(() => {
     setIsAllStudentPage(false);
@@ -336,7 +337,7 @@ const AllAlumnisContent = () => {
                                     )}
                                   </a>
                                 </li>
-                                <li className="small">
+                                {/* <li className="small">
                                   <span className="fa-li">
                                     <i className="fas fa-lg fa-fax mr-1" />
                                   </span>
@@ -346,7 +347,7 @@ const AllAlumnisContent = () => {
                                       ? alumnus.mobile
                                       : "Invalid Mobile Number"
                                     : "N/A"}
-                                </li>
+                                </li> */}
                               </ul>
                             </div>
                           </div>

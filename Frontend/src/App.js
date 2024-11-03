@@ -53,10 +53,10 @@ function App() {
           />
           <Route path="/home" element={<ProtectedRoute element={<Home />} />} />
           <Route path="/requests" element={<ProtectedRoute element={<Requests />} />} />
-          <Route
+          {/* <Route
             path="/home2"
             element={<ProtectedRoute element={<Home2 />} />}
-          />
+          /> */}
           <Route
             path="/profile"
             element={<ProtectedRoute element={<Profile />} />}
