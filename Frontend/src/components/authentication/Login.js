@@ -82,7 +82,7 @@ const handleSubmit = async (e) => {
         );
         await showNotification("Login successful", "success", "Success");
         toggleLogin();
-        navigate("/home2");
+        navigate("/myprofile");
       }
     } else {
       console.log("Login failed:", data);

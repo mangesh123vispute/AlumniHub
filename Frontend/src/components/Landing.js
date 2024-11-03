@@ -121,7 +121,7 @@ function Landing() {
           <div className="hidden md:flex space-x-2">
             {isLoggedin ? (
               <Link
-                to="/home2"
+                to="/myprofile"
                 className="bg-red-900 text-white px-4 py-2 rounded "
               >
                 Dashboard

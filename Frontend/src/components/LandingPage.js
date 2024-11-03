@@ -65,7 +65,7 @@ const navigate = useNavigate();
           }}
         >
           <NavLink
-            to="/home2"
+            to="/myprofile"
             className="text-white me-3 p-2 font-weight-bold"
             activeClassName="underline"
           >

@@ -46,12 +46,12 @@
                 <i className="fas fa-bars" />
               </a>
             </li>
-            <li className="nav-item d-none d-sm-inline-block">
+            {/* <li className="nav-item d-none d-sm-inline-block">
               {" "}
               <Link to="/home2" className="nav-link">
                 Home
               </Link>
-            </li>
+            </li> */}
             {user ? (
               <li className="nav-item d-none d-sm-inline-block">
                 <a
