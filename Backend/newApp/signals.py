@@ -6,7 +6,7 @@ from .models import User, AlumniProfile, StudentProfile, HODPrincipalProfile
 def create_user_profile(sender, instance, created, **kwargs):
     # Do not create a profile if the user is a staff member
     if created and not instance.is_staff:
-        print("Creating user profile", instance.is_student, instance.is_alumni)
+        print("Creating user profile", instance.is_student, instance.is_alumni, instance.is_superuser)
         
         if instance.is_student:
             if not hasattr(instance, 'studentprofile'):

@@ -228,7 +228,7 @@ const SuperUserProfileContent = () => {
         }
       })
       .catch((error) => {
-        console.error("Error fetching Admin data:", error);
+        console.error("Error fetching Admin data:", error.response.data);
         setLoading(false);
         showNotification(
           "Error fetching Admin data, please try again.",

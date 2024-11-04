@@ -283,7 +283,6 @@ class GETHODs(APIView):
             if hod_id:
                 # If 'pk' is provided, return a specific HOD
                 hod_user = get_object_or_404(User, id=hod_id, hodprincipalprofile__isnull=False)
-
                 # Check if the HOD profile exists, if not create a new profile
                 if not hasattr(hod_user, 'hodprincipalprofile'):
                     HODPrincipalProfile.objects.create(user=hod_user)
