@@ -61,6 +61,79 @@ const handleCloseModal = () => {
   setIsImageOpen(false);
 };
 
+  const handleGradSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const token = localStorage.getItem("authTokens")
+      ? JSON.parse(localStorage.getItem("authTokens"))
+      : null;
+
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1; // getMonth() is zero-based
+    if (
+      alumniData?.user?.graduation_year === "" ||
+      alumniData?.user?.graduation_month === ""
+    ) {
+      showNotification(
+        "Please enter graduation year and month.",
+        "warning",
+        "Warning"
+      );
+      setLoading(false);
+      return;
+    }
+    const gradYear = parseInt(alumniData?.user?.graduation_year);
+    const gradMonth = parseInt(alumniData?.user?.graduation_month);
+    
+    try {
+      if (!isNaN(gradYear) && !isNaN(gradMonth)) {
+      const response = await axios.post(
+        `${baseurl}/update-alumni-profile/${id || userData?.user_id}/`,
+        {graduation_year: gradYear, graduation_month: gradMonth},
+        {
+          headers: {
+            Authorization: `Bearer ${token?.access}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setLoading(false);
+        setReload(!reload);
+
+        // Check graduation year and month logic
+        if (
+          gradYear > currentYear ||
+          (gradYear === currentYear && gradMonth >= currentMonth)
+        ) {
+          showNotification(
+            "You are assigned with a Student profile.",
+            "success",
+            "Profile Updated to Student"
+          );
+          localStorage.removeItem("authTokens");
+        } else {
+          showNotification(
+            "You are assigned with the Alumni profile.",
+            "success",
+            "Profile Updated to Alumni"
+          );
+          localStorage.removeItem("authTokens");
+        }
+        }
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error.message);
+      showNotification(
+        "Error updating profile, please try again.",
+        "error",
+        "Error"
+      );
+      setLoading(false);
+    }
+  };
   const handleCropComplete = async (croppedImageBlob) => {
     console.log("Cropped Image Data:", croppedImageBlob);
 
@@ -137,6 +210,7 @@ setIsDropdownOpen(null);  // Open the modal
       Work: "",
       Year_Joined: "",
       graduation_year: "",
+      graduation_month: "",
       Branch: "",
       email: "",
       mobile: "",
@@ -155,6 +229,7 @@ setIsDropdownOpen(null);  // Open the modal
         Work: user?.Work,
         Year_Joined: user?.Year_Joined,
         graduation_year: user?.graduation_year,
+        graduation_month: user?.graduation_month,
         Branch: user?.Branch,
         email: user?.email,
         mobile: user?.mobile,
@@ -275,6 +350,7 @@ setIsDropdownOpen(null);  // Open the modal
               Work: response.data.Work,
               Year_Joined: response.data.Year_Joined,
               graduation_year: response.data.graduation_year,
+              graduation_month: response.data.graduation_month,
               Branch: response.data.Branch,
               email: response.data.email,
               mobile: response.data.mobile,
@@ -293,6 +369,7 @@ setIsDropdownOpen(null);  // Open the modal
                 Work: response.data.Work,
                 Year_Joined: response.data.Year_Joined,
                 graduation_year: response.data.graduation_year,
+                graduation_month: response.data.graduation_month,
                 Branch: response.data.Branch,
                 email: response.data.email,
                 mobile: response.data.mobile,
@@ -461,7 +538,7 @@ setIsDropdownOpen(null);  // Open the modal
   
     if (!selectedPost?.title || !selectedPost?.content || !selectedPost?.tag ) {
       showNotification(
-        "Please fill in all fields and upload an image.",
+        "Please fill in all fields !",
         "warning",
         "Missing fields"
       );
@@ -505,6 +582,7 @@ setIsDropdownOpen(null);  // Open the modal
       })
       .catch((error) => {
         console.error("Error during update:", error);
+        // alert("Error during update:", error.response?.data?.detail);
         showNotification(
           error.response?.data?.detail || "Error updating the post.",
           "warning",
@@ -612,26 +690,25 @@ setIsDropdownOpen(null);  // Open the modal
                       />
                       {userData?.user_id === user?.id && (
                         <button
-                        className="btn btn-primary btn-xs elevation-2"
-                        style={{
-                          backgroundColor: "#007bff",
-                          color: "white",
-                          border: "none",
-                          borderRadius: "50%",
-                          cursor: "pointer",
-                          position: "absolute",
-                          top: "10px", // Position at the top
-                          left: "10px", // Position at the left
-                          zIndex: 10, // Ensure it's on top of the image
-                        }}
-                        onClick={() => {
-                          setIsModalOpen(true);
-                        }}
-                      >
-                        <i className="fas fa-pencil-alt"></i>
-                      </button>
-                      )
-                      }
+                          className="btn btn-primary btn-xs elevation-2"
+                          style={{
+                            backgroundColor: "#007bff",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "50%",
+                            cursor: "pointer",
+                            position: "absolute",
+                            top: "10px", // Position at the top
+                            left: "10px", // Position at the left
+                            zIndex: 10, // Ensure it's on top of the image
+                          }}
+                          onClick={() => {
+                            setIsModalOpen(true);
+                          }}
+                        >
+                          <i className="fas fa-pencil-alt"></i>
+                        </button>
+                      )}
                     </div>
                     <h3 className="profile-username text-center ">
                       {user ? user.full_name || user.username : "User"}
@@ -898,7 +975,7 @@ setIsDropdownOpen(null);  // Open the modal
                           href="#timeline"
                           data-toggle="tab"
                         >
-                          Contacts
+                          <i className="fas fa-address-book mr-1"></i> Contacts
                         </a>
                       </li>
                       <li className="nav-item ">
@@ -907,7 +984,7 @@ setIsDropdownOpen(null);  // Open the modal
                           href="#activity"
                           data-toggle="tab"
                         >
-                          Posts
+                          <i className="fas fa-file-alt mr-1"></i> Posts
                         </a>
                       </li>
 
@@ -918,7 +995,8 @@ setIsDropdownOpen(null);  // Open the modal
                             href="#settings"
                             data-toggle="tab"
                           >
-                            Edit Profile
+                            <i className="fas fa-user-edit mr-1"></i> Edit
+                            Profile
                           </a>
                         </li>
                       )}
@@ -928,8 +1006,16 @@ setIsDropdownOpen(null);  // Open the modal
                             className="nav-link"
                             href="#editGradDate"
                             data-toggle="tab"
+                            onClick={() => {
+                              showNotification(
+                                "Your profile will change based on your graduation date. If it’s the same or after today, you’ll be a Student. If it’s before today, you’ll be an Alumni.",
+                                "info",
+                                "Graduation Details"
+                              );
+                            }}
                           >
-                            Update Graduation Date
+                            <i className="fas fa-calendar-alt mr-1"></i>{" "}
+                            Graduation Details
                           </a>
                         </li>
                       )}
@@ -982,18 +1068,19 @@ setIsDropdownOpen(null);  // Open the modal
                                   </span>
 
                                   <span className="description">
-                                    Created at -{" "}
                                     {formatDate(post?.created_at) || "Date"}
                                     <br></br>
-                                    <span
-                                      className="badge bg-success"
-                                      style={{
-                                        fontSize: "0.8em",
-                                        padding: "0.5em",
-                                      }}
-                                    >
+                                    <span>
                                       {" "}
-                                      {post?.tag || "Tag"}
+                                      <b
+                                        style={{
+                                          color: "Green",
+                                          textTransform: "capitalize",
+                                        }}
+                                      >
+                                        {" "}
+                                        {post?.tag || "Tag"}
+                                      </b>
                                     </span>
                                   </span>
                                 </div>
@@ -1002,9 +1089,13 @@ setIsDropdownOpen(null);  // Open the modal
                                 {userData?.user_id === user?.id && (
                                   <div className="dropdown">
                                     <button
-                                      className="btn btn-link dropdown-toggle"
+                                      className="btn btn-link"
                                       type="button"
                                       onClick={() => toggleDropdown(post?.id)}
+                                      style={{
+                                        padding: "0", // Remove default padding
+                                        fontSize: "0.8em", // Reduced font size
+                                      }}
                                     >
                                       <i
                                         className="fas fa-ellipsis-v"
@@ -1019,15 +1110,18 @@ setIsDropdownOpen(null);  // Open the modal
                                         <span
                                           onClick={() => handleEditClick(post)}
                                           className="dropdown-item"
+                                          style={{ fontSize: "0.8em" }}
                                         >
-                                          Edit
+                                          <i className="fas fa-edit"></i> Edit
                                         </span>
                                         <span
                                           onClick={() =>
                                             handleDeleteClick(post)
                                           }
+                                          style={{ fontSize: "0.8em" }}
                                           className="dropdown-item"
                                         >
+                                          <i className="fas fa-trash"></i>{" "}
                                           Delete
                                         </span>
                                       </div>
@@ -1039,7 +1133,13 @@ setIsDropdownOpen(null);  // Open the modal
                                 {isEditModalOpen && (
                                   <div className="modal">
                                     <div className="modal-content">
-                                      <div className="modal-header">
+                                      <div
+                                        className="modal-header"
+                                        style={{
+                                          backgroundColor: "#007bff",
+                                          color: "white",
+                                        }}
+                                      >
                                         <h3 className="modal-title">
                                           Edit Post
                                         </h3>
@@ -1097,77 +1197,78 @@ setIsDropdownOpen(null);  // Open the modal
                                               }
                                             />
                                           </div>
-                                          <div>
+                                          <div className="form-group">
                                             <label>Previous Image</label>
-                                          </div>
-                                          <div className="col-auto">
-                                            <a
-                                              href="#"
-                                              onClick={(e) => {
-                                                e.preventDefault();
-                                                handleImageClick();
-                                              }}
-                                              className="mr-3"
-                                            >
-                                              <i className="fas fa-image mr-1" />{" "}
-                                              Image
-                                            </a>
-
-                                            {isImageOpen && (
-                                              <div
-                                                style={{
-                                                  position: "fixed",
-                                                  top: 0,
-                                                  left: 0,
-                                                  width: "100%",
-                                                  height: "100%",
-                                                  backgroundColor: "tranparent",
-                                                  display: "flex",
-                                                  justifyContent: "center",
-                                                  alignItems: "center",
-                                                  zIndex: 1050,
+                                            <div className="col-auto">
+                                              <a
+                                                href="#"
+                                                onClick={(e) => {
+                                                  e.preventDefault();
+                                                  handleImageClick();
                                                 }}
-                                                onClick={handleCloseModal}
+                                                className="mr-3"
                                               >
+                                                <i className="fas fa-image mr-1" />{" "}
+                                                Image
+                                              </a>
+
+                                              {isImageOpen && (
                                                 <div
                                                   style={{
-                                                    position: "relative",
-                                                    maxWidth: "100%",
-                                                    maxHeight: "100%",
+                                                    position: "fixed",
+                                                    top: 0,
+                                                    left: 0,
+                                                    width: "100%",
+                                                    height: "100%",
+                                                    backgroundColor:
+                                                      "tranparent",
                                                     display: "flex",
                                                     justifyContent: "center",
                                                     alignItems: "center",
+                                                    zIndex: 1050,
                                                   }}
+                                                  onClick={handleCloseModal}
                                                 >
-                                                  <img
-                                                    src={selectedPost?.Image}
-                                                    alt="Post"
+                                                  <div
                                                     style={{
-                                                      // maxWidth: "100%",
-                                                      // maxHeight: "100%",
-                                                      width: "100%",
-                                                      height: "auto",
-                                                      borderRadius: "5px",
-                                                      boxShadow:
-                                                        "0 4px 12px rgba(0, 0, 0, 0.3)",
+                                                      position: "relative",
+                                                      maxWidth: "100%",
+                                                      maxHeight: "100%",
+                                                      display: "flex",
+                                                      justifyContent: "center",
+                                                      alignItems: "center",
                                                     }}
-                                                  />
-                                                  <span
-                                                    style={{
-                                                      position: "absolute",
-                                                      top: "10px",
-                                                      right: "10px",
-                                                      fontSize: "1.5em",
-                                                      color: "#fff",
-                                                      cursor: "pointer",
-                                                    }}
-                                                    onClick={handleCloseModal}
                                                   >
-                                                    &times;
-                                                  </span>
+                                                    <img
+                                                      src={selectedPost?.Image}
+                                                      alt="Post"
+                                                      style={{
+                                                        // maxWidth: "100%",
+                                                        // maxHeight: "100%",
+                                                        width: "100%",
+                                                        height: "auto",
+                                                        borderRadius: "5px",
+                                                        boxShadow:
+                                                          "0 4px 12px rgba(0, 0, 0, 0.3)",
+                                                      }}
+                                                    />
+                                                    <span
+                                                      style={{
+                                                        position: "absolute",
+                                                        top: "10px",
+                                                        right: "10px",
+                                                        fontSize: "1.5em",
+                                                        color: "#fff",
+                                                        cursor: "pointer",
+                                                      }}
+                                                      onClick={handleCloseModal}
+                                                    >
+                                                      &times;
+                                                    </span>
+                                                  </div>
                                                 </div>
-                                              </div>
-                                            )}
+                                              )}
+                                            </div>
                                           </div>
                                           <div className="form-group">
                                             <label>Image Upload </label>
@@ -1222,6 +1323,12 @@ setIsDropdownOpen(null);  // Open the modal
                                   style={{
                                     marginTop: "0.5em",
                                     marginBottom: "0.5em",
+                                    whiteSpace: "pre-wrap",
+                                    wordWrap: "break-word",
+                                    hyphens: "auto",
+                                    overflowWrap: "break-word",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
                                   }}
                                 >
                                   {post?.content || "Content"}
@@ -1238,7 +1345,8 @@ setIsDropdownOpen(null);  // Open the modal
                                         Image
                                       </a>
                                     </div> */}
-                                  <div className="col-auto">
+
+                                  <div className="col-auto mt-3">
                                     <a
                                       href="#"
                                       onClick={(e) => {
@@ -1306,28 +1414,32 @@ setIsDropdownOpen(null);  // Open the modal
                                       </div>
                                     )}
                                   </div>
-                                { post?.DocUrl && <div className="col-auto">
-                                    <a
-                                      href={post?.DocUrl || "#"}
-                                      target="_blank"
-                                      rel="noreferrer"
-                                      className="mr-3"
-                                    >
-                                      <i className="fas fa-file-alt mr-1" />{" "}
-                                      Document
-                                    </a>
-                                  </div>}
+                                  {post?.DocUrl && (
+                                    <div className="col-auto mt-3">
+                                      <a
+                                        href={post?.DocUrl || "#"}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="mr-3"
+                                      >
+                                        <i className="fas fa-file-alt mr-1" />{" "}
+                                        Document
+                                      </a>
+                                    </div>
+                                  )}
 
-                                { post?.link && <div className="col-auto">
-                                    <a
-                                      href={post?.link || "#"}
-                                      target="_blank"
-                                      rel="noreferrer"
-                                      className="mr-3"
-                                    >
-                                      <i className="fas fa-link mr-1" /> Link
-                                    </a>
-                                  </div>}
+                                  {post?.link && (
+                                    <div className="col-auto mt-3">
+                                      <a
+                                        href={post?.link || "#"}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="mr-3"
+                                      >
+                                        <i className="fas fa-link mr-1" /> Link
+                                      </a>
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                             ))}
@@ -2122,7 +2234,7 @@ setIsDropdownOpen(null);  // Open the modal
                         className="tab-pane"
                         id="editGradDate"
                         style={{
-                          maxHeight: "131vh",
+                          maxHeight: "117vh",
                           overflowY: "auto", // Enable vertical scrolling
                           overflowX: "hidden", // Prevent horizontal scrolling
                           padding: "15px", // Optional: add padding if needed
@@ -2131,12 +2243,31 @@ setIsDropdownOpen(null);  // Open the modal
                       >
                         <form
                           className="form-horizontal"
-                          onSubmit={handleSubmit}
+                          onSubmit={handleGradSubmit}
                         >
+                          { console.log("alumniData::",alumniData)}
                           <p className="editheading" style={{ marginTop: "0" }}>
-                            Modify Graduation Details
+                            Update Graduation Details
                           </p>
+                          <span style={{ color: "red" }}>
+                            <i>
+                              Please double-check your graduation year and
+                              month. Providing accurate information ensures that
+                              your alumni profile is correctly represented,
+                              allowing fellow alumni and students to connect
+                              with you and enabling accurate referral
+                              opportunities.
+                            </i>
+                          </span>
+                          <hr
+                            style={{
+                              border: "1px solid black",
+                              marginBottom: "1.5em",
+                              marginTop: "1.5em",
+                            }}
+                          ></hr>
                           <div className="form-group row">
+                           
                             <label
                               htmlFor="inputFullName"
                               className="col-sm-2 col-form-label"
@@ -2148,12 +2279,13 @@ setIsDropdownOpen(null);  // Open the modal
                                 type="number"
                                 className="form-control"
                                 id="month"
-                                name="month"
-                                value={alumniData?.user?.full_name}
+                                name="graduation_month"
+                                value={alumniData?.user?.graduation_month}
                                 onChange={handleUserChange}
                                 placeholder="Graduation Month"
                                 max={12}
                                 min={1}
+                                style={{ width: "25%" }}
                               />
                             </div>
                           </div>
@@ -2170,12 +2302,13 @@ setIsDropdownOpen(null);  // Open the modal
                                 type="number"
                                 className="form-control"
                                 id="year"
-                                name="year"
-                                value={alumniData?.profile?.Education}
-                                onChange={handleProfileChange}
+                                name="graduation_year"
+                                value={alumniData?.user?.graduation_year}
+                                onChange={handleUserChange}
                                 placeholder="Graduation Year"
                                 max={2100}
                                 min={1983}
+                                style={{ width: "25%" }}
                               />
                             </div>
                           </div>

@@ -444,26 +444,25 @@ const StudentProfileContent = () => {
                         />
                         {userData?.user_id === user?.id && (
                           <button
-                          className="btn btn-primary btn-xs elevation-2"
-                          style={{
-                            backgroundColor: "#007bff",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "50%",
-                            cursor: "pointer",
-                            position: "absolute",
-                            top: "0px", // Position at the top
-                            left: "0px", // Position at the left
-                            zIndex: 10, // Ensure it's on top of the image
-                          }}
-                          onClick={() => {
-                            setIsModalOpen(true);
-                          }}
-                        >
-                          <i className="fas fa-pencil-alt"></i>
-                        </button>
-                        ) }
-                        
+                            className="btn btn-primary btn-xs elevation-2"
+                            style={{
+                              backgroundColor: "#007bff",
+                              color: "white",
+                              border: "none",
+                              borderRadius: "50%",
+                              cursor: "pointer",
+                              position: "absolute",
+                              top: "0px", // Position at the top
+                              left: "0px", // Position at the left
+                              zIndex: 10, // Ensure it's on top of the image
+                            }}
+                            onClick={() => {
+                              setIsModalOpen(true);
+                            }}
+                          >
+                            <i className="fas fa-pencil-alt"></i>
+                          </button>
+                        )}
                       </div>
                       <h3 className="profile-username text-center">
                         {user ? user.full_name || user.username : "User"}
@@ -700,6 +699,7 @@ const StudentProfileContent = () => {
                             href="#contacts"
                             data-toggle="tab"
                           >
+                            <i className="fas fa-address-book mr-1"></i>{" "}
                             Contacts
                           </a>
                         </li>
@@ -710,12 +710,13 @@ const StudentProfileContent = () => {
                               href="#edit"
                               data-toggle="tab"
                             >
-                              Edit Profile
+                              <i className="fas fa-user-edit mr-1"></i> Edit
+                              Profile
                             </a>
                           </li>
                         )}
 
-                        {userData?.user_id === user?.id && (
+                        {/* {userData?.user_id === user?.id && (
                           <li className="nav-item">
                             <a
                               className="nav-link"
@@ -732,7 +733,7 @@ const StudentProfileContent = () => {
                               Graduation Details
                             </a>
                           </li>
-                        )}
+                        )} */}
                       </ul>
                     </div>
                     {/* /.card-header */}

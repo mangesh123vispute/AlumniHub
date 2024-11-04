@@ -450,6 +450,19 @@ class AlumniRegistrationView(APIView):
         serializer = AlumniRegistrationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            subject = "AlumniHub Registration Successful"
+            message = (
+                "Registration successful. Your account will be verified by the college authority. "
+                "After verification, you will receive an email, and then you can log in."
+            )
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                [email],
+                fail_silently=False,
+            )
+
             return Response({"detail": "Registration successful. Your account will be verified by college authority. After verification, you will receive an email, and then you can log in.."}, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

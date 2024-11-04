@@ -89,7 +89,7 @@ function Landing() {
     </div>
     <div className="hidden md:flex space-x-2">
       {isLoggedin ? (
-        <Link to="/home2" className="hover:bg-red-900 text-[1.2rem] text-white px-4 py-2 rounded-[15px]">
+        <Link to="/myprofile" className="hover:bg-red-900 text-[1.2rem] text-white px-4 py-2 rounded-[15px]">
           Dashboard
         </Link>
       ) : (

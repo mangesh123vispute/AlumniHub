@@ -25,7 +25,7 @@ const Home = ({ DynamicContent, url, heading = "Dashboard" }) => {
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
                     
-                    <a href="/myprofile">Home</a>
+                    <a href="/">Home</a>
                   </li>
                   <li className="breadcrumb-item active">
                     {url ? url : "Home"}

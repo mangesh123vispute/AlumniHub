@@ -30,6 +30,7 @@ const AllAlumnisContent = () => {
     toggleAddAdminModal,
     isAddAdminModalOpen,
     userData,
+    setIsAllPostPage,
     reloadFilter,
   } = useContext(AuthContext);
 
@@ -182,6 +183,7 @@ const [totalPages, setTotalPages] = useState(1);
     setIsAllAdminPage(true);
     setIsAllStudentPage(false);
     setIsAllAlumniPage(false);
+    setIsAllPostPage(false);
     setFilter(true);
   }, []);
 

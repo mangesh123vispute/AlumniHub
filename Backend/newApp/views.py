@@ -19,6 +19,9 @@ from django.db.models import Q
 from .allPostSerializers import AlumniGETPostSerializer, HodPrincipalGETPostSerializer
 from .authenticateAlumniSerializers import InactiveAlumniSerializer
 from rest_framework.exceptions import PermissionDenied
+from django.core.mail import send_mail
+from django.conf import settings
+from .updateAlumniProfileSerializers import ProfileUpdateSerializer
 
 class HodPrincipalPostPagination(PageNumberPagination):
     page_size = 10  # Number of posts per page
@@ -519,24 +522,84 @@ class PostListPagination(PageNumberPagination):
     page_size_query_param = 'page_size' 
     max_page_size = 100 
 
+# class PostListView(APIView):
+#     pagination_class = PostListPagination
+
+#     def get(self, request, *args, **kwargs):
+#         alumni_posts = AlumniPost.objects.all()
+#         hod_posts = HodPrincipalPost.objects.all()
+
+#         alumni_serializer = AlumniGETPostSerializer(alumni_posts, many=True)
+#         hod_serializer = HodPrincipalGETPostSerializer(hod_posts, many=True)
+
+#         # Combine the posts and paginate
+#         combined_posts = alumni_serializer.data + hod_serializer.data
+        
+#         # Paginate combined posts
+#         paginator = self.pagination_class()
+#         page = paginator.paginate_queryset(combined_posts, request)
+        
+#         return paginator.get_paginated_response(page)
+
 class PostListView(APIView):
     pagination_class = PostListPagination
 
     def get(self, request, *args, **kwargs):
-        alumni_posts = AlumniPost.objects.all()
-        hod_posts = HodPrincipalPost.objects.all()
+        # Base query for AlumniPost and HodPrincipalPost
+        alumni_posts = AlumniPost.objects.filter(author__is_alumni=True)
+        hod_posts = HodPrincipalPost.objects.filter(author__is_superuser=True)
 
+        # Filtering parameters
+        filters = {
+            'author__full_name__icontains': request.query_params.get('full_name', None),
+            'created_at__gte': request.query_params.get('created_at_min', None),
+            'created_at__lte': request.query_params.get('created_at_max', None),
+            'tag__icontains': request.query_params.get('tag', None),
+            'title__icontains': request.query_params.get('title', None),
+        }
+        
+       
+        if request.query_params.get('is_alumni') is not None:
+            filters['author__is_alumni'] = request.query_params.get('is_alumni').lower() == 'true'
+
+        if request.query_params.get('is_superuser') is not None:
+            filters['author__is_superuser'] = request.query_params.get('is_superuser').lower() == 'true'
+
+        
+        filters = {key: value for key, value in filters.items() if value is not None}
+
+        # Apply filters to alumni and hod posts
+        alumni_posts = alumni_posts.filter(**filters)
+        hod_posts = hod_posts.filter(**filters)
+
+        # Multi-field search (OR condition)
+        search_query = request.query_params.get('search', None)
+        if search_query:
+            alumni_posts = alumni_posts.filter(
+                Q(author__full_name__icontains=search_query) |
+                Q(tag__icontains=search_query) |
+                Q(title__icontains=search_query) |
+                Q(content__icontains=search_query)
+            )
+            hod_posts = hod_posts.filter(
+                Q(author__full_name__icontains=search_query) |
+                Q(tag__icontains=search_query) |
+                Q(title__icontains=search_query) |
+                Q(content__icontains=search_query)
+            )
+
+        # Serialize the filtered posts
         alumni_serializer = AlumniGETPostSerializer(alumni_posts, many=True)
         hod_serializer = HodPrincipalGETPostSerializer(hod_posts, many=True)
 
         # Combine the posts and paginate
         combined_posts = alumni_serializer.data + hod_serializer.data
-        
-        # Paginate combined posts
         paginator = self.pagination_class()
         page = paginator.paginate_queryset(combined_posts, request)
-        
+
+        # Return paginated response
         return paginator.get_paginated_response(page)
+        
 
 class InactiveAlumniListView(generics.ListAPIView):
     serializer_class = InactiveAlumniSerializer
@@ -556,6 +619,22 @@ class AlumniActivationAPIView(APIView):
         if not request.user.is_superuser:
             raise PermissionDenied("You do not have permission to perform this action.")
 
+    def send_activation_email(self, user):
+        subject = "Your Alumni Account Has Been Activated !"
+        message = "Hello {},\n\nYour alumni account has been successfully activated ,You can now Login to AlumniHub ! ".format(user.get_full_name())
+        from_email = settings.EMAIL_HOST_USER
+        recipient_list = [user.email]
+
+        send_mail(subject, message, from_email, recipient_list)
+
+    def send_deletion_email(self, user):
+        subject = "Your Alumni Account Has Been Deleted"
+        message = "Hello {},\n\nWe regret to inform you that your alumni account has been successfully deleted. If you have any questions or concerns, please feel free to reach out to us.".format(user.get_full_name())
+        from_email = settings.EMAIL_HOST_USER
+        recipient_list = [user.email]
+
+        send_mail(subject, message, from_email, recipient_list)
+
     def put(self, request, user_id):
         self.check_superuser(request)
         user = get_object_or_404(User, id=user_id)
@@ -567,7 +646,7 @@ class AlumniActivationAPIView(APIView):
         # Activate the alumni user
         user.is_active = True
         user.save()
-
+        self.send_activation_email(user)
         return Response({"detail": "Alumni account activated successfully."}, status=status.HTTP_200_OK)
 
     def delete(self, request, user_id):
@@ -577,14 +656,33 @@ class AlumniActivationAPIView(APIView):
         # Check if the user is an alumni
         if not user.is_alumni:
             return Response({"detail": "User is not an alumni."}, status=status.HTTP_400_BAD_REQUEST)
-
+        
         # Delete the alumni user
         user.delete()
+        self.send_deletion_email(user)
 
         return Response({"detail": "Alumni account deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
 
+
 class AcceptAllAlumni(APIView):
     permission_classes = [IsAuthenticated]
+
+    def send_activation_email(self, user):
+        subject = "Your Alumni Account Has Been Activated!"
+        message = "Hello {},\n\nYour alumni account has been successfully activated. You can now log in to AlumniHub!".format(user.get_full_name())
+        from_email = settings.EMAIL_HOST_USER
+        recipient_list = [user.email]
+        print("I am gettting called")
+
+        send_mail(subject, message, from_email, recipient_list)
+
+    def send_deletion_email(self, user):
+        subject = "Your Alumni Account Has Been Deleted"
+        message = "Hello {},\n\nWe regret to inform you that your alumni account has been successfully deleted. If you have any questions or concerns, please feel free to reach out to us.".format(user.get_full_name())
+        from_email = settings.EMAIL_HOST_USER
+        recipient_list = [user.email]
+
+        send_mail(subject, message, from_email, recipient_list)
 
     def put(self, request, *args, **kwargs):
         # Check if the requesting user is a superuser
@@ -593,13 +691,19 @@ class AcceptAllAlumni(APIView):
                 {"error": "You do not have permission to perform this action."},
                 status=status.HTTP_403_FORBIDDEN,
             )
-        
+
         try:
             # Filter for inactive alumni
             inactive_alumni = User.objects.filter(is_alumni=True, is_active=False)
 
-            # Update is_active status for each matching user
+            # Update is_active status for each matching user and collect activated users
             updated_count = inactive_alumni.update(is_active=True)
+            activated_users = inactive_alumni.values_list('id', flat=True)  # Get the IDs of activated users
+
+            # Send activation emails to all activated users
+            for user_id in activated_users:
+                user = User.objects.get(id=user_id)
+                self.send_activation_email(user)
 
             return Response(
                 {
@@ -615,4 +719,29 @@ class AcceptAllAlumni(APIView):
                     "details": str(e)
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )          
+
+class UpdateAlumniProfileView(APIView):
+    def post(self, request, user_id):
+        # Retrieve the user based on user_id
+        user = get_object_or_404(User, id=user_id)
+        
+        # Check if the user is an alumni
+        if not user.is_alumni:
+            return Response(
+                {"error": "User is not an alumni."},
+                status=status.HTTP_400_BAD_REQUEST
             )
+
+        # Deserialize and validate input data
+        serializer = ProfileUpdateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        # Update the profile based on graduation date
+        graduation_date = serializer.validated_data.get('graduation_date')
+        updated_user = serializer.update_profile(user, graduation_date)
+
+        return Response(
+            {"message": "Profile updated successfully.", "user": updated_user.id},
+            status=status.HTTP_200_OK
+        )

@@ -3,8 +3,16 @@ import StudentFilter from "../Filter/StudentFilter";
 import AlumniFilter from "../Filter/AlumniFilter";
 import AdminFilter from "../Filter/AdminFilter";
 import AuthContext from "../../context/AuthContext.js";
+import AllPostFilter from "../Filter/AllPostFilter";
 const Footer = () => {
-  let { userData, isAllStudentPage,isAllAdminPage,isAllAlumniPage, filterClicked } = useContext(AuthContext);
+  let {
+    userData,
+    isAllStudentPage,
+    isAllAdminPage,
+    isAllAlumniPage,
+    filterClicked,
+    isAllPostPage,
+  } = useContext(AuthContext);
   return (
     <>
       <footer
@@ -33,15 +41,17 @@ const Footer = () => {
         </div>
       </footer>
       {/* Control Sidebar */}
-      {filterClicked ? ( <aside
-        className="control-sidebar control-sidebar-dark"
-        style={{ borderRadius: "10px" }}
-      >
-        {isAllStudentPage && <StudentFilter />}
-        {isAllAlumniPage && <AlumniFilter />}
-        {isAllAdminPage && <AdminFilter />}
-      </aside>): null}
-     
+      {filterClicked ? (
+        <aside
+          className="control-sidebar control-sidebar-dark"
+          style={{ borderRadius: "10px" }}
+        >
+          {isAllStudentPage && <StudentFilter />}
+          {isAllAlumniPage && <AlumniFilter />}
+          {isAllAdminPage && <AdminFilter />}
+          {isAllPostPage && <AllPostFilter />}
+        </aside>
+      ) : null}
     </>
   );
 };

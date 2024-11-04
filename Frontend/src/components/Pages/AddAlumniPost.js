@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Home from "../Dashboard/Home";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
@@ -28,9 +28,20 @@ const AddAlumniPostContent = () => {
     title,
     handleClose,
     showNotification,
+    setIsAllStudentPage,
+    setIsAllAdminPage,
+    setIsAllAlumniPage,
+    setIsAllPostPage,
+    setFilter,
   } = useContext(AuthContext);
 
- 
+   useEffect(() => {
+     setIsAllStudentPage(false);
+     setIsAllAdminPage(false);
+     setIsAllAlumniPage(false);
+     setFilter(false);
+     setIsAllPostPage(false);
+   }, []);
   // Handle form submission (upload post details)
   const handleSubmit = async (e) => {
     setLoading(true);
@@ -39,7 +50,7 @@ const AddAlumniPostContent = () => {
       return;
     }
 
-    if (!Title || !content || !tag || !Image) {
+    if (!Title || !content || !tag ) {
       showNotification(
         "Please fill in all fields and upload an image.",
         "warning",
@@ -54,7 +65,7 @@ const AddAlumniPostContent = () => {
   formData.append("title", Title);
   formData.append("content", content);
   formData.append("tag", tag);
-  formData.append("Image", Image); // Assuming `Image` is the file object
+  if (Image) formData.append("Image", Image);
   formData.append("DocUrl", docUrl);
 
    await axios
@@ -118,15 +129,6 @@ const AddAlumniPostContent = () => {
                   />
                 </div>
                 <div className="form-group">
-                  <label>Content</label>
-                  <textarea
-                    className="form-control"
-                    placeholder="Enter content"
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                  />
-                </div>
-                <div className="form-group">
                   <label>Tag</label>
                   <input
                     type="text"
@@ -137,36 +139,42 @@ const AddAlumniPostContent = () => {
                   />
                 </div>
                 <div className="form-group">
-                  <label>Image Upload (required)</label>
-                  <div className="input-group">
-                  <input
-                    type="file"
+                  <label>Content</label>
+                  <textarea
                     className="form-control"
-                    
-                    onChange={(e)=>setImage(e.target.files[0])}
-                    required
+                    placeholder="Enter content"
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
                   />
-                   
+                </div>
+
+                <div className="form-group">
+                  <label>Image Upload</label>
+                  <div className="input-group">
+                    <input
+                      type="file"
+                      className="form-control"
+                      onChange={(e) => setImage(e.target.files[0])}
+                      
+                    />
                   </div>
-                 
                 </div>
                 <div className="form-group">
                   <label>Document Upload</label>
                   <div className="input-group">
-                  <input
-                    type="url"
-                    className="form-control"
-                    placeholder="Enter document URL"
-                    value={docUrl}
-                    onChange={(e) => setDocUrl(e.target.value)}
-                  />
+                    <input
+                      type="url"
+                      className="form-control"
+                      placeholder="Enter document URL"
+                      value={docUrl}
+                      onChange={(e) => setDocUrl(e.target.value)}
+                    />
                   </div>
-                 
                 </div>
               </div>
               <div className="card-footer">
                 <button type="submit" className="btn btn-primary">
-                  Submit 
+                  Submit
                 </button>
               </div>
             </form>

@@ -29,6 +29,7 @@ const AllAlumnisContent = () => {
     setIsAllAlumniPage,
     setIsAllAdminPage,
     reloadFilter,
+    setIsAllPostPage,
   } = useContext(AuthContext);
   setFilter(true);
 
@@ -80,6 +81,8 @@ const AllAlumnisContent = () => {
     setIsAllStudentPage(false);
     setIsAllAdminPage(false);
     setIsAllAlumniPage(true);
+    setFilter(true);
+    setIsAllPostPage(false);
   }, []);
 
   console.log("Als=umni data ", alumniData);
@@ -151,8 +154,8 @@ const AllAlumnisContent = () => {
                                   {alumnus?.alumni_profile?.Heading
                                     ? alumnus.alumni_profile.Heading
                                     : alumnus?.alumni_profile?.job_title
-                                      ? alumnus.alumni_profile.job_title
-                                      : "N/A"}
+                                    ? alumnus.alumni_profile.job_title
+                                    : "N/A"}
                                 </p>
 
                                 <ul className="ml-4 mb-0 fa-ul text-muted">
@@ -202,7 +205,7 @@ const AllAlumnisContent = () => {
                                     <i className="fas fa-lg fa-folder mr-1" />
                                   </span>
                                   Portfolio:{" "}
-                                  {!alumnus?.portfolio_link == 'N/A' ? (
+                                  {!alumnus?.portfolio_link == "N/A" ? (
                                     <a
                                       href={alumnus.portfolio_link}
                                       target="_blank"
@@ -219,7 +222,7 @@ const AllAlumnisContent = () => {
                                     <i className="fas fa-lg fa-file-alt mr-1" />
                                   </span>
                                   Resume:{" "}
-                                  {!alumnus?.resume_link == 'N/A' ? (
+                                  {!alumnus?.resume_link == "N/A" ? (
                                     <a
                                       href={alumnus.resume_link}
                                       target="_blank"
@@ -251,21 +254,27 @@ const AllAlumnisContent = () => {
                                     <i className="fas fa-lg fa-envelope mr-1" />
                                   </span>
                                   Email:{" "}
-                                  {alumnus?.email && alumnus.email !== 'N/A' ? (
-                                    <a href={`mailto:${alumnus.email}`}>{alumnus.email}</a>
+                                  {alumnus?.email && alumnus.email !== "N/A" ? (
+                                    <a href={`mailto:${alumnus.email}`}>
+                                      {alumnus.email}
+                                    </a>
                                   ) : (
                                     "N/A"
                                   )}
-
                                 </li>
                                 <li className="small mt-1">
                                   <span className="fa-li">
                                     <i className="fab fa-lg fa-github mr-1" />
                                   </span>
                                   GitHub:{" "}
-                                  {alumnus?.Github && alumnus.Github !== "N/A" ? (
-                                    <a href={alumnus.Github} target="_blank" rel="noopener noreferrer">
-                                      Click
+                                  {alumnus?.Github &&
+                                  alumnus.Github !== "N/A" ? (
+                                    <a
+                                      href={alumnus.Github}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      {alumnus.Github}
                                     </a>
                                   ) : (
                                     "N/A"
@@ -276,14 +285,18 @@ const AllAlumnisContent = () => {
                                     <i className="fab fa-lg fa-linkedin mr-1" />
                                   </span>
                                   LinkedIn:{" "}
-                                  {alumnus?.linkedin && alumnus.linkedin !== "N/A" ? (
-                                    <a href={alumnus.linkedin} target="_blank" rel="noopener noreferrer">
+                                  {alumnus?.linkedin &&
+                                  alumnus.linkedin !== "N/A" ? (
+                                    <a
+                                      href={alumnus.linkedin}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
                                       {alumnus.linkedin}
                                     </a>
                                   ) : (
                                     "N/A"
                                   )}
-
                                 </li>
                                 {/* <li className="small">
                                   <span className="fa-li">
@@ -327,8 +340,9 @@ const AllAlumnisContent = () => {
                   className={`page-item ${pageNumber === 1 ? "disabled" : ""}`}
                 >
                   <button
-                    className={`page-link ${pageNumber === 1 ? "opacity-50 cursor-not-allowed" : ""
-                      }`}
+                    className={`page-link ${
+                      pageNumber === 1 ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
                     onClick={() => setPageNumber(pageNumber - 1)}
                     disabled={pageNumber === 1}
                   >
@@ -348,14 +362,16 @@ const AllAlumnisContent = () => {
 
                 {/* Next button */}
                 <li
-                  className={`page-item ${pageNumber === totalPages ? "disabled" : ""
-                    }`}
+                  className={`page-item ${
+                    pageNumber === totalPages ? "disabled" : ""
+                  }`}
                 >
                   <button
-                    className={`page-link ${pageNumber === totalPages
-                      ? "opacity-50 cursor-not-allowed"
-                      : ""
-                      }`}
+                    className={`page-link ${
+                      pageNumber === totalPages
+                        ? "opacity-50 cursor-not-allowed"
+                        : ""
+                    }`}
                     onClick={() => setPageNumber(pageNumber + 1)}
                     disabled={pageNumber === totalPages}
                   >

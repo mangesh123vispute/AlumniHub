@@ -187,6 +187,7 @@ class AlumniProfileAdmin(ImportExportModelAdmin):
     list_display = [
         'id', 
         'user', 
+        'full_name',
         "Heading",
         'current_company_name', 
         'job_title',  
@@ -209,12 +210,12 @@ class AlumniProfileAdmin(ImportExportModelAdmin):
      ]
 
 
-    search_fields = ['user__username', 'current_company_name', 'job_title', 'skills', 'industry']  
+    search_fields = ['user__username','user__full_name' ,'current_company_name', 'job_title', 'industry']  
     ordering = ['user'] 
     readonly_fields = ['id']
     fieldsets = (
     (None, {
-        'fields': ('user', 'Heading', 'job_title', 'current_city', 'current_country')
+        'fields': ('user', 'full_name','Heading', 'job_title', 'current_city', 'current_country')
     }),
     ('Career Information', {
         'fields': ('current_company_name', 'years_of_experience', 'industry', 'achievements', 'previous_companies')
@@ -246,6 +247,7 @@ class StudentProfileAdmin(ImportExportModelAdmin):
     list_display = [
         'id',
         'user',
+        'full_name',
         'Heading',
         "Education",
         'current_year_of_study',
@@ -256,7 +258,8 @@ class StudentProfileAdmin(ImportExportModelAdmin):
         'user',                    
     ]
     search_fields = [
-        'user__username',          
+        'user__username',  
+        'user__full_name',      
         'Heading',                 
         'Education',              
     ]
@@ -286,6 +289,7 @@ class HODPrincipalProfileAdmin(ImportExportModelAdmin):
     list_display = [
         'id',
         'user',
+        'full_name',
         'designation',
     ]
     list_filter = [
@@ -294,6 +298,7 @@ class HODPrincipalProfileAdmin(ImportExportModelAdmin):
     ]
     search_fields = [
         'user__username',  
+        'user_full_name',
         'designation',      
     ]
     list_display_links = [
@@ -320,6 +325,7 @@ class AluminiPostAdmin(ImportExportModelAdmin):
     list_display = [
         'id',
         'author',
+        'full_name',    
         'tag',
         'title',
         "content",
@@ -332,13 +338,13 @@ class AluminiPostAdmin(ImportExportModelAdmin):
 
 
 class HodPrincipalPostAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'created_at', 'updated_at')
-    search_fields = ('title', 'author__full_name', 'tag')
+    list_display = ( 'author','full_name', 'title','created_at', 'updated_at')
+    search_fields = ('title','author__full_name', 'tag')
     list_filter = ('created_at', 'updated_at')
 
 class AlumniCredentialsAdmin(admin.ModelAdmin):
-    list_display = ('user', 'fourth_year_marksheet', 'lc', 'id_card', 'graduation_certificate')
-    search_fields = ('user__username', 'user__email')  # Allow searching by username and email
+    list_display = ('user', 'full_name','fourth_year_marksheet', 'lc', 'id_card', 'graduation_certificate')
+    search_fields = ('user__username','user__full_name', 'user__email')  # Allow searching by username and email
     list_filter = ('user__is_active',)  # Filter by user activity status
 
     def has_change_permission(self, request, obj=None):
