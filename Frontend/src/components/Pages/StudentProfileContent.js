@@ -715,7 +715,7 @@ const StudentProfileContent = () => {
                           </li>
                         )}
 
-                        {userData?.user_id === user?.id && (
+                        {/* {userData?.user_id === user?.id && (
                           <li className="nav-item">
                             <a
                               className="nav-link"
@@ -732,7 +732,7 @@ const StudentProfileContent = () => {
                               Graduation Details
                             </a>
                           </li>
-                        )}
+                        )} */}
                       </ul>
                     </div>
                     {/* /.card-header */}

@@ -28,6 +28,7 @@ const AllStudentsContent = () => {
     setIsAllAlumniPage,
     setIsAllAdminPage,
     reloadFilter,
+    setIsAllPostPage,
   } = useContext(AuthContext);
   setFilter(true);
 
@@ -81,6 +82,8 @@ const AllStudentsContent = () => {
     setIsAllStudentPage(true);
     setIsAllAlumniPage(false);
     setIsAllAdminPage(false);
+    setIsAllPostPage(false);
+    setFilter(true);
   }, []);
   return (
     <div>

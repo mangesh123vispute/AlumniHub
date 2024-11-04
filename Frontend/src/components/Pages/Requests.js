@@ -19,6 +19,8 @@ const Requests = () => {
     showNotification,
     setNumberOfInactiveAlumni,
     numberOfInactiveAlumni,
+    setIsAllStudentPage,
+    setIsAllAlumniPage,
   } = useContext(AuthContext);
 
   const [alumniData, setAlumniData] = useState([]);
@@ -166,6 +168,13 @@ const Requests = () => {
       setLoading(false); // Optional: reset loading state
     }
   };
+
+  useEffect(() => {
+    setIsAllAdminPage(false);
+    setIsAllStudentPage(false);
+    setIsAllAlumniPage(false);
+    setFilter(false);
+  }, []);
 
   const requestContent = () => {
     return (

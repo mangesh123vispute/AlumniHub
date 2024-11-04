@@ -4,7 +4,7 @@ from .models import AlumniPost, HodPrincipalPost, User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['full_name', 'Image', 'is_alumni', 'is_superuser']
+        fields = ['id','full_name', 'Image', 'is_alumni','is_student', 'is_superuser']
 
 class AlumniGETPostSerializer(serializers.ModelSerializer):
     author = UserSerializer()

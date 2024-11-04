@@ -29,6 +29,7 @@ export const AuthProvider = ({ children }) => {
   const [imageRefresh, setImageRefresh] = useState(false);
   const [ProfileImage, setProfileImage] = useState("");
   const [reloadFilter, setReloadFilter] = useState(false);
+  const [isAllPostPage, setIsAllPostPage] = useState(false);
   
    
  const [Alumnifilters, setAlumniFilters] = useState({
@@ -67,6 +68,16 @@ export const AuthProvider = ({ children }) => {
     designation: "",
   });
  
+  const [postFilters, setPostFilters] = useState({
+    title: "",
+    full_name: "",
+    tag: "",
+    created_at_min: "",
+    created_at_max: "",
+    is_alumni: "",
+    is_superuser: "",
+  });
+
   const location = useLocation();
 
   const toggleimageRefresh = () => {
@@ -204,7 +215,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem("authTokens");
         setAuthTokens(null);
         setUser(null);
-        // navigate("/login");
+        
         console.log("2. Access token verification failed");
         return -1;
       }  
@@ -316,6 +327,10 @@ export const AuthProvider = ({ children }) => {
     toggleLogin,
     toggelFilter,
     reloadFilter,
+    isAllPostPage,
+    setIsAllPostPage,
+    postFilters,
+    setPostFilters,
   };
 
 

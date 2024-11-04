@@ -519,24 +519,84 @@ class PostListPagination(PageNumberPagination):
     page_size_query_param = 'page_size' 
     max_page_size = 100 
 
+# class PostListView(APIView):
+#     pagination_class = PostListPagination
+
+#     def get(self, request, *args, **kwargs):
+#         alumni_posts = AlumniPost.objects.all()
+#         hod_posts = HodPrincipalPost.objects.all()
+
+#         alumni_serializer = AlumniGETPostSerializer(alumni_posts, many=True)
+#         hod_serializer = HodPrincipalGETPostSerializer(hod_posts, many=True)
+
+#         # Combine the posts and paginate
+#         combined_posts = alumni_serializer.data + hod_serializer.data
+        
+#         # Paginate combined posts
+#         paginator = self.pagination_class()
+#         page = paginator.paginate_queryset(combined_posts, request)
+        
+#         return paginator.get_paginated_response(page)
+
 class PostListView(APIView):
     pagination_class = PostListPagination
 
     def get(self, request, *args, **kwargs):
-        alumni_posts = AlumniPost.objects.all()
-        hod_posts = HodPrincipalPost.objects.all()
+        # Base query for AlumniPost and HodPrincipalPost
+        alumni_posts = AlumniPost.objects.filter(author__is_alumni=True)
+        hod_posts = HodPrincipalPost.objects.filter(author__is_superuser=True)
 
+        # Filtering parameters
+        filters = {
+            'author__full_name__icontains': request.query_params.get('full_name', None),
+            'created_at__gte': request.query_params.get('created_at_min', None),
+            'created_at__lte': request.query_params.get('created_at_max', None),
+            'tag__icontains': request.query_params.get('tag', None),
+            'title__icontains': request.query_params.get('title', None),
+        }
+        
+       
+        if request.query_params.get('is_alumni') is not None:
+            filters['author__is_alumni'] = request.query_params.get('is_alumni').lower() == 'true'
+
+        if request.query_params.get('is_superuser') is not None:
+            filters['author__is_superuser'] = request.query_params.get('is_superuser').lower() == 'true'
+
+        
+        filters = {key: value for key, value in filters.items() if value is not None}
+
+        # Apply filters to alumni and hod posts
+        alumni_posts = alumni_posts.filter(**filters)
+        hod_posts = hod_posts.filter(**filters)
+
+        # Multi-field search (OR condition)
+        search_query = request.query_params.get('search', None)
+        if search_query:
+            alumni_posts = alumni_posts.filter(
+                Q(author__full_name__icontains=search_query) |
+                Q(tag__icontains=search_query) |
+                Q(title__icontains=search_query) |
+                Q(content__icontains=search_query)
+            )
+            hod_posts = hod_posts.filter(
+                Q(author__full_name__icontains=search_query) |
+                Q(tag__icontains=search_query) |
+                Q(title__icontains=search_query) |
+                Q(content__icontains=search_query)
+            )
+
+        # Serialize the filtered posts
         alumni_serializer = AlumniGETPostSerializer(alumni_posts, many=True)
         hod_serializer = HodPrincipalGETPostSerializer(hod_posts, many=True)
 
         # Combine the posts and paginate
         combined_posts = alumni_serializer.data + hod_serializer.data
-        
-        # Paginate combined posts
         paginator = self.pagination_class()
         page = paginator.paginate_queryset(combined_posts, request)
-        
+
+        # Return paginated response
         return paginator.get_paginated_response(page)
+        
 
 class InactiveAlumniListView(generics.ListAPIView):
     serializer_class = InactiveAlumniSerializer
