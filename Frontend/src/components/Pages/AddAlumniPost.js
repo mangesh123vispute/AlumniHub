@@ -19,7 +19,7 @@ const AddAlumniPostContent = () => {
   const [Image,setImage] = useState(null)
   const [Loading, setLoading] = useState(false);
 
-
+  
   const {
     verifyaccessToken,
     isOpen,
@@ -33,6 +33,7 @@ const AddAlumniPostContent = () => {
     setIsAllAlumniPage,
     setIsAllPostPage,
     setFilter,
+    userData,
   } = useContext(AuthContext);
 
    useEffect(() => {
@@ -69,35 +70,34 @@ const AddAlumniPostContent = () => {
   formData.append("DocUrl", docUrl);
 
    await axios
-      .post(`${baseurl}/alumni/posts/`, formData, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "multipart/form-data"
-        },
-      })
-      .then((response) => {
-        
-        setTitle("");
-        setContent("");
-        setTag("");
-        setImage(null);
-        setDocUrl("");
-        showNotification(
-          "Post created successfully.",
-          "success",
-          "Post created"
-        );
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error during submission:", error);
-        showNotification(
-          "Error submitting the post.",
-          "warning",
-          "Submission failed"
-        );
-        setLoading(false);
-      });
+     .post(`${baseurl}/alumni/posts/${userData?.user_id}/`, formData, {
+       headers: {
+         Authorization: `Bearer ${accessToken}`,
+         "Content-Type": "multipart/form-data",
+       },
+     })
+     .then((response) => {
+       setTitle("");
+       setContent("");
+       setTag("");
+       setImage(null);
+       setDocUrl("");
+       showNotification(
+         "Post created successfully.",
+         "success",
+         "Post created"
+       );
+       setLoading(false);
+     })
+     .catch((error) => {
+       console.error("Error during submission:", error);
+       showNotification(
+         "Error submitting the post.",
+         "warning",
+         "Submission failed"
+       );
+       setLoading(false);
+     });
   };
 
   return (

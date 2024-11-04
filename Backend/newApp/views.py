@@ -32,9 +32,10 @@ class HodPrincipalPostAPIView(APIView):
     permission_classes = [IsAuthenticated]  # Require authentication for all actions
 
     # POST method: Create a new post
-    def post(self, request):
-        # Check if the user is a superuser
-        if not request.user.is_superuser:
+    def post(self, request,pk):
+        
+        user= User.objects.get(pk=pk)
+        if not user.is_superuser and not user.is_active and not user.is_staff:
             return Response({"detail": "You do not have permission to create a post."}, status=status.HTTP_403_FORBIDDEN)
 
         serializer = HodPrincipalPostSerializer(data=request.data)
@@ -122,9 +123,11 @@ class AlumniPostAPIView(APIView):
     permission_classes = [IsAuthenticated]  # Require authentication for all actions
 
     # POST method: Create a new post
-    def post(self, request):
+    def post(self, request,pk):
         # Check if the user is a superuser
-        if not request.user.is_alumni:
+        user= User.objects.get(pk=pk)
+        if not user.is_alumni:
+            print("You are not an alumni",request.user)
             return Response({"detail": "You do not have permission to create a post."}, status=status.HTTP_403_FORBIDDEN)
 
         serializer = AlumniPostSerializer(data=request.data)
