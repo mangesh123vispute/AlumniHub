@@ -64,7 +64,8 @@ const Requests = () => {
     fetchAlumniData();
   }, [userData, reload]);
 
-   const activateAlumni = async (alumniId) => {
+  const activateAlumni = async (alumniId) => {
+     setLoading(true);
      const token = localStorage.getItem("authTokens")
        ? JSON.parse(localStorage.getItem("authTokens"))
        : null;
@@ -87,20 +88,24 @@ const Requests = () => {
            "Success"
          );
          setReload(true);
+         setLoading(false);
          setAlumniData(alumniData.filter((alumni) => alumni.id !== alumniId));
        }
      } catch (error) {
        console.error("Error activating alumni:", error.message);
+       setLoading(false);
        showNotification(
          "Error activating alumni, please try again.",
          "error",
          "Error"
        );
+
      }
    };
 
    // Function to delete alumni
-   const deleteAlumni = async (alumniId) => {
+  const deleteAlumni = async (alumniId) => {
+     setLoading(true);
      const token = localStorage.getItem("authTokens")
        ? JSON.parse(localStorage.getItem("authTokens"))
        : null;
@@ -117,10 +122,12 @@ const Requests = () => {
 
        if (response.status === 204) {
          showNotification("Alumni deleted successfully!", "success", "Success");
+         setLoading(false);
          setAlumniData(alumniData.filter((alumni) => alumni.id !== alumniId));
          setReload(true);
        }
      } catch (error) {
+       setLoading(false);
        console.error("Error deleting alumni:", error.message);
        showNotification(
          "Error deleting alumni, please try again.",

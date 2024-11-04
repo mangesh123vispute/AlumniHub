@@ -149,7 +149,9 @@ class AlumniProfile(models.Model):
     achievements = models.TextField(blank=True,default="N/A")
     previous_companies = models.TextField(blank=True,default="N/A")
     preferred_contact_method = models.CharField(max_length=50, choices=[('email', 'Email'), ('mobile', 'Mobile'), ('linkedin', 'LinkedIn'),('instagram', 'Instagram')], blank=True,default='email')
-
+    
+    def full_name(self):
+        return self.user.full_name
 
     def __str__(self):
         return f"{self.user.full_name} - {self.current_company_name}"
@@ -160,6 +162,9 @@ class StudentProfile(models.Model):
     Education = models.CharField(max_length=255,blank=True,default="N/A")
     current_year_of_study = models.IntegerField(blank=True,default=0, validators=[MinValueValidator(0), MaxValueValidator(10)])
 
+    def full_name(self):
+        return self.user.full_name
+    
     def __str__(self):
         return f"{self.user.full_name} - Student"
 
@@ -169,6 +174,9 @@ class HODPrincipalProfile(models.Model):
     designation = models.CharField(max_length=100,blank=True,default="N/A")  
     def __str__(self):
         return f"{self.user.full_name} - {self.designation}"
+    
+    def full_name(self):
+        return self.user.full_name
 
 class AlumniPost(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
@@ -192,6 +200,9 @@ class AlumniPost(models.Model):
             output_size = (800, 800)
             img.thumbnail(output_size)
             img.save(self.Image.path)
+    
+    def full_name(self):
+        return self.author.full_name
 
     def __str__(self):
         return f"{self.title} by {self.author.full_name}"
@@ -221,6 +232,10 @@ class HodPrincipalPost(models.Model):
             img.thumbnail(output_size)
             img.thumbnail(output_size)
             img.save(self.Image.path)
+
+    def full_name(self):
+        return self.author.full_name
+    
     def __str__(self):
         return f"{self.title} by {self.author.full_name}"
 
@@ -230,6 +245,9 @@ class AlumniCredentials(models.Model):
     lc = models.ImageField(upload_to='documents/lc/', blank=True, null=True)
     id_card = models.ImageField(upload_to='documents/id_cards/', blank=True, null=True)
     graduation_certificate = models.ImageField(upload_to='documents/graduation_certificates/', blank=True, null=True)
+
+    def full_name(self):
+        return self.user.full_name
 
     def __str__(self):
         return f"Alumni - {self.user.username}"

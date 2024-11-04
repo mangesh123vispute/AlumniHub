@@ -19,6 +19,9 @@ from django.db.models import Q
 from .allPostSerializers import AlumniGETPostSerializer, HodPrincipalGETPostSerializer
 from .authenticateAlumniSerializers import InactiveAlumniSerializer
 from rest_framework.exceptions import PermissionDenied
+from django.core.mail import send_mail
+from django.conf import settings
+from .updateAlumniProfileSerializers import ProfileUpdateSerializer
 
 class HodPrincipalPostPagination(PageNumberPagination):
     page_size = 10  # Number of posts per page
@@ -616,6 +619,22 @@ class AlumniActivationAPIView(APIView):
         if not request.user.is_superuser:
             raise PermissionDenied("You do not have permission to perform this action.")
 
+    def send_activation_email(self, user):
+        subject = "Your Alumni Account Has Been Activated !"
+        message = "Hello {},\n\nYour alumni account has been successfully activated ,You can now Login to AlumniHub ! ".format(user.get_full_name())
+        from_email = settings.EMAIL_HOST_USER
+        recipient_list = [user.email]
+
+        send_mail(subject, message, from_email, recipient_list)
+
+    def send_deletion_email(self, user):
+        subject = "Your Alumni Account Has Been Deleted"
+        message = "Hello {},\n\nWe regret to inform you that your alumni account has been successfully deleted. If you have any questions or concerns, please feel free to reach out to us.".format(user.get_full_name())
+        from_email = settings.EMAIL_HOST_USER
+        recipient_list = [user.email]
+
+        send_mail(subject, message, from_email, recipient_list)
+
     def put(self, request, user_id):
         self.check_superuser(request)
         user = get_object_or_404(User, id=user_id)
@@ -627,7 +646,7 @@ class AlumniActivationAPIView(APIView):
         # Activate the alumni user
         user.is_active = True
         user.save()
-
+        self.send_activation_email(user)
         return Response({"detail": "Alumni account activated successfully."}, status=status.HTTP_200_OK)
 
     def delete(self, request, user_id):
@@ -637,9 +656,10 @@ class AlumniActivationAPIView(APIView):
         # Check if the user is an alumni
         if not user.is_alumni:
             return Response({"detail": "User is not an alumni."}, status=status.HTTP_400_BAD_REQUEST)
-
+        
         # Delete the alumni user
         user.delete()
+        self.send_deletion_email(user)
 
         return Response({"detail": "Alumni account deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
 
@@ -676,3 +696,28 @@ class AcceptAllAlumni(APIView):
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+
+class UpdateAlumniProfileView(APIView):
+    def post(self, request, user_id):
+        # Retrieve the user based on user_id
+        user = get_object_or_404(User, id=user_id)
+        
+        # Check if the user is an alumni
+        if not user.is_alumni:
+            return Response(
+                {"error": "User is not an alumni."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Deserialize and validate input data
+        serializer = ProfileUpdateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        # Update the profile based on graduation date
+        graduation_date = serializer.validated_data.get('graduation_date')
+        updated_user = serializer.update_profile(user, graduation_date)
+
+        return Response(
+            {"message": "Profile updated successfully.", "user": updated_user.id},
+            status=status.HTTP_200_OK
+        )

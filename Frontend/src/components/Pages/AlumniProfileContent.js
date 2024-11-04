@@ -61,6 +61,79 @@ const handleCloseModal = () => {
   setIsImageOpen(false);
 };
 
+  const handleGradSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const token = localStorage.getItem("authTokens")
+      ? JSON.parse(localStorage.getItem("authTokens"))
+      : null;
+
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1; // getMonth() is zero-based
+    if (
+      alumniData?.user?.graduation_year === "" ||
+      alumniData?.user?.graduation_month === ""
+    ) {
+      showNotification(
+        "Please enter graduation year and month.",
+        "warning",
+        "Warning"
+      );
+      setLoading(false);
+      return;
+    }
+    const gradYear = parseInt(alumniData?.user?.graduation_year);
+    const gradMonth = parseInt(alumniData?.user?.graduation_month);
+    
+    try {
+      if (!isNaN(gradYear) && !isNaN(gradMonth)) {
+      const response = await axios.post(
+        `${baseurl}/update-alumni-profile/${id || userData?.user_id}/`,
+        {graduation_year: gradYear, graduation_month: gradMonth},
+        {
+          headers: {
+            Authorization: `Bearer ${token?.access}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setLoading(false);
+        setReload(!reload);
+
+        // Check graduation year and month logic
+        if (
+          gradYear > currentYear ||
+          (gradYear === currentYear && gradMonth >= currentMonth)
+        ) {
+          showNotification(
+            "You are assigned with a Student profile.",
+            "success",
+            "Profile Updated to Student"
+          );
+          localStorage.removeItem("authTokens");
+        } else {
+          showNotification(
+            "You are assigned with the Alumni profile.",
+            "success",
+            "Profile Updated to Alumni"
+          );
+          localStorage.removeItem("authTokens");
+        }
+        }
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error.message);
+      showNotification(
+        "Error updating profile, please try again.",
+        "error",
+        "Error"
+      );
+      setLoading(false);
+    }
+  };
   const handleCropComplete = async (croppedImageBlob) => {
     console.log("Cropped Image Data:", croppedImageBlob);
 
@@ -137,6 +210,7 @@ setIsDropdownOpen(null);  // Open the modal
       Work: "",
       Year_Joined: "",
       graduation_year: "",
+      graduation_month: "",
       Branch: "",
       email: "",
       mobile: "",
@@ -155,6 +229,7 @@ setIsDropdownOpen(null);  // Open the modal
         Work: user?.Work,
         Year_Joined: user?.Year_Joined,
         graduation_year: user?.graduation_year,
+        graduation_month: user?.graduation_month,
         Branch: user?.Branch,
         email: user?.email,
         mobile: user?.mobile,
@@ -275,6 +350,7 @@ setIsDropdownOpen(null);  // Open the modal
               Work: response.data.Work,
               Year_Joined: response.data.Year_Joined,
               graduation_year: response.data.graduation_year,
+              graduation_month: response.data.graduation_month,
               Branch: response.data.Branch,
               email: response.data.email,
               mobile: response.data.mobile,
@@ -293,6 +369,7 @@ setIsDropdownOpen(null);  // Open the modal
                 Work: response.data.Work,
                 Year_Joined: response.data.Year_Joined,
                 graduation_year: response.data.graduation_year,
+                graduation_month: response.data.graduation_month,
                 Branch: response.data.Branch,
                 email: response.data.email,
                 mobile: response.data.mobile,
@@ -929,9 +1006,16 @@ setIsDropdownOpen(null);  // Open the modal
                             className="nav-link"
                             href="#editGradDate"
                             data-toggle="tab"
+                            onClick={() => {
+                              showNotification(
+                                "Your profile will change based on your graduation date. If it’s the same or after today, you’ll be a Student. If it’s before today, you’ll be an Alumni.",
+                                "info",
+                                "Graduation Details"
+                              );
+                            }}
                           >
-                            <i className="fas fa-calendar-alt mr-1"></i> Update
-                            Graduation Date
+                            <i className="fas fa-calendar-alt mr-1"></i>{" "}
+                            Graduation Details
                           </a>
                         </li>
                       )}
@@ -2150,7 +2234,7 @@ setIsDropdownOpen(null);  // Open the modal
                         className="tab-pane"
                         id="editGradDate"
                         style={{
-                          maxHeight: "131vh",
+                          maxHeight: "117vh",
                           overflowY: "auto", // Enable vertical scrolling
                           overflowX: "hidden", // Prevent horizontal scrolling
                           padding: "15px", // Optional: add padding if needed
@@ -2159,12 +2243,31 @@ setIsDropdownOpen(null);  // Open the modal
                       >
                         <form
                           className="form-horizontal"
-                          onSubmit={handleSubmit}
+                          onSubmit={handleGradSubmit}
                         >
+                          { console.log("alumniData::",alumniData)}
                           <p className="editheading" style={{ marginTop: "0" }}>
-                            Modify Graduation Details
+                            Update Graduation Details
                           </p>
+                          <span style={{ color: "red" }}>
+                            <i>
+                              Please double-check your graduation year and
+                              month. Providing accurate information ensures that
+                              your alumni profile is correctly represented,
+                              allowing fellow alumni and students to connect
+                              with you and enabling accurate referral
+                              opportunities.
+                            </i>
+                          </span>
+                          <hr
+                            style={{
+                              border: "1px solid black",
+                              marginBottom: "1.5em",
+                              marginTop: "1.5em",
+                            }}
+                          ></hr>
                           <div className="form-group row">
+                           
                             <label
                               htmlFor="inputFullName"
                               className="col-sm-2 col-form-label"
@@ -2176,12 +2279,13 @@ setIsDropdownOpen(null);  // Open the modal
                                 type="number"
                                 className="form-control"
                                 id="month"
-                                name="month"
-                                value={alumniData?.user?.full_name}
+                                name="graduation_month"
+                                value={alumniData?.user?.graduation_month}
                                 onChange={handleUserChange}
                                 placeholder="Graduation Month"
                                 max={12}
                                 min={1}
+                                style={{ width: "25%" }}
                               />
                             </div>
                           </div>
@@ -2198,12 +2302,13 @@ setIsDropdownOpen(null);  // Open the modal
                                 type="number"
                                 className="form-control"
                                 id="year"
-                                name="year"
-                                value={alumniData?.profile?.Education}
-                                onChange={handleProfileChange}
+                                name="graduation_year"
+                                value={alumniData?.user?.graduation_year}
+                                onChange={handleUserChange}
                                 placeholder="Graduation Year"
                                 max={2100}
                                 min={1983}
+                                style={{ width: "25%" }}
                               />
                             </div>
                           </div>

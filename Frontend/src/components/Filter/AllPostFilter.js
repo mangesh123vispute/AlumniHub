@@ -120,9 +120,9 @@ const AllPostFilter = () => {
           />
         </div>
 
-        <div className="form-group row mt-3">
+        <div className="form-group mt-3">
           {/* Is Alumni Option */}
-          <div className="col-sm-6">
+          <div className="col-sm-12">
             <button
               type="button"
               className={`btn ${
@@ -155,7 +155,7 @@ const AllPostFilter = () => {
           </div>
 
           {/* Is Superuser Option */}
-          <div className="col-sm-6">
+          <div className="col-sm-12">
             <button
               type="button"
               className={`btn ${
