@@ -294,7 +294,7 @@ const SideNav = () => {
                               className="fas fa-plus mr-2"
                               style={{ fontSize: "1em" }}
                             />
-                            <p style={{ fontSize: "1em" }}>Add Post</p>
+                            <p style={{ fontSize: "1em" }}>Create Post</p>
                           </Link>
                         </li>
                       </div>
@@ -418,7 +418,7 @@ const SideNav = () => {
                               className="fas fa-plus mr-2"
                               style={{ fontSize: "1em" }}
                             />
-                            <p style={{ fontSize: "1em" }}>Add Post</p>
+                            <p style={{ fontSize: "1em" }}>Create Post</p>
                           </Link>
                         </li>
                       </div>

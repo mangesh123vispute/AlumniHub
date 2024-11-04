@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Home from "../../Dashboard/Home";
 import axios from "axios";
 import AuthContext from "../../../context/AuthContext";
@@ -28,9 +28,20 @@ const AddHodPostContent = () => {
     title,
     handleClose,
     showNotification,
+    setIsAllStudentPage,
+    setIsAllAdminPage,
+    setIsAllAlumniPage,
+    setIsAllPostPage,
+    setFilter,
   } = useContext(AuthContext);
 
- 
+  useEffect(() => {
+    setIsAllStudentPage(false);
+    setIsAllAdminPage(false);
+    setIsAllAlumniPage(false);
+    setFilter(false);
+    setIsAllPostPage(false);
+  }, []);
   // Handle form submission (upload post details)
   const handleSubmit = async (e) => {
     setLoading(true);

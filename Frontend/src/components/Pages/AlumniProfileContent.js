@@ -461,7 +461,7 @@ setIsDropdownOpen(null);  // Open the modal
   
     if (!selectedPost?.title || !selectedPost?.content || !selectedPost?.tag ) {
       showNotification(
-        "Please fill in all fields and upload an image.",
+        "Please fill in all fields !",
         "warning",
         "Missing fields"
       );
@@ -505,6 +505,7 @@ setIsDropdownOpen(null);  // Open the modal
       })
       .catch((error) => {
         console.error("Error during update:", error);
+        // alert("Error during update:", error.response?.data?.detail);
         showNotification(
           error.response?.data?.detail || "Error updating the post.",
           "warning",
@@ -612,26 +613,25 @@ setIsDropdownOpen(null);  // Open the modal
                       />
                       {userData?.user_id === user?.id && (
                         <button
-                        className="btn btn-primary btn-xs elevation-2"
-                        style={{
-                          backgroundColor: "#007bff",
-                          color: "white",
-                          border: "none",
-                          borderRadius: "50%",
-                          cursor: "pointer",
-                          position: "absolute",
-                          top: "10px", // Position at the top
-                          left: "10px", // Position at the left
-                          zIndex: 10, // Ensure it's on top of the image
-                        }}
-                        onClick={() => {
-                          setIsModalOpen(true);
-                        }}
-                      >
-                        <i className="fas fa-pencil-alt"></i>
-                      </button>
-                      )
-                      }
+                          className="btn btn-primary btn-xs elevation-2"
+                          style={{
+                            backgroundColor: "#007bff",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "50%",
+                            cursor: "pointer",
+                            position: "absolute",
+                            top: "10px", // Position at the top
+                            left: "10px", // Position at the left
+                            zIndex: 10, // Ensure it's on top of the image
+                          }}
+                          onClick={() => {
+                            setIsModalOpen(true);
+                          }}
+                        >
+                          <i className="fas fa-pencil-alt"></i>
+                        </button>
+                      )}
                     </div>
                     <h3 className="profile-username text-center ">
                       {user ? user.full_name || user.username : "User"}
@@ -982,18 +982,19 @@ setIsDropdownOpen(null);  // Open the modal
                                   </span>
 
                                   <span className="description">
-                                    Created at -{" "}
                                     {formatDate(post?.created_at) || "Date"}
                                     <br></br>
-                                    <span
-                                      className="badge bg-success"
-                                      style={{
-                                        fontSize: "0.8em",
-                                        padding: "0.5em",
-                                      }}
-                                    >
+                                    <span>
                                       {" "}
-                                      {post?.tag || "Tag"}
+                                      <b
+                                        style={{
+                                          color: "Green",
+                                          textTransform: "capitalize",
+                                        }}
+                                      >
+                                        {" "}
+                                        {post?.tag || "Tag"}
+                                      </b>
                                     </span>
                                   </span>
                                 </div>
@@ -1002,9 +1003,13 @@ setIsDropdownOpen(null);  // Open the modal
                                 {userData?.user_id === user?.id && (
                                   <div className="dropdown">
                                     <button
-                                      className="btn btn-link dropdown-toggle"
+                                      className="btn btn-link"
                                       type="button"
                                       onClick={() => toggleDropdown(post?.id)}
+                                      style={{
+                                        padding: "0", // Remove default padding
+                                        fontSize: "0.8em", // Reduced font size
+                                      }}
                                     >
                                       <i
                                         className="fas fa-ellipsis-v"
@@ -1019,15 +1024,18 @@ setIsDropdownOpen(null);  // Open the modal
                                         <span
                                           onClick={() => handleEditClick(post)}
                                           className="dropdown-item"
+                                          style={{ fontSize: "0.8em" }}
                                         >
-                                          Edit
+                                          <i className="fas fa-edit"></i> Edit
                                         </span>
                                         <span
                                           onClick={() =>
                                             handleDeleteClick(post)
                                           }
+                                          style={{ fontSize: "0.8em" }}
                                           className="dropdown-item"
                                         >
+                                          <i className="fas fa-trash"></i>{" "}
                                           Delete
                                         </span>
                                       </div>
@@ -1039,7 +1047,13 @@ setIsDropdownOpen(null);  // Open the modal
                                 {isEditModalOpen && (
                                   <div className="modal">
                                     <div className="modal-content">
-                                      <div className="modal-header">
+                                      <div
+                                        className="modal-header"
+                                        style={{
+                                          backgroundColor: "#007bff",
+                                          color: "white",
+                                        }}
+                                      >
                                         <h3 className="modal-title">
                                           Edit Post
                                         </h3>
@@ -1097,77 +1111,78 @@ setIsDropdownOpen(null);  // Open the modal
                                               }
                                             />
                                           </div>
-                                          <div>
+                                          <div className="form-group">
                                             <label>Previous Image</label>
-                                          </div>
-                                          <div className="col-auto">
-                                            <a
-                                              href="#"
-                                              onClick={(e) => {
-                                                e.preventDefault();
-                                                handleImageClick();
-                                              }}
-                                              className="mr-3"
-                                            >
-                                              <i className="fas fa-image mr-1" />{" "}
-                                              Image
-                                            </a>
-
-                                            {isImageOpen && (
-                                              <div
-                                                style={{
-                                                  position: "fixed",
-                                                  top: 0,
-                                                  left: 0,
-                                                  width: "100%",
-                                                  height: "100%",
-                                                  backgroundColor: "tranparent",
-                                                  display: "flex",
-                                                  justifyContent: "center",
-                                                  alignItems: "center",
-                                                  zIndex: 1050,
+                                            <div className="col-auto">
+                                              <a
+                                                href="#"
+                                                onClick={(e) => {
+                                                  e.preventDefault();
+                                                  handleImageClick();
                                                 }}
-                                                onClick={handleCloseModal}
+                                                className="mr-3"
                                               >
+                                                <i className="fas fa-image mr-1" />{" "}
+                                                Image
+                                              </a>
+
+                                              {isImageOpen && (
                                                 <div
                                                   style={{
-                                                    position: "relative",
-                                                    maxWidth: "100%",
-                                                    maxHeight: "100%",
+                                                    position: "fixed",
+                                                    top: 0,
+                                                    left: 0,
+                                                    width: "100%",
+                                                    height: "100%",
+                                                    backgroundColor:
+                                                      "tranparent",
                                                     display: "flex",
                                                     justifyContent: "center",
                                                     alignItems: "center",
+                                                    zIndex: 1050,
                                                   }}
+                                                  onClick={handleCloseModal}
                                                 >
-                                                  <img
-                                                    src={selectedPost?.Image}
-                                                    alt="Post"
+                                                  <div
                                                     style={{
-                                                      // maxWidth: "100%",
-                                                      // maxHeight: "100%",
-                                                      width: "100%",
-                                                      height: "auto",
-                                                      borderRadius: "5px",
-                                                      boxShadow:
-                                                        "0 4px 12px rgba(0, 0, 0, 0.3)",
+                                                      position: "relative",
+                                                      maxWidth: "100%",
+                                                      maxHeight: "100%",
+                                                      display: "flex",
+                                                      justifyContent: "center",
+                                                      alignItems: "center",
                                                     }}
-                                                  />
-                                                  <span
-                                                    style={{
-                                                      position: "absolute",
-                                                      top: "10px",
-                                                      right: "10px",
-                                                      fontSize: "1.5em",
-                                                      color: "#fff",
-                                                      cursor: "pointer",
-                                                    }}
-                                                    onClick={handleCloseModal}
                                                   >
-                                                    &times;
-                                                  </span>
+                                                    <img
+                                                      src={selectedPost?.Image}
+                                                      alt="Post"
+                                                      style={{
+                                                        // maxWidth: "100%",
+                                                        // maxHeight: "100%",
+                                                        width: "100%",
+                                                        height: "auto",
+                                                        borderRadius: "5px",
+                                                        boxShadow:
+                                                          "0 4px 12px rgba(0, 0, 0, 0.3)",
+                                                      }}
+                                                    />
+                                                    <span
+                                                      style={{
+                                                        position: "absolute",
+                                                        top: "10px",
+                                                        right: "10px",
+                                                        fontSize: "1.5em",
+                                                        color: "#fff",
+                                                        cursor: "pointer",
+                                                      }}
+                                                      onClick={handleCloseModal}
+                                                    >
+                                                      &times;
+                                                    </span>
+                                                  </div>
                                                 </div>
-                                              </div>
-                                            )}
+                                              )}
+                                            </div>
                                           </div>
                                           <div className="form-group">
                                             <label>Image Upload </label>
@@ -1222,6 +1237,12 @@ setIsDropdownOpen(null);  // Open the modal
                                   style={{
                                     marginTop: "0.5em",
                                     marginBottom: "0.5em",
+                                    whiteSpace: "pre-wrap",
+                                    wordWrap: "break-word",
+                                    hyphens: "auto",
+                                    overflowWrap: "break-word",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
                                   }}
                                 >
                                   {post?.content || "Content"}
@@ -1238,7 +1259,8 @@ setIsDropdownOpen(null);  // Open the modal
                                         Image
                                       </a>
                                     </div> */}
-                                  <div className="col-auto">
+
+                                  <div className="col-auto mt-3">
                                     <a
                                       href="#"
                                       onClick={(e) => {
@@ -1306,28 +1328,32 @@ setIsDropdownOpen(null);  // Open the modal
                                       </div>
                                     )}
                                   </div>
-                                { post?.DocUrl && <div className="col-auto">
-                                    <a
-                                      href={post?.DocUrl || "#"}
-                                      target="_blank"
-                                      rel="noreferrer"
-                                      className="mr-3"
-                                    >
-                                      <i className="fas fa-file-alt mr-1" />{" "}
-                                      Document
-                                    </a>
-                                  </div>}
+                                  {post?.DocUrl && (
+                                    <div className="col-auto mt-3">
+                                      <a
+                                        href={post?.DocUrl || "#"}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="mr-3"
+                                      >
+                                        <i className="fas fa-file-alt mr-1" />{" "}
+                                        Document
+                                      </a>
+                                    </div>
+                                  )}
 
-                                { post?.link && <div className="col-auto">
-                                    <a
-                                      href={post?.link || "#"}
-                                      target="_blank"
-                                      rel="noreferrer"
-                                      className="mr-3"
-                                    >
-                                      <i className="fas fa-link mr-1" /> Link
-                                    </a>
-                                  </div>}
+                                  {post?.link && (
+                                    <div className="col-auto mt-3">
+                                      <a
+                                        href={post?.link || "#"}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="mr-3"
+                                      >
+                                        <i className="fas fa-link mr-1" /> Link
+                                      </a>
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                             ))}

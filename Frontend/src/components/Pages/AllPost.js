@@ -180,7 +180,13 @@ const [isImageOpen, setIsImageOpen] = useState(false);
                   {posts?.map((post, ind) => (
                     <div key={ind} className="post">
                       {console.log(post)}
-                      <div className="user-block">
+                      <div
+                        className="user-block"
+                        style={{
+                          borderBottom: "0.8px dashed  #ccc",
+                          paddingBottom: "10px", // Change the width and color as needed
+                        }}
+                      >
                         <img
                           className="img-circle img-bordered-sm"
                           src={`${baseurl}/${post?.author?.Image || "#"}`}
@@ -194,24 +200,24 @@ const [isImageOpen, setIsImageOpen] = useState(false);
                             style={{
                               cursor: "pointer",
                             }}
-                           
                           >
                             {post?.author?.full_name || "Author"}
                           </a>
                         </span>
 
                         <span className="description">
-                          Created at - {formatDate(post?.created_at) || "Date"}
+                          {formatDate(post?.created_at) || "Date"}
                           <br></br>
-                          <span
-                            className="badge bg-success"
-                            style={{
-                              fontSize: "0.8em",
-                              padding: "0.5em",
-                            }}
-                          >
+                          <span>
                             {" "}
-                            {post?.tag || "Tag"}
+                            <b
+                              style={{
+                                color: "Green",
+                                textTransform: "capitalize",
+                              }}
+                            >
+                              {post?.tag || "Tag"}
+                            </b>
                           </span>
                         </span>
                       </div>
@@ -228,23 +234,18 @@ const [isImageOpen, setIsImageOpen] = useState(false);
                         style={{
                           marginTop: "0.5em",
                           marginBottom: "0.5em",
+                          whiteSpace: "pre-wrap",
+                          wordWrap: "break-word",
+                          hyphens: "auto",
+                          overflowWrap: "break-word",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
                         }}
                       >
                         {post?.content || "Content"}
                       </p>
                       <div className="row">
-                        {/* <div className="col-auto">
-                                      <a
-                                        href={post?.image_url || "#"}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="mr-3"
-                                      >
-                                        <i className="fas fa-image mr-1" />{" "}
-                                        Image
-                                      </a>
-                                    </div> */}
-                        <div className="col-auto">
+                        <div className="col-auto mt-3">
                           <a
                             href="#"
                             onClick={(e) => {
@@ -312,7 +313,7 @@ const [isImageOpen, setIsImageOpen] = useState(false);
                           )}
                         </div>
                         {post?.DocUrl && (
-                          <div className="col-auto">
+                          <div className="col-auto mt-3">
                             <a
                               href={post?.DocUrl || "#"}
                               target="_blank"
@@ -338,6 +339,7 @@ const [isImageOpen, setIsImageOpen] = useState(false);
                       </div>
                     </div>
                   ))}
+                  
                 </>
               )}
 
