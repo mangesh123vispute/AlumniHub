@@ -663,8 +663,26 @@ class AlumniActivationAPIView(APIView):
 
         return Response({"detail": "Alumni account deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
 
+
 class AcceptAllAlumni(APIView):
     permission_classes = [IsAuthenticated]
+
+    def send_activation_email(self, user):
+        subject = "Your Alumni Account Has Been Activated!"
+        message = "Hello {},\n\nYour alumni account has been successfully activated. You can now log in to AlumniHub!".format(user.get_full_name())
+        from_email = settings.EMAIL_HOST_USER
+        recipient_list = [user.email]
+        print("I am gettting called")
+
+        send_mail(subject, message, from_email, recipient_list)
+
+    def send_deletion_email(self, user):
+        subject = "Your Alumni Account Has Been Deleted"
+        message = "Hello {},\n\nWe regret to inform you that your alumni account has been successfully deleted. If you have any questions or concerns, please feel free to reach out to us.".format(user.get_full_name())
+        from_email = settings.EMAIL_HOST_USER
+        recipient_list = [user.email]
+
+        send_mail(subject, message, from_email, recipient_list)
 
     def put(self, request, *args, **kwargs):
         # Check if the requesting user is a superuser
@@ -673,13 +691,19 @@ class AcceptAllAlumni(APIView):
                 {"error": "You do not have permission to perform this action."},
                 status=status.HTTP_403_FORBIDDEN,
             )
-        
+
         try:
             # Filter for inactive alumni
             inactive_alumni = User.objects.filter(is_alumni=True, is_active=False)
 
-            # Update is_active status for each matching user
+            # Update is_active status for each matching user and collect activated users
             updated_count = inactive_alumni.update(is_active=True)
+            activated_users = inactive_alumni.values_list('id', flat=True)  # Get the IDs of activated users
+
+            # Send activation emails to all activated users
+            for user_id in activated_users:
+                user = User.objects.get(id=user_id)
+                self.send_activation_email(user)
 
             return Response(
                 {
@@ -695,7 +719,7 @@ class AcceptAllAlumni(APIView):
                     "details": str(e)
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
+            )          
 
 class UpdateAlumniProfileView(APIView):
     def post(self, request, user_id):
