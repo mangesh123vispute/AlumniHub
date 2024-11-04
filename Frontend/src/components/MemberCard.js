@@ -28,7 +28,7 @@ function MemberCard({ name, title, description, imgSrc }) {
           <i className="fab fa-twitter text-2xl hover:text-blue-500"></i>
         </a>
         <a href="#" className="text-white mb-4">
-          <i className="fab fa-facebook text-2xl hover:text-blue-500"></i>
+          <i className="fab fa-github text-2xl hover:text-zinc-500"></i>
         </a>
         <a href="#" className="text-white mb-4">
           <i className="fab fa-instagram text-2xl hover:text-pink-500"></i>
