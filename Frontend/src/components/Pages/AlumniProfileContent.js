@@ -898,7 +898,7 @@ setIsDropdownOpen(null);  // Open the modal
                           href="#timeline"
                           data-toggle="tab"
                         >
-                          Contacts
+                          <i className="fas fa-address-book mr-1"></i> Contacts
                         </a>
                       </li>
                       <li className="nav-item ">
@@ -907,7 +907,7 @@ setIsDropdownOpen(null);  // Open the modal
                           href="#activity"
                           data-toggle="tab"
                         >
-                          Posts
+                          <i className="fas fa-file-alt mr-1"></i> Posts
                         </a>
                       </li>
 
@@ -918,7 +918,8 @@ setIsDropdownOpen(null);  // Open the modal
                             href="#settings"
                             data-toggle="tab"
                           >
-                            Edit Profile
+                            <i className="fas fa-user-edit mr-1"></i> Edit
+                            Profile
                           </a>
                         </li>
                       )}
@@ -929,7 +930,8 @@ setIsDropdownOpen(null);  // Open the modal
                             href="#editGradDate"
                             data-toggle="tab"
                           >
-                            Update Graduation Date
+                            <i className="fas fa-calendar-alt mr-1"></i> Update
+                            Graduation Date
                           </a>
                         </li>
                       )}

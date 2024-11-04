@@ -715,7 +715,7 @@ const SuperUserProfileContent = () => {
                           href="#timeline"
                           data-toggle="tab"
                         >
-                          Contacts
+                          <i className="fas fa-address-book mr-1"></i> Contacts
                         </a>
                       </li>
                       <li className="nav-item">
@@ -724,7 +724,7 @@ const SuperUserProfileContent = () => {
                           href="#activity"
                           data-toggle="tab"
                         >
-                          Posts
+                          <i className="fas fa-file-alt mr-1"></i> Posts
                         </a>
                       </li>
                       {userData?.user_id === user?.id && (
@@ -734,7 +734,8 @@ const SuperUserProfileContent = () => {
                             href="#settings"
                             data-toggle="tab"
                           >
-                            Edit Profile
+                            <i className="fas fa-user-edit mr-1"></i> Edit
+                            Profile
                           </a>
                         </li>
                       )}
@@ -847,8 +848,6 @@ const SuperUserProfileContent = () => {
                                     )}
                                   </div>
                                 )}
-
-                               
 
                                 {isEditModalOpen && (
                                   <div className="modal">
@@ -1066,11 +1065,8 @@ const SuperUserProfileContent = () => {
                                         Image
                                       </a>
                                     </div> */}
-                                 
-                                  <div
-                                    className="col-auto mt-3"
-                                    
-                                  >
+
+                                  <div className="col-auto mt-3">
                                     <a
                                       href="#"
                                       onClick={(e) => {
