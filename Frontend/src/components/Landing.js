@@ -66,8 +66,8 @@ function Landing() {
 
 {/* Sticky Navbar */}
 <nav className="bg-yellow-500 border-b-2 border-red-700 text-white w-full sticky top-0 z-50 shadow-lg">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
-    <div className="flex items-center -ml-[5vh] space-x-2">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-around items-center h-16">
+    <div className="flex items-center  space-x-2">
       <Link to="/" className="text-lg md:text-2xl font-bold hover:text-red-800">
         Alumni Hub |
       </Link>
@@ -151,7 +151,7 @@ function Landing() {
     &#10095;
   </button>
   {/* Marquee Text */}
-  <div className="absolute -bottom-[6vh] md:-bottom-[8vh] lg:-bottom-[9vh] z-10 w-full bg-yellow-500 py-2 md:py-3 text-center text-white">
+  <div className="absolute -mt-[5vh] md:-bottom-[8vh]  z-10 w-full bg-yellow-500 py-2 md:py-3 text-center text-white">
     <div className="animate-marquee text-[0.9rem] md:text-[1rem] lg:text-[1.2rem] whitespace-nowrap">
       Welcome to Alumni Hub! Join us in celebrating achievements and connections.
     </div>
