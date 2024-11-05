@@ -81,7 +81,7 @@
           {/* Right navbar links */}
           <ul className="navbar-nav ml-auto">
             {/* Messages Dropdown Menu */}
-            {isAllAdminPage && userData.is_superuser && (
+            {isAllAdminPage && (userData.is_superuser && userData.username==="Admin") && (
               <li className="nav-item ">
                 <button
                   className="btn btn-sm btn-default mt-2"

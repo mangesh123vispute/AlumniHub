@@ -33,6 +33,7 @@ const AddHodPostContent = () => {
     setIsAllAlumniPage,
     setIsAllPostPage,
     setFilter,
+    userData,
   } = useContext(AuthContext);
 
   useEffect(() => {
@@ -77,7 +78,7 @@ const AddHodPostContent = () => {
   formData.append("DocUrl", docUrl);
 
     await axios
-      .post(`${baseurl}/hodposts/`, formData, {
+      .post(`${baseurl}/hodposts/${userData.user_id }/`, formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "multipart/form-data"
