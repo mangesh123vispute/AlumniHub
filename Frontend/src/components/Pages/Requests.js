@@ -190,25 +190,7 @@ const Requests = () => {
           <div className="card" style={{ minHeight: "90vh" }}>
             <div className="card-header">
               <h3 className="card-title">Alumni Connect Requests</h3>
-              {numberOfInactiveAlumni === 0 ? null : (
-                <span className="float-right">
-                  <button
-                    className="btn btn-primary btn-sm"
-                    style={{ fontSize: "0.7rem" }}
-                    onClick={() => {
-                      if (
-                        window.confirm(
-                          "Are you sure you want to accept all Alumnis?"
-                        )
-                      ) {
-                        acceptAllAlumni();
-                      }
-                    }}
-                  >
-                    <i className="fas fa-check-circle mr-2"></i>Accept All
-                  </button>
-                </span>
-              )}
+              
             </div>
             <div
               className="card-body p-0"
