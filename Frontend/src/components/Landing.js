@@ -9,7 +9,7 @@ import ContactSection from "./ContactSection";
 import FooterSection from "./FooterSection";
 import TopAlumni from "./TopAlumni";
 import { HashLink } from "react-router-hash-link";
-import './marquee.css';
+
 gsap.registerPlugin(ScrollTrigger);
 
 function Landing() {
@@ -20,9 +20,12 @@ function Landing() {
   const [isLoggedin, setIsLoggedin] = useState(false);
 
   const backgroundImages = [
-    "https://www.sscoetjalgaon.ac.in/public/images/slider/snap105.jpg",
-    "https://www.sscoetjalgaon.ac.in/public/images/slider/slide21.jpg",
-    "https://www.sscoetjalgaon.ac.in/public/images/slider/snap1041.jpg"
+    "./sliderImg1.jpg",
+    "./sliderImg2.jpg",
+    "./sliderImg3.jpg",
+    "./sliderImg4.jpg",
+    "./sliderImg5.jpg"
+
   ];
 
   useEffect(() => {
@@ -65,10 +68,10 @@ function Landing() {
   <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
     {/* Left-aligned logo */}
     <div className="flex items-center justify-start">
-      <Link to="/" className="text-lg md:text-2xl font-bold hover:text-red-800">
+      <Link to="/" className=" md:text-lg sm:text-lg font-bold hover:text-red-800">
         Alumni Hub |
       </Link>
-      <span className="text-red-800 text-lg">SSBT COET</span>
+      <span className="text-red-800  sm:text-lg">SSBT COET</span>
     </div>
     
     {/* Centered Links (hidden on smaller screens) */}
@@ -115,9 +118,7 @@ function Landing() {
         <div className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000" style={{ backgroundImage: `url(${backgroundImages[bgIndex]})` }}></div>
         <button onClick={prevSlide} className="absolute left-5 top-1/2 transform -translate-y-1/2 text-white bg-black bg-opacity-50 rounded-full p-2">&#10094;</button>
         <button onClick={nextSlide} className="absolute right-5 top-1/2 transform -translate-y-1/2 text-white bg-black bg-opacity-50 rounded-full p-2">&#10095;</button>
-        <div className="absolute bottom-5 w-full bg-yellow-500 py-2 text-center text-white">
-          <div className="animate-marquee text-[1rem] md:text-lg whitespace-nowrap">Welcome to Alumni Hub! Join us in celebrating achievements and connections.</div>
-        </div>
+
       </div>
 
       {/* About and Other Sections */}
@@ -125,30 +126,32 @@ function Landing() {
         <div className="container mx-auto max-w-screen-xl">
           <div className="flex flex-col lg:flex-row gap-10 lg:gap-16">
             <div className="lg:w-1/2 flex justify-center items-center">
-              <img src="https://www.sscoetjalgaon.ac.in/public/images/home-page/undergraduate1.jpg" alt="About Us" className="rounded-xl shadow-lg w-full max-h-[500px] object-cover" />
+              <img src="./about1.jpg" alt="About Us" className="rounded-xl shadow-lg w-full max-h-[500px] object-cover" />
             </div>
-            <div className="lg:w-1/2 text-center lg:text-left space-y-4">
-              <h2 className="text-3xl font-bold">About Us</h2>
+            <div className="lg:w-1/2 text-center relative   lg:text-left space-y-4">
+              <h2 className="text-3xl font-bold mt-5 mb-2">About Us</h2>
+              <i>
               <p className="text-base text-gray-700 leading-relaxed">Welcome to AlumniHub! We connect students, alumni, and college staff to foster lasting relationships and opportunities...</p>
+              </i>
             </div>
           </div>
         </div>
       </section>
 
       {/* Our Inspiration Section */}
-      <div id="inspiration" className="py-10 text-center">
+      <div id="inspirati on" className="py-10 text-center">
         <AboutSection
           title="Our Inspiration"
           secondTitle="Hon. Sau. Pratibhatai Patil"
           desc="I am deeply committed to the cause of education and would like to see every person..."
-          imgUrl="https://www.sscoetjalgaon.ac.in/public/images/ceo1.jpg"
+          imgUrl="./pratibhatai-patil.jpg"
           direction="left"
         />
       </div>
 
       {/* Additional Sections */}
-      <TeamSection />
       <TopAlumni />
+      <TeamSection />      
       <ContactSection />
       <FooterSection />
     </div>

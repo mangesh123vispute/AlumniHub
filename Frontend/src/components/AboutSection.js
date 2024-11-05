@@ -25,7 +25,7 @@ const AboutSection = ({ title, desc, imgSrc, secondTitle }) => {
           {/* Right Image Content */}
           <div className="lg:w-1/2 flex justify-center items-center">
             <img
-              src={imgSrc}
+              src="./pratibhatai-patil.jpg"
               alt="About Us"
               className="rounded-xl shadow-lg w-full sm:w-3/4 lg:w-full object-cover max-h-[400px] lg:max-h-[500px]"
             />
