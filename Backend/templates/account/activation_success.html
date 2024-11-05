@@ -1,3 +1,5 @@
+{% load static %}
+
 <style>
   .activation__wrapper {
     position: absolute;
@@ -91,15 +93,17 @@
 
 <div class="activation__wrapper">
   <div class="activation__container">
-    <div class="activation__header">Alumni<b>Hub</b>
-
+    <div class="activation__header">Alumni<b>Hub</b> | SSBT COET
     </div>
-    <div class="activation__subject"></div>
+    <div>
+      <img src="/media/default/ssbticon.jfif" alt="icon" style="width: 4vw; height: auto;" />
+    </div>
+    <div class="activation__subject"></div> 
     <div class="activation__arrow"></div>
     <div class="activation__message">
       <div> Dear, <span class="activation__user">{{user.username}}</span>
         <!--<Username>-->
-        <br/>{{message}}</div>
+     <span style="color: green;">    <br/>{{message}}</div> </span>
     </div>
     <div class="activation__link">
       <div>

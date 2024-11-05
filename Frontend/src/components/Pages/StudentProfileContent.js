@@ -262,11 +262,15 @@ const StudentProfileContent = () => {
           ? JSON.parse(localStorage.getItem("authTokens"))
           : null;
         try {
-          const response = await axios.put(`${baseurl}/edit-student-profile/${id || userData?.user_id}/`, studentData,{
-            headers: {
-              Authorization: `Bearer ${token?.access}`,
-            },
-          });
+          const response = await axios.put(
+            `${baseurl}/edit-student-profile/${id || userData?.user_id}/`,
+            studentData,
+            {
+              headers: {
+                Authorization: `Bearer ${token?.access}`,
+              },
+            }
+          );
           if (response.status === 200) {
             setLoading(false);
             if (reload) {
@@ -274,13 +278,50 @@ const StudentProfileContent = () => {
             } else {
               setReload(true);
             }
-            showNotification("Profile updated successfully!", "success", "Success");
+            showNotification(
+              "Profile updated successfully!",
+              "success",
+              "Success"
+            );
           }
-        
         } catch (error) {
-          console.error('Error updating profile:', error.message);
-          showNotification( "Error updating profile, please try again.", "error", "Error");
+          console.error("Error updating profile:", error.message);
           setLoading(false);
+
+          // Check if the error response has user_errors or profile_errors
+          if (error.response && error.response.data) {
+            const { user_errors, profile_errors } = error.response.data;
+
+            // Extract errors to show in a user-friendly format
+            let errorMessage =
+              "Error updating profile. Please check the following:\n";
+
+            // Iterate over user_errors if it exists
+            if (user_errors && Object.keys(user_errors).length > 0) {
+              errorMessage += "User Errors:\n";
+              Object.entries(user_errors).forEach(([field, messages]) => {
+                errorMessage += `- ${field}: ${messages.join(", ")}\n`;
+              });
+            }
+
+            // Iterate over profile_errors if it exists
+            if (profile_errors && Object.keys(profile_errors).length > 0) {
+              errorMessage += "Profile Errors:\n";
+              Object.entries(profile_errors).forEach(([field, messages]) => {
+                errorMessage += `- ${field}: ${messages.join(", ")}\n`;
+              });
+            }
+
+            // Show the error notification with the constructed message
+            showNotification(errorMessage, "error", "Error");
+          } else {
+            // If no specific errors, show a generic error message
+            showNotification(
+              "Error updating profile, please try again.",
+              "error",
+              "Error"
+            );
+          }
         }
       };
 

@@ -77,7 +77,7 @@ class ActivationEmailView(APIView):
         serializer = ActivationEmailSerializer(data=request.data)
         if serializer.is_valid():
             validated_data = serializer.validated_data
-            
+        
             email = validated_data.get('email')
 
             try:
