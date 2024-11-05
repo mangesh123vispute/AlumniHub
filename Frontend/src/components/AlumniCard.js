@@ -1,54 +1,49 @@
 import React from 'react';
 
 const AlumniCard = ({ name, text1, text2, img, linkedIn, facebook, twitter, instagram }) => (
-  <div className="relative group bg-white rounded-lg shadow-md flex flex-col items-center text-center transition-transform duration-300 ease-in-out transform hover:scale-105 w-full">
+  <div className="bg-white rounded-lg shadow-md transform transition-transform duration-300 hover:scale-105 mx-auto w-full sm:max-w-xs md:max-w-sm lg:max-w-md xl:max-w-lg">
     {/* Image Section */}
-    <div className="w-full h-48 sm:h-56 lg:h-64">
+    <div className="w-full h-40 sm:h-48 md:h-56 lg:h-64 xl:h-72 overflow-hidden rounded-t-lg">
       <img
         src={img}
         alt={name}
-        className="rounded-t-lg shadow-lg w-full h-full object-cover transition-opacity duration-300 ease-in-out group-hover:opacity-70"
+        className="w-full h-full object-cover transition-opacity duration-300 ease-in-out group-hover:opacity-80"
       />
     </div>
 
     {/* Info Section */}
-    <div className="member-info p-4 flex flex-col items-center">
-      <h4 className="text-[1rem] sm:text-2xl font-semibold">{name}</h4>       
-      <span className="text-gray-500 text-sm font-bold text-center mt-1">
-        {text1}
-      </span>
-      <span className="text-gray-500 text-sm font-bold text-center mb-3">
-        {text2}
-      </span>
-      <hr className="border-t-2 w-full mt-2" />
+    <div className="p-4 text-center">
+      <h4 className="text-lg md:text-xl font-semibold text-gray-800 mb-1">{name}</h4>
+      <p className="text-gray-600 text-sm md:text-base font-medium mb-1">{text1}</p>
+      <p className="text-gray-500 text-sm md:text-base font-medium mb-3">{text2}</p>
+
+      {/* Social Icons */}
+      <div className="flex justify-center space-x-3 mt-2">
+        {twitter && (
+          <a href={twitter} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-blue-400">
+            <i className="fab fa-twitter text-lg md:text-xl"></i>
+          </a>
+        )}
+        {facebook && (
+          <a href={facebook} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-blue-600">
+            <i className="fab fa-facebook text-lg md:text-xl"></i>
+          </a>
+        )}
+        {instagram && (
+          <a href={instagram} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-pink-500">
+            <i className="fab fa-instagram text-lg md:text-xl"></i>
+          </a>
+        )}
+        {linkedIn && (
+          <a href={linkedIn} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-blue-700">
+            <i className="fab fa-linkedin text-lg md:text-xl"></i>
+          </a>
+        )}
+      </div>
     </div>
 
-    {/* Social Icons Section */}
-    <div className="flex justify-center space-x-4 mt-3">
-      {twitter && (
-        <a href={twitter} className="text-gray-600 hover:text-blue-500" target="_blank" rel="noopener noreferrer">
-          <i className="fab fa-twitter text-2xl"></i>
-        </a>
-      )}
-      {facebook && (
-        <a href={facebook} className="text-gray-600 hover:text-blue-500" target="_blank" rel="noopener noreferrer">
-          <i className="fab fa-facebook text-2xl"></i>
-        </a>
-      )}
-      {instagram && (
-        <a href={instagram} className="text-gray-600 hover:text-pink-500" target="_blank" rel="noopener noreferrer">
-          <i className="fab fa-instagram text-2xl"></i>
-        </a>
-      )}
-      {linkedIn && (
-        <a href={linkedIn} className="text-gray-600 hover:text-blue-600" target="_blank" rel="noopener noreferrer">
-          <i className="fab fa-linkedin text-2xl"></i>
-        </a>
-      )}
-    </div>
-    
     {/* Bottom Accent Border */}
-    <div className="w-full h-1 bg-red-500 rounded-b-lg mt-4"></div>
+    <div className="w-full h-1 bg-indigo-500 rounded-b-lg"></div>
   </div>
 );
 
