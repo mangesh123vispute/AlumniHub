@@ -1,6 +1,6 @@
 import React from 'react';
 
-function MemberCard({ name, title, description, imgSrc }) {
+function MemberCard({ name, title, description, imgSrc,linkDIN,github }) {
   return (
     <div className="relative group bg-white rounded-lg shadow-md p-4 flex flex-col items-center text-center transition-transform duration-300 ease-in-out transform hover:scale-105">
       <link
@@ -24,16 +24,11 @@ function MemberCard({ name, title, description, imgSrc }) {
 
       {/* Vertical Bar for Social Icons */}
       <div className="social-bar bg-white z-30 absolute top-0 right-0 h-full w-0 overflow-hidden transition-all duration-300 ease-in-out group-hover:w-24 flex flex-col items-center justify-center">
-        <a href="#" className="text-white mb-4">
-          <i className="fab fa-twitter text-2xl hover:text-blue-500"></i>
-        </a>
-        <a href="#" className="text-white mb-4">
+
+        <a href={github} target='_blank' className="text-white mb-4">
           <i className="fab fa-github text-2xl hover:text-zinc-500"></i>
         </a>
-        <a href="#" className="text-white mb-4">
-          <i className="fab fa-instagram text-2xl hover:text-pink-500"></i>
-        </a>
-        <a href="#" className="text-white">
+        <a href={linkDIN} target='_blank' className="text-white">
           <i className="fab fa-linkedin text-2xl hover:text-blue-600"></i>
         </a>
       </div>
