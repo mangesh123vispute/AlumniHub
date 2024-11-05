@@ -15,12 +15,15 @@ function MemberCard({ name, title, description, imgSrc, linkDIN, github, gmail }
           className="rounded-lg shadow-lg w-full h-full object-cover"
         />
       </div>
-      <div className="member-info mb-4">
+      <div className="member-info">
         <h4 className="text-lg font-semibold">{name}</h4>
         <span className="text-sm font-bold text-gray-500">{title}</span>
         <hr className="border-2 bg-black mt-2" />
         <p className="text-gray-600 text-sm mt-3">{description}</p>
+        
+        
       </div>
+      <div className="text-sm absolute bottom-5 font-bold text-gray-500"><hr className="border-2  bg-black " />{gmail}</div>
 
       {/* Vertical Bar for Social Icons */}
       <div className="social-bar bg-white z-30 absolute top-0 right-0 h-full w-0 overflow-hidden transition-all duration-300 ease-in-out group-hover:w-24 flex flex-col items-center justify-center">
