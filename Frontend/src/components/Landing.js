@@ -140,7 +140,7 @@ function Landing() {
         <AboutSection
           title="Our Inspiration"
           secondTitle="Hon. Sau. Pratibhatai Patil"
-          desc="I am deeply committed to the cause of education and would like to see every person..."
+          desc="I am deeply committed to the cause of education and would like to see every person, man and woman, boy and girl, be touched by the light of modern education."
           imgUrl="./pratibhatai-patil.jpg"
           direction="left"
         />
