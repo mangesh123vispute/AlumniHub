@@ -118,9 +118,7 @@ function Landing() {
         <div className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000" style={{ backgroundImage: `url(${backgroundImages[bgIndex]})` }}></div>
         <button onClick={prevSlide} className="absolute left-5 top-1/2 transform -translate-y-1/2 text-white bg-black bg-opacity-50 rounded-full p-2">&#10094;</button>
         <button onClick={nextSlide} className="absolute right-5 top-1/2 transform -translate-y-1/2 text-white bg-black bg-opacity-50 rounded-full p-2">&#10095;</button>
-
       </div>
-
       {/* About and Other Sections */}
       <section id="about" className="py-10 px-4 text-center">
         <div className="container mx-auto max-w-screen-xl">
@@ -131,13 +129,12 @@ function Landing() {
             <div className="lg:w-1/2 text-center relative   lg:text-left space-y-4">
               <h2 className="text-3xl font-bold mt-5 mb-2">About Us</h2>
               <i>
-              <p className="text-base text-gray-700 leading-relaxed">Welcome to AlumniHub! We connect students, alumni, and college staff to foster lasting relationships and opportunities...</p>
+              <p className="text-base text-gray-700 leading-relaxed">Welcome to AlumniHub! We connect students, alumni, and college staff to foster lasting relationships and opportunities. Students can reach out to alumni for career guidance, apply for internships, and access job openings. Alumni can mentor students and engage in college activities, while administrators manage alumni data and organize events. With easy-to-use features for networking, event planning, and secure donations, AlumniHub supports everyone’s journey from student to proud alumni. Join us in keeping the college community connected and thriving!</p>
               </i>
             </div>
           </div>
         </div>
       </section>
-
       {/* Our Inspiration Section */}
       <div id="inspirati on" className="py-10 text-center">
         <AboutSection

@@ -2,9 +2,8 @@ import React from "react";
 
 const ContactSection = () => {
   return (
-    <section id="contact" className="contact py-12 px-5 md:py-16">
-      {/* Section Title */}
-     
+    <section className="contact py-12 px-5 md:py-16">
+      {/* Section Title */}    
 
       <div className="container mx-auto text-center mb-8 md:mb-12">
         <div className="flex flex-wrap justify-center lg:justify-between">

@@ -2,7 +2,7 @@ import React from 'react';
 
 const FooterSection = () => {
   return (
-    <footer className="bg-black bg-opacity-80 relative">
+    <footer id="contact"  className="bg-black bg-opacity-80 relative">
             <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
