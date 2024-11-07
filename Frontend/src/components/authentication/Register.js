@@ -19,15 +19,15 @@ const Register = () => {
   } = useContext(AuthContext);
  setFilter(false);
   const [Loading, setLoading] = useState(false);
-  const [selectedDocument, setSelectedDocument] = useState("");
+  // const [selectedDocument, setSelectedDocument] = useState("");
 
-  const handleDocumentSelect = (e) => {
-    setSelectedDocument(e.target.value);
-    setFormData({ ...formData, document_type: e.target.value });
-  };
-  const handleFileChange = (e) => {
-    setFormData({ ...formData, document_file: e.target.files[0] });
-  };
+  // const handleDocumentSelect = (e) => {
+  //   setSelectedDocument(e.target.value);
+  //   setFormData({ ...formData, document_type: e.target.value });
+  // };
+  // const handleFileChange = (e) => {
+  //   setFormData({ ...formData, document_file: e.target.files[0] });
+  // };
   const [formData, setFormData] = useState({
      full_name: "",
      username: "",
@@ -37,8 +37,8 @@ const Register = () => {
      graduation_year: "",
      graduation_month: "",
      linkedin: "",
-     document_type: "",
-     document_file: null,
+    //  document_type: "",
+    //  document_file: null,
    });
 
   const handleChange = (e) => {
@@ -56,8 +56,8 @@ const Register = () => {
       graduation_year,
       graduation_month,
       linkedin,
-      document_type,
-      document_file,
+      // document_type,
+      // document_file,
     } = formData;
 
     if (
@@ -68,9 +68,9 @@ const Register = () => {
       !confirmPassword ||
       !graduation_year ||
       !graduation_month ||
-      !linkedin ||
-      !document_type ||
-      !document_file
+      !linkedin
+      // !document_type ||
+      // !document_file
     ) {
       showNotification("All fields are required!", "warning", "Warning");
       return false;
@@ -172,7 +172,8 @@ const Register = () => {
      }
 
    } catch (error) {
-      console.error("Error:", error);
+     console.error("1.Error:", error);
+     
        showNotification(
          error?.response?.data?.detail || "Something went wrong",
          "error",
@@ -395,7 +396,7 @@ const Register = () => {
                     </div>
                   </div>
 
-                  <div className="form-group">
+                  {/* <div className="form-group">
                     <select
                       onChange={handleDocumentSelect}
                       className="form-control select2"
@@ -411,9 +412,9 @@ const Register = () => {
                         Graduation Certificate
                       </option>
                     </select>
-                  </div>
+                  </div> */}
 
-                  {selectedDocument && (
+                  {/* {selectedDocument && (
                     <div className="form-group">
                       <span>
                         Select Document: <b>{selectedDocument}</b>
@@ -427,7 +428,7 @@ const Register = () => {
                         required
                       />
                     </div>
-                  )}
+                  )} */}
                   <hr
                     style={{
                       border: "1px solid #d2d6df",

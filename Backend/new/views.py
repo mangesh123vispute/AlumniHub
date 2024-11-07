@@ -10,7 +10,7 @@ from django.utils.encoding import force_bytes,force_str
 from rest_framework import status
 from .utils import send_activation_email
 from django.contrib.auth.tokens import default_token_generator
-from django.core.mail import send_mail
+from django.core.mail import send_mail,EmailMultiAlternatives
 from django.conf import settings
 import urllib.parse
 from django.utils.encoding import force_str
@@ -21,7 +21,8 @@ from rest_framework.permissions import IsAuthenticated
 from django.db import IntegrityError
 from rest_framework.permissions import IsAdminUser
 from  .AlumniRegisterSerializers import AlumniRegistrationSerializer
-
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 User=get_user_model()
 
 class UserRegisterAPIView(APIView):
@@ -88,7 +89,7 @@ class ActivationEmailView(APIView):
                 # Send activation email
                 activation_token = default_token_generator.make_token(user)
                 uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
-                
+                print("1.I am getting called")
                 # Pass all validated data to the email function
                 send_activation_email(user, uidb64, activation_token, validated_data)
 
@@ -157,13 +158,33 @@ class ActivateAccountView(APIView):
                 'message3': "Request a new activation link.",
                  'url': "http://localhost:3000/activate_email"
                 })
+
     def send_confirmation_email(self, user):
+        """Sends an account activation confirmation email to the user."""
         subject = "Account Activated"
-        message = f"Hello {user.username},\n\nYour account has been successfully activated. You can now log in."
-        from_email = settings.DEFAULT_FROM_EMAIL  # Make sure you have this set in your Django settings
+        email_from = settings.DEFAULT_FROM_EMAIL
         recipient_list = [user.email]
 
-        send_mail(subject, message, from_email, recipient_list)
+        message = f"Hello {user.username},\n\nYour account has been successfully activated. You can now log in."
+        url="http://localhost:3000/login"
+        context: dict[str, str] = {
+            'message': message,
+            'message3': "You can Login Now",
+            'url':url
+        }
+
+        html_message = render_to_string('account/BaseEmail.html', context)
+        plain_message = strip_tags(html_message)
+
+        message = EmailMultiAlternatives(
+            subject=subject,
+            body=plain_message,
+            from_email=email_from,
+            to=recipient_list
+        )
+        message.attach_alternative(html_message, "text/html")
+        message.send()
+
 
 # ! forgot password and username 
 class ForgotPasswordAPIView(APIView):
@@ -189,7 +210,7 @@ class ForgotPasswordAPIView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def send_password_reset_email(self, user, uidb64, token):
+    # def send_password_reset_email(self, user, uidb64, token):
         subject = "Reset Your Password"
         message = "Please reset your password using the link below:"
         reset_link = f"http://localhost:3000/reset-password/{uidb64}/{token}/"
@@ -207,6 +228,32 @@ class ForgotPasswordAPIView(APIView):
             fail_silently=False,
             html_message=html_message
         )
+    def send_password_reset_email(self, user, uidb64, token):
+        """Sends a password reset email to the user."""
+        subject = "Reset Your Password"
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [user.email]
+
+        reset_link = f"http://localhost:3000/reset-password/{uidb64}/{token}/"
+        message = "Please reset your password using the link below:"
+
+        context: dict[str, str] = {
+            'message': message,
+            'url': reset_link,
+            'message3': "Reset Your Password"
+        }
+
+        html_message = render_to_string('account/BaseEmail.html', context)
+        plain_message = strip_tags(html_message)
+
+        message = EmailMultiAlternatives(
+            subject=subject,
+            body=plain_message,
+            from_email=email_from,
+            to=recipient_list
+        )
+        message.attach_alternative(html_message, "text/html")
+        message.send()
 
 
 class ResetPasswordAPIView(APIView):
@@ -251,25 +298,52 @@ class ForgotUsernameAPIView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def send_username_reset_email(self, user, uidb64, token):
-        subject = "Reset Your Username"
-        message = "Please reset your username using the link below:"
-        reset_link = f"http://localhost:3000/reset-username/{uidb64}/{token}/"
+    # def send_username_reset_email(self, user, uidb64, token):
+    #     subject = "Reset Your Username"
+    #     message = "Please reset your username using the link below:"
+    #     reset_link = f"http://localhost:3000/reset-username/{uidb64}/{token}/"
 
-        html_message = f"""
-            <p>{message}</p>
-            <p><a href="{reset_link}">Reset Username</a></p>
-        """
+    #     html_message = f"""
+    #         <p>{message}</p>
+    #         <p><a href="{reset_link}">Reset Username</a></p>
+    #     """
 
-        send_mail(
-            subject,
-            message,
-            settings.EMAIL_HOST_USER,
-            [user.email],
-            fail_silently=False,
-            html_message=html_message
-        )
+    #     send_mail(
+    #         subject,
+    #         message,
+    #         settings.EMAIL_HOST_USER,
+    #         [user.email],
+    #         fail_silently=False,
+    #         html_message=html_message
+    #     )
         
+    def send_username_reset_email(self, user, uidb64, token):
+        """Sends a username reset email to the user."""
+        subject = "Reset Your Username"
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [user.email]
+
+        reset_link = f"http://localhost:3000/reset-username/{uidb64}/{token}/"
+        message = "Please reset your username using the link below:"
+
+        context: dict[str, str] = {
+            'message': message,
+            'url': reset_link,
+            'message3': "Reset Your Username"
+        }
+
+        html_message = render_to_string('account/BaseEmail.html', context)
+        plain_message = strip_tags(html_message)
+
+        message = EmailMultiAlternatives(
+            subject=subject,
+            body=plain_message,
+            from_email=email_from,
+            to=recipient_list
+        )
+        message.attach_alternative(html_message, "text/html")
+        message.send()
+
 class ResetUsernameAPIView(APIView):
     def post(self, request, uidb64, token):
         try:
@@ -315,28 +389,30 @@ class SendActivationEmailView(APIView):
     def send_activation_email(self, user):
         """Sends a simple activation email to the user."""
         subject = "Activate Your Account"
-        message = "Please activate your account by clicking the link below."
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [user.email]
 
-        # Static activation URL (replace with the actual URL)
         activation_link = "http://localhost:3000/activate_email"
+        context: dict[str, str] = {
+            'user': user,
+            'url': activation_link,
+            'message': "Please activate your account by clicking the button below.",
+            'message2': "Once activated, you'll have access to the full features of AlumniHub.",
+            'message3': "Activate Your Account"
+        }
 
-        html_message = f"""
-            <p>{message}</p>
-            <p><a href="{activation_link}">Activate Your Account</a></p>
-        """
+        html_message = render_to_string('account/BaseEmail.html',context)
+        plain_message=strip_tags(html_message)
 
-        send_mail(
-            subject,
-            message,
-            email_from,
-            recipient_list,
-            html_message=html_message,
-            fail_silently=False,
+        message=EmailMultiAlternatives(
+            subject=subject,
+            body=plain_message,
+            from_email=email_from,
+            to=recipient_list
+
         )
-
-
+        message.attach_alternative(html_message,"text/html")
+        message.send()
 
 
 
@@ -411,6 +487,7 @@ class AdminRegistrationView(APIView):
             username=username,
             email=email,
             full_name=validated_data.get('full_name'),
+            is_allowedToJoinAlumni=validated_data.get('is_allowedToJoinAlumni'),
             is_superuser=True,
             is_active=True,
         )
@@ -451,18 +528,29 @@ class AlumniRegistrationView(APIView):
         if serializer.is_valid():
             serializer.save()
             subject = "AlumniHub Registration Successful"
-            message = (
-                "Registration successful. Your account will be verified by the college authority. "
-                "After verification, you will receive an email, and then you can log in."
-            )
-            send_mail(
-                subject,
-                message,
-                settings.DEFAULT_FROM_EMAIL,
-                [email],
-                fail_silently=False,
-            )
+            email_from = settings.DEFAULT_FROM_EMAIL
+            recipient_list = [email]
+            combined_message = (
+             "Registration successful. Your account will be verified by the college authority. "
+              "After verification, you will receive an email, and then you can log in."
+                 )
+            url="#"
+            context: dict[str, str] = {
+            'message': combined_message,
+            'url': url,
+            'message3': "Thank You for Registering"
+              }
+            html_message = render_to_string('account/BaseEmail.html', context)
+            plain_message = strip_tags(html_message)
 
+            message = EmailMultiAlternatives(
+                subject=subject,
+                body=plain_message,
+                from_email=email_from,
+                to=recipient_list
+            )
+            message.attach_alternative(html_message, "text/html")
+            message.send()
             return Response({"detail": "Registration successful. Your account will be verified by college authority. After verification, you will receive an email, and then you can log in.."}, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

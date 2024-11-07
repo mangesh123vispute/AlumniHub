@@ -206,13 +206,13 @@ const Requests = () => {
                   }}
                 >
                   <tr>
-                    <th style={{ width: "25%", backgroundColor: "lightgray" }}>
+                    <th style={{ width: "10%", backgroundColor: "lightgray" }}>
                       Alumni Name
                     </th>
                     <th style={{ width: "8%", backgroundColor: "lightgray" }}>
                       LinkedIn
                     </th>
-                    <th style={{ width: "15%", backgroundColor: "lightgray" }}>
+                    {/* <th style={{ width: "15%", backgroundColor: "lightgray" }}>
                       FY Marksheet
                     </th>
                     <th style={{ width: "8%", backgroundColor: "lightgray" }}>
@@ -223,8 +223,8 @@ const Requests = () => {
                     </th>
                     <th style={{ width: "15%", backgroundColor: "lightgray" }}>
                       Grad Certificate
-                    </th>
-                    <th style={{ width: "20%", backgroundColor: "lightgray" }}>
+                    </th> */}
+                    <th style={{ width: "20%", backgroundColor: "lightgray",textAlign: "right" }}>
                       Actions
                     </th>
                   </tr>
@@ -246,7 +246,7 @@ const Requests = () => {
                             </a>
                           ) : null}
                         </td>
-
+{/* 
                         <td>
                           {alumni.alumni_credentials.fourth_year_marksheet ? (
                             <i
@@ -316,8 +316,8 @@ const Requests = () => {
                           ) : (
                             "N/A"
                           )}
-                        </td>
-                        <td className="project-actions">
+                        </td> */}
+                        <td className="project-actions" style={{ textAlign: "right" }}>
                           <span
                             title="Correct"
                             style={{ color: "green", cursor: "pointer" }}

@@ -85,14 +85,19 @@ const TopAlumni = () => {
     <section className="bg-gray-100 py-10">
       <div className="container mx-auto px-4">
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-black text-center mb-6 md:mb-10">
-          Our Top <span className="text-black"> Alumni</span>
+          <span className="text-red-900">
+            Our Top Alumni
+          </span>
         </h2>
         <div
           ref={carouselRef}
           className="flex overflow-hidden whitespace-nowrap space-x-4 md:space-x-6 lg:space-x-8"
         >
           {[...alumniData, ...alumniData].map((alumni, index) => (
-            <div key={index} className="flex-shrink-0 w-48 sm:w-56 md:w-64 lg:w-72 mx-2">
+            <div
+              key={index}
+              className="flex-shrink-0 w-48 sm:w-56 md:w-64 lg:w-72 mx-2"
+            >
               <AlumniCard
                 name={alumni.name}
                 text1={alumni.text1}

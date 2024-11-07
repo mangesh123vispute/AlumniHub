@@ -34,7 +34,7 @@ const TeamSection = () => {
       name: "Aditya Patil",
       title: "Full-Stack Developer | React js | Node js | Next js | MERN stack | DSA ",
       description: "Computer Engineering student passionate about full-stack web development and frontend development, with hands-on experience in the MERN stack and React, strong DSA skills, and a track record of improving user engagement and backend performance.",
-      imgSrc: "/AdityaPic.jfif",
+      imgSrc: "/Aditya.jpeg",
       github:"https://github.com/Adityapatil1203",
       linkDIN:"https://www.linkedin.com/in/aditya-patil-b7b435258/",
       gmail:"adityapatil9226@gmail.com"
@@ -44,8 +44,11 @@ const TeamSection = () => {
   return (
     <section id="team" className="team section py-12 bg-gray-100">
       {/* Section Title */}
-      <div className="container mx-auto text-center mb-12 px-4" data-aos="fade-up">
-        <h2 className="text-3xl font-bold text-black">Our Team</h2>
+      <div
+        className="container mx-auto text-center mb-12 px-4"
+        data-aos="fade-up"
+      >
+        <h2 className="text-3xl font-bold text-red-900 ">Our Team</h2>
       </div>
 
       <div className="container mx-auto px-4">

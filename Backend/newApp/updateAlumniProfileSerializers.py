@@ -1,9 +1,13 @@
 from datetime import date
-from django.core.mail import send_mail
+from django.core.mail import send_mail,EmailMultiAlternatives
 from rest_framework import serializers
 from .models import AlumniProfile, StudentProfile, User, AlumniPost
 from django.conf import settings
 import logging
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
+
 logger = logging.getLogger(__name__)
 class ProfileUpdateSerializer(serializers.Serializer):
     graduation_year = serializers.IntegerField()
@@ -45,14 +49,43 @@ class ProfileUpdateSerializer(serializers.Serializer):
             user.is_alumni = False
             user.save()
 
+            # # Send email notification to the user
+            # send_mail(
+            #     subject="Profile Update: You are now classified as a Student",
+            #     message="Your profile has been updated to Student status.",
+            #     from_email=settings.DEFAULT_FROM_EMAIL,
+            #     recipient_list=[user.email],
+            #     fail_silently=False,
+            # )
             # Send email notification to the user
-            send_mail(
-                subject="Profile Update: You are now classified as a Student",
-                message="Your profile has been updated to Student status.",
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[user.email],
-                fail_silently=False,
+            subject = "Profile Update: You are now classified as a Student"
+            email_from = settings.DEFAULT_FROM_EMAIL
+            recipient_list = [user.email]
+
+            # Prepare context for rendering the email template
+            context: dict[str, str] = {
+                'user': user.full_name,
+                'message': "Your profile has been updated to Student status. You can now access student-specific features in AlumniHub.",
+                'message3': "Explore Student Features",
+                "url":"http://localhost:3000/login",
+            }
+
+            # Render the email content using a template
+            html_message = render_to_string('account/BaseEmail.html', context)
+            plain_message = strip_tags(html_message)
+
+            # Send email using EmailMultiAlternatives
+            message = EmailMultiAlternatives(
+                subject=subject,
+                body=plain_message,
+                from_email=email_from,
+                to=recipient_list
             )
+            message.attach_alternative(html_message, "text/html")
+            message.send()
+
+
+            
 
             # Create or update StudentProfile (One-to-One)
             StudentProfile.objects.update_or_create(user=user)

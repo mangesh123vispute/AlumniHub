@@ -7,7 +7,7 @@ class AdminRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'full_name', 'Branch', 'designation', 'password']
+        fields = ['username', 'email', 'full_name', 'Branch', 'designation', 'password','is_allowedToJoinAlumni']
         extra_kwargs = {
             'password': {'write_only': True}
         }

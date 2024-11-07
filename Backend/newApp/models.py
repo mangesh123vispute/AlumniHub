@@ -11,11 +11,12 @@ import json
 import uuid
 from django.conf import settings
 from django.urls import reverse
-from django.core.mail import send_mail
+from django.core.mail import send_mail,EmailMultiAlternatives
 from django.utils import timezone
 from django.utils import timezone
 from django.core.exceptions import ValidationError
-
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 
 class User(AbstractUser):
@@ -45,6 +46,7 @@ class User(AbstractUser):
     resume_link=models.CharField(max_length=500,blank=True,default="N/A")
     skills = models.TextField(blank=True,default="N/A") 
     isAlumniDirectRegistration=models.BooleanField(default=False)
+    is_allowedToJoinAlumni=models.BooleanField(default=False)
     graduation_month = models.IntegerField(
         blank=True,  # Allow blank for superuser in the validation
         null=True,   # Allow null for superuser in the validation
@@ -58,7 +60,7 @@ class User(AbstractUser):
         
     )
     is_active = models.BooleanField(default=False)
-
+   
     
     def generate_unique_username(self):
         """Generates a unique username using a UUID."""
@@ -71,25 +73,30 @@ class User(AbstractUser):
     def send_activation_email(self):
         """Sends an email to activate the user account."""
         subject = "Activate Your Account"
-        message = "Please activate your account by clicking the link below."
+        # message = "Please activate your account by clicking the link below."
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [self.email]
 
-        full_url = "http://localhost:3000/activate_email"
-        
-        html_message = f"""
-            <p>{message}</p>
-            <p><a href="{full_url}">Activate Your Account</a></p>
-        """
+        # full_url = "http://localhost:3000/activate_email"
+        activation_link = "http://localhost:3000/activate_email"
+        context: dict[str, str] = {
+                'message': "Please activate your account by clicking the button below.",
+                'url': activation_link,
+                'message3': "Activate Your Account"
+            }
+        html_message = render_to_string('account/BaseEmail.html', context)
+        plain_message = strip_tags(html_message)
 
-        send_mail(
-            subject,
-            message,
-            email_from,
-            recipient_list,
-            html_message=html_message,
-            fail_silently=False,
+        
+        # Send email using EmailMultiAlternatives
+        message = EmailMultiAlternatives(
+            subject=subject,
+            body=plain_message,
+            from_email=email_from,
+            to=recipient_list
         )
+        message.attach_alternative(html_message, "text/html")
+        message.send()
 
     def save(self, *args, **kwargs):
         
@@ -239,18 +246,18 @@ class HodPrincipalPost(models.Model):
     def __str__(self):
         return f"{self.title} by {self.author.full_name}"
 
-class AlumniCredentials(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='alumni_credentials')
-    fourth_year_marksheet = models.ImageField(upload_to='documents/marksheets/', blank=True, null=True)
-    lc = models.ImageField(upload_to='documents/lc/', blank=True, null=True)
-    id_card = models.ImageField(upload_to='documents/id_cards/', blank=True, null=True)
-    graduation_certificate = models.ImageField(upload_to='documents/graduation_certificates/', blank=True, null=True)
+# class AlumniCredentials(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='alumni_credentials')
+#     fourth_year_marksheet = models.ImageField(upload_to='documents/marksheets/', blank=True, null=True)
+#     lc = models.ImageField(upload_to='documents/lc/', blank=True, null=True)
+#     id_card = models.ImageField(upload_to='documents/id_cards/', blank=True, null=True)
+#     graduation_certificate = models.ImageField(upload_to='documents/graduation_certificates/', blank=True, null=True)
 
-    def full_name(self):
-        return self.user.full_name
+#     def full_name(self):
+#         return self.user.full_name
 
-    def __str__(self):
-        return f"Alumni - {self.user.username}"
+#     def __str__(self):
+#         return f"Alumni - {self.user.username}"
 
 class Command(createsuperuser.Command):
     help = 'Custom createsuperuser command'

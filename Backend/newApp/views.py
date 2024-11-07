@@ -19,9 +19,11 @@ from django.db.models import Q
 from .allPostSerializers import AlumniGETPostSerializer, HodPrincipalGETPostSerializer
 from .authenticateAlumniSerializers import InactiveAlumniSerializer
 from rest_framework.exceptions import PermissionDenied
-from django.core.mail import send_mail
+from django.core.mail import send_mail,EmailMultiAlternatives
 from django.conf import settings
 from .updateAlumniProfileSerializers import ProfileUpdateSerializer
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 class HodPrincipalPostPagination(PageNumberPagination):
     page_size = 10  # Number of posts per page
@@ -621,21 +623,78 @@ class AlumniActivationAPIView(APIView):
         if not request.user.is_superuser:
             raise PermissionDenied("You do not have permission to perform this action.")
 
+    # def send_activation_email(self, user):
+    #     subject = "Your Alumni Account Has Been Activated !"
+    #     message = "Hello {},\n\nYour alumni account has been successfully activated ,You can now Login to AlumniHub ! ".format(user.get_full_name())
+    #     from_email = settings.EMAIL_HOST_USER
+    #     recipient_list = [user.email]
+
+    #     send_mail(subject, message, from_email, recipient_list)
+
     def send_activation_email(self, user):
-        subject = "Your Alumni Account Has Been Activated !"
-        message = "Hello {},\n\nYour alumni account has been successfully activated ,You can now Login to AlumniHub ! ".format(user.get_full_name())
+        """Sends an activation confirmation email to the user."""
+        subject = "Your Alumni Account Has Been Activated!"
         from_email = settings.EMAIL_HOST_USER
         recipient_list = [user.email]
 
-        send_mail(subject, message, from_email, recipient_list)
+        # Prepare context for rendering the email template
+        context: dict[str, str] = {
+            'user': user.get_full_name(),
+            'message': "Your alumni account has been successfully activated. You can now log in to AlumniHub and enjoy all its features.",
+            'message3': "Log In to AlumniHub",
+            'url':"http://localhost:3000/login"
+        }
 
+        # Render the email content using a template
+        html_message = render_to_string('account/BaseEmail.html', context)
+        plain_message = strip_tags(html_message)
+
+        # Send email using EmailMultiAlternatives
+        message = EmailMultiAlternatives(
+            subject=subject,
+            body=plain_message,
+            from_email=from_email,
+            to=recipient_list
+        )
+        message.attach_alternative(html_message, "text/html")
+        message.send()
+
+
+    # def send_deletion_email(self, user):
+    #     subject = "Your Alumni Account Has Been Deleted"
+    #     message = "Hello {},\n\nWe regret to inform you that your alumni account has been successfully deleted. If you have any questions or concerns, please feel free to reach out to us.".format(user.get_full_name())
+    #     from_email = settings.EMAIL_HOST_USER
+    #     recipient_list = [user.email]
+
+    #     send_mail(subject, message, from_email, recipient_list)
     def send_deletion_email(self, user):
+        """Sends an email notification when the user's alumni account is deleted."""
         subject = "Your Alumni Account Has Been Deleted"
-        message = "Hello {},\n\nWe regret to inform you that your alumni account has been successfully deleted. If you have any questions or concerns, please feel free to reach out to us.".format(user.get_full_name())
         from_email = settings.EMAIL_HOST_USER
         recipient_list = [user.email]
 
-        send_mail(subject, message, from_email, recipient_list)
+        # Prepare context for rendering the email template
+        context: dict[str, str] = {
+            'user': user.get_full_name(),
+            'message': "We regret to inform you that your alumni account has been successfully deleted. If you have any questions or concerns, please feel free to reach out to us.",
+            'message3': "Contact Us",
+            'url': "http://localhost:3000/#contact"
+        }
+
+        # Render the email content using a template
+        html_message = render_to_string('account/BaseEmail.html', context)
+        plain_message = strip_tags(html_message)
+
+        # Send email using EmailMultiAlternatives
+        message = EmailMultiAlternatives(
+            subject=subject,
+            body=plain_message,
+            from_email=from_email,
+            to=recipient_list
+        )
+        message.attach_alternative(html_message, "text/html")
+        message.send()
+
 
     def put(self, request, user_id):
         self.check_superuser(request)

@@ -43,6 +43,7 @@ const [totalPages, setTotalPages] = useState(1);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [allowSettings, setAllowSettings] = useState(false);
   const[reload, setReload] = useState(false);
   const pageSize = 10;
   const isValidGitHubUrl = (url) => {
@@ -79,7 +80,15 @@ const [totalPages, setTotalPages] = useState(1);
     e.preventDefault();
     setLoading(true);
 
-    const newStaff = { full_name: fullName, email, designation, Branch: branch, username, password };
+    const newStaff = {
+      full_name: fullName,
+      email,
+      designation,
+      Branch: branch,
+      username,
+      password,
+      is_allowedToJoinAlumni: allowSettings,
+    };
     const token = localStorage.getItem("authTokens")
       ? JSON.parse(localStorage.getItem("authTokens"))
       : null;
@@ -109,6 +118,7 @@ const [totalPages, setTotalPages] = useState(1);
         setPassword("");
         setConfirmPassword("");
         toggleModal();
+        setAllowSettings(false);
         setReload(true);
       }
     } catch (error) {
@@ -440,6 +450,7 @@ const [totalPages, setTotalPages] = useState(1);
                         onChange={(e) => setBranch(e.target.value)}
                       />
                     </div>
+
                     <div className="form-group col-md-12">
                       <label htmlFor="password">Password</label>
                       <input
@@ -465,6 +476,18 @@ const [totalPages, setTotalPages] = useState(1);
                         min={"8"}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                       />
+                    </div>
+
+                    <div className="form-group col-md-12 mt-3">
+                      <input
+                        type="checkbox"
+                        id="allowSettings"
+                        checked={allowSettings}
+                        onChange={(e) => setAllowSettings(e.target.checked)}
+                      />
+                      <label htmlFor="allowSettings" className="ml-2">
+                        Allow for Settings Tab
+                      </label>
                     </div>
                   </div>
                 </form>

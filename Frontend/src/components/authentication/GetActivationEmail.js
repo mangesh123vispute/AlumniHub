@@ -45,7 +45,7 @@ const GetActivationEmail = () => {
       console.log(error);
       showNotification(
         error.response.data.detail ||
-          "Failed to reset password, Please try again",
+          "Failed to send activation email, Please try again",
         "error",
         "Error"
       );

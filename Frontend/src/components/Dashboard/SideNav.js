@@ -449,23 +449,26 @@ const SideNav = () => {
                         ) : null}
                       </p>
                     </Link>
+                    
                   </li>
-                  <li className="nav-item">
-                    <Link
-                      to={`${baseurl}/admin/`}
-                      className="nav-link"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <p style={{ fontSize: "1em" }}>
-                        <i
-                          className="fas fa-cog nav-icon"
-                          style={{ fontSize: "1em" }}
-                        ></i>
-                        Settings
-                      </p>
-                    </Link>
-                  </li>
+                  {(userData?.is_allowedToJoinAlumni || userData?.username==="Admin") && (
+                    <li className="nav-item">
+                      <Link
+                        to={`${baseurl}/admin/`}
+                        className="nav-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <p style={{ fontSize: "1em" }}>
+                          <i
+                            className="fas fa-cog nav-icon"
+                            style={{ fontSize: "1em" }}
+                          ></i>
+                          Settings
+                        </p>
+                      </Link>
+                    </li>
+                  )}
                 </>
               )}
 
