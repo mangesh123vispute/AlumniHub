@@ -46,7 +46,6 @@ class User(AbstractUser):
     resume_link=models.CharField(max_length=500,blank=True,default="N/A")
     skills = models.TextField(blank=True,default="N/A") 
     isAlumniDirectRegistration=models.BooleanField(default=False)
-    is_allowedToJoinAlumni=models.BooleanField(default=False)
     graduation_month = models.IntegerField(
         blank=True,  # Allow blank for superuser in the validation
         null=True,   # Allow null for superuser in the validation
@@ -60,7 +59,12 @@ class User(AbstractUser):
         
     )
     is_active = models.BooleanField(default=False)
-   
+
+    # permissions 
+    is_allowedToJoinAlumni=models.BooleanField(default=False)
+    is_allowedToAccessSettings=models.BooleanField(default=False)
+    is_allowedToAddAdmin=models.BooleanField(default=False)
+    is_allowedToAccessLinkedinScrappingTab=models.BooleanField(default=False)
     
     def generate_unique_username(self):
         """Generates a unique username using a UUID."""

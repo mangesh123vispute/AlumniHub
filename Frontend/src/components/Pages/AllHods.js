@@ -32,6 +32,8 @@ const AllAlumnisContent = () => {
     userData,
     setIsAllPostPage,
     reloadFilter,
+    toggelreloadAdminData,
+    reloadAdminData,
   } = useContext(AuthContext);
 
 const [pageNumber, setPageNumber] = useState(1);
@@ -44,7 +46,11 @@ const [totalPages, setTotalPages] = useState(1);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [allowSettings, setAllowSettings] = useState(false);
-  const[reload, setReload] = useState(false);
+  const [allowAddAdmin, setAllowAddAdmin] = useState(false);
+  const [allowAccessLinkedinScrapping, setAllowAccessLinkedinScrapping] = useState(false);
+  const [allowAccessAlumniJoinRequest, setAllowAccessAlumniJoinRequest] = useState(false);
+
+  
   const pageSize = 10;
   const isValidGitHubUrl = (url) => {
     const githubUrlPattern =
@@ -87,7 +93,10 @@ const [totalPages, setTotalPages] = useState(1);
       Branch: branch,
       username,
       password,
-      is_allowedToJoinAlumni: allowSettings,
+      is_allowedToAccessSettings: allowSettings,
+      is_allowedToJoinAlumni: allowAccessAlumniJoinRequest,
+      is_allowedToAddAdmin: allowAddAdmin,
+      is_allowedToAccessLinkedinScrappingTab: allowAccessLinkedinScrapping,
     };
     const token = localStorage.getItem("authTokens")
       ? JSON.parse(localStorage.getItem("authTokens"))
@@ -119,7 +128,11 @@ const [totalPages, setTotalPages] = useState(1);
         setConfirmPassword("");
         toggleModal();
         setAllowSettings(false);
-        setReload(true);
+        setAllowAddAdmin(false);
+        setAllowAccessLinkedinScrapping(false);
+        setAllowAccessAlumniJoinRequest(false);
+        toggelreloadAdminData();
+        toggleAddAdminModal();
       }
     } catch (error) {
       // Check for specific error messages
@@ -187,7 +200,7 @@ const [totalPages, setTotalPages] = useState(1);
   // Fetch alumni on component mount
   useEffect(() => {
     fetchAdmins(pageNumber);
-  }, [pageNumber, reloadFilter, reload]);
+  }, [pageNumber, reloadFilter, reloadAdminData]);
 
   useEffect(() => {
     setIsAllAdminPage(true);
@@ -395,6 +408,20 @@ const [totalPages, setTotalPages] = useState(1);
               >
                 <form onSubmit={handleAddAdmin}>
                   <div className="form-row">
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        width: "100%",
+                      }}
+                    >
+                      <p style={{ color: "red", margin: 0 }}>
+                        {" "}
+                        Personal Details{" "}
+                        <hr style={{ border: "1px solid black" }} />
+                      </p>
+                    </div>
                     <div className="form-group col-md-12">
                       <label htmlFor="fullName">Full Name</label>
                       <input
@@ -478,7 +505,32 @@ const [totalPages, setTotalPages] = useState(1);
                       />
                     </div>
 
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        width: "100%",
+                      }}
+                    >
+                      <p style={{ color: "red", margin: 0 }}>
+                        Permissions <hr style={{ border: "1px solid black" }} />
+                      </p>
+                    </div>
+
                     <div className="form-group col-md-12 mt-3">
+                      <input
+                        type="checkbox"
+                        id="allowAddAdmin"
+                        checked={allowAddAdmin}
+                        onChange={(e) => setAllowAddAdmin(e.target.checked)}
+                      />
+                      <label htmlFor="allowAddAdmin" className="ml-2">
+                        Grant permission to add new administrators
+                      </label>
+                    </div>
+
+                    <div className="form-group col-md-12 ">
                       <input
                         type="checkbox"
                         id="allowSettings"
@@ -486,7 +538,40 @@ const [totalPages, setTotalPages] = useState(1);
                         onChange={(e) => setAllowSettings(e.target.checked)}
                       />
                       <label htmlFor="allowSettings" className="ml-2">
-                        Allow for Settings Tab
+                        Grant access to the Settings tab
+                      </label>
+                    </div>
+
+                    <div className="form-group col-md-12">
+                      <input
+                        type="checkbox"
+                        id="allowAccessLinkedinScrapping"
+                        checked={allowAccessLinkedinScrapping}
+                        onChange={(e) =>
+                          setAllowAccessLinkedinScrapping(e.target.checked)
+                        }
+                      />
+                      <label
+                        htmlFor="allowAccessLinkedinScrapping"
+                        className="ml-2"
+                      >
+                        Grant permission to use the LinkedIn Scraping tool
+                      </label>
+                    </div>
+                    <div className="form-group col-md-12">
+                      <input
+                        type="checkbox"
+                        id="allowAccessAlumniJoinRequest"
+                        checked={allowAccessAlumniJoinRequest}
+                        onChange={(e) =>
+                          setAllowAccessAlumniJoinRequest(e.target.checked)
+                        }
+                      />
+                      <label
+                        htmlFor="allowAccessAlumniJoinRequest"
+                        className="ml-2"
+                      >
+                        Grant access to the Alumni Join Request tab
                       </label>
                     </div>
                   </div>

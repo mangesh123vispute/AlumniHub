@@ -1,21 +1,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Error = () => {
+const NotAuthorized = () => {
   return (
     <div style={styles.container}>
-      <div style={styles.errorContent}>
+      <div style={styles.content}>
         <h3 style={styles.errorCode}>
-          <i className="fas fa-exclamation-triangle" style={styles.icon} /> 404
+          <i className="fas fa-ban" style={styles.icon} /> 403
         </h3>
         <p style={styles.message}>
-          <strong>Oops! Page not found.</strong>
+          <strong>You are not authorized to access this page.</strong>
         </p>
         <p style={styles.subMessage}>
-          We couldn't find the page you're looking for. Meanwhile, you can
+          If you believe this is a mistake, please contact your administrator.
+          Meanwhile, you can
           <Link to="/" style={styles.link}>
             {" "}
-            return to the website.
+            return to the homepage.
           </Link>
         </p>
       </div>
@@ -33,7 +34,7 @@ const styles = {
     backgroundColor: "#f4f6f9", // AdminLTE light background
     padding: "20px", // Added padding for smaller screens
   },
-  errorContent: {
+  content: {
     textAlign: "center",
     color: "#343a40", // Dark color for better visibility
     width: "90%", // Responsive width
@@ -41,7 +42,7 @@ const styles = {
   },
   errorCode: {
     fontSize: "4rem", // Adjusted for default screen size
-    color: "#ffc107", // AdminLTE warning color
+    color: "#dc3545", // Red color indicating an error
     marginBottom: "20px",
   },
   icon: {
@@ -92,4 +93,4 @@ styleSheet.type = "text/css";
 styleSheet.innerText = mediaStyles;
 document.head.appendChild(styleSheet);
 
-export default Error;
+export default NotAuthorized;

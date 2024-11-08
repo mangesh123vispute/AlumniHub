@@ -2,7 +2,7 @@ import {React, useEffect} from "react";
 import Footer from "./Footer";
 import Header from "./Header";
 import SideNav from "./SideNav";
-
+import AddAdmin from "../Pages/AddAdmin";
 
 const Home = ({ DynamicContent, url, heading = "Dashboard" }) => {
   
@@ -55,6 +55,7 @@ const Home = ({ DynamicContent, url, heading = "Dashboard" }) => {
           </div>
         </section>
       </div>
+      <AddAdmin/>
       <Footer />
     </div>
   );

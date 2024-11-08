@@ -6,8 +6,13 @@ import baseurl from "../const.js";
 import { Link } from "react-router-dom";
 
 const SideNav = () => {
-  let { userData, numberOfInactiveAlumni, ProfileImage } =
-    useContext(AuthContext);
+  let {
+    userData,
+    numberOfInactiveAlumni,
+    ProfileImage,
+    showNotification,
+    toggleAddAdminModal,
+  } = useContext(AuthContext);
   console.log("userData", userData);
   const [activeDropdown, setActiveDropdown] = useState(null);
   // const [isOpen, setIsOpen] = useState(false); // State to control dropdown visibility
@@ -425,33 +430,84 @@ const SideNav = () => {
                     )}
                   </li>
 
-                  <li className="nav-item">
-                    <Link to="/requests" className="nav-link">
-                      <p style={{ fontSize: "1em" }}>
-                        <i
-                          className="fas fa-user-plus nav-icon"
-                          style={{ fontSize: "1em" }}
-                          title="Request to Join"
-                        ></i>
-                        Join Requests
-                        {numberOfInactiveAlumni ? (
-                          <span
-                            className="left badge badge-danger "
-                            style={{
-                              fontSize: "0.6em",
-                              position: "relative",
-                              bottom: "1em",
-                              left: "0.5em",
-                            }}
-                          >
-                            {numberOfInactiveAlumni}
-                          </span>
-                        ) : null}
-                      </p>
-                    </Link>
-                    
-                  </li>
-                  {(userData?.is_allowedToJoinAlumni || userData?.username==="Admin") && (
+                  {(userData?.is_allowedToAccessLinkedinScrappingTab ||
+                    userData?.username === "Admin") && (
+                    <li className="nav-item">
+                      <Link
+                        to={`/LinkedinScraper`}
+                        className="nav-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <p style={{ fontSize: "1em" }}>
+                          <i
+                            className="fab fa-linkedin-in nav-icon"
+                            style={{ fontSize: "1em" }}
+                          ></i>
+                          Linkedin Scrapper
+                        </p>
+                      </Link>
+                    </li>
+                  )}
+
+                  {(userData?.is_allowedToAddAdmin ||
+                    userData?.username === "Admin") && (
+                    <li className="nav-item">
+                      <Link
+                        type="button"
+                        className="nav-link"
+                        onClick={() => {
+                          showNotification(
+                            "While adding an admin, ensure that you grant them appropriate permissions to give them the right level of access..",
+                            "info",
+                            "Info"
+                          );
+                          toggleAddAdminModal();
+                        }}
+                      >
+                        <p style={{ fontSize: "1em" }}>
+                          <i
+                            className="fas fa-user-plus nav-icon"
+                            style={{ fontSize: "1em" }}
+                            title="Add New Administrator"
+                          ></i>
+                          Add New Administrator
+                        </p>
+                      </Link>
+                    </li>
+                  )}
+
+                  {(userData?.is_allowedToJoinAlumni ||
+                    userData?.username === "Admin") && (
+                    <li className="nav-item">
+                      <Link to="/requests" className="nav-link">
+                        <p style={{ fontSize: "1em" }}>
+                          <i
+                            className="fas fa-hands-helping nav-icon"
+                            style={{ fontSize: "1em" }}
+                            title="Request to Join"
+                          ></i>
+                          Alumni Join Requests
+                          {numberOfInactiveAlumni ? (
+                            <span
+                              className="left badge badge-danger "
+                              style={{
+                                fontSize: "0.6em",
+                                position: "relative",
+                                bottom: "1em",
+                                left: "0.5em",
+                              }}
+                            >
+                              {numberOfInactiveAlumni}
+                            </span>
+                          ) : null}
+                        </p>
+                      </Link>
+                    </li>
+                  )}
+
+                  {(userData?.is_allowedToAccessSettings ||
+                    userData?.username === "Admin") && (
                     <li className="nav-item">
                       <Link
                         to={`${baseurl}/admin/`}

@@ -30,7 +30,11 @@ export const AuthProvider = ({ children }) => {
   const [ProfileImage, setProfileImage] = useState("");
   const [reloadFilter, setReloadFilter] = useState(false);
   const [isAllPostPage, setIsAllPostPage] = useState(false);
+  const [reloadAdminData, setReloadAdminData] = useState(false);
   
+  const toggelreloadAdminData = () => {
+    setReloadAdminData((prev) => !prev);
+  }
    
  const [Alumnifilters, setAlumniFilters] = useState({
    full_name: "",
@@ -331,6 +335,9 @@ export const AuthProvider = ({ children }) => {
     setIsAllPostPage,
     postFilters,
     setPostFilters,
+    reloadAdminData,
+    setReloadAdminData,
+    toggelreloadAdminData,
   };
 
 

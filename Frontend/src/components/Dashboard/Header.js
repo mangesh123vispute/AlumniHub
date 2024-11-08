@@ -81,24 +81,26 @@
           {/* Right navbar links */}
           <ul className="navbar-nav ml-auto">
             {/* Messages Dropdown Menu */}
-            {isAllAdminPage && (userData.is_superuser && userData.username==="Admin") && (
-              <li className="nav-item ">
-                <button
-                  className="btn btn-sm btn-default mt-2"
-                  type="button"
-                  onClick={() => {
-                   showNotification(
-                     "By adding an admin, you are granting them full authority. Please proceed carefully.",
-                     "info",
-                     "Info"
-                   );
-                    toggleAddAdminModal();
-                  }}
-                >
-                 <i class="fas fa-user-plus mr-1"></i> Add Admin
-                </button>
-              </li>
-            )}
+            {isAllAdminPage &&
+              (userData?.is_allowedToAddAdmin ||
+                userData?.username === "Admin") && (
+                <li className="nav-item ">
+                  <button
+                    className="btn btn-sm btn-default mt-2"
+                    type="button"
+                    onClick={() => {
+                      showNotification(
+                        "While adding an admin, ensure that you grant them appropriate permissions to give them the right level of access..",
+                        "info",
+                        "Info"
+                      );
+                      toggleAddAdminModal();
+                    }}
+                  >
+                    <i class="fas fa-user-plus mr-1"></i> Add Admin
+                  </button>
+                </li>
+              )}
 
             {filter ? (
               <>

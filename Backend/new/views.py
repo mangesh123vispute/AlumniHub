@@ -488,6 +488,9 @@ class AdminRegistrationView(APIView):
             email=email,
             full_name=validated_data.get('full_name'),
             is_allowedToJoinAlumni=validated_data.get('is_allowedToJoinAlumni'),
+            is_allowedToAccessSettings=validated_data.get('is_allowedToAccessSettings'),
+            is_allowedToAddAdmin=validated_data.get('is_allowedToAddAdmin'),
+            is_allowedToAccessLinkedinScrappingTab=validated_data.get('is_allowedToAccessLinkedinScrappingTab'),
             is_superuser=True,
             is_active=True,
         )

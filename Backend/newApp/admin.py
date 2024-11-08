@@ -20,12 +20,12 @@ class UserAdmin(ImportExportModelAdmin):
     readonly_fields = ['id']
     list_display = [
         'id', 'username', 'full_name', 'Branch', 'is_active',
-        'is_alumni', 'is_student', 'is_superuser','is_allowedToJoinAlumni','graduation_month', 'graduation_year',"is_staff",
+        'is_alumni', 'is_student', 'is_superuser','is_allowedToJoinAlumni','is_allowedToAccessSettings','is_allowedToAddAdmin','is_allowedToAccessLinkedinScrappingTab','graduation_month', 'graduation_year',"is_staff",
         'email', 'portfolio_link', 'resume_link', 'mobile',
         'linkedin', 'instagram', 'Github', 'skills',
         'About', 'Work', 'Year_Joined', 'Image'
     ]
-    list_filter = ['is_active', 'is_alumni', 'is_student', 'is_superuser','is_allowedToJoinAlumni', 'Branch', 'graduation_year', 'Year_Joined']
+    list_filter = ['is_active', 'is_alumni', 'is_student', 'is_superuser','is_allowedToJoinAlumni','is_allowedToAccessSettings', 'is_allowedToAddAdmin','is_allowedToAccessLinkedinScrappingTab','Branch', 'graduation_year', 'Year_Joined']
     actions = ['send_email_action', "send_activation_email_action","update_profiles_action"]
     search_fields = ['id', 'username', 'full_name', 'Branch', 'graduation_year', 'email', 'mobile', 'linkedin', 'instagram', 'Github', 'skills', 'About', 'Work', 'Year_Joined']
     list_display_links = ['id', 'username', 'full_name', 'email', 'mobile', 'linkedin', 'instagram', 'Github']
@@ -35,7 +35,7 @@ class UserAdmin(ImportExportModelAdmin):
             'fields': ('username', 'full_name', 'Branch', 'skills', 'About', 'Work', 'Image')
         }),
         ('Permissions', {
-            'fields': ('is_active', 'is_superuser', 'is_alumni', 'is_student','is_staff','is_allowedToJoinAlumni'),
+            'fields': ('is_active', 'is_superuser', 'is_alumni', 'is_student','is_staff','is_allowedToJoinAlumni','is_allowedToAccessSettings','is_allowedToAddAdmin','is_allowedToAccessLinkedinScrappingTab'),
         }),
         ('Important dates', {
             'fields': ("graduation_month",'graduation_year', 'Year_Joined'),
