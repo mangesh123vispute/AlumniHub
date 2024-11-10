@@ -23,6 +23,8 @@ from rest_framework.permissions import IsAdminUser
 from  .AlumniRegisterSerializers import AlumniRegistrationSerializer
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+import base64
+
 User=get_user_model()
 
 class UserRegisterAPIView(APIView):
@@ -84,12 +86,28 @@ class ActivationEmailView(APIView):
             try:
                 user = User.objects.get(email=email)
                 if user.is_active:
-                    return Response({"detail": "Your account is already activated."}, status=status.HTTP_400_BAD_REQUEST)
-
+                    return Response({"detail": "Account is already activated for this Email"}, status=status.HTTP_400_BAD_REQUEST)
+                
+                if validated_data.get("username"):
+                    new_username = validated_data.get("username")
+                    # Check if a username exists and exclude the current user
+                    if User.objects.filter(username=new_username).exclude(pk=user.pk).exists():
+                        return Response(
+                            {"detail": "Username is already taken. Please enter a different username"},
+                            status=status.HTTP_400_BAD_REQUEST
+                        )
+                if validated_data.get("email"):
+                    new_email = validated_data.get("email")
+                    # Check if an email exists and exclude the current user
+                    if User.objects.filter(email=new_email).exclude(pk=user.pk).exists():
+                        return Response(
+                            {"detail": "Email is already in use. Please enter a different email."},
+                            status=status.HTTP_400_BAD_REQUEST
+                        )
+                
                 # Send activation email
                 activation_token = default_token_generator.make_token(user)
                 uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
-                print("1.I am getting called")
                 # Pass all validated data to the email function
                 send_activation_email(user, uidb64, activation_token, validated_data)
 
@@ -118,13 +136,26 @@ class ActivateAccountView(APIView):
 
             if data.get("username"):
                 new_username = data.get("username")
-                if User.objects.filter(username=new_username).exists():
+                # Check if a username exists and exclude the current user
+                if User.objects.filter(username=new_username).exclude(pk=user.pk).exists():
                     return Response(
                         {"detail": "Username is already taken."},
                         status=status.HTTP_400_BAD_REQUEST
                     )
                 else:
                     user.username = new_username
+
+            if data.get("email"):
+                new_email = data.get("email")
+                # Check if an email exists and exclude the current user
+                if User.objects.filter(email=new_email).exclude(pk=user.pk).exists():
+                    return Response(
+                        {"detail": "Email is already in use."},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+                else:
+                    user.email = new_email
+
            
             if(data.get('role')=="Alumni"):
                 user.is_alumni=True
@@ -210,24 +241,7 @@ class ForgotPasswordAPIView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    # def send_password_reset_email(self, user, uidb64, token):
-        subject = "Reset Your Password"
-        message = "Please reset your password using the link below:"
-        reset_link = f"http://localhost:3000/reset-password/{uidb64}/{token}/"
 
-        html_message = f"""
-            <p>{message}</p>
-            <p><a href="{reset_link}">Reset Password</a></p>
-        """
-
-        send_mail(
-            subject,
-            message,
-            settings.EMAIL_HOST_USER,
-            [user.email],
-            fail_silently=False,
-            html_message=html_message
-        )
     def send_password_reset_email(self, user, uidb64, token):
         """Sends a password reset email to the user."""
         subject = "Reset Your Password"
@@ -392,7 +406,8 @@ class SendActivationEmailView(APIView):
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [user.email]
 
-        activation_link = "http://localhost:3000/activate_email"
+        encoded_email = base64.urlsafe_b64encode(user.email.encode()).decode()
+        activation_link = f'http://localhost:3000/activate_email/{encoded_email}'
         context: dict[str, str] = {
             'user': user,
             'url': activation_link,

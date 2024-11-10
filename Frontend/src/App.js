@@ -1,6 +1,5 @@
 import Home from "./components/Dashboard/Home.js";
 import Error from "./components/ErrorPage/Error.js";
-import Maintenance from "./components/Mentainance/Maintenance.js";
 import { AuthProvider } from "./context/AuthContext";
 import Login from "./components/authentication/Login.js";
 import ActivateEmail from "./components/authentication/ActivateEmail.js";
@@ -25,23 +24,9 @@ import ForgotUsername from "./components/authentication/Forgot_username.js";
 import GetActivationEmail from "./components/authentication/GetActivationEmail.js";
 import ResetPassword from "./components/authentication/Reset_password.js";
 import ResetUsername from "./components/authentication/Reset_username.js";
-import LinkedinScrap from "./components/LinkedinScrap.js/LinkedinScrap.js";
 import MyProfile from "./components/Pages/MyProfile.js";
-import NotAuthorized from "./components/AuthenticationPages/NotAuthorized.js";
-import React, {  useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
 
 function App() {
-  const isUnderMaintenance = true;
-  const [userData, setUserData] = useState(null);
-   useEffect(() => {
-     const tokenData = JSON.parse(localStorage.getItem("authTokens"));
-     if (tokenData && tokenData.access) {
-       const decodedToken = jwtDecode(tokenData.access);
-       setUserData(decodedToken);
-     }
-   }, []);
-
   
   return (
     <BrowserRouter>
@@ -49,8 +34,12 @@ function App() {
         <Routes>
           {/* <Route path="/" element={<Layout />}> */}
           <Route path="/" element={<Landing />} />
+
           <Route path="/login" element={<Login />} />
-          <Route path="/activate_email" element={<ActivateEmail />} />
+          <Route
+            path="/activate_email/:useremail"
+            element={<ActivateEmail />}
+          />
           <Route path="/forgot_password" element={<ForgotPassword />} />
           <Route path="/forgot_username" element={<ForgotUsername />} />
           <Route
@@ -68,14 +57,7 @@ function App() {
           <Route path="/home" element={<ProtectedRoute element={<Home />} />} />
           <Route
             path="/requests"
-            element={
-              userData?.is_allowedToJoinAlumni ||
-              userData?.username === "Admin" ? (
-                <ProtectedRoute element={<Requests />} />
-              ) : (
-                <NotAuthorized />
-              )
-            }
+            element={<ProtectedRoute element={<Requests />} />}
           />
           {/* <Route
             path="/home2"
@@ -119,21 +101,8 @@ function App() {
           />
           <Route path="/register" element={<Register />} />
           <Route path="/about" element={<AboutUs />} />
-          <Route
-            path="/LinkedinScraper"
-            element={
-              isUnderMaintenance ? (
-                <Maintenance />
-              ) : (userData?.is_allowedToAccessLinkedinScrappingTab ||
-                userData?.username === "Admin") ? (
-                <ProtectedRoute element={<LinkedinScrap />} />
-              ) : (
-                <NotAuthorized />
-              )
-            }
-          />
-         
           <Route path="*" element={<Error />} />
+          {/* <Route path="/forgot_password" element={<ProtectedRoute element={<Reset_password />} />} /> */}
         </Routes>
       </AuthProvider>
     </BrowserRouter>

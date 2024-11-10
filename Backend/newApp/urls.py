@@ -2,7 +2,7 @@ from django.urls import path
 from django.conf import settings
 from . import views
 from django.conf.urls.static import static
-from .views import HodPrincipalPostAPIView,GETAlumni,HodAuthorPostListView,AlumniPostAPIView,GETHODs,GETStudent,UserImageUploadView,AlumniAuthorPostListView,PostListView,InactiveAlumniListView,AlumniActivationAPIView,AcceptAllAlumni,UserImageRetrieveView,UpdateAlumniProfileView
+from .views import HodPrincipalPostAPIView,GETAlumni,HodAuthorPostListView,AlumniPostAPIView,GETHODs,GETStudent,UserImageUploadView,AlumniAuthorPostListView,PostListView,InactiveAlumniListView,AlumniActivationAPIView,AcceptAllAlumni,UserImageRetrieveView,UpdateAlumniProfileView,UserDetailView
 
 
 
@@ -48,6 +48,7 @@ urlpatterns = [
 
     path('update-alumni-profile/<int:user_id>/', UpdateAlumniProfileView.as_view(), name='update-profile'),
 
+    path('user-detail/', UserDetailView.as_view(), name='user-detail'),
 
    
 ]+static(settings.MEDIA_URL, document_root=settings. MEDIA_ROOT)    

@@ -806,3 +806,34 @@ class UpdateAlumniProfileView(APIView):
             {"message": "Profile updated successfully.", "user": updated_user.id},
             status=status.HTTP_200_OK
         )
+
+
+class UserDetailView(APIView):
+    """
+    API view to retrieve username, email, graduation_year, and graduation_month based on the provided email.
+    """
+    def post(self, request):
+        email = request.data.get('email')
+        
+        if not email:
+            return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Get the user or return a 404 response if not found
+        user = get_object_or_404(User, email=email)
+
+        role="None"
+        if user.is_alumni:
+            role="Alumni"
+        elif user.is_student:
+            role="Student"
+
+        # Prepare the response data
+        user_data = {
+            'username': user.username,
+            'email': user.email,
+            'graduation_year': user.graduation_year,
+            'graduation_month': user.graduation_month,
+            'role':role
+        }
+
+        return Response(user_data, status=status.HTTP_200_OK)

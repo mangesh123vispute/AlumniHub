@@ -2,17 +2,59 @@ import React, { useState, useContext,useEffect } from "react";
 import AuthContext from "../../context/AuthContext.js";
 import LoadingSpinner from "../Loading/Loading.js";
 import Notification from "../Notification/Notification.js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import baseurl from "../const.js";
 const ActivateEmail = () => {
-  const [username, setUsername] = useState(""); // State for username
-  const [email, setEmail] = useState(""); // State for email
-  const [password, setPassword] = useState(""); // State for password
-  const [confirmPassword, setConfirmPassword] = useState(""); // State for confirm password
+  const [username, setUsername] = useState(""); 
+  const [email, setEmail] = useState(""); 
+  const [password, setPassword] = useState(""); 
+  const [confirmPassword, setConfirmPassword] = useState(""); 
   const [role, setRole] = useState("");
   const [graduation_month, setGraduation_month] = useState("");
-  const [graduation_year, setGraduation_year] = useState("");// State for role
+  const [graduation_year, setGraduation_year] = useState("");
   const navigate = useNavigate();
+  const { useremail } = useParams();
+  const decodedUserEmail = atob(useremail);
+
+
+  async function fetchUserDetails(email) {
+    try {
+      const response = await fetch(`${baseurl}/user-detail/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: email }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log("User Details:", data);
+      return data;
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchUserDetails(decodedUserEmail).then((data) => {
+      if (data) {
+        console.log("1.Data",data)
+        setUsername(data.username);
+        setEmail(data.email);
+        setRole(data.role);
+        setGraduation_month(data.graduation_month);
+        setGraduation_year(data.graduation_year);
+      }
+    });
+  }, []);
+
+
+
   const {
     isOpen,
     message,
@@ -98,12 +140,12 @@ const ActivateEmail = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/activate-email/", {
+      const response = await fetch(`${baseurl}/activate-email/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, email, password, role, graduation_year, graduation_month }), // Include role in the request body
+        body: JSON.stringify({ username, email, password, role, graduation_year, graduation_month }), 
       });
 
       if (response.ok) {
@@ -134,9 +176,7 @@ const ActivateEmail = () => {
     }
   };
 
-  const handleRadioChange = (e) => {
-    setRole(e.target.value); // Update role state based on selected radio button
-  };
+
 
   return (
     <div>
@@ -152,14 +192,17 @@ const ActivateEmail = () => {
         <div className="login-box">
           <div className="card card-outline card-primary">
             <div className="card-header text-center">
-              <Link to="/" style={{ color: "#007bff" }}>
-                AlumniHub | <span style={{ marginLeft: "3px",fontSize: "22px" }}>SSBT COET</span>
+              <Link to="/" style={{ color: "#007bff", fontSize: "25px" }}>
+                AlumniHub |{" "}
+                <span style={{ marginLeft: "3px", fontSize: "21px" }}>
+                  SSBT COET
+                </span>
               </Link>
             </div>
             <div className="card-body">
-              <p className="login-box-msg" style={{ fontSize: "1.2em" }}>
-                Please enter your details below to{" "}
-                <b>activate your account!!</b>
+              <p className="login-box-msg" style={{ fontSize: "1em" }}>
+                Please fill in the remaining information below to <br></br>
+                <b>Activate your account!!</b>
               </p>
               <form onSubmit={handleSubmit}>
                 <div className="input-group mb-3">
@@ -206,6 +249,7 @@ const ActivateEmail = () => {
                         min="1"
                         max="12"
                         required
+                        readOnly={role === "Student"}
                       />
                       <div className="input-group-append">
                         <div
@@ -235,6 +279,7 @@ const ActivateEmail = () => {
                         min="1983"
                         max="2100"
                         required
+                        readOnly={role === "Student"}
                       />
                       <div className="input-group-append">
                         <div
@@ -283,49 +328,13 @@ const ActivateEmail = () => {
                   </div>
                 </div>
                 <div className="row">
-                  <div className="col-8">
-                    <div
-                      className="btn-group btn-group-toggle"
-                      data-toggle="buttons"
-                    >
-                      <label
-                        className="btn bg-olive"
-                        style={{ fontSize: "0.9em" }}
-                      >
-                        <input
-                          type="radio"
-                          name="role"
-                          value="Student"
-                          checked={role === "Student"}
-                          onChange={handleRadioChange} // Update role on change
-                          required // Ensure role selection is required
-                        />{" "}
-                        <span className="fas fa-graduation-cap mr-1" />
-                        Student
-                      </label>
-                      <label
-                        className="btn bg-olive "
-                        style={{ fontSize: "0.9em" }}
-                      >
-                        <input
-                          type="radio"
-                          name="role"
-                          value="Alumni"
-                          checked={role === "Alumni"}
-                          onChange={handleRadioChange} // Update role on change
-                          required // Ensure role selection is required
-                        />{" "}
-                        <span className="fas fa-users mr-1" /> Alumni
-                      </label>
-                    </div>
-                  </div>
-                  <div className="col-4">
+                  <div className="col-12">
                     <button
                       type="submit"
                       className="btn btn-primary btn-block"
                       style={{ fontSize: "0.9em" }}
                     >
-                      Activate
+                      Send Confirmation Email
                     </button>
                   </div>
                 </div>
