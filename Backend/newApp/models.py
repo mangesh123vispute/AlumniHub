@@ -17,7 +17,7 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-
+import base64
 
 class User(AbstractUser):
     username = models.CharField(max_length=150, unique=True,blank=True)
@@ -82,7 +82,8 @@ class User(AbstractUser):
         recipient_list = [self.email]
 
         # full_url = "http://localhost:3000/activate_email"
-        activation_link = "http://localhost:3000/activate_email"
+        encoded_email = base64.urlsafe_b64encode(self.email.encode()).decode()
+        activation_link = f"http://localhost:3000/activate_email/{encoded_email}"
         context: dict[str, str] = {
                 'message': "Please activate your account by clicking the button below.",
                 'url': activation_link,

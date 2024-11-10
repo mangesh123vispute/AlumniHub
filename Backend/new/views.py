@@ -24,6 +24,7 @@ from  .AlumniRegisterSerializers import AlumniRegistrationSerializer
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 import base64
+from datetime import datetime
 
 User=get_user_model()
 
@@ -104,7 +105,40 @@ class ActivationEmailView(APIView):
                             {"detail": "Email is already in use. Please enter a different email."},
                             status=status.HTTP_400_BAD_REQUEST
                         )
-                
+                    
+                role = validated_data.get('role')
+                if role == "Alumni":
+                    graduation_month = int(validated_data.get('graduation_month'))
+                    graduation_year = int(validated_data.get('graduation_year'))
+                    current_date = datetime.now()
+
+                    # Check if graduation date is in the past
+                    if (graduation_year < current_date.year) or (
+                        graduation_year == current_date.year and graduation_month < current_date.month
+                    ):
+                        pass  # Graduation date is valid (in the past)
+                    else:
+                        return Response(
+                            {"detail": "Graduation month and year must be in the past for Alumni."},
+                            status=status.HTTP_400_BAD_REQUEST
+                        )
+                    
+                elif role == "Student":
+                    graduation_month =int(validated_data.get('graduation_month')) 
+                    graduation_year = int(validated_data.get('graduation_year') )
+
+                    # Check if graduation date is in the future for Students
+                    if (graduation_year > current_date.year) or (
+                        graduation_year == current_date.year and graduation_month > current_date.month
+                    ):
+                        pass  # Graduation date is valid (in the future)
+                    else:
+                        return Response(
+                            {"detail": "Graduation month and year must be in the future for Students."},
+                            status=status.HTTP_400_BAD_REQUEST
+                        )
+
+
                 # Send activation email
                 activation_token = default_token_generator.make_token(user)
                 uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
