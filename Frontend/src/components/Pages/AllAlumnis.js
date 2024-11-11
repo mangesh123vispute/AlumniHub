@@ -46,11 +46,15 @@ const AllAlumnisContent = () => {
       ? JSON.parse(localStorage.getItem("authTokens"))
       : null;
 
+    
+    const filteredFilters = Object.fromEntries(
+      Object.entries(Alumnifilters).filter(([_, value]) => value !== "")
+    );
     // Construct query parameters from Alumnifilters
     const queryParams = new URLSearchParams({
       page: pageNumber,
       page_size: pageSize,
-      ...Alumnifilters, // Spread the Alumnifilters into the query params
+      ...filteredFilters, // Spread the Alumnifilters into the query params
     }).toString();
 
     try {

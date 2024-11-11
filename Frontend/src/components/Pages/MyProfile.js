@@ -62,7 +62,7 @@ localStorage.setItem('id',userData?.user_id);
       <Home
         DynamicContent={getProfileContent()}
         url="profile"
-        heading="Profile"
+        heading="My Profile"
       />
     </>
   ): <LoadingSpinner isLoading={loading} />;

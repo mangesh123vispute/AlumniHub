@@ -71,7 +71,9 @@ const Profile = () => {
       <Home
         DynamicContent={getProfileContent()}
         url="profile"
-        heading="Profile"
+        heading={`${
+          state?.id === userData?.user_id ? "My profile" : "Profile"
+        }`}
       />
     </>
   ) : (

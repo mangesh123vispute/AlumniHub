@@ -606,3 +606,9 @@ class AlumniRegistrationView(APIView):
             return Response({"detail": "Registration successful. Your account will be verified by college authority. After verification, you will receive an email, and then you can log in.."}, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+def custom_404_view(request, exception):
+    return render(request, 'account/404.html', status=404)

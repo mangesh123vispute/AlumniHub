@@ -52,36 +52,13 @@ const [totalPages, setTotalPages] = useState(1);
 
   
   const pageSize = 10;
-  const isValidGitHubUrl = (url) => {
-    const githubUrlPattern =
-      /^(https?:\/\/)?(www\.)?github\.com\/[A-Za-z0-9_-]+\/?$/;
-    return githubUrlPattern.test(url);
-  };
-
-  const isValidLinkedInUrl = (url) => {
-    const linkedinUrlPattern =
-      /^(https?:\/\/)?(www\.)?linkedin\.com\/in\/[A-Za-z0-9_-]+\/?$/;
-    return linkedinUrlPattern.test(url);
-  };
-  const isValidMobileNumber = (number) => {
-    // This regex checks for numbers with 10 digits, with optional country code
-    const mobileNumberPattern = /^(\+\d{1,3}[- ]?)?\d{10}$/;
-    return mobileNumberPattern.test(number);
-  };
-  const isValidEmail = (email) => {
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return emailPattern.test(email);
-  };
 
   const handleViewProfile = (userData) => {
     setShowProfileOfId(true);
     navigate("/profile", { state: userData });
   };
 
-  const handleEdit = (userData) => {
-  }
-  const handleDelete = (userData) => {
-  }
+
   const handleAddAdmin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -171,11 +148,15 @@ const [totalPages, setTotalPages] = useState(1);
       ? JSON.parse(localStorage.getItem("authTokens"))
       : null;
 
+    const filteredFilters = Object.fromEntries(
+      Object.entries(hodFilters).filter(([_, value]) => value !== "")
+    );
+    
     // Construct query parameters from hodFilters
     const queryParams = new URLSearchParams({
       page: pageNumber,
       page_size: pageSize,
-      ...hodFilters, // Spread the hodFilters into the query params
+      ...filteredFilters, // Spread the hodFilters into the query params
     }).toString();
 
     try {

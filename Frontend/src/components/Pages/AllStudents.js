@@ -39,17 +39,21 @@ const AllStudentsContent = () => {
     navigate("/profile", { state: userData });
   };
 
+
   const fetchStudents = async (pageNumber) => {
     setLoading(true);
     const token = localStorage.getItem("authTokens")
       ? JSON.parse(localStorage.getItem("authTokens"))
       : null;
 
-    // Construct query parameters from StudentFilters
+    const filteredFilters = Object.fromEntries(
+      Object.entries(studentFilters).filter(([_, value]) => value !== "")
+    );
+
     const queryParams = new URLSearchParams({
       page: pageNumber,
       page_size: pageSize,
-      ...studentFilters,
+      ...filteredFilters,
     }).toString();
 
     try {

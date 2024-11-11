@@ -27,6 +27,7 @@ urlpatterns = [
         '', include('newApp.urls')
     ),
    
+  
 #^ DRF Authentication   
 
     path('register-admin/', AdminRegistrationView.as_view(), name='register-admin'),
