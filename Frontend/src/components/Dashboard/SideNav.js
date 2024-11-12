@@ -430,7 +430,7 @@ const SideNav = () => {
                     )}
                   </li>
 
-                  {(userData?.is_allowedToAccessLinkedinScrappingTab ||
+                  {/* {(userData?.is_allowedToAccessLinkedinScrappingTab ||
                     userData?.username === "Admin") && (
                     <li className="nav-item">
                       <Link
@@ -448,7 +448,7 @@ const SideNav = () => {
                         </p>
                       </Link>
                     </li>
-                  )}
+                  )} */}
 
                   {(userData?.is_allowedToAddAdmin ||
                     userData?.username === "Admin") && (
@@ -471,7 +471,7 @@ const SideNav = () => {
                             style={{ fontSize: "1em" }}
                             title="Add New Administrator"
                           ></i>
-                          Add New Administrator
+                          Create Admin
                         </p>
                       </Link>
                     </li>

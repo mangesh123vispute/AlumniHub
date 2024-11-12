@@ -245,73 +245,78 @@ const [isImageOpen, setIsImageOpen] = useState(false);
                         {post?.content || "Content"}
                       </p>
                       <div className="row">
-                        <div className="col-auto mt-3">
-                          <a
-                            href="#"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleImageClick();
-                            }}
-                            className="mr-3"
-                          >
-                            <i className="fas fa-image mr-1" /> Image
-                          </a>
-
-                          {isImageOpen && (
-                            <div
-                              style={{
-                                position: "fixed",
-                                top: 0,
-                                left: 0,
-                                width: "100%",
-                                height: "100%",
-                                backgroundColor: "tranparent",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                zIndex: 1050,
-                              }}
-                              onClick={handleCloseModal}
-                            >
-                              <div
-                                style={{
-                                  position: "relative",
-                                  maxWidth: "100%",
-                                  maxHeight: "100%",
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  alignItems: "center",
+                        {post?.Image !== "/media/default/def.jpeg" &&
+                          post?.Image && (
+                            <div className="col-auto mt-3">
+                              <a
+                                href="#"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  handleImageClick();
                                 }}
+                                className="mr-3"
                               >
-                                <img
-                                  src={post?.Image}
-                                  alt="Post"
+                                <i className="fas fa-image mr-1" /> Image
+                              </a>
+
+                              {isImageOpen && (
+                                <div
                                   style={{
-                                    // maxWidth: "100%",
-                                    // maxHeight: "100%",
+                                    position: "fixed",
+                                    top: 0,
+                                    left: 0,
                                     width: "100%",
-                                    height: "auto",
-                                    borderRadius: "5px",
-                                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
-                                  }}
-                                />
-                                <span
-                                  style={{
-                                    position: "absolute",
-                                    top: "10px",
-                                    right: "10px",
-                                    fontSize: "1.5em",
-                                    color: "#fff",
-                                    cursor: "pointer",
+                                    height: "100%",
+                                    backgroundColor: "tranparent",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    zIndex: 1050,
                                   }}
                                   onClick={handleCloseModal}
                                 >
-                                  &times;
-                                </span>
-                              </div>
+                                  <div
+                                    style={{
+                                      position: "relative",
+                                      maxWidth: "100%",
+                                      maxHeight: "100%",
+                                      display: "flex",
+                                      justifyContent: "center",
+                                      alignItems: "center",
+                                    }}
+                                  >
+                                    <img
+                                      src={post?.Image}
+                                      alt="Post"
+                                      style={{
+                                        // maxWidth: "100%",
+                                        // maxHeight: "100%",
+                                        width: "100%",
+                                        height: "auto",
+                                        borderRadius: "5px",
+                                        boxShadow:
+                                          "0 4px 12px rgba(0, 0, 0, 0.3)",
+                                      }}
+                                    />
+                                    <span
+                                      style={{
+                                        position: "absolute",
+                                        top: "10px",
+                                        right: "10px",
+                                        fontSize: "1.5em",
+                                        color: "#fff",
+                                        cursor: "pointer",
+                                      }}
+                                      onClick={handleCloseModal}
+                                    >
+                                      &times;
+                                    </span>
+                                  </div>
+                                </div>
+                              )}
                             </div>
                           )}
-                        </div>
+
                         {post?.DocUrl && (
                           <div className="col-auto mt-3">
                             <a
@@ -339,7 +344,6 @@ const [isImageOpen, setIsImageOpen] = useState(false);
                       </div>
                     </div>
                   ))}
-                  
                 </>
               )}
 

@@ -1098,16 +1098,23 @@ const SuperUserProfileContent = () => {
                                     </div> */}
 
                                   <div className="col-auto mt-3">
-                                    <a
-                                      href="#"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        handleImageClick();
-                                      }}
-                                      className="mr-3"
-                                    >
-                                      <i className="fas fa-image mr-1" /> Image
-                                    </a>
+                                    {console.log("post", post)}
+                                    {(post?.Image &&
+                                      !post.Image.includes(
+                                        "/media/default/def.jpeg"
+                                      )) && (
+                                        <a
+                                          href="#"
+                                          onClick={(e) => {
+                                            e.preventDefault();
+                                            handleImageClick();
+                                          }}
+                                          className="mr-3"
+                                        >
+                                          <i className="fas fa-image mr-1" />{" "}
+                                          Image
+                                        </a>
+                                      )}
 
                                     {isImageOpen && (
                                       <div
