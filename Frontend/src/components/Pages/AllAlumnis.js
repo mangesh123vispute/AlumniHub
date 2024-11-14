@@ -208,8 +208,8 @@ const AllAlumnisContent = () => {
                                   <span className="fa-li">
                                     <i className="fas fa-lg fa-folder mr-1" />
                                   </span>
-                                  Portfolio:{" "}
-                                  {!alumnus?.portfolio_link == "N/A" ? (
+                                  
+                                  {alumnus?.portfolio_link !== "N/A" ? (
                                     <a
                                       href={alumnus.portfolio_link}
                                       target="_blank"
@@ -226,7 +226,7 @@ const AllAlumnisContent = () => {
                                     <i className="fas fa-lg fa-file-alt mr-1" />
                                   </span>
                                   Resume:{" "}
-                                  {!alumnus?.resume_link == "N/A" ? (
+                                  {alumnus?.resume_link !== "N/A" ? (
                                     <a
                                       href={alumnus.resume_link}
                                       target="_blank"

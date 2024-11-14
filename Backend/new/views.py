@@ -81,7 +81,8 @@ class ActivationEmailView(APIView):
         serializer = ActivationEmailSerializer(data=request.data)
         if serializer.is_valid():
             validated_data = serializer.validated_data
-        
+            current_date = datetime.now()
+            
             email = validated_data.get('email')
 
             try:
@@ -110,7 +111,7 @@ class ActivationEmailView(APIView):
                 if role == "Alumni":
                     graduation_month = int(validated_data.get('graduation_month'))
                     graduation_year = int(validated_data.get('graduation_year'))
-                    current_date = datetime.now()
+                    
 
                     # Check if graduation date is in the past
                     if (graduation_year < current_date.year) or (
