@@ -26,7 +26,7 @@ const AllPostFilter = () => {
   return (
     <div
       className="p-3"
-      style={{ height: "90%", overflowY: "auto", overflowX: "hidden" }}
+      style={{ height: "90vh", overflowY: "auto", overflowX: "hidden" }}
     >
       <div
         style={{
@@ -62,6 +62,21 @@ const AllPostFilter = () => {
             placeholder="Enter Author Name"
             style={{ marginBottom: "0.5em" }}
           />
+        </div>
+
+         {/* Sorting */}
+        <div>
+          <label>Sort By:</label>
+          <select
+            className="form-control"
+            name="sort_order"
+            value={postFilters.sort_order || "-created_at"}
+            onChange={handleChange}
+            style={{ marginBottom: "0.5em" }}
+          >
+            <option value="-created_at">Newest First</option>
+            <option value="created_at">Oldest First</option>
+          </select>
         </div>
 
         {/* Tag */}

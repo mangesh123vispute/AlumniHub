@@ -80,6 +80,8 @@ export const AuthProvider = ({ children }) => {
     created_at_max: "",
     is_alumni: "",
     is_superuser: "",
+    sort_order: "",
+
   });
 
   const location = useLocation();

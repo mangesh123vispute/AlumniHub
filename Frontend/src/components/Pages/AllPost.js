@@ -68,25 +68,7 @@ const [isImageOpen, setIsImageOpen] = useState(false);
 
  
 
-  // const getAllPosts = async (page) => {
-  //   setLoading(true);
-  //   try {
-  //     console.log("page " + page);
-  //     if(page===undefined){setPage(1);}
-  //     const response = await axios.get(`${baseurl}/posts?page=${page}&page_size=10`);
-  //     setPosts(response.data.results); // Set fetched posts
-  //     setHasMore(response.data.next !== null);
-  //      // If 'next' is null, stop loading more posts
-  //      const totalItems = response.data.count;
-  //      setTotalPages(Math.ceil(totalItems / 10));
-  //      setLoading(false);
-  //   } catch (error) {
-  //     console.error('Error fetching posts:', error);
-  //     showNotification("Error fetching posts, please try again.", "error", "Error");
-  //     setLoading(false);
-  //   }
-  // };
-
+ 
   const getAllPosts = async (pageNumber) => {
     setLoading(true);
 

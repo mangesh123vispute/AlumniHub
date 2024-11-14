@@ -1,4 +1,4 @@
-import React ,{ useContext, useState }from "react";
+import React, { useContext, useState, useRef, useEffect } from "react";
 import StudentFilter from "../Filter/StudentFilter";
 import AlumniFilter from "../Filter/AlumniFilter";
 import AdminFilter from "../Filter/AdminFilter";
@@ -12,7 +12,26 @@ const Footer = () => {
     isAllAlumniPage,
     filterClicked,
     isAllPostPage,
+    setFilterClicked,
   } = useContext(AuthContext);
+
+   const filterRef = useRef(null);
+
+   useEffect(() => {
+     function handleClickOutside(event) {
+       if (filterRef.current && !filterRef.current.contains(event.target)) {
+         setFilterClicked(false); 
+       }
+     }
+
+     document.addEventListener("mousedown", handleClickOutside);
+
+     
+     return () => {
+       document.removeEventListener("mousedown", handleClickOutside);
+     };
+   }, []);
+
   return (
     <>
       <footer
@@ -43,6 +62,7 @@ const Footer = () => {
       {/* Control Sidebar */}
       {filterClicked ? (
         <aside
+          ref={filterRef}
           className="control-sidebar control-sidebar-dark"
           style={{ borderRadius: "10px" }}
         >

@@ -22,7 +22,7 @@ const StudentFilter = () => {
   return (
     <div
       className="p-3"
-      style={{ height: "100vh", overflowY: "auto", overflowX: "hidden" }}
+      style={{ height: "90vh", overflowY: "auto", overflowX: "hidden" }}
     >
       <div
         style={{

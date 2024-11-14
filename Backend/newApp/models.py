@@ -18,6 +18,7 @@ from django.core.exceptions import ValidationError
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 import base64
+from datetime import datetime
 
 class User(AbstractUser):
     username = models.CharField(max_length=150, unique=True,blank=True)
@@ -104,9 +105,28 @@ class User(AbstractUser):
         message.send()
 
     def save(self, *args, **kwargs):
-        
+        current_date = datetime.now()
+        current_year = current_date.year
+        current_month = current_date.month
+
         if self.email and User.objects.filter(email=self.email).exclude(pk=self.pk).exists():
             raise ValidationError(f"A user with email '{self.email}' already exists.")
+
+        if self.is_alumni and self.is_student:
+            raise ValidationError("A user cannot be both a student and an alumni at the same time.")
+        
+        if self.is_alumni:
+            if (self.graduation_year > current_year) or (
+                self.graduation_year == current_year and self.graduation_month > current_month
+            ):
+                raise ValidationError("Alumni graduation year and month cannot be in the future.")
+
+        if self.is_student:
+            if (self.graduation_year < current_year) or (
+                self.graduation_year == current_year and self.graduation_month <= current_month
+            ):
+                raise ValidationError("A student cannot have a graduation year and month in the past or current date.")
+            
 
         if self.is_superuser:
             self.is_active = True

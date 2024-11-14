@@ -90,15 +90,16 @@ const Register = () => {
       return false;
     }
    const linkedinPattern =
-     /^https:\/\/(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+\/?$/;
+     /^https:\/\/(www\.)?linkedin\.com\/[a-zA-Z0-9\/._-]+\/?$/;
    if (!linkedinPattern.test(linkedin)) {
      showNotification(
-       "Please enter a valid LinkedIn profile URL!",
+       "Please enter a valid LinkedIn Profile",
        "warning",
        "Warning"
      );
      return false;
    }
+
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth() + 1;
     const gradYear = parseInt(graduation_year);

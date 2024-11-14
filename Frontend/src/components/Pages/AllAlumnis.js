@@ -208,10 +208,16 @@ const AllAlumnisContent = () => {
                                   <span className="fa-li">
                                     <i className="fas fa-lg fa-folder mr-1" />
                                   </span>
-                                  
+                                  Portfolio{" "}
                                   {alumnus?.portfolio_link !== "N/A" ? (
                                     <a
-                                      href={alumnus.portfolio_link}
+                                      href={
+                                        alumnus.portfolio_link.startsWith(
+                                          "http"
+                                        )
+                                          ? alumnus.portfolio_link
+                                          : `https://${alumnus.portfolio_link}`
+                                      }
                                       target="_blank"
                                       rel="noopener noreferrer"
                                     >
@@ -228,7 +234,11 @@ const AllAlumnisContent = () => {
                                   Resume:{" "}
                                   {alumnus?.resume_link !== "N/A" ? (
                                     <a
-                                      href={alumnus.resume_link}
+                                      href={
+                                        alumnus.resume_link.startsWith("http")
+                                          ? alumnus.resume_link
+                                          : `https://${alumnus.resume_link}`
+                                      }
                                       target="_blank"
                                       rel="noopener noreferrer"
                                     >
@@ -274,7 +284,11 @@ const AllAlumnisContent = () => {
                                   {alumnus?.Github &&
                                   alumnus.Github !== "N/A" ? (
                                     <a
-                                      href={alumnus.Github}
+                                      href={
+                                        alumnus.Github.startsWith("http")
+                                          ? alumnus.Github
+                                          : `https://${alumnus.Github}`
+                                      }
                                       target="_blank"
                                       rel="noopener noreferrer"
                                     >
@@ -292,7 +306,11 @@ const AllAlumnisContent = () => {
                                   {alumnus?.linkedin &&
                                   alumnus.linkedin !== "N/A" ? (
                                     <a
-                                      href={alumnus.linkedin}
+                                      href={
+                                        alumnus.linkedin.startsWith("http")
+                                          ? alumnus.linkedin
+                                          : `https://${alumnus.linkedin}`
+                                      }
                                       target="_blank"
                                       rel="noopener noreferrer"
                                     >

@@ -550,8 +550,11 @@ class PostListView(APIView):
 
     def get(self, request, *args, **kwargs):
         # Base query for AlumniPost and HodPrincipalPost
-        alumni_posts = AlumniPost.objects.filter(author__is_alumni=True)
-        hod_posts = HodPrincipalPost.objects.filter(author__is_superuser=True)
+        sort_order = request.query_params.get('sort_order', '-created_at')
+        
+        alumni_posts = AlumniPost.objects.filter(author__is_alumni=True).order_by(sort_order)
+        hod_posts = HodPrincipalPost.objects.filter(author__is_superuser=True).order_by(sort_order)
+
 
         # Filtering parameters
         filters = {
@@ -598,6 +601,8 @@ class PostListView(APIView):
 
         # Combine the posts and paginate
         combined_posts = alumni_serializer.data + hod_serializer.data
+        combined_posts.sort(key=lambda x: x['created_at'], reverse=sort_order == '-created_at')
+        
         paginator = self.pagination_class()
         page = paginator.paginate_queryset(combined_posts, request)
 

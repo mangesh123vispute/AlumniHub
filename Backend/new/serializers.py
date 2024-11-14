@@ -73,6 +73,17 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
     
     def validate(self, attrs):
+
+        username = attrs['username'] 
+        userfromusername = User.objects.filter(username=username).first()
+        
+
+        if not userfromusername.is_active:
+            raise AuthenticationFailed(
+                detail='Your account is not activated. Please activate your account first.',
+                code=status.HTTP_403_FORBIDDEN
+            )
+
         # Check if the user credentials are correct
         user = authenticate(username=attrs['username'], password=attrs['password'])
     
