@@ -20,13 +20,13 @@ class UserAdmin(ImportExportModelAdmin):
     readonly_fields = ['id']
     list_display = [
         'id', 'username', 'full_name', 'Branch', 'is_active',
-        'is_alumni', 'is_student', 'is_superuser','is_allowedToJoinAlumni','is_allowedToAccessSettings','is_allowedToAddAdmin','is_allowedToAccessLinkedinScrappingTab','graduation_month', 'graduation_year',"is_staff",
+        'is_alumni', 'is_student', 'is_superuser','is_allowedToJoinAlumni','is_allowedToAccessSettings','is_allowedToAddAdmin','is_allowedToAccessPostRequestTab','graduation_month', 'graduation_year',"is_staff",
         'email', 'portfolio_link', 'resume_link', 'mobile',
         'linkedin', 'instagram', 'Github', 'skills',
         'About', 'Work', 'Year_Joined', 'Image'
     ]
-    list_filter = ['is_active', 'is_alumni', 'is_student', 'is_superuser','is_allowedToJoinAlumni','is_allowedToAccessSettings', 'is_allowedToAddAdmin','is_allowedToAccessLinkedinScrappingTab','Branch', 'graduation_year', 'Year_Joined']
-    actions = ['send_email_action', "send_activation_email_action","update_profiles_action"]
+    list_filter = ['is_active', 'is_alumni', 'is_student', 'is_superuser','is_allowedToJoinAlumni','is_allowedToAccessSettings', 'is_allowedToAddAdmin','is_allowedToAccessPostRequestTab','Branch', 'graduation_year', 'Year_Joined']
+    actions = ['send_email_action', "send_activation_email_action","update_profiles_action",'send_profile_update_request_action']
     search_fields = ['id', 'username', 'full_name', 'Branch', 'graduation_year', 'email', 'mobile', 'linkedin', 'instagram', 'Github', 'skills', 'About', 'Work', 'Year_Joined']
     list_display_links = ['id', 'username', 'full_name', 'email', 'mobile', 'linkedin', 'instagram', 'Github']
     ordering = ['username']
@@ -35,7 +35,7 @@ class UserAdmin(ImportExportModelAdmin):
             'fields': ('username', 'full_name', 'Branch', 'skills', 'About', 'Work', 'Image')
         }),
         ('Permissions', {
-            'fields': ('is_active', 'is_superuser', 'is_alumni', 'is_student','is_staff','is_allowedToJoinAlumni','is_allowedToAccessSettings','is_allowedToAddAdmin','is_allowedToAccessLinkedinScrappingTab'),
+            'fields': ('is_active', 'is_superuser', 'is_alumni', 'is_student','is_staff','is_allowedToJoinAlumni','is_allowedToAccessSettings','is_allowedToAddAdmin','is_allowedToAccessPostRequestTab'),
         }),
         ('Important dates', {
             'fields': ("graduation_month",'graduation_year', 'Year_Joined'),
@@ -217,6 +217,42 @@ class UserAdmin(ImportExportModelAdmin):
         self.message_user(request, _("Activation emails have been sent to inactive users."))
 
     send_activation_email_action.short_description = _("Send activation email to inactive users")
+
+    def send_profile_update_request_action(self, request, queryset):
+        email_subject = "SSBT COET | AlumniHub - Update Your Profile to Strengthen Our College Community, Support Current Students, and Expand Your Networking Opportunities!"
+        
+        for user in queryset:
+            context: dict[str, str] = {
+                'user': user,
+            }
+            
+            # Check if the user is an alumni or student
+            if user.is_alumni:
+                # Send UpdateAlumniStatusEmail.html for alumni users
+                html_message = render_to_string('account/UpdateAlumniStatusEmail.html', context)
+            elif user.is_student:
+                # Send UpdateStudentStatusEmail.html for student users
+                html_message = render_to_string('account/UpdateStudentStatusEmail.html', context)
+            else:
+                # If the user is neither alumni nor student, you can skip or handle differently
+                continue
+            
+            plain_message = strip_tags(html_message)
+            
+            # Send email using EmailMultiAlternatives
+            message = EmailMultiAlternatives(
+                subject=email_subject,
+                body=plain_message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[user.email]
+            )
+            message.attach_alternative(html_message, "text/html")
+            message.send()
+
+        self.message_user(request, _("Profile update request emails have been sent to the selected users."))
+
+    send_profile_update_request_action.short_description = _("Send profile update request email to selected users")
+
 
 class AlumniProfileAdmin(ImportExportModelAdmin):
     list_display = [

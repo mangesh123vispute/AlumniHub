@@ -155,8 +155,8 @@ const AllStudentsContent = () => {
                                 {students?.student_profile?.Heading
                                   ? students.student_profile.Heading
                                   : students?.student_profile?.job_title
-                                    ? students.student_profile.job_title
-                                    : "N/A"}
+                                  ? students.student_profile.job_title
+                                  : "N/A"}
                               </p>
                             </div>
                             <div className="col-5 text-center">
@@ -188,9 +188,13 @@ const AllStudentsContent = () => {
                                   <i className="fas fa-lg fa-folder mr-1" />
                                 </span>
                                 Portfolio:{" "}
-                                {!students?.portfolio_link == 'N/A' ? (
+                                {students?.portfolio_link !== "N/A" ? (
                                   <a
-                                    href={students.portfolio_link}
+                                    href={
+                                      students.portfolio_link.startsWith("http")
+                                        ? students.portfolio_link
+                                        : `https://${students.portfolio_link}`
+                                    }
                                     target="_blank"
                                     rel="noopener noreferrer"
                                   >
@@ -205,9 +209,13 @@ const AllStudentsContent = () => {
                                   <i className="fas fa-lg fa-file-alt mr-1" />
                                 </span>
                                 Resume:{" "}
-                                {!students.resume_link == 'N/A' ? (
+                                {students.resume_link !== "N/A" ? (
                                   <a
-                                    href={students.resume_link}
+                                    href={
+                                      students.resume_link.startsWith("http")
+                                        ? students.resume_link
+                                        : `https://${students.resume_link}`
+                                    }
                                     target="_blank"
                                     rel="noopener noreferrer"
                                   >
@@ -236,7 +244,9 @@ const AllStudentsContent = () => {
                                 </span>
                                 Email:{" "}
                                 {students?.email ? (
-                                  <a href={`mailto:${students.email}`}>{students.email}</a>
+                                  <a href={`mailto:${students.email}`}>
+                                    {students.email}
+                                  </a>
                                 ) : (
                                   "N/A"
                                 )}
@@ -246,9 +256,18 @@ const AllStudentsContent = () => {
                                   <i className="fab fa-lg fa-github mr-1" />
                                 </span>
                                 GitHub:{" "}
-                                {students?.Github && students.Github !== "N/A" ? (
-                                  <a href={students.Github} target="_blank" rel="noopener noreferrer">
-                                    Click here
+                                {students?.Github &&
+                                students.Github !== "N/A" ? (
+                                  <a
+                                    href={
+                                      students.Github.startsWith("http")
+                                        ? students.Github
+                                        : `https://${students.Github}`
+                                    }
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    {students.Github}
                                   </a>
                                 ) : (
                                   "N/A"
@@ -260,7 +279,15 @@ const AllStudentsContent = () => {
                                 </span>
                                 LinkedIn:{" "}
                                 {students?.linkedin ? (
-                                  <a href={students.linkedin} target="_blank" rel="noopener noreferrer">
+                                  <a
+                                    href={
+                                      students.linkedin.startsWith("http")
+                                        ? students.linkedin
+                                        : `https://${students.linkedin}`
+                                    }
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
                                     {students.linkedin}
                                   </a>
                                 ) : (
@@ -308,8 +335,9 @@ const AllStudentsContent = () => {
                   className={`page-item ${pageNumber === 1 ? "disabled" : ""}`}
                 >
                   <button
-                    className={`page-link ${pageNumber === 1 ? "opacity-50 cursor-not-allowed" : ""
-                      }`}
+                    className={`page-link ${
+                      pageNumber === 1 ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
                     onClick={() => setPageNumber(pageNumber - 1)}
                     disabled={pageNumber === 1}
                   >
@@ -329,14 +357,16 @@ const AllStudentsContent = () => {
 
                 {/* Next button */}
                 <li
-                  className={`page-item ${pageNumber === totalPages ? "disabled" : ""
-                    }`}
+                  className={`page-item ${
+                    pageNumber === totalPages ? "disabled" : ""
+                  }`}
                 >
                   <button
-                    className={`page-link ${pageNumber === totalPages
-                      ? "opacity-50 cursor-not-allowed"
-                      : ""
-                      }`}
+                    className={`page-link ${
+                      pageNumber === totalPages
+                        ? "opacity-50 cursor-not-allowed"
+                        : ""
+                    }`}
                     onClick={() => setPageNumber(pageNumber + 1)}
                     disabled={pageNumber === totalPages}
                   >

@@ -1561,14 +1561,21 @@ setIsDropdownOpen(null);  // Open the modal
 
                                 <strong>LinkedIn:</strong>
                                 <p className="text-muted font">
-                                  {user?.linkedin ? (
-                                    <a
-                                      href={user?.linkedin || "#"}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      {user?.linkedin ? user.linkedin : "N/A"}
-                                    </a>
+                                  {user?.linkedin !=='N/A'? (
+                                   <a
+  href={
+    user?.linkedin?.startsWith("http")
+      ? user.linkedin
+      : user?.linkedin
+      ? `https://${user.linkedin}`
+      : "#"
+  }
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  {user?.linkedin}
+</a>
+
                                   ) : (
                                     "N/A"
                                   )}
@@ -1576,14 +1583,21 @@ setIsDropdownOpen(null);  // Open the modal
 
                                 <strong>GitHub:</strong>
                                 <p className="text-muted font">
-                                  {user?.Github ? (
+                                  {user?.Github!== 'N/A' ? (
                                     <a
-                                      href={user?.Github || "#"}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      {user?.Github ? user.Github : "N/A"}
-                                    </a>
+  href={
+    user?.Github?.startsWith("http")
+      ? user.Github
+      : user?.Github
+      ? `https://${user.Github}`
+      : "#"
+  }
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  {user?.Github}
+</a>
+
                                   ) : (
                                     "N/A"
                                   )}
@@ -1591,14 +1605,21 @@ setIsDropdownOpen(null);  // Open the modal
 
                                 <strong>Instagram:</strong>
                                 <p className="text-muted font">
-                                  {user?.instagram ? (
+                                  {user?.instagram !== 'N/A'? (
                                     <a
-                                      href={user?.instagram || "#"}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      {user?.instagram ? user.instagram : "N/A"}
-                                    </a>
+  href={
+    user?.instagram?.startsWith("http")
+      ? user.instagram
+      : user?.instagram
+      ? `https://${user.instagram}`
+      : "#"
+  }
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  {user?.instagram }
+</a>
+
                                   ) : (
                                     "N/A"
                                   )}
@@ -1633,16 +1654,21 @@ setIsDropdownOpen(null);  // Open the modal
                               <div className="timeline-body">
                                 <strong>Portfolio:</strong>
                                 <p className="text-muted font">
-                                  {user?.portfolio_link ? (
+                                  {user?.portfolio_link !=='N/A'? (
                                     <a
-                                      href={user?.portfolio_link || "#"}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      {user?.portfolio_link
-                                        ? user.portfolio_link
-                                        : "N/A"}
-                                    </a>
+  href={
+    user?.portfolio_link?.startsWith("http")
+      ? user.portfolio_link
+      : user?.portfolio_link
+      ? `https://${user.portfolio_link}`
+      : "#"
+  }
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  {user?.portfolio_link }
+</a>
+
                                   ) : (
                                     "N/A"
                                   )}
@@ -1650,16 +1676,21 @@ setIsDropdownOpen(null);  // Open the modal
 
                                 <strong>Resume:</strong>
                                 <p className="text-muted font">
-                                  {user?.resume_link ? (
-                                    <a
-                                      href={user?.resume_link || "#"}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      {user?.resume_link
-                                        ? user.resume_link
-                                        : "N/A"}
-                                    </a>
+                                  {user?.resume_link !== 'N/A'? (
+                                   <a
+  href={
+    user?.resume_link?.startsWith("http")
+      ? user.resume_link
+      : user?.resume_link
+      ? `https://${user.resume_link}`
+      : "#"
+  }
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  {user?.resume_link }
+</a>
+
                                   ) : (
                                     "N/A"
                                   )}

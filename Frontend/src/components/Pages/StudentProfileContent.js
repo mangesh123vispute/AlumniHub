@@ -806,13 +806,19 @@ const StudentProfileContent = () => {
 
                                   <strong>LinkedIn:</strong>
                                   <p className="text-muted font">
-                                    {user?.linkedin ? (
+                                    {user?.linkedin !== "N/A" ? (
                                       <a
-                                        href={user?.linkedin || "#"}
+                                        href={
+                                          user?.linkedin?.startsWith("http")
+                                            ? user.linkedin
+                                            : user?.linkedin
+                                            ? `https://${user.linkedin}`
+                                            : "#"
+                                        }
                                         target="_blank"
                                         rel="noopener noreferrer"
                                       >
-                                        {user?.linkedin ? user.linkedin : "N/A"}
+                                        {user?.linkedin}
                                       </a>
                                     ) : (
                                       "N/A"
@@ -821,13 +827,19 @@ const StudentProfileContent = () => {
 
                                   <strong>GitHub:</strong>
                                   <p className="text-muted font">
-                                    {user?.Github ? (
+                                    {user?.Github !== "N/A" ? (
                                       <a
-                                        href={user?.Github || "#"}
+                                        href={
+                                          user?.Github?.startsWith("http")
+                                            ? user.Github
+                                            : user?.Github
+                                            ? `https://${user.Github}`
+                                            : "#"
+                                        }
                                         target="_blank"
                                         rel="noopener noreferrer"
                                       >
-                                        {user?.Github ? user.Github : "N/A"}
+                                        {user?.Github}
                                       </a>
                                     ) : (
                                       "N/A"
@@ -836,15 +848,19 @@ const StudentProfileContent = () => {
 
                                   <strong>Instagram:</strong>
                                   <p className="text-muted font">
-                                    {user?.instagram ? (
+                                    {user?.instagram !== "N/A" ? (
                                       <a
-                                        href={user?.instagram || "#"}
+                                        href={
+                                          user?.instagram?.startsWith("http")
+                                            ? user.instagram
+                                            : user?.instagram
+                                            ? `https://${user.instagram}`
+                                            : "#"
+                                        }
                                         target="_blank"
                                         rel="noopener noreferrer"
                                       >
-                                        {user?.instagram
-                                          ? user.instagram
-                                          : "N/A"}
+                                        {user?.instagram }
                                       </a>
                                     ) : (
                                       "N/A"

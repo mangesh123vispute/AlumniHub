@@ -430,26 +430,6 @@ const SideNav = () => {
                     )}
                   </li>
 
-                  {/* {(userData?.is_allowedToAccessLinkedinScrappingTab ||
-                    userData?.username === "Admin") && (
-                    <li className="nav-item">
-                      <Link
-                        to={`/LinkedinScraper`}
-                        className="nav-link"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <p style={{ fontSize: "1em" }}>
-                          <i
-                            className="fab fa-linkedin-in nav-icon"
-                            style={{ fontSize: "1em" }}
-                          ></i>
-                          Linkedin Scrapper
-                        </p>
-                      </Link>
-                    </li>
-                  )} */}
-
                   {(userData?.is_allowedToAddAdmin ||
                     userData?.username === "Admin") && (
                     <li className="nav-item">
@@ -501,6 +481,26 @@ const SideNav = () => {
                               {numberOfInactiveAlumni}
                             </span>
                           ) : null}
+                        </p>
+                      </Link>
+                    </li>
+                  )}
+
+                  {(userData?.is_allowedToAccessPostRequestTab ||
+                    userData?.username === "Admin") && (
+                    <li className="nav-item">
+                      <Link
+                        to={`/LinkedinScraper`}
+                        className="nav-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <p style={{ fontSize: "1em" }}>
+                          <i
+                            className="fas fa-paper-plane nav-icon"
+                            style={{ fontSize: "1em" }}
+                          ></i>
+                          Alumni Post Requests
                         </p>
                       </Link>
                     </li>

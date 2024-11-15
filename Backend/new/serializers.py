@@ -57,7 +57,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['is_allowedToJoinAlumni'] = user.is_allowedToJoinAlumni
         token['is_allowedToAccessSettings'] = user.is_allowedToAccessSettings
         token['is_allowedToAddAdmin'] = user.is_allowedToAddAdmin
-        token['is_allowedToAccessLinkedinScrappingTab'] = user.is_allowedToAccessLinkedinScrappingTab
+        token['is_allowedToAccessPostRequestTab'] = user.is_allowedToAccessPostRequestTab
         token['image'] = user.Image.url if user.Image else 'default/def.jpeg'
         token['mobile'] = user.mobile
         token['linkedin'] = user.linkedin

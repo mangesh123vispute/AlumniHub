@@ -65,7 +65,7 @@ class User(AbstractUser):
     is_allowedToJoinAlumni=models.BooleanField(default=False)
     is_allowedToAccessSettings=models.BooleanField(default=False)
     is_allowedToAddAdmin=models.BooleanField(default=False)
-    is_allowedToAccessLinkedinScrappingTab=models.BooleanField(default=False)
+    is_allowedToAccessPostRequestTab=models.BooleanField(default=False)
     
     def generate_unique_username(self):
         """Generates a unique username using a UUID."""

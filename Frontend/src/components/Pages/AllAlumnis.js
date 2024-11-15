@@ -320,17 +320,7 @@ const AllAlumnisContent = () => {
                                     "N/A"
                                   )}
                                 </li>
-                                {/* <li className="small">
-                                  <span className="fa-li">
-                                    <i className="fas fa-lg fa-fax mr-1" />
-                                  </span>
-                                  Mobile No:{" "}
-                                  {alumnus.mobile
-                                    ? isValidMobileNumber(alumnus.mobile)
-                                      ? alumnus.mobile
-                                      : "Invalid Mobile Number"
-                                    : "N/A"}
-                                </li> */}
+                               
                               </ul>
                             </div>
                           </div>
