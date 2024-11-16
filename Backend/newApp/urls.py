@@ -2,7 +2,7 @@ from django.urls import path
 from django.conf import settings
 from . import views
 from django.conf.urls.static import static
-from .views import HodPrincipalPostAPIView,GETAlumni,HodAuthorPostListView,AlumniPostAPIView,GETHODs,GETStudent,UserImageUploadView,AlumniAuthorPostListView,PostListView,InactiveAlumniListView,AlumniActivationAPIView,AcceptAllAlumni,UserImageRetrieveView,UpdateAlumniProfileView,UserDetailView
+from .views import HodPrincipalPostAPIView,GETAlumni,HodAuthorPostListView,AlumniPostAPIView,GETHODs,GETStudent,UserImageUploadView,AlumniAuthorPostListView,PostListView,InactiveAlumniListView,AlumniActivationAPIView,AcceptAllAlumni,UserImageRetrieveView,UpdateAlumniProfileView,UserDetailView,UnverifiedAlumniPostListView, VerifyAlumniPostView, RejectAlumniPostView
 
 
 
@@ -22,7 +22,7 @@ urlpatterns = [
     path('hodposts/author/<int:author_id>/', HodAuthorPostListView.as_view(), name='author-posts'),
     path('alumniPosts/author/<int:author_id>/', AlumniAuthorPostListView.as_view(), name='author-posts'),
 
-   
+
     path('getalumni/', GETAlumni.as_view()),  # For list or creation
     path('getalumni/<int:pk>/', GETAlumni.as_view()),  # For specific alumni operations (GET spefific user )
     path('hods/', GETHODs.as_view(), name='all_hods'),  # For retrieving all HODs
@@ -39,6 +39,11 @@ urlpatterns = [
  
     # Get all post :Admin+ Alumni 
     path('posts/', PostListView.as_view(), name='post-list'),
+
+    # Get unverified alumni post 
+    path('unverified-alumni-posts/', UnverifiedAlumniPostListView.as_view(), name='unverified-alumni-posts'),
+    path('verify-alumni-post/<int:post_id>/', VerifyAlumniPostView.as_view(), name='verify-alumni-post'),
+    path('reject-alumni-post/<int:post_id>/', RejectAlumniPostView.as_view(), name='reject-alumni-post'),
 
     # authenticateAlumni 
     path('inactive-alumni/', InactiveAlumniListView.as_view(), name='inactive-alumni-list'),

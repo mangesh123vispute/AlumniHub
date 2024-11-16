@@ -11,7 +11,7 @@ class AlumniGETPostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AlumniPost
-        fields = ['author', 'created_at', 'tag','Image', 'content', 'title', 'image_url', 'DocUrl']
+        fields = ['id','author', 'created_at', 'tag','Image', 'content', 'title', 'image_url', 'DocUrl']
 
 class HodPrincipalGETPostSerializer(serializers.ModelSerializer):
     author = UserSerializer()

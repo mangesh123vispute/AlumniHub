@@ -490,10 +490,9 @@ const SideNav = () => {
                     userData?.username === "Admin") && (
                     <li className="nav-item">
                       <Link
-                        to={`/LinkedinScraper`}
+                        to={`/unverifiedalumni_posts`}
                         className="nav-link"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        
                       >
                         <p style={{ fontSize: "1em" }}>
                           <i
