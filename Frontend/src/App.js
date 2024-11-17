@@ -3,6 +3,7 @@ import Error from "./components/ErrorPage/Error.js";
 import { AuthProvider } from "./context/AuthContext";
 import Login from "./components/authentication/Login.js";
 import ActivateEmail from "./components/authentication/ActivateEmail.js";
+import UpdateProfileInfo from "./components/Pages/UpdateProfileInfo.js";
 import Register from "./components/authentication/Register.js";
 import Profile from "./components/Pages/Profile.js";
 import Requests from "./components/Pages/Requests.js";
@@ -41,6 +42,11 @@ function App() {
             path="/activate_email/:useremail"
             element={<ActivateEmail />}
           />
+          <Route
+            path="/update_Student_profile_info/:id/:username/:email/:graduation_year/"
+            element={<UpdateProfileInfo />}
+          />
+
           <Route path="/forgot_password" element={<ForgotPassword />} />
           <Route path="/forgot_username" element={<ForgotUsername />} />
           <Route

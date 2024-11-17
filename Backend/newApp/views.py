@@ -24,6 +24,7 @@ from django.conf import settings
 from .updateAlumniProfileSerializers import ProfileUpdateSerializer
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from .editProfileSerializers import UserSerializer, StudentProfileSerializer
 
 class HodPrincipalPostPagination(PageNumberPagination):
     page_size = 10  # Number of posts per page
@@ -961,3 +962,6 @@ class UserDetailView(APIView):
         }
 
         return Response(user_data, status=status.HTTP_200_OK)
+
+
+

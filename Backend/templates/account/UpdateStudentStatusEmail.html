@@ -171,12 +171,12 @@ Update Student Profile
     <div style="text-align: center; margin-bottom: 1em;">
         <span style="font-size: 1.5em;">
             <i style="font-size: medium;">
-                Review your information and <b>click "Update Profile" to be redirected to the edit profile page</b> if needed. Keeping your profile updated helps support your future opportunities !!
+                Review your information and <b><a href="http://localhost:3000/update_Student_profile_info/{{user.id}}/{{user.username}}/{{user.email}}/{{user.graduation_year}}/">click "Open Profile Editor"</a> to be redirected to the edit profile page</b> if needed. Keeping your profile updated helps support your future opportunities !!
             </i>
         </span>
     </div>
 
-   <hr style=" margin-bottom: 1.5em;">
+   <hr style=" margin-bottom: 1.5em;">  
     <form  action="#">
       <div class="formbold-input-group">
         <label for="name" class="formbold-form-label" >Full Name </label>
@@ -314,7 +314,7 @@ Update Student Profile
 
       
  <hr/>
-   <a href="http://localhost:3000/myprofile/{{user.username}}/{{user.password}}"><button class="formbold-btn">Update Profile</button></a>   
+   <a href="http://localhost:3000/update_Student_profile_info"><button class="formbold-btn">Open Profile Editor</button></a>   
     </form>
   </div>
 </div>
