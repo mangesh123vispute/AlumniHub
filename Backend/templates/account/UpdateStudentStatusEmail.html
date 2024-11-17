@@ -1,325 +1,324 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <style type="text/css">
-      body {
-  margin: auto;
-  background: #eaeaea;  
-  font-family: 'Open Sans', sans-serif;
-}
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+  .formbold-main-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+  }
 
-.info p {
-  text-align:center;
-  color: #999;
-  text-transform:none;
-  font-weight:600;
-  font-size:15px;
-  margin-top:2px
-}
+  .formbold-form-wrapper {
+    margin: 0 auto;
+    max-width: 570px;
+    width: 100%;
+    background: white;
+    padding: 40px;
+  }
 
-.info i {
-  color:#F6AA93;
-}
-form h1 {
-  font-size: 18px;
-  background: #F6AA93 none repeat scroll 0% 0%;
-  color: rgb(255, 255, 255);
-  padding: 22px 25px;
-  border-radius: 5px 5px 0px 0px;
-  margin: auto;
-  text-shadow: none; 
-  text-align:left
-}
+  .formbold-form-img {
+    margin-bottom: 45px;
+  }
 
-form {
-  border-radius: 5px;
-  max-width:700px;
-  width:100%;
-  margin: 5% auto;
-  background-color: #FFFFFF;
-  overflow: hidden;
-}
+  .formbold-input-group {
+    margin-bottom: 18px;
+  }
 
-p span {
-  color: #F00;
-}
+  .formbold-form-select {
+    width: 100%;
+    padding: 12px 22px;
+    border-radius: 5px;
+    border: 1px solid #dde3ec;
+    background: #ffffff;
+    font-size: 16px;
+    color: #536387;
+    outline: none;
+    resize: none;
+  }
 
-p {
-  margin: 0px;
-  font-weight: 500;
-  line-height: 2;
-  color:#333;
-}
+  .formbold-input-radio-wrapper {
+    margin-bottom: 25px;
+  }
+  .formbold-radio-flex {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .formbold-radio-label {
+    font-size: 14px;
+    line-height: 24px;
+    color: #07074d;
+    position: relative;
+    padding-left: 25px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  .formbold-input-radio {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .formbold-radio-checkmark {
+    position: absolute;
+    top: -1px;
+    left: 0;
+    height: 18px;
+    width: 18px;
+    background-color: #ffffff;
+    border: 1px solid #dde3ec;
+    border-radius: 50%;
+  }
+  .formbold-radio-label
+    .formbold-input-radio:checked
+    ~ .formbold-radio-checkmark {
+    background-color: #6a64f1;
+  }
+  .formbold-radio-checkmark:after {
+    content: '';
+    position: absolute;
+    display: none;
+  }
 
-h1 {
-  text-align:center; 
-  color: #666;
-  text-shadow: 1px 1px 0px #FFF;
-  margin:50px 0px 0px 0px
-}
+  .formbold-radio-label
+    .formbold-input-radio:checked
+    ~ .formbold-radio-checkmark:after {
+    display: block;
+  }
 
-input {
-  border-radius: 0px 5px 5px 0px;
-  border: 1px solid #eee;
-  margin-bottom: 15px;
-  width: 75%;
-  height: 40px;
-  float: left;
-  padding: 0px 15px;
-}
+  .formbold-radio-label .formbold-radio-checkmark:after {
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ffffff;
+    transform: translate(-50%, -50%);
+  }
 
-a {
-  text-decoration:inherit
-}
+  .formbold-form-input {
+    width: 100%;
+    padding: 13px 22px;
+    border-radius: 5px;
+    border: 1px solid #dde3ec;
+    background: #ffffff;
+    font-weight: 500;
+    font-size: 16px;
+    color: #07074d;
+    outline: none;
+    resize: none;
+  }
+  .formbold-form-input::placeholder {
+    color: #536387;
+  }
+  .formbold-form-input:focus {
+    border-color: #6a64f1;
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+  }
+  .formbold-form-label {
+    color: #07074d;
+    font-size: 14px;
+    line-height: 24px;
+    display: block;
+    margin-bottom: 10px;
+  }
 
-textarea {
-  border-radius: 0px 5px 5px 0px;
-  border: 1px solid #EEE;
-  margin: 0;
-  width: 75%;
-  height: 130px; 
-  float: left;
-  padding: 0px 15px;
-}
-
-.form-group {
-  overflow: hidden;
-  clear: both;
-}
-
-.icon-case {
-  width: 35px;
-  float: left;
-  border-radius: 5px 0px 0px 5px;
-  background:#eeeeee;
-  height:42px;
-  position: relative;
-  text-align: center;
-  line-height:40px;
-}
-
-i {
-  color:#555;
-}
-
-.contentform {
-  padding: 40px 30px;
-}
-
-.bouton-contact{
-  background-color: #81BDA4;
-  color: #FFF;
-  text-align: center;
-  width: 100%;
-  border:0;
-  padding: 17px 25px;
-  border-radius: 0px 0px 5px 5px;
-  cursor: pointer;
-  margin-top: 40px;
-  font-size: 18px;
-}
-
-.leftcontact {
-  width:49.5%; 
-  float:left;
-  border-right: 1px dotted #CCC;
-  box-sizing: border-box;
-  padding: 0px 15px 0px 0px;
-}
-
-.rightcontact {
-  width:49.5%;
-  float:right;
-  box-sizing: border-box;
-  padding: 0px 0px 0px 15px;
-}
-
-.validation {
-  display:none;
-  margin: 0 0 10px;
-  font-weight:400;
-  font-size:13px;
-  color: #DE5959;
-}
-
-#sendmessage {
-  border:1px solid #fff;
-  display:none;
-  text-align:center;
-  margin:10px 0;
-  font-weight:600;
-  margin-bottom:30px;
-  background-color: #EBF6E0;
-  color: #5F9025;
-  border: 1px solid #B3DC82;
-  padding: 13px 40px 13px 18px;
-  border-radius: 3px;
-  box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.03);
-}
-
-#sendmessage.show,.show  {
-  display:block;
-}
-    </style>
+  .formbold-btn {
+    text-align: center;
+    width: 100%;
+    font-size: 16px;
+    border-radius: 5px;
+    padding: 14px 25px;
+    border: none;
+    font-weight: 500;
+    background-color: #6a64f1;
+    color: white;
+    cursor: pointer;
+    margin-top: 25px;
+  }
+  .formbold-btn:hover {
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+  }
+</style>
 </head>
 <body>
-  <div style="text-align: center; margin-top: 20px;">
-        <img src="https://th.bing.com/th/id/OIP.mmgw2dNXmC4wjn9PudkNYwHaH0?rs=1&pid=ImgDetMain" style="width: 100px; height: auto;">
+<div class="formbold-main-wrapper">
+  <!-- Author: FormBold Team -->
+  <!-- Learn More: https://formbold.com -->
+  <div class="formbold-form-wrapper">
+   
+   <div style="text-align: center;">
+        <img src="https://th.bing.com/th/id/OIP.mmgw2dNXmC4wjn9PudkNYwHaH0?rs=1&pid=ImgDetMain" style="width: 10vw; height: auto;">
+    </div>
+    <div style="font-weight: bold; font-size: 1.5em; text-align: center; margin-top: 0.5em; margin-bottom:0.5em;">
+Update Student Profile
+    </div>
+    <div style="text-align: center; margin-bottom: 1em;">
+        <span style="font-size: 1.5em;">
+            <i style="font-size: medium;">
+                Review your information and <b>click "Update Profile" to be redirected to the edit profile page</b> if needed. Keeping your profile updated helps support your future opportunities !!
+            </i>
+        </span>
     </div>
 
-    <h1>AlumniHub | SSBT COET</h1>
-    <div class="info"><p style="font-size: large;"> Student Profile Update !! </p></div>
+   <hr style=" margin-bottom: 1.5em;">
+    <form  action="#">
+      <div class="formbold-input-group">
+        <label for="name" class="formbold-form-label" >Full Name </label>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          placeholder="Full Name"
+          class="formbold-form-input"
+          value={{user.full_name}}
+          readonly
+        />
+      </div>
 
-	  
-  <form>
-    <h1 style="font-size: small; text-align:center"><i>Verify and update your profile to support your college and empower future students, while strengthening your connection to the alumni network!</i></h1>
-	   
-	    
-    <div class="contentform">
-    	<div id="sendmessage"> Your Profile has been updated successfully!! </div>
+      <div class="formbold-input-group"  id="myForm">
+        <label for="email" class="formbold-form-label"> Education </label>
+        <input
+          type="text"
+          name="Education" 
+          id="Education" 
+          placeholder="Education"
+          class="formbold-form-input"
+          readonly
+          value={{student_profile.Education}}
 
+          
+        />
+      </div>
 
-    	<div class="leftcontact">
-			      <div class="form-group">
-			        <p>Full Name<span>*</span></p>
-			        <span class="icon-case"><i class="fa fa-male"></i></span>
-				        <input type="text" name="full_name" id="nom" data-rule="required" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Nom' doit être renseigné." value="{{ user.full_name }}"/>
-                <div class="validation"></div>
-       </div> 
+      <div class="formbold-input-group"  id="myForm">
+        <label for="Branch" class="formbold-form-label"> Branch </label>
+        <input
+          type="text"
+          name="Branch"
+          id="Branch"
+          placeholder="Branch"
+          class="formbold-form-input"
+          readonly
+          value={{user.Branch}}
 
-            <div class="form-group">
-            <p>Education <span>*</span></p>
-            <span class="icon-case"><i class="fa fa-user"></i></span>
-				<input type="text" name="Education" id="prenom" data-rule="required" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Prénom' doit être renseigné." value="{{user.Education}}"/>
-                <div class="validation"></div>
-			</div>
+        />
+      </div>
 
-			<div class="form-group">
-			<p>Branch <span>*</span></p>	
-			<span class="icon-case"><i class="fa fa-envelope-o"></i></span>
-                <input type="text" name="Branch" id="email" data-rule="email" data-msg="Vérifiez votre saisie sur les champs : Le champ 'E-mail' est obligatoire." value="{{user.Branch}}"/>
-                <div class="validation"></div>
-			</div>	
+      <div class="formbold-input-group">
+        <label for="Academic_Year" class="formbold-form-label"> Academic Year </label>
+        <input
+          type="number" 
+          name="Academic Year"
+          id="Academic_Year"
+          placeholder="Academic Year"
+          class="formbold-form-input"
+          readonly
+          value={{student_profile.current_year_of_study}}
+        />
+      </div>
 
-			<div class="form-group">
-			<p>Academic Year <span>*</span></p>
-			<span class="icon-case"><i class="fa fa-home"></i></span>
-				<input type="number" name="society" id="society" data-rule="required" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Société' doit être renseigné." value="{{user.Year_Joined}}"/>
-                <div class="validation"></div>
-			</div>
+      <div class="formbold-input-group">
+        <label for="Academic_Year" class="formbold-form-label">Email </label>
+        <input
+          type="email" 
+          name="email"
+          id="email"
+          placeholder="Email"
+          class="formbold-form-input"
+          readonly
+          value={{user.email}}
+        />
+      </div>
 
-			<div class="form-group">
-			<p>Admission Year <span>*</span></p>
-			<span class="icon-case"><i class="fa fa-location-arrow"></i></span>
-				<input type="number" name="adresse" id="adresse" data-rule="required" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Adresse' doit être renseigné." value="{{user.Year_Joined}}"/>
-                <div class="validation"></div>
-			</div>
+      <div class="formbold-input-group">
+        <label for="Academic_Year" class="formbold-form-label"> Mobile No.</label>
+        <input
+          type="text" 
+          name="Mobile"
+          id="Mobile"
+          placeholder="Mobile"
+          class="formbold-form-input"
+          readonly
+          value={{user.mobile}}
+        />
+      </div>
 
-			<div class="form-group">
-			<p>Email <span>*</span></p>
-			<span class="icon-case"><i class="fa fa-map-marker"></i></span>
-				<input type="email" name="email" id="postal" data-rule="required" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Code postal' doit être renseigné." value="{{user.email}}"/>
-                <div class="validation"></div>
-			</div>	
+      <!-- New fields -->
+        <div class="formbold-input-group">
+            <label for="linkedin" class="formbold-form-label">LinkedIn</label>
+            <input type="text" name="linkedin" id="linkedin" placeholder="LinkedIn Profile URL" class="formbold-form-input" value="{{ user.linkedin }}" readonly>
+        </div>
 
-       <div class="form-group">
-			<p>Heading<span>*</span></p>	
-			<span class="icon-case"><i class="fa fa-comment-o"></i></span>
-                <input type="text" name="Heading" id="sujet" data-rule="required" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Sujet' doit être renseigné." value="{{user.resume_link}}"/>
-                <div class="validation"></div>
-			</div>
+        <div class="formbold-input-group">
+            <label for="instagram" class="formbold-form-label">Instagram</label>
+            <input type="text" name="instagram" id="instagram" placeholder="Instagram Profile URL" class="formbold-form-input" value="{{ user.instagram }}" readonly>
+        </div>
 
-       <div class="form-group">
-			<p>About<span>*</span></p>	
-			<span class="icon-case"><i class="fa fa-comment-o"></i></span>
-                <input type="text" name="About" id="sujet" data-rule="required" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Sujet' doit être renseigné." value="{{user.About}}"/>
-                <div class="validation"></div>
-			</div>
+        <div class="formbold-input-group">
+            <label for="Github" class="formbold-form-label">GitHub</label>
+            <input type="text" name="Github" id="Github" placeholder="GitHub Profile URL" class="formbold-form-input" value="{{ user.Github }}" readonly>
+        </div>
 
+        <div class="formbold-input-group">
+            <label for="portfolio_link" class="formbold-form-label">Portfolio Link</label>
+            <input type="text" name="portfolio_link" id="portfolio_link" placeholder="Portfolio URL" class="formbold-form-input" value="{{ user.portfolio_link }}" readonly>
+        </div>
 
-	</div>
+        <div class="formbold-input-group">
+            <label for="resume_link" class="formbold-form-label">Resume Link</label>
+            <input type="text" name="resume_link" id="resume_link" placeholder="Resume URL" class="formbold-form-input" value="{{ user.resume_link }}" readonly>
+        </div>
 
-	<div class="rightcontact">	
-
-			<div class="form-group">
-			<p>Mobile <span>*</span></p>
-			<span class="icon-case"><i class="fa fa-building-o"></i></span>
-				<input type="text" name="mobile" id="ville" data-rule="required" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Ville' doit être renseigné." value="{{user.mobile}}"/>
-                <div class="validation"></div>
-			</div>	
-
-			<div class="form-group">
-			<p>Linkedin Profile <span>*</span></p>	
-			<span class="icon-case"><i class="fa fa-phone"></i></span>
-				<input type="text" name="linkedin" id="phone" data-rule="maxlen:10" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Téléphone' doit être renseigné. Minimum 10 chiffres" value="{{user.linkedin}}"/>
-                <div class="validation"></div>
-			</div>
-
-			<div class="form-group">
-			<p>Instagram <span>*</span></p>
-			<span class="icon-case"><i class="fa fa-info"></i></span>
-                <input type="text" name="instagram" id="fonction" data-rule="required" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Fonction' doit être renseigné." value="{{user.instagram}}"/>
-                <div class="validation"></div>
-			</div>
-
-			<div class="form-group">
-			<p>Github <span>*</span></p>	
-			<span class="icon-case"><i class="fa fa-comment-o"></i></span>
-                <input type="text" name="github" id="sujet" data-rule="required" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Sujet' doit être renseigné." value="{{user.Github}}"/>
-                <div class="validation"></div>
-			</div>
-		
-			<div class="form-group">
-			<p>Portfolio link <span>*</span></p>	
-			<span class="icon-case"><i class="fa fa-comment-o"></i></span>
-                <input type="text" name="portfolio_link" id="sujet" data-rule="required" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Sujet' doit être renseigné." value="{{user.portfolio_link}}"/>
-                <div class="validation"></div>
-			</div>
-
-      <div class="form-group">
-			<p>Resume link <span>*</span></p>	
-			<span class="icon-case"><i class="fa fa-comment-o"></i></span>
-                <input type="text" name="resume_link" id="sujet" data-rule="required" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Sujet' doit être renseigné." value="{{user.resume_link}}"/>
-                <div class="validation"></div>
-			</div>
-
-     
-
-        <div class="form-group">
-			<p>Work<span>*</span></p>	
-			<span class="icon-case"><i class="fa fa-comment-o"></i></span>
-                <input type="text" name="Work" id="sujet" data-rule="required" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Sujet' doit être renseigné." value="{{user.Work}}"/>
-                <div class="validation"></div>
-			</div>
-
-         <div class="form-group"  >
-			<p  >Skills<span>*</span></p>	
-			<span class="icon-case"><i class="fa fa-comment-o"></i></span>
-                <input type="text" name="Work" id="sujet" data-rule="required" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Sujet' doit être renseigné." value="{{user.skills}}"/>
-                <div class="validation"></div>
-			</div>
+    <div class="formbold-input-group">
+    <label for="Heading" class="formbold-form-label">Heading</label>
+    <textarea name="Heading" id="Heading" placeholder="Profile Heading" class="formbold-form-input" readonly style="resize: vertical; min-height: 100px;">{{ student_profile.Heading }}</textarea>
+</div>
 
 
 
-	</div>
-	</div>
-<button type="submit" id="updateButton" class="bouton-contact">Update Profile</button>
-	
-</form>	
-<script>
-  // Select the button by its ID and add an event listener
-  document.getElementById("updateButton").addEventListener("click", function (event) {
-    event.preventDefault(); // Prevent the default form submission
-    alert("Profile Updated Successfully!");
-    console.log("Profile Updated Successfully!");
-    document.getElementById("sendmessage").classList.add("show");
-  });
-</script>
+       <div class="formbold-input-group">
+    <label for="About" class="formbold-form-label">About</label>
+    <textarea name="About" id="About" placeholder="About Me" class="formbold-form-input" readonly style="resize: vertical; min-height: 150px;">{{ user.About }}</textarea>
+</div>
+
+
+        <div class="formbold-input-group">
+    <label for="Work" class="formbold-form-label">Work</label>
+    <textarea name="Work" id="Work" placeholder="Work Experience" class="formbold-form-input" readonly style="resize: vertical; min-height: 150px;">{{ user.Work }}</textarea>
+</div>
+
+
+        <div class="formbold-input-group">
+    <label for="skills" class="formbold-form-label">Skills</label>
+    <textarea name="skills" id="skills" placeholder="Skills" class="formbold-form-input" readonly style="resize: vertical; min-height: 150px;">{{ user.skills }}</textarea>
+</div>
+
+
+      
+
+      
+ <hr/>
+   <a href="http://localhost:3000/myprofile/{{user.username}}/{{user.password}}"><button class="formbold-btn">Update Profile</button></a>   
+    </form>
+  </div>
+</div>
+
 
   
 </body>

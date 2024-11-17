@@ -271,18 +271,6 @@ class HodPrincipalPost(models.Model):
     def __str__(self):
         return f"{self.title} by {self.author.full_name}"
 
-# class AlumniCredentials(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='alumni_credentials')
-#     fourth_year_marksheet = models.ImageField(upload_to='documents/marksheets/', blank=True, null=True)
-#     lc = models.ImageField(upload_to='documents/lc/', blank=True, null=True)
-#     id_card = models.ImageField(upload_to='documents/id_cards/', blank=True, null=True)
-#     graduation_certificate = models.ImageField(upload_to='documents/graduation_certificates/', blank=True, null=True)
-
-#     def full_name(self):
-#         return self.user.full_name
-
-#     def __str__(self):
-#         return f"Alumni - {self.user.username}"
 
 class Command(createsuperuser.Command):
     help = 'Custom createsuperuser command'

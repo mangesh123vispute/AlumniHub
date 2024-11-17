@@ -222,20 +222,31 @@ class UserAdmin(ImportExportModelAdmin):
         email_subject = "SSBT COET | AlumniHub - Update Your Profile to Strengthen Our College Community, Support Current Students, and Expand Your Networking Opportunities!"
         
         for user in queryset:
-            context: dict[str, str] = {
+            # Prepare the context with user data
+            context = {
                 'user': user,
             }
             
-            # Check if the user is an alumni or student
+            # Check if the user is an alumni and add AlumniProfile data
             if user.is_alumni:
-                # Send UpdateAlumniStatusEmail.html for alumni users
-                html_message = render_to_string('account/UpdateAlumniStatusEmail.html', context)
+                try:
+                    alumni_profile = AlumniProfile.objects.get(user=user)
+                    context['alumni_profile'] = alumni_profile  # Add the alumni profile data to the context
+                    html_message = render_to_string('account/UpdateAlumniStatusEmail.html', context)
+                except AlumniProfile.DoesNotExist:
+                    continue  # Skip if no alumni profile is found
+            
+            # Check if the user is a student and add StudentProfile data
             elif user.is_student:
-                # Send UpdateStudentStatusEmail.html for student users
-                html_message = render_to_string('account/UpdateStudentStatusEmail.html', context)
+                try:
+                    student_profile = StudentProfile.objects.get(user=user)
+                    context['student_profile'] = student_profile  # Add the student profile data to the context
+                    html_message = render_to_string('account/UpdateStudentStatusEmail.html', context)
+                except StudentProfile.DoesNotExist:
+                    continue  # Skip if no student profile is found
+
             else:
-                # If the user is neither alumni nor student, you can skip or handle differently
-                continue
+                continue  # Skip if the user is neither alumni nor student
             
             plain_message = strip_tags(html_message)
             
@@ -252,6 +263,7 @@ class UserAdmin(ImportExportModelAdmin):
         self.message_user(request, _("Profile update request emails have been sent to the selected users."))
 
     send_profile_update_request_action.short_description = _("Send profile update request email to selected users")
+
 
 
 class AlumniProfileAdmin(ImportExportModelAdmin):
