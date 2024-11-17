@@ -18,6 +18,7 @@ import ProtectedRoute from "./components/ProtectedRoute.js";
 import AddHodPost from "./components/Pages/HOD/AddHodPost.js";
 import AddAlumniPost from './components/Pages/AddAlumniPost.js'
 import AllPost from "./components/Pages/AllPost.js";
+import UnverifiedAlumniPost from "./components/Pages/UnverifiedAlumniPost.js";
 import YourPosts from "./components/Pages/YourPosts.js";
 import ForgotPassword from "./components/authentication/Forgot_password.js";
 import ForgotUsername from "./components/authentication/Forgot_username.js";
@@ -94,6 +95,10 @@ function App() {
           <Route
             path="/all_posts"
             element={<ProtectedRoute element={<AllPost />} />}
+          />
+          <Route
+            path="/unverifiedalumni_posts"
+            element={<ProtectedRoute element={<UnverifiedAlumniPost />} />}
           />
           <Route
             path="/your_posts"

@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -228,18 +226,20 @@ i {
 			</div>	
 
        <div class="form-group">
-			<p>Heading<span>*</span></p>	
-			<span class="icon-case"><i class="fa fa-comment-o"></i></span>
-                <input type="text" name="Heading" id="sujet" data-rule="required" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Sujet' doit être renseigné." value="{{user.resume_link}}"/>
+			<p>Heading <span>*</span></p>
+			<span class="icon-case"><i class="fa fa-comments-o"></i></span>
+                <textarea name="Heading" rows="14" data-rule="required" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Message' doit être renseigné." value="{{user.Heading}}"></textarea>
                 <div class="validation"></div>
-			</div>
+			</div>	
 
+      
        <div class="form-group">
 			<p>About<span>*</span></p>	
 			<span class="icon-case"><i class="fa fa-comment-o"></i></span>
-                <input type="text" name="About" id="sujet" data-rule="required" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Sujet' doit être renseigné." value="{{user.About}}"/>
+                <textarea type="text" name="About" id="sujet" data-rule="required" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Sujet' doit être renseigné." value="{{user.About}}"/>
                 <div class="validation"></div>
 			</div>
+
 
 
 	</div>
@@ -288,7 +288,7 @@ i {
                 <div class="validation"></div>
 			</div>
 
-     
+      
 
         <div class="form-group">
 			<p>Work<span>*</span></p>	
@@ -297,29 +297,19 @@ i {
                 <div class="validation"></div>
 			</div>
 
-         <div class="form-group"  >
-			<p  >Skills<span>*</span></p>	
-			<span class="icon-case"><i class="fa fa-comment-o"></i></span>
-                <input type="text" name="Work" id="sujet" data-rule="required" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Sujet' doit être renseigné." value="{{user.skills}}"/>
+      <div class="form-group">
+			<p>Skills <span>*</span></p>
+			<span class="icon-case"><i class="fa fa-comments-o"></i></span>
+                <textarea name="skills" rows="14" data-rule="required" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Message' doit être renseigné." value="{{user.skills}}"></textarea>
                 <div class="validation"></div>
-			</div>
-
+			</div>	
 
 
 	</div>
 	</div>
-<button type="submit" id="updateButton" class="bouton-contact">Update Profile</button>
+<button type="submit" class="bouton-contact">Update Profile</button>
 	
 </form>	
-<script>
-  // Select the button by its ID and add an event listener
-  document.getElementById("updateButton").addEventListener("click", function (event) {
-    event.preventDefault(); // Prevent the default form submission
-    alert("Profile Updated Successfully!");
-    console.log("Profile Updated Successfully!");
-    document.getElementById("sendmessage").classList.add("show");
-  });
-</script>
 
   
 </body>

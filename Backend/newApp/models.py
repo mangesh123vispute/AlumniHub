@@ -220,11 +220,11 @@ class AlumniPost(models.Model):
         default='default/def.jpeg',
         blank=True
     )
-    image_url = models.URLField(max_length=500,blank=True, default="N/A")  
-    DocUrl = models.URLField(max_length=500,blank=True, default="N/A")  
+    image_url = models.CharField(max_length=500,blank=True, default="N/A")  
+    DocUrl = models.CharField(max_length=500,blank=True, default="N/A")  
     created_at = models.DateTimeField(default=timezone.now, blank=True)  
     updated_at = models.DateTimeField(auto_now=True, blank=True)  
-    
+    verified= models.BooleanField(default=False)
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         img = Image.open(self.Image.path)
@@ -250,8 +250,8 @@ class HodPrincipalPost(models.Model):
         default='default/def.jpeg',
         blank=True
     )
-    image_url = models.URLField(max_length=500,blank=True,default="N/A")  
-    DocUrl = models.URLField(max_length=500, blank=True,default="N/A")  
+    image_url = models.CharField(max_length=500,blank=True,default="N/A")  
+    DocUrl = models.CharField(max_length=500, blank=True,default="N/A")  
     created_at = models.DateTimeField(default=timezone.now, blank=True)  
     updated_at = models.DateTimeField(auto_now=True, blank=True) 
 

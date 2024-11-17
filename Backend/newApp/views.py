@@ -552,12 +552,12 @@ class PostListView(APIView):
         # Base query for AlumniPost and HodPrincipalPost
         sort_order = request.query_params.get('sort_order', '-created_at')
         
-        alumni_posts = AlumniPost.objects.filter(author__is_alumni=True).order_by(sort_order)
+        alumni_posts = AlumniPost.objects.filter(author__is_alumni=True,verified=True).order_by(sort_order)
         hod_posts = HodPrincipalPost.objects.filter(author__is_superuser=True).order_by(sort_order)
 
 
         # Filtering parameters
-        filters = {
+        filters = {     
             'author__full_name__icontains': request.query_params.get('full_name', None),
             'created_at__gte': request.query_params.get('created_at_min', None),
             'created_at__lte': request.query_params.get('created_at_max', None),
@@ -608,6 +608,125 @@ class PostListView(APIView):
 
         # Return paginated response
         return paginator.get_paginated_response(page)
+    
+    
+class UnverifiedAlumniPostListView(APIView):
+    permission_classes = [IsAuthenticated]
+    pagination_class = PostListPagination
+
+    def get(self, request, *args, **kwargs):
+
+        if not (
+                (request.user.username == "Admin" and request.user.is_superuser) or 
+                (request.user.is_superuser and request.user.is_allowedToAccessPostRequestTab)
+            ):
+                raise PermissionDenied("You do not have permission to access this resource.")
+
+        
+        sort_order = request.query_params.get('sort_order', '-created_at')
+        unverified_alumni_posts = AlumniPost.objects.filter(
+            author__is_alumni=True,
+            verified=False
+        ).order_by(sort_order)
+
+        
+        serializer = AlumniGETPostSerializer(unverified_alumni_posts, many=True)
+
+      
+        paginator = self.pagination_class()
+        page = paginator.paginate_queryset(serializer.data, request)
+
+        
+        return paginator.get_paginated_response(page)
+    
+
+class VerifyAlumniPostView(APIView):
+    def post(self, request, post_id):
+        
+        if not (
+            (request.user.username == "Admin" and request.user.is_superuser) or
+            (request.user.is_superuser and request.user.is_allowedToAccessPostRequestTab)
+        ):
+            raise PermissionDenied("You do not have permission to access this resource.")
+        
+       
+        try:
+            post = AlumniPost.objects.get(id=post_id)
+        except AlumniPost.DoesNotExist:
+            raise NotFound("The specified post does not exist.")
+
+       
+        post.verified = True
+        post.save()
+
+        subject = "Your Post has been Verified"
+        email_from = settings.DEFAULT_FROM_EMAIL
+        recipient_list = [post.author.email] 
+        combined_message = "Your post has been successfully verified by the AlumniHub."
+        url = "#"
+        context = {
+            'message': combined_message,
+            'url': url,
+            'message3': "Thank you for your contribution!"
+        }
+        html_message = render_to_string('account/BaseEmail.html', context)
+        plain_message = strip_tags(html_message)
+
+        message = EmailMultiAlternatives(
+            subject=subject,
+            body=plain_message,
+            from_email=email_from,
+            to=recipient_list
+        )
+        message.attach_alternative(html_message, "text/html")
+        message.send()
+
+
+        return Response({"detail": "Post verified successfully."}, status=status.HTTP_200_OK)
+    
+class RejectAlumniPostView(APIView):
+    def delete(self, request, post_id):
+        # Check if the user has the required permissions
+        if not (
+            (request.user.username == "Admin" and request.user.is_superuser) or
+            (request.user.is_superuser and request.user.is_allowedToAccessPostRequestTab)
+        ):
+            raise PermissionDenied("You do not have permission to access this resource.")
+        
+        # Get the post by ID
+        try:
+            post = AlumniPost.objects.get(id=post_id)
+        except AlumniPost.DoesNotExist:
+            raise NotFound("The specified post does not exist.")
+        
+        author_email = post.author.email
+        # Delete the post
+        post.delete()
+
+        subject = "Your Post has been Rejected and Deleted"
+        email_from = settings.DEFAULT_FROM_EMAIL
+        recipient_list = [author_email]
+        combined_message = "We appreciate your contribution to AlumniHub, but unfortunately, your recent post did not meet our criteria and has been removed; please reach out if you'd like more details or assistance."
+        url = "#"
+        context = {
+            'message': combined_message,
+            'url': url,
+            'message3': "For further queries, contact support."
+        }
+        html_message = render_to_string('account/BaseEmail.html', context)
+        plain_message = strip_tags(html_message)
+
+        message = EmailMultiAlternatives(
+            subject=subject,
+            body=plain_message,
+            from_email=email_from,
+            to=recipient_list
+        )
+        message.attach_alternative(html_message, "text/html")
+        message.send()
+
+
+        return Response({"detail": "Post rejected and deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
         
 
 class InactiveAlumniListView(generics.ListAPIView):

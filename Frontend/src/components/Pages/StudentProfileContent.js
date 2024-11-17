@@ -881,7 +881,7 @@ const StudentProfileContent = () => {
                                 <div className="timeline-body">
                                   <strong>Portfolio:</strong>
                                   <p className="text-muted font">
-                                    {user?.portfolio_link ? (
+                                    {user?.portfolio_link !== "N/A" ? (
                                       <a
                                         href={user?.portfolio_link || "#"}
                                         target="_blank"
@@ -898,7 +898,7 @@ const StudentProfileContent = () => {
 
                                   <strong>Resume:</strong>
                                   <p className="text-muted font">
-                                    {user?.resume_link ? (
+                                    {user?.resume_link !== "N/A" ? (
                                       <a
                                         href={user?.resume_link || "#"}
                                         target="_blank"
