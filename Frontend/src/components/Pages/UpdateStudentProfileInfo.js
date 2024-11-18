@@ -20,19 +20,19 @@ const UpdateStudentProfileInfoContent = () => {
 
  const [formData, setFormData] = useState({
    full_name: "",
-   education: "",
-   branch: "",
-   academic_year: "",
+   Education: "",
+   Branch: "",
+   current_year_of_study: "",
    email: "",
    mobile: "",
    linkedin: "",
    instagram: "",
-   github: "",
+   Github: "",
    portfolio_link: "",
    resume_link: "",
-   heading: "",
-   about: "",
-   work: "",
+   Heading: "",
+   About: "",
+   Work: "",
    skills: "",
  });
   const getUserData = async (userId, username, graduationYear) => {
@@ -53,20 +53,20 @@ const UpdateStudentProfileInfoContent = () => {
 
         setFormData({
           full_name: userData.full_name,
-          education: studentProfileData.Education,
-          branch: userData.Branch,
-          academic_year: studentProfileData.current_year_of_study,
+          Education: studentProfileData.Education,
+          Branch: userData.Branch,
+          current_year_of_study: studentProfileData.current_year_of_study,
           email: userData.email,
           mobile: userData.mobile,
           linkedin: userData.linkedin,
           instagram: userData.instagram,
-          github: userData.Github,
+          Github: userData.Github,
           portfolio_link: userData.portfolio_link,
           resume_link: userData.resume_link,
-          heading: studentProfileData.Heading,
-          about: studentProfileData.About,
-          work: studentProfileData.Work,
-          skills: studentProfileData.skills,
+          Heading: studentProfileData.Heading,
+          About: userData.About,
+          Work: userData.Work,
+          skills: userData.skills,
         });
         
       } else {
@@ -183,23 +183,23 @@ const UpdateStudentProfileInfoContent = () => {
                     <input
                       type="text"
                       className="form-control"
-                      id="education"
+                      id="Education"
                       placeholder="Education"
-                      name="education"
-                      value={formData.education}
+                      name="Education"
+                      value={formData.Education}
                       onChange={handleChange}
                     />
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="branch">Branch</label>
+                    <label htmlFor="Branch">Branch</label>
                     <input
                       type="text"
                       className="form-control"
-                      id="branch"
+                      id="Branch"
                       placeholder="Branch"
-                      name="branch"
-                      value={formData.branch}
+                      name="Branch"
+                      value={formData.Branch}
                       onChange={handleChange}
                     />
                   </div>
@@ -209,10 +209,10 @@ const UpdateStudentProfileInfoContent = () => {
                     <input
                       type="number"
                       className="form-control"
-                      id="academic_year"
+                      id="current_year_of_study"
                       placeholder="Academic Year"
-                      name="academic_year"
-                      value={formData.academic_year}
+                      name="current_year_of_study"
+                      value={formData.current_year_of_study}
                       onChange={handleChange}
                     />
                   </div>
@@ -236,7 +236,7 @@ const UpdateStudentProfileInfoContent = () => {
                       type="text"
                       className="form-control"
                       id="mobile"
-                      placeholder="Mobile"  
+                      placeholder="Mobile"
                       name="mobile"
                       value={formData.mobile}
                       onChange={handleChange}
@@ -274,14 +274,14 @@ const UpdateStudentProfileInfoContent = () => {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="github">GitHub</label>
+                    <label htmlFor="Github">GitHub</label>
                     <input
                       type="text"
                       className="form-control"
-                      id="github"
+                      id="Github"
                       placeholder="GitHub Profile URL"
-                      name="github"
-                      value={formData.github}
+                      name="Github"
+                      value={formData.Github}
                       onChange={handleChange}
                     />
                   </div>
@@ -316,10 +316,10 @@ const UpdateStudentProfileInfoContent = () => {
                     <label htmlFor="heading">Heading</label>
                     <textarea
                       className="form-control"
-                      id="heading"
+                      id="Heading"
                       placeholder="Heading"
-                      name="heading"
-                      value={formData.heading}
+                      name="Heading"
+                      value={formData.Heading}
                       onChange={handleChange}
                     />
                   </div>
@@ -328,10 +328,10 @@ const UpdateStudentProfileInfoContent = () => {
                     <label htmlFor="about">About</label>
                     <textarea
                       className="form-control"
-                      id="about"
+                      id="About"
                       placeholder="About"
-                      name="about"
-                      value={formData.about}
+                      name="About"
+                      value={formData.About}
                       onChange={handleChange}
                     />
                   </div>
@@ -339,10 +339,10 @@ const UpdateStudentProfileInfoContent = () => {
                     <label htmlFor="about">Work</label>
                     <textarea
                       className="form-control"
-                      id="work"
+                      id="Work"
                       placeholder="Work Experience"
-                      name="work"
-                      value={formData.work}
+                      name="Work"
+                      value={formData.Work}
                       onChange={handleChange}
                     />
                   </div>

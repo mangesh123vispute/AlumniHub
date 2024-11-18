@@ -32,7 +32,7 @@ const UpdateAlumniProfileInfoContent = () => {
     resume_link: "",
     Heading: "",
     About: "",
-    work: "",
+    Work: "",
     skills: "",
     current_city: "",
     current_country: "",
@@ -41,7 +41,7 @@ const UpdateAlumniProfileInfoContent = () => {
     previous_companies: "",
     years_of_experience: "",
     industry: "",
-    achievements:"",
+    achievements: "",
   });
   const getUserData = async (userId, username, graduationYear) => {
     setLoading(true);
@@ -71,9 +71,9 @@ const UpdateAlumniProfileInfoContent = () => {
           portfolio_link: userData.portfolio_link,
           resume_link: userData.resume_link,
           Heading: alumniProfileData.Heading,
-          About: alumniProfileData.About,
-          work: alumniProfileData.Work,
-          skills: alumniProfileData.skills,
+          About: userData.About,
+          Work: userData.Work,
+          skills: userData.skills,
           current_city: alumniProfileData.current_city,
           current_country: alumniProfileData.current_country,
           job_title: alumniProfileData.job_title,
@@ -81,7 +81,7 @@ const UpdateAlumniProfileInfoContent = () => {
           previous_companies: alumniProfileData.previous_companies,
           years_of_experience: alumniProfileData.years_of_experience,
           industry: alumniProfileData.industry,
-          achievements: alumniProfileData.achievements
+          achievements: alumniProfileData.achievements,
         });
       } else {
         console.log("Error loading student profile");
@@ -240,8 +240,6 @@ const UpdateAlumniProfileInfoContent = () => {
                     />
                   </div>
 
-                  
-
                   <div className="form-group">
                     <label htmlFor="email">Email</label>
                     <input
@@ -364,10 +362,10 @@ const UpdateAlumniProfileInfoContent = () => {
                     <label htmlFor="about">Work</label>
                     <textarea
                       className="form-control"
-                      id="work"
+                      id="Work"
                       placeholder="Work"
-                      name="work"
-                      value={formData.work}
+                      name="Work"
+                      value={formData.Work}
                       onChange={handleChange}
                     />
                   </div>
@@ -448,7 +446,7 @@ const UpdateAlumniProfileInfoContent = () => {
 
                   <div className="form-group">
                     <label htmlFor="about">Skills</label>
-                    <textarea 
+                    <textarea
                       className="form-control"
                       id="skills"
                       placeholder="Skills"
