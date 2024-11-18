@@ -35,7 +35,7 @@ class User(AbstractUser):
     Branch = models.CharField(max_length=50,blank=True, default="N/A")
     Image = models.ImageField(
         upload_to='images', 
-        default='default/def.jpeg',
+        default='default/def.jpg',
         blank=True
     )
     # contact infromation
@@ -217,7 +217,7 @@ class AlumniPost(models.Model):
     content = models.TextField(blank=True,default="N/A")
     Image = models.ImageField(
         upload_to='images',
-        default='default/def.jpeg',
+        default='default/def.jpg',
         blank=True
     )
     image_url = models.CharField(max_length=500,blank=True, default="N/A")  
@@ -247,7 +247,7 @@ class HodPrincipalPost(models.Model):
     tag = models.CharField(max_length=255,blank=True, default="N/A")
     Image = models.ImageField(
         upload_to='images',
-        default='default/def.jpeg',
+        default='default/def.jpg',
         blank=True
     )
     image_url = models.CharField(max_length=500,blank=True,default="N/A")  

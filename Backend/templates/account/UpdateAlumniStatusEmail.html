@@ -166,13 +166,11 @@
         <img src="https://th.bing.com/th/id/OIP.mmgw2dNXmC4wjn9PudkNYwHaH0?rs=1&pid=ImgDetMain" style="width: 10vw; height: auto;">
     </div>
     <div style="font-weight: bold; font-size: 1.5em; text-align: center; margin-top: 0.5em; margin-bottom:0.5em;">
-Update Student Profile
+Update Alumni Profile
     </div>
     <div style="text-align: center; margin-bottom: 1em;">
         <span style="font-size: 1.5em;">
-            <i style="font-size: medium;">
-                Review your information and <b>click "Update Profile" to be redirected to the edit profile page</b> if needed. Keeping your profile updated helps support your future opportunities !!
-            </i>
+           <i style="font-size: medium;"> Keep your alumni profile updated to strengthen your network and unlock future opportunities; <a href="http://localhost:3000/update_Alumni_profile_info/{{user.id}}/{{user.username}}/{{user.email}}/{{user.graduation_year}}/"><b>click "Update Profile" to edit your information</b></a>. </i>
         </span>
     </div>
 
@@ -184,8 +182,8 @@ Update Student Profile
             </div>
 
             <div class="formbold-input-group">
-                <label for="email" class="formbold-form-label">Email</label>
-                <input type="email" name="email" id="email" class="formbold-form-input" value="{{ user.email }}" readonly>
+                <label for="Education" class="formbold-form-label">Education</label>
+                <input type="text" name="Education" id="Education" class="formbold-form-input" value="{{ alumni_profile.Education }}" readonly>
             </div>
 
             <div class="formbold-input-group">
@@ -193,9 +191,24 @@ Update Student Profile
                 <input type="text" name="Branch" id="Branch" class="formbold-form-input" value="{{ user.Branch }}" readonly>
             </div>
 
+              <div class="formbold-input-group">
+                <label for="City" class="formbold-form-label">City</label>
+                <input type="text" name="City" id="City" class="formbold-form-input" value="{{ alumni_profile.current_city }}" readonly>
+            </div>
+
+             <div class="formbold-input-group">
+                <label for="Country" class="formbold-form-label">Country</label>
+                <input type="text" name="Country" id="Country" class="formbold-form-input" value="{{ alumni_profile.current_country }}" readonly>
+            </div>
+            
             <div class="formbold-input-group">
                 <label for="Year_Joined" class="formbold-form-label">Admission Year</label>
                 <input type="number" name="Year_Joined" id="Year_Joined" class="formbold-form-input" value="{{ user.Year_Joined }}" readonly>
+            </div>
+
+             <div class="formbold-input-group">
+                <label for="Email" class="formbold-form-label">Email</label>
+                <input type="email" name="Email" id="Email" class="formbold-form-input" value="{{ user.email }}" readonly>
             </div>
 
             <div class="formbold-input-group">
@@ -213,6 +226,11 @@ Update Student Profile
                 <input type="text" name="instagram" id="instagram" class="formbold-form-input" value="{{ user.instagram }}" readonly>
             </div>
 
+             <div class="formbold-input-group">
+                <label for="pref" class="formbold-form-label">Prefered Contact Method</label>
+                <input type="text" name="pref" id="pref" class="formbold-form-input" value="{{ alumni_profile.preferred_contact_method }}" readonly>
+            </div>
+
             <div class="formbold-input-group">
                 <label for="Github" class="formbold-form-label">GitHub</label>
                 <input type="text" name="Github" id="Github" class="formbold-form-input" value="{{ user.Github }}" readonly>
@@ -228,9 +246,16 @@ Update Student Profile
                 <input type="text" name="resume_link" id="resume_link" class="formbold-form-input" value="{{ user.resume_link }}" readonly>
             </div>
 
+            
+            <div class="formbold-input-group">
+                <label for="Heading" class="formbold-form-label">Heading</label>
+                <textarea name="Heading" id="Heading" class="formbold-form-input" readonly style="resize: vertical; min-height: 150px;" >{{ alumni_profile.Heading }}</textarea>
+            </div>
+
+
             <div class="formbold-input-group">
                 <label for="About" class="formbold-form-label">About</label>
-                <textarea name="About" id="About" class="formbold-form-input" readonly style="resize: vertical; min-height: 150px;">{{ user.About }}</textarea>
+                <textarea name="About" id="About" class="formbold-form-input" readonly style="resize: vertical; min-height: 150px;" >{{ user.About }}</textarea>
             </div>
 
             <div class="formbold-input-group">
@@ -238,23 +263,46 @@ Update Student Profile
                 <textarea name="Work" id="Work" class="formbold-form-input" readonly style="resize: vertical; min-height: 150px;">{{ user.Work }}</textarea>
             </div>
 
+             <div class="formbold-input-group">
+                <label for="title" class="formbold-form-label">Job title</label>
+                <input type="text" name="title" id="title" class="formbold-form-input" value="{{ alumni_profile.job_title }}" readonly>
+            </div>
+
+            <div class="formbold-input-group">
+                <label for="company" class="formbold-form-label">Current Company</label>
+                <input type="text" name="company" id="company" class="formbold-form-input" value="{{ alumni_profile.current_company_name }}" readonly>
+            </div>
+
+            
+
+            <div class="formbold-input-group">
+                <label for="previous_c" class="formbold-form-label">Previous Companies</label>
+                <textarea name="previous_c" id="previous_c" class="formbold-form-input" readonly style="resize: vertical; min-height: 150px;">{{ alumni_profile.previous_companies }}</textarea>
+            </div>
+
+             <div class="formbold-input-group">
+                <label for="workexp" class="formbold-form-label">Work Experience</label>
+                <input type="text" name="workexp" id="workexp" class="formbold-form-input" value="{{ alumni_profile.years_of_experience }}" readonly>
+            </div>
+
+            <div class="formbold-input-group">
+                <label for="ind" class="formbold-form-label">Industry</label>
+                <input type="text" name="ind" id="ind" class="formbold-form-input" value="{{ alumni_profile.industry }}" readonly>
+            </div>
+
+            <div class="formbold-input-group">
+                <label for="achive" class="formbold-form-label">Achievement</label>
+                <textarea name="achive" id="achive" class="formbold-form-input" readonly style="resize: vertical; min-height: 150px;">{{ alumni_profile.achievements }}</textarea>
+            </div>
+
             <div class="formbold-input-group">
                 <label for="skills" class="formbold-form-label">Skills</label>
                 <textarea name="skills" id="skills" class="formbold-form-input" readonly style="resize: vertical; min-height: 150px;">{{ user.skills }}</textarea>
             </div>
 
-            <div class="formbold-input-group">
-                <label for="graduation_month" class="formbold-form-label">Graduation Month</label>
-                <input type="number" name="graduation_month" id="graduation_month" class="formbold-form-input" value="{{ user.graduation_month }}" readonly>
-            </div>
-
-            <div class="formbold-input-group">
-                <label for="graduation_year" class="formbold-form-label">Graduation Year</label>
-                <input type="number" name="graduation_year" id="graduation_year" class="formbold-form-input" value="{{ user.graduation_year }}" readonly>
-            </div>
 
  <hr/>
-   <a href="http://localhost:3000/myprofile"><button class="formbold-btn">Update Profile</button></a>   
+   <a href="http://localhost:3000/update_Alumni_profile_info/{{user.id}}/{{user.username}}/{{user.email}}/{{user.graduation_year}}/"><button class="formbold-btn">Update Profile</button></a>   
      
     </form>
   </div>

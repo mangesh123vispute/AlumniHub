@@ -298,7 +298,7 @@ class AlumniProfileAdmin(ImportExportModelAdmin):
     readonly_fields = ['id']
     fieldsets = (
     (None, {
-        'fields': ('user', 'full_name','Heading', 'job_title', 'current_city', 'current_country')
+        'fields': ('user','Heading', 'job_title', 'current_city', 'current_country')
     }),
     ('Career Information', {
         'fields': ('current_company_name', 'years_of_experience', 'industry', 'achievements', 'previous_companies')

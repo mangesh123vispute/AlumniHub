@@ -3,7 +3,8 @@ import Error from "./components/ErrorPage/Error.js";
 import { AuthProvider } from "./context/AuthContext";
 import Login from "./components/authentication/Login.js";
 import ActivateEmail from "./components/authentication/ActivateEmail.js";
-import UpdateProfileInfo from "./components/Pages/UpdateProfileInfo.js";
+import UpdateStudentProfileInfo from "./components/Pages/UpdateStudentProfileInfo.js";
+import UpdateAlumniProfileInfo from "./components/Pages/UpdateAlumniProfileInfo.js";
 import Register from "./components/authentication/Register.js";
 import Profile from "./components/Pages/Profile.js";
 import Requests from "./components/Pages/Requests.js";
@@ -44,7 +45,11 @@ function App() {
           />
           <Route
             path="/update_Student_profile_info/:id/:username/:email/:graduation_year/"
-            element={<UpdateProfileInfo />}
+            element={<UpdateStudentProfileInfo />}
+          />
+          <Route
+            path="/update_Alumni_profile_info/:id/:username/:email/:graduation_year/"
+            element={<UpdateAlumniProfileInfo />}
           />
 
           <Route path="/forgot_password" element={<ForgotPassword />} />

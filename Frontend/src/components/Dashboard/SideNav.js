@@ -23,13 +23,12 @@ const SideNav = () => {
         {/* Brand Logo */}
         <Link to="/" className="brand-link" style={{ textDecoration: "none" }}>
           <img
-            src="./Logo.jfif"
-            alt="SSBT COET"
+            src="/Logo.jfif"
+            alt=""
             class="brand-image img-circle elevation-3"
-            style={{
-              marginTop: "5px",
-            }}
-          ></img>
+            style={{ marginTop: "5px" }}
+          />
+
           <div style={{ display: "flex", flexDirection: "column" }}>
             <span
               className="brand-text font-weight-light"
@@ -51,10 +50,10 @@ const SideNav = () => {
                 src={
                   ProfileImage
                     ? `${ProfileImage}`
-                    : `../../dist/img/user1-128x128.jpg`
+                    : '/profile.jpg'
                 }
                 className="img-circle elevation-2 mt-1"
-                alt="User Image"
+                alt=""
               />
             </div>
             <div className="info">
@@ -489,11 +488,7 @@ const SideNav = () => {
                   {(userData?.is_allowedToAccessPostRequestTab ||
                     userData?.username === "Admin") && (
                     <li className="nav-item">
-                      <Link
-                        to={`/unverifiedalumni_posts`}
-                        className="nav-link"
-                        
-                      >
+                      <Link to={`/unverifiedalumni_posts`} className="nav-link">
                         <p style={{ fontSize: "1em" }}>
                           <i
                             className="fas fa-paper-plane nav-icon"
