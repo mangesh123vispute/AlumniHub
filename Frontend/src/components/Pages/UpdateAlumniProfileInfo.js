@@ -9,9 +9,9 @@ import { useParams } from "react-router-dom";
 
 const UpdateAlumniProfileInfoContent = () => {
   const [loading, setLoading] = useState(false);
-  const { id, username, email, graduation_year } = useParams();
+  const { id, username, graduation_year } = useParams();
 
-  console.log(id, username, email, graduation_year);
+  console.log(id, username, graduation_year);
 
   let { showNotification, message, icon, title, handleClose, isOpen } =
     useContext(AuthContext);
@@ -22,16 +22,16 @@ const UpdateAlumniProfileInfoContent = () => {
   const [formData, setFormData] = useState({
     full_name: "",
     Education: "",
-    branch: "",
+    Branch: "",
     email: "",
     mobile: "",
     linkedin: "",
     instagram: "",
-    github: "",
+    Github: "",
     portfolio_link: "",
     resume_link: "",
-    heading: "",
-    about: "",
+    Heading: "",
+    About: "",
     work: "",
     skills: "",
     current_city: "",
@@ -43,12 +43,12 @@ const UpdateAlumniProfileInfoContent = () => {
     industry: "",
     achievements:"",
   });
-  const getUserData = async (userId, username, email, graduationYear) => {
+  const getUserData = async (userId, username, graduationYear) => {
     setLoading(true);
 
     try {
       const response = await axios.get(
-        `${baseurl}/alumni-profile/${userId}/${username}/${email}/${graduationYear}/`
+        `${baseurl}/alumni-profile/${userId}/${username}/${graduationYear}/`
       );
 
       if (response.status === 200) {
@@ -62,16 +62,16 @@ const UpdateAlumniProfileInfoContent = () => {
         setFormData({
           full_name: userData.full_name,
           Education: alumniProfileData.Education,
-          branch: userData.Branch,
+          Branch: userData.Branch,
           email: userData.email,
           mobile: userData.mobile,
           linkedin: userData.linkedin,
           instagram: userData.instagram,
-          github: userData.Github,
+          Github: userData.Github,
           portfolio_link: userData.portfolio_link,
           resume_link: userData.resume_link,
-          heading: alumniProfileData.Heading,
-          about: alumniProfileData.About,
+          Heading: alumniProfileData.Heading,
+          About: alumniProfileData.About,
           work: alumniProfileData.Work,
           skills: alumniProfileData.skills,
           current_city: alumniProfileData.current_city,
@@ -111,7 +111,7 @@ const UpdateAlumniProfileInfoContent = () => {
 
   useEffect(() => {
     localStorage.removeItem("authTokens");
-    getUserData(id, username, email, graduation_year);
+    getUserData(id, username, graduation_year);
   }, []);
 
   const handleChange = (e) => {
@@ -128,7 +128,7 @@ const UpdateAlumniProfileInfoContent = () => {
     setLoading(true);
     try {
       const response = await axios.put(
-        `${baseurl}/student-profile/${id}/${username}/${email}/${graduation_year}/`,
+        `${baseurl}/alumni-profile/${id}/${username}/${graduation_year}/`,
         formData
       );
 
@@ -202,14 +202,14 @@ const UpdateAlumniProfileInfoContent = () => {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="branch">Branch</label>
+                    <label htmlFor="Branch">Branch</label>
                     <input
                       type="text"
                       className="form-control"
-                      id="branch"
+                      id="Branch"
                       placeholder="Branch"
-                      name="branch"
-                      value={formData.branch}
+                      name="Branch"
+                      value={formData.Branch}
                       onChange={handleChange}
                     />
                   </div>
@@ -299,14 +299,14 @@ const UpdateAlumniProfileInfoContent = () => {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="github">GitHub</label>
+                    <label htmlFor="Github">GitHub</label>
                     <input
                       type="text"
                       className="form-control"
-                      id="github"
+                      id="Github"
                       placeholder="GitHub Profile URL"
-                      name="github"
-                      value={formData.github}
+                      name="Github"
+                      value={formData.Github}
                       onChange={handleChange}
                     />
                   </div>
@@ -338,25 +338,25 @@ const UpdateAlumniProfileInfoContent = () => {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="heading">Heading</label>
+                    <label htmlFor="Heading">Heading</label>
                     <textarea
                       className="form-control"
-                      id="heading"
+                      id="Heading"
                       placeholder="Heading"
-                      name="heading"
-                      value={formData.heading}
+                      name="Heading"
+                      value={formData.Heading}
                       onChange={handleChange}
                     />
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="about">About</label>
+                    <label htmlFor="About">About</label>
                     <textarea
                       className="form-control"
-                      id="about"
+                      id="About"
                       placeholder="About"
-                      name="about"
-                      value={formData.about}
+                      name="About"
+                      value={formData.About}
                       onChange={handleChange}
                     />
                   </div>

@@ -966,15 +966,14 @@ class UserDetailView(APIView):
 
 class UpdateStudentProfileAPIView(APIView):
     permission_classes = [AllowAny]
-    def get(self, request, user_id,username,email,graduation_year):
+    def get(self, request, user_id,username,graduation_year):
         try:
             # Fetch the user and their related student profile
             user = User.objects.get(id=user_id, is_student=True)
 
             # Cross-check provided data with the user's data
-            if user.username != username or user.email != email or str(user.graduation_year) != str(graduation_year):
+            if user.username != username  or str(user.graduation_year) != str(graduation_year):
                 return Response({'detail': 'You are not authorized to access this data.'}, status=status.HTTP_403_FORBIDDEN)
-            
             
             student_profile = StudentProfile.objects.get(user=user)
 
@@ -991,13 +990,13 @@ class UpdateStudentProfileAPIView(APIView):
         except StudentProfile.DoesNotExist:
             return Response({'detail': 'Student profile not found'}, status=status.HTTP_404_NOT_FOUND)
 
-    def put(self, request, user_id,username,email,graduation_year):
+    def put(self, request, user_id,username,graduation_year):
         try:
             # Fetch the user and their related student profile
             user = User.objects.get(id=user_id, is_student=True)
 
             # Cross-check provided data with the user's data
-            if user.username != username or user.email != email or str(user.graduation_year) != str(graduation_year):
+            if user.username != username  or str(user.graduation_year) != str(graduation_year):
                 return Response({'detail': 'You are not authorized to access this data.'}, status=status.HTTP_403_FORBIDDEN)
 
             existing_user = User.objects.filter(email=request.data.get('email')).exclude(id=user_id).first()
@@ -1036,13 +1035,13 @@ class UpdateStudentProfileAPIView(APIView):
 class UpdateAlumniProfileAPIView(APIView):
     permission_classes = [AllowAny]
 
-    def get(self, request, user_id, username, email, graduation_year):
+    def get(self, request, user_id, username, graduation_year):
         try:
             # Fetch the user and their related alumni profile
             user = User.objects.get(id=user_id, is_alumni=True)
 
             # Cross-check provided data with the user's data
-            if user.username != username or user.email != email or str(user.graduation_year) != str(graduation_year):
+            if user.username != username  or str(user.graduation_year) != str(graduation_year):
                 return Response({'detail': 'You are not authorized to access this data.'}, status=status.HTTP_403_FORBIDDEN)
 
             alumni_profile = AlumniProfile.objects.get(user=user)
@@ -1060,13 +1059,13 @@ class UpdateAlumniProfileAPIView(APIView):
         except AlumniProfile.DoesNotExist:
             return Response({'detail': 'Alumni profile not found'}, status=status.HTTP_404_NOT_FOUND)
 
-    def put(self, request, user_id, username, email, graduation_year):
+    def put(self, request, user_id, username, graduation_year):
         try:
             # Fetch the user and their related alumni profile
             user = User.objects.get(id=user_id, is_alumni=True)
 
             # Cross-check provided data with the user's data
-            if user.username != username or user.email != email or str(user.graduation_year) != str(graduation_year):
+            if user.username != username  or str(user.graduation_year) != str(graduation_year):
                 return Response({'detail': 'You are not authorized to access this data.'}, status=status.HTTP_403_FORBIDDEN)
 
             existing_user = User.objects.filter(email=request.data.get('email')).exclude(id=user_id).first()

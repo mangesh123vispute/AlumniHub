@@ -53,10 +53,10 @@ urlpatterns = [
 
     path('update-alumni-profile/<int:user_id>/', UpdateAlumniProfileView.as_view(), name='update-profile'),
 
-    path('student-profile/<int:user_id>/<str:username>/<str:email>/<int:graduation_year>/', 
+    path('student-profile/<int:user_id>/<str:username>/<int:graduation_year>/', 
          UpdateStudentProfileAPIView.as_view(), 
          name='update_student_profile'),
-    path('alumni-profile/<int:user_id>/<str:username>/<str:email>/<int:graduation_year>/', 
+    path('alumni-profile/<int:user_id>/<str:username>/<int:graduation_year>/', 
          UpdateAlumniProfileAPIView.as_view(), 
          name='update_alumni_profile'),
 

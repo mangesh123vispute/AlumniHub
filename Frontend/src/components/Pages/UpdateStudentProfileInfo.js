@@ -10,9 +10,7 @@ import { useParams } from "react-router-dom";
 
 const UpdateStudentProfileInfoContent = () => {
   const [loading, setLoading] = useState(false);
-  const { id, username, email, graduation_year } = useParams();
-
-  console.log(id, username, email, graduation_year);
+  const { id, username, graduation_year } = useParams();
   
   let { showNotification, message, icon, title, handleClose, isOpen } =
     useContext(AuthContext);
@@ -37,12 +35,12 @@ const UpdateStudentProfileInfoContent = () => {
    work: "",
    skills: "",
  });
-  const getUserData = async (userId, username, email, graduationYear) => {
+  const getUserData = async (userId, username, graduationYear) => {
     setLoading(true);
   
     try {
       const response = await axios.get(
-        `${baseurl}/student-profile/${userId}/${username}/${email}/${graduationYear}/`,
+        `${baseurl}/student-profile/${userId}/${username}/${graduationYear}/`,
       );
 
       if (response.status === 200) {
@@ -99,7 +97,7 @@ const UpdateStudentProfileInfoContent = () => {
   
   useEffect(() => {
     localStorage.removeItem("authTokens");
-    getUserData(id, username, email, graduation_year);
+    getUserData(id, username, graduation_year);
   }, []);
   
   const handleChange = (e) => {
@@ -116,7 +114,7 @@ const UpdateStudentProfileInfoContent = () => {
      setLoading(true);
      try {
        const response = await axios.put(
-         `${baseurl}/student-profile/${id}/${username}/${email}/${graduation_year}/`,
+         `${baseurl}/student-profile/${id}/${username}/${graduation_year}/`,
          formData
        );
 

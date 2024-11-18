@@ -44,11 +44,11 @@ function App() {
             element={<ActivateEmail />}
           />
           <Route
-            path="/update_Student_profile_info/:id/:username/:email/:graduation_year/"
+            path="/update_Student_profile_info/:id/:username/:graduation_year/"
             element={<UpdateStudentProfileInfo />}
           />
           <Route
-            path="/update_Alumni_profile_info/:id/:username/:email/:graduation_year/"
+            path="/update_Alumni_profile_info/:id/:username/:graduation_year/"
             element={<UpdateAlumniProfileInfo />}
           />
 
