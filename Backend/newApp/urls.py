@@ -2,7 +2,7 @@ from django.urls import path
 from django.conf import settings
 from . import views
 from django.conf.urls.static import static
-from .views import HodPrincipalPostAPIView,GETAlumni,HodAuthorPostListView,AlumniPostAPIView,GETHODs,GETStudent,UserImageUploadView,AlumniAuthorPostListView,PostListView,InactiveAlumniListView,AlumniActivationAPIView,AcceptAllAlumni,UserImageRetrieveView,UpdateAlumniProfileView,UserDetailView,UnverifiedAlumniPostListView, VerifyAlumniPostView, RejectAlumniPostView
+from .views import HodPrincipalPostAPIView,GETAlumni,HodAuthorPostListView,AlumniPostAPIView,GETHODs,GETStudent,UserImageUploadView,AlumniAuthorPostListView,PostListView,InactiveAlumniListView,AlumniActivationAPIView,AcceptAllAlumni,UserImageRetrieveView,UpdateAlumniProfileView,UserDetailView,UnverifiedAlumniPostListView, VerifyAlumniPostView, RejectAlumniPostView,UpdateStudentProfileAPIView,UpdateAlumniProfileAPIView
 
 
 
@@ -52,6 +52,13 @@ urlpatterns = [
     path('alumni/accept-all/', AcceptAllAlumni.as_view(), name='accept-all-alumni'),
 
     path('update-alumni-profile/<int:user_id>/', UpdateAlumniProfileView.as_view(), name='update-profile'),
+
+    path('student-profile/<int:user_id>/<str:username>/<int:graduation_year>/', 
+         UpdateStudentProfileAPIView.as_view(), 
+         name='update_student_profile'),
+    path('alumni-profile/<int:user_id>/<str:username>/<int:graduation_year>/', 
+         UpdateAlumniProfileAPIView.as_view(), 
+         name='update_alumni_profile'),
 
     path('user-detail/', UserDetailView.as_view(), name='user-detail'),
 
