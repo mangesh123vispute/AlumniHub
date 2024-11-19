@@ -41,7 +41,7 @@ const [totalPages, setTotalPages] = useState(1);
 
 
   
-  const pageSize = 10;
+  const pageSize = 12;
 
   const handleViewProfile = (userData) => {
     setShowProfileOfId(true);
