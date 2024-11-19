@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import axios from "axios";
 import Home from "../Dashboard/Home.js";
 import AuthContext from "../../context/AuthContext.js";
@@ -14,12 +14,14 @@ const AllStudentsContent = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 12;
+  const isFirstLoad = useRef(true); 
   const {
     isOpen,
     message,
     icon,
     title,
     showNotification,
+    setStudentFilters,
     handleClose,
     setFilter,
     setShowProfileOfId,
@@ -49,12 +51,13 @@ const AllStudentsContent = () => {
     const filteredFilters = Object.fromEntries(
       Object.entries(studentFilters).filter(([_, value]) => value !== "")
     );
+    
 
-    const queryParams = new URLSearchParams({
-      page: pageNumber,
-      page_size: pageSize,
-      ...filteredFilters,
-    }).toString();
+   const queryParams = new URLSearchParams({
+     page: pageNumber,
+     page_size: pageSize,
+     ...(isFirstLoad.current ? {} : filteredFilters), 
+   }).toString();
 
     try {
       const response = await axios.get(
@@ -72,6 +75,17 @@ const AllStudentsContent = () => {
       }
     } catch (err) {
       console.error("Error fetching students: ", err);
+       if (
+         err.response?.status === 400 &&
+         err.response?.data?.error === "Invalid page."
+       ) {
+         console.warn("Invalid page number detected. Resetting to page 1.");
+         setPageNumber(1);
+       } else {
+         
+         console.error("Unexpected error: ", err.message);
+      }
+      
       setLoading(false);
     }
   };
@@ -80,6 +94,15 @@ const AllStudentsContent = () => {
   // Fetch alumni on component mount
   useEffect(() => {
     fetchStudents(pageNumber);
+
+     if (isFirstLoad.current) {
+       // On the first load, pass an empty object for filters
+      setStudentFilters({});
+      fetchStudents(pageNumber);
+       isFirstLoad.current = false; // Mark as no longer the first load
+     } else {
+        fetchStudents(pageNumber);
+     }
   }, [pageNumber, reloadFilter]);
 
   useEffect(() => {

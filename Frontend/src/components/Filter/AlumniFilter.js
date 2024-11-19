@@ -10,6 +10,7 @@ const AlumniFilter = () => {
 
   
   const handleReset = () => {
+    
     // Reset the Alumnifilters to an empty object or default values
     setAlumniFilters({});
     toggelFilter();

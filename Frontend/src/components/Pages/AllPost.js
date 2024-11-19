@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import Home from "../Dashboard/Home";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
@@ -32,11 +32,12 @@ const AllPostContent = () => {
     setIsAllPostPage,
     postFilters,
     reloadFilter,
+    setPostFilters,
   } = useContext(AuthContext);
 setFilter(true);
   const navigate = useNavigate();
   
-
+const isFirstLoad = useRef(true); 
   const handleViewProfile = (userData) => {
     setShowProfileOfId(true);
     navigate("/profile", { state: userData });
@@ -64,6 +65,14 @@ const [isImageOpen, setIsImageOpen] = useState(false);
 
   useEffect(() => {
     getAllPosts(page);
+     if (isFirstLoad.current) {
+       setPostFilters({});
+       getAllPosts(page);
+       isFirstLoad.current = false;
+     } else {
+       getAllPosts(page);
+    }
+    
   }, [page, reloadFilter]);
 
  
@@ -80,7 +89,7 @@ const [isImageOpen, setIsImageOpen] = useState(false);
     const queryParams = new URLSearchParams({
       page: pageNumber || 1,
       page_size: 10,
-      ...filteredPostFilters,
+      ...(isFirstLoad.current ? {} : filteredPostFilters),
     }).toString();
 
     try {
@@ -92,13 +101,21 @@ const [isImageOpen, setIsImageOpen] = useState(false);
         setTotalPages(Math.ceil(totalItems / 10));
       }
     } catch (error) {
-      console.error("Error fetching posts:", error);
-      showNotification(
-        "Error fetching posts, please try again.",
-        "error",
-        "Error"
-      );
-    } finally {
+    console.error("Error fetching posts:", error);
+
+    // Check if the error matches the specific criteria
+    if (
+        error.message === "Request failed with status code 404" &&
+        error.name === "AxiosError" &&
+        error.code === "ERR_BAD_REQUEST" &&
+        error.response &&
+        error.response.status === 404
+    ) {
+        console.log("Specific error occurred. Resetting to page 1.");
+        setPage(1);
+    }
+}
+finally {
       setLoading(false);
     }
   };

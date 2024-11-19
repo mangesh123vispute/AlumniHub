@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import axios from "axios";
 import Home from "../Dashboard/Home.js";
 import AuthContext from "../../context/AuthContext.js";
@@ -14,9 +14,11 @@ const AllAlumnisContent = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 12;
+  const isFirstLoad = useRef(true); 
+
   const {
     isOpen,
-    message,  
+    message,
     icon,
     title,
     showNotification,
@@ -54,7 +56,7 @@ const AllAlumnisContent = () => {
     const queryParams = new URLSearchParams({
       page: pageNumber,
       page_size: pageSize,
-      ...filteredFilters, // Spread the Alumnifilters into the query params
+    ...(isFirstLoad.current ? {} : filteredFilters), 
     }).toString();
 
     try {
@@ -68,25 +70,42 @@ const AllAlumnisContent = () => {
         setTotalPages(Math.ceil(totalItems / pageSize));
         setLoading(false);
       }
+      
     } catch (err) {
       console.error("Error fetching alumni: ", err);
+       if (
+         err.response?.status === 400 &&
+         err.response?.data?.error === "Invalid page."
+       ) {
+         console.warn("Invalid page number detected. Resetting to page 1.");
+         setPageNumber(1); 
+       } else {
+         console.error("Unexpected error: ", err.message);
+      }
+      
       setLoading(false);
     }
   };
 
 
-
   // Fetch alumni on component mount
   useEffect(() => {
+  if (isFirstLoad.current) {
+    // On the first load, pass an empty object for filters
+    setAlumniFilters({});
+    fetchAlumni(pageNumber, {});
+    isFirstLoad.current = false; // Mark as no longer the first load
+  } else {
     fetchAlumni(pageNumber, Alumnifilters);
+  }
   }, [pageNumber, reloadFilter]);
 
   useEffect(() => {
     setIsAllStudentPage(false);
     setIsAllAdminPage(false);
-    setIsAllAlumniPage(true);
+    setIsAllAlumniPage(true); 
     setFilter(true);
-    setIsAllPostPage(false);
+    setIsAllPostPage(false);    
   }, []);
 
   console.log("Als=umni data ", alumniData);

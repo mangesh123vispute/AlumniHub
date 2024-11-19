@@ -31,6 +31,7 @@ export const AuthProvider = ({ children }) => {
   const [reloadFilter, setReloadFilter] = useState(false);
   const [isAllPostPage, setIsAllPostPage] = useState(false);
   const [reloadAdminData, setReloadAdminData] = useState(false);
+  const[ resetFilter, setResetFilter] = useState(false);
   
   const toggelreloadAdminData = () => {
     setReloadAdminData((prev) => !prev);
@@ -66,6 +67,7 @@ export const AuthProvider = ({ children }) => {
     current_year_of_study_max: "",
   });
 
+
   const [hodFilters, setHODFilters] = useState({
     full_name: "", // For filtering by full name
     Branch: "", // For filtering by Branch
@@ -89,6 +91,8 @@ export const AuthProvider = ({ children }) => {
   const toggleimageRefresh = () => {
     setImageRefresh((prev) => !prev);
   }
+
+ 
   
   const toggleModal = () => {
     setIsModalOpen((prev) => !prev);
@@ -340,6 +344,8 @@ export const AuthProvider = ({ children }) => {
     reloadAdminData,
     setReloadAdminData,
     toggelreloadAdminData,
+    resetFilter,
+    setResetFilter,
   };
 
 
