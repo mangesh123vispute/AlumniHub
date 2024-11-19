@@ -13,10 +13,10 @@ const AllAlumnisContent = () => {
   const [loading, setLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const pageSize = 10;
+  const pageSize = 12;
   const {
     isOpen,
-    message,
+    message,  
     icon,
     title,
     showNotification,
