@@ -44,12 +44,19 @@ const ResetUsername = () => {
       }
     } catch (error) {
       setLoading(false);
-      showNotification(
-        "Failed to reset username, Please try again",
-        "error",
-        "Error"
-      );
+
+      // Default error message
+      let errorMessage = "Failed to reset username. Please try again.";
+
+      // Check if error contains a 'detail' field
+      if (error.response?.data?.detail) {
+        errorMessage = error.response.data.detail;
+      }
+
+      // Show notification with the determined error message
+      showNotification(errorMessage, "warning", "Warning");
     }
+
   };
 
   return (
@@ -85,7 +92,7 @@ const ResetUsername = () => {
               <form onSubmit={handleSubmit}>
                 <div className="input-group mb-3">
                   <input
-                    type="password"
+                    type="text"
                     value={newUsername}
                     className="form-control"
                     onChange={(e) => setnewUsername(e.target.value)}

@@ -483,11 +483,11 @@ const SuperUserProfileContent = () => {
       fetchPosts();
     } catch (error) {
       console.error("Error during Delete:", error);
-      showNotification(
-        error.response?.data?.detail || "Error Deleting the post.",
-        "warning",
-        "Delete failed"
-      );
+      // showNotification(
+      //   error.response?.data?.detail || "Error Deleting the post.",
+      //   "warning",
+      //   "Delete failed"
+      // );
     }
 
     setLoading(false);

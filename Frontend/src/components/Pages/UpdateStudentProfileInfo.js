@@ -132,14 +132,35 @@ const UpdateStudentProfileInfoContent = () => {
          );
        }
      } catch (error) {
-       // Ensure error details are accessed safely
-       const errorDetail =
-         error.response?.data?.detail || "An error occurred. Please try again.";
+       let errorDetail = "An error occurred. Please try again.";
+
+       if (error.response?.data) {
+         const errorData = error.response.data;
+
+         if (errorData.detail) {
+           errorDetail = errorData.detail;
+         } else if (typeof errorData === "object") {
+           errorDetail = Object.entries(errorData)
+             .map(([key, value]) => {
+               if (typeof value === "object") {
+                 return `${key}: ${Object.entries(value)
+                   .map(
+                     ([field, messages]) => `${field}: ${messages.join(", ")}`
+                   )
+                   .join("; ")}`;
+               }
+               return `${key}: ${value}`;
+             })
+             .join("; ");
+         }
+       }
+
        console.error("Error updating profile:", error);
        showNotification(errorDetail, "warning", "Warning");
      } finally {
        setLoading(false);
      }
+
    };
 
   return (

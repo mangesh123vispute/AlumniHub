@@ -51,11 +51,6 @@ const Requests = () => {
         }
       } catch (error) {
         console.error("Error fetching alumni data:", error.message);
-        showNotification(
-          "Error fetching alumni data, please try again.",
-          "error",
-          "Error"
-        );
       } finally {
         setLoading(false);
       }

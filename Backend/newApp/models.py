@@ -109,6 +109,9 @@ class User(AbstractUser):
         current_year = current_date.year
         current_month = current_date.month
 
+        self.graduation_year = int(self.graduation_year)
+        self.graduation_month = int(self.graduation_month)
+
         if self.email and User.objects.filter(email=self.email).exclude(pk=self.pk).exists():
             raise ValidationError(f"A user with email '{self.email}' already exists.")
 

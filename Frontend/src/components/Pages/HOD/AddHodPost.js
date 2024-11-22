@@ -158,7 +158,7 @@ const AddHodPostContent = () => {
                     onChange={(e) => setContent(e.target.value)}
                   />
                 </div>
-
+{/* 
                 <div className="form-group">
                   <label>Image Upload </label>
                   <div className="input-group">
@@ -180,7 +180,7 @@ const AddHodPostContent = () => {
                       onChange={(e) => setDocUrl(e.target.value)}
                     />
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className="card-footer">
                 <button type="submit" className="btn btn-primary">
