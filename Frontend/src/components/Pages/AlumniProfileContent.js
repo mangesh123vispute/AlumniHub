@@ -1198,6 +1198,20 @@ setIsDropdownOpen(null);  // Open the modal
                                               }
                                             />
                                           </div>
+                                           <div className="form-group">
+                                            <label>Tag</label>
+                                            <input
+                                              type="text"
+                                              className="form-control"
+                                              value={selectedPost?.tag || ""}
+                                              onChange={(e) =>
+                                                setSelectedPost({
+                                                  ...selectedPost,
+                                                  tag: e.target.value,
+                                                })
+                                              }
+                                            />
+                                          </div>
                                           <div className="form-group">
                                             <label>Content</label>
                                             <textarea
@@ -1213,21 +1227,8 @@ setIsDropdownOpen(null);  // Open the modal
                                               }
                                             />
                                           </div>
-                                          <div className="form-group">
-                                            <label>Tag</label>
-                                            <input
-                                              type="text"
-                                              className="form-control"
-                                              value={selectedPost?.tag || ""}
-                                              onChange={(e) =>
-                                                setSelectedPost({
-                                                  ...selectedPost,
-                                                  tag: e.target.value,
-                                                })
-                                              }
-                                            />
-                                          </div>
-                                          <div className="form-group">
+                                         
+                                          {/* <div className="form-group">
                                             <label>Previous Image</label>
                                             <div className="col-auto">
                                               <a
@@ -1325,7 +1326,7 @@ setIsDropdownOpen(null);  // Open the modal
                                                 })
                                               }
                                             />
-                                          </div>
+                                          </div> */}
                                         </div>
                                         <div className="modal-footer">
                                           <button
@@ -1363,114 +1364,7 @@ setIsDropdownOpen(null);  // Open the modal
                                 >
                                   {post?.content || "Content"}
                                 </p>
-                                <div className="row">
-                                  {/* <div className="col-auto">
-                                      <a
-                                        href={post?.image_url || "#"}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="mr-3"
-                                      >
-                                        <i className="fas fa-image mr-1" />{" "}
-                                        Image
-                                      </a>
-                                    </div> */}
-
-                                  <div className="col-auto mt-3">
-                                    <a
-                                      href="#"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        handleImageClick();
-                                      }}
-                                      className="mr-3"
-                                    >
-                                      <i className="fas fa-image mr-1" /> Image
-                                    </a>
-
-                                    {isImageOpen && (
-                                      <div
-                                        style={{
-                                          position: "fixed",
-                                          top: 0,
-                                          left: 0,
-                                          width: "100%",
-                                          height: "100%",
-                                          backgroundColor: "tranparent",
-                                          display: "flex",
-                                          justifyContent: "center",
-                                          alignItems: "center",
-                                          zIndex: 1050,
-                                        }}
-                                        onClick={handleCloseModal}
-                                      >
-                                        <div
-                                          style={{
-                                            position: "relative",
-                                            maxWidth: "100%",
-                                            maxHeight: "100%",
-                                            display: "flex",
-                                            justifyContent: "center",
-                                            alignItems: "center",
-                                          }}
-                                        >
-                                          <img
-                                            src={post?.Image}
-                                            alt="Post"
-                                            style={{
-                                              // maxWidth: "100%",
-                                              // maxHeight: "100%",
-                                              width: "100%",
-                                              height: "auto",
-                                              borderRadius: "5px",
-                                              boxShadow:
-                                                "0 4px 12px rgba(0, 0, 0, 0.3)",
-                                            }}
-                                          />
-                                          <span
-                                            style={{
-                                              position: "absolute",
-                                              top: "10px",
-                                              right: "10px",
-                                              fontSize: "1.5em",
-                                              color: "#fff",
-                                              cursor: "pointer",
-                                            }}
-                                            onClick={handleCloseModal}
-                                          >
-                                            &times;
-                                          </span>
-                                        </div>
-                                      </div>
-                                    )}
-                                  </div>
-                                  {post?.DocUrl && (
-                                    <div className="col-auto mt-3">
-                                      <a
-                                        href={post?.DocUrl || "#"}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="mr-3"
-                                      >
-                                        <i className="fas fa-file-alt mr-1" />{" "}
-                                        Document
-                                      </a>
-                                    </div>
-                                  )}
-
-                                  {post?.link && (
-                                    <div className="col-auto mt-3">
-                                      <a
-                                        href={post?.link || "#"}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="mr-3"
-                                      >
-                                        <i className="fas fa-link mr-1" /> Link
-                                      </a>
-                                    </div>
-                                  )}
-                                </div>
+                               
                               </div>
                             ))}
                           </>

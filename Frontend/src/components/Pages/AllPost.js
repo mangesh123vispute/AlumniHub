@@ -243,7 +243,7 @@ finally {
                       >
                         {post?.content || "Content"}
                       </p>
-                      <div className="row">
+                      {/* <div className="row">
                         {post?.Image !== "/media/default/def.jpeg" &&
                           post?.Image && (
                             <div className="col-auto mt-3">
@@ -340,7 +340,7 @@ finally {
                             </a>
                           </div>
                         )}
-                      </div>
+                      </div> */}
                     </div>
                   ))}
                 </>
