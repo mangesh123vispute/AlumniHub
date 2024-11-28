@@ -57,7 +57,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['is_allowedToJoinAlumni'] = user.is_allowedToJoinAlumni
         token['is_allowedToAccessSettings'] = user.is_allowedToAccessSettings
         token['is_allowedToAddAdmin'] = user.is_allowedToAddAdmin
-        token['is_allowedToAccessLinkedinScrappingTab'] = user.is_allowedToAccessLinkedinScrappingTab
+        token['is_allowedToAccessPostRequestTab'] = user.is_allowedToAccessPostRequestTab
         token['image'] = user.Image.url if user.Image else 'default/def.jpeg'
         token['mobile'] = user.mobile
         token['linkedin'] = user.linkedin
@@ -73,6 +73,17 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
     
     def validate(self, attrs):
+
+        username = attrs['username'] 
+        userfromusername = User.objects.filter(username=username).first()
+        
+
+        if not userfromusername.is_active:
+            raise AuthenticationFailed(
+                detail='Your account is not activated. Please activate your account first.',
+                code=status.HTTP_403_FORBIDDEN
+            )
+
         # Check if the user credentials are correct
         user = authenticate(username=attrs['username'], password=attrs['password'])
     

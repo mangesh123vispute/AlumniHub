@@ -42,7 +42,7 @@ const GetActivationEmail = () => {
       }
     } catch (error) {
       setLoading(false);
-      console.log(error);
+      console.error(error);
       showNotification(
         error.response.data.detail ||
           "Failed to send activation email, Please try again",

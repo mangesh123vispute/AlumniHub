@@ -14,7 +14,7 @@ const StudentProfileContent = () => {
       setIsAllAdminPage,
       toggleimageRefresh,
     } = useContext(AuthContext);
-    console.log("userData", userData);
+    
    
     const id = localStorage.getItem("id");
     const [user, setUser] = useState(null);
@@ -29,7 +29,7 @@ const StudentProfileContent = () => {
     }, []);
   
    const handleCropComplete = async (croppedImageBlob) => {
-     console.log("Cropped Image Data:", croppedImageBlob);
+    
 
      // Create FormData and append the cropped image Blob
      const formData = new FormData();
@@ -64,7 +64,7 @@ const StudentProfileContent = () => {
        const data = await response.json();
 
        if (response.ok) {
-         console.log("Image uploaded successfully:", data.detail);
+        
          showNotification("Image uploaded successfully", "success", "Success");
          toggleimageRefresh();
          toggleReload();
@@ -158,7 +158,7 @@ const StudentProfileContent = () => {
       studentData.profile.Education,
       studentData.profile.current_year_of_study,
     ];
-    console.log(studentData.user.instagram);
+   
     // Check if the fields are not empty or equal to the default value (e.g., "N/A", 0)
     fieldsToCheck.forEach((field) => {
       if (
@@ -170,7 +170,7 @@ const StudentProfileContent = () => {
           field.trim() !== "/media/default/def.jpeg") ||
         (typeof field === "number" && field !== 0)
       ) {
-        console.log(field);
+       
         filledFields++;
       }
     });
@@ -251,7 +251,7 @@ const StudentProfileContent = () => {
        
     }, [userData?.user_id, reload]);
   
-    console.log("user ", user);
+   
   
   
       // Function to handle form submission
@@ -806,13 +806,19 @@ const StudentProfileContent = () => {
 
                                   <strong>LinkedIn:</strong>
                                   <p className="text-muted font">
-                                    {user?.linkedin ? (
+                                    {user?.linkedin !== "N/A" ? (
                                       <a
-                                        href={user?.linkedin || "#"}
+                                        href={
+                                          user?.linkedin?.startsWith("http")
+                                            ? user.linkedin
+                                            : user?.linkedin
+                                            ? `https://${user.linkedin}`
+                                            : "#"
+                                        }
                                         target="_blank"
                                         rel="noopener noreferrer"
                                       >
-                                        {user?.linkedin ? user.linkedin : "N/A"}
+                                        {user?.linkedin}
                                       </a>
                                     ) : (
                                       "N/A"
@@ -821,13 +827,19 @@ const StudentProfileContent = () => {
 
                                   <strong>GitHub:</strong>
                                   <p className="text-muted font">
-                                    {user?.Github ? (
+                                    {user?.Github !== "N/A" ? (
                                       <a
-                                        href={user?.Github || "#"}
+                                        href={
+                                          user?.Github?.startsWith("http")
+                                            ? user.Github
+                                            : user?.Github
+                                            ? `https://${user.Github}`
+                                            : "#"
+                                        }
                                         target="_blank"
                                         rel="noopener noreferrer"
                                       >
-                                        {user?.Github ? user.Github : "N/A"}
+                                        {user?.Github}
                                       </a>
                                     ) : (
                                       "N/A"
@@ -836,15 +848,19 @@ const StudentProfileContent = () => {
 
                                   <strong>Instagram:</strong>
                                   <p className="text-muted font">
-                                    {user?.instagram ? (
+                                    {user?.instagram !== "N/A" ? (
                                       <a
-                                        href={user?.instagram || "#"}
+                                        href={
+                                          user?.instagram?.startsWith("http")
+                                            ? user.instagram
+                                            : user?.instagram
+                                            ? `https://${user.instagram}`
+                                            : "#"
+                                        }
                                         target="_blank"
                                         rel="noopener noreferrer"
                                       >
-                                        {user?.instagram
-                                          ? user.instagram
-                                          : "N/A"}
+                                        {user?.instagram }
                                       </a>
                                     ) : (
                                       "N/A"
@@ -865,7 +881,7 @@ const StudentProfileContent = () => {
                                 <div className="timeline-body">
                                   <strong>Portfolio:</strong>
                                   <p className="text-muted font">
-                                    {user?.portfolio_link ? (
+                                    {user?.portfolio_link !== "N/A" ? (
                                       <a
                                         href={user?.portfolio_link || "#"}
                                         target="_blank"
@@ -882,7 +898,7 @@ const StudentProfileContent = () => {
 
                                   <strong>Resume:</strong>
                                   <p className="text-muted font">
-                                    {user?.resume_link ? (
+                                    {user?.resume_link !== "N/A" ? (
                                       <a
                                         href={user?.resume_link || "#"}
                                         target="_blank"

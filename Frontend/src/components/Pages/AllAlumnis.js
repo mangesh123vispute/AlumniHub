@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import axios from "axios";
 import Home from "../Dashboard/Home.js";
 import AuthContext from "../../context/AuthContext.js";
@@ -13,7 +13,9 @@ const AllAlumnisContent = () => {
   const [loading, setLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const pageSize = 10;
+  const pageSize = 12;
+  const isFirstLoad = useRef(true); 
+
   const {
     isOpen,
     message,
@@ -54,7 +56,7 @@ const AllAlumnisContent = () => {
     const queryParams = new URLSearchParams({
       page: pageNumber,
       page_size: pageSize,
-      ...filteredFilters, // Spread the Alumnifilters into the query params
+    ...(isFirstLoad.current ? {} : filteredFilters), 
     }).toString();
 
     try {
@@ -68,25 +70,42 @@ const AllAlumnisContent = () => {
         setTotalPages(Math.ceil(totalItems / pageSize));
         setLoading(false);
       }
+      
     } catch (err) {
       console.error("Error fetching alumni: ", err);
+       if (
+         err.response?.status === 400 &&
+         err.response?.data?.error === "Invalid page."
+       ) {
+         console.warn("Invalid page number detected. Resetting to page 1.");
+         setPageNumber(1); 
+       } else {
+         console.error("Unexpected error: ", err.message);
+      }
+      
       setLoading(false);
     }
   };
 
 
-
   // Fetch alumni on component mount
   useEffect(() => {
+  if (isFirstLoad.current) {
+    // On the first load, pass an empty object for filters
+    setAlumniFilters({});
+    fetchAlumni(pageNumber, {});
+    isFirstLoad.current = false; // Mark as no longer the first load
+  } else {
     fetchAlumni(pageNumber, Alumnifilters);
+  }
   }, [pageNumber, reloadFilter]);
 
   useEffect(() => {
     setIsAllStudentPage(false);
     setIsAllAdminPage(false);
-    setIsAllAlumniPage(true);
+    setIsAllAlumniPage(true); 
     setFilter(true);
-    setIsAllPostPage(false);
+    setIsAllPostPage(false);    
   }, []);
 
   console.log("Als=umni data ", alumniData);
@@ -208,10 +227,16 @@ const AllAlumnisContent = () => {
                                   <span className="fa-li">
                                     <i className="fas fa-lg fa-folder mr-1" />
                                   </span>
-                                  
+                                  Portfolio{" "}
                                   {alumnus?.portfolio_link !== "N/A" ? (
                                     <a
-                                      href={alumnus.portfolio_link}
+                                      href={
+                                        alumnus.portfolio_link.startsWith(
+                                          "http"
+                                        )
+                                          ? alumnus.portfolio_link
+                                          : `https://${alumnus.portfolio_link}`
+                                      }
                                       target="_blank"
                                       rel="noopener noreferrer"
                                     >
@@ -228,7 +253,11 @@ const AllAlumnisContent = () => {
                                   Resume:{" "}
                                   {alumnus?.resume_link !== "N/A" ? (
                                     <a
-                                      href={alumnus.resume_link}
+                                      href={
+                                        alumnus.resume_link.startsWith("http")
+                                          ? alumnus.resume_link
+                                          : `https://${alumnus.resume_link}`
+                                      }
                                       target="_blank"
                                       rel="noopener noreferrer"
                                     >
@@ -274,7 +303,11 @@ const AllAlumnisContent = () => {
                                   {alumnus?.Github &&
                                   alumnus.Github !== "N/A" ? (
                                     <a
-                                      href={alumnus.Github}
+                                      href={
+                                        alumnus.Github.startsWith("http")
+                                          ? alumnus.Github
+                                          : `https://${alumnus.Github}`
+                                      }
                                       target="_blank"
                                       rel="noopener noreferrer"
                                     >
@@ -292,7 +325,11 @@ const AllAlumnisContent = () => {
                                   {alumnus?.linkedin &&
                                   alumnus.linkedin !== "N/A" ? (
                                     <a
-                                      href={alumnus.linkedin}
+                                      href={
+                                        alumnus.linkedin.startsWith("http")
+                                          ? alumnus.linkedin
+                                          : `https://${alumnus.linkedin}`
+                                      }
                                       target="_blank"
                                       rel="noopener noreferrer"
                                     >
@@ -302,17 +339,7 @@ const AllAlumnisContent = () => {
                                     "N/A"
                                   )}
                                 </li>
-                                {/* <li className="small">
-                                  <span className="fa-li">
-                                    <i className="fas fa-lg fa-fax mr-1" />
-                                  </span>
-                                  Mobile No:{" "}
-                                  {alumnus.mobile
-                                    ? isValidMobileNumber(alumnus.mobile)
-                                      ? alumnus.mobile
-                                      : "Invalid Mobile Number"
-                                    : "N/A"}
-                                </li> */}
+                               
                               </ul>
                             </div>
                           </div>

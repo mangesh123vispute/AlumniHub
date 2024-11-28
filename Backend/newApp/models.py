@@ -18,6 +18,7 @@ from django.core.exceptions import ValidationError
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 import base64
+from datetime import datetime
 
 class User(AbstractUser):
     username = models.CharField(max_length=150, unique=True,blank=True)
@@ -34,7 +35,7 @@ class User(AbstractUser):
     Branch = models.CharField(max_length=50,blank=True, default="N/A")
     Image = models.ImageField(
         upload_to='images', 
-        default='default/def.jpeg',
+        default='default/def.jpg',
         blank=True
     )
     # contact infromation
@@ -64,7 +65,7 @@ class User(AbstractUser):
     is_allowedToJoinAlumni=models.BooleanField(default=False)
     is_allowedToAccessSettings=models.BooleanField(default=False)
     is_allowedToAddAdmin=models.BooleanField(default=False)
-    is_allowedToAccessLinkedinScrappingTab=models.BooleanField(default=False)
+    is_allowedToAccessPostRequestTab=models.BooleanField(default=False)
     
     def generate_unique_username(self):
         """Generates a unique username using a UUID."""
@@ -104,9 +105,31 @@ class User(AbstractUser):
         message.send()
 
     def save(self, *args, **kwargs):
-        
+        current_date = datetime.now()
+        current_year = current_date.year
+        current_month = current_date.month
+
+        self.graduation_year = int(self.graduation_year)
+        self.graduation_month = int(self.graduation_month)
+
         if self.email and User.objects.filter(email=self.email).exclude(pk=self.pk).exists():
             raise ValidationError(f"A user with email '{self.email}' already exists.")
+
+        if self.is_alumni and self.is_student:
+            raise ValidationError("A user cannot be both a student and an alumni at the same time.")
+        
+        if self.is_alumni:
+            if (self.graduation_year > current_year) or (
+                self.graduation_year == current_year and self.graduation_month > current_month
+            ):
+                raise ValidationError("Alumni graduation year and month cannot be in the future.")
+
+        if self.is_student:
+            if (self.graduation_year < current_year) or (
+                self.graduation_year == current_year and self.graduation_month <= current_month
+            ):
+                raise ValidationError("A student cannot have a graduation year and month in the past or current date.")
+            
 
         if self.is_superuser:
             self.is_active = True
@@ -197,14 +220,14 @@ class AlumniPost(models.Model):
     content = models.TextField(blank=True,default="N/A")
     Image = models.ImageField(
         upload_to='images',
-        default='default/def.jpeg',
+        default='default/def.jpg',
         blank=True
     )
-    image_url = models.URLField(max_length=500,blank=True, default="N/A")  
-    DocUrl = models.URLField(max_length=500,blank=True, default="N/A")  
+    image_url = models.CharField(max_length=500,blank=True, default="N/A")  
+    DocUrl = models.CharField(max_length=500,blank=True, default="N/A")  
     created_at = models.DateTimeField(default=timezone.now, blank=True)  
     updated_at = models.DateTimeField(auto_now=True, blank=True)  
-    
+    verified= models.BooleanField(default=False)
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         img = Image.open(self.Image.path)
@@ -227,11 +250,11 @@ class HodPrincipalPost(models.Model):
     tag = models.CharField(max_length=255,blank=True, default="N/A")
     Image = models.ImageField(
         upload_to='images',
-        default='default/def.jpeg',
+        default='default/def.jpg',
         blank=True
     )
-    image_url = models.URLField(max_length=500,blank=True,default="N/A")  
-    DocUrl = models.URLField(max_length=500, blank=True,default="N/A")  
+    image_url = models.CharField(max_length=500,blank=True,default="N/A")  
+    DocUrl = models.CharField(max_length=500, blank=True,default="N/A")  
     created_at = models.DateTimeField(default=timezone.now, blank=True)  
     updated_at = models.DateTimeField(auto_now=True, blank=True) 
 
@@ -251,18 +274,6 @@ class HodPrincipalPost(models.Model):
     def __str__(self):
         return f"{self.title} by {self.author.full_name}"
 
-# class AlumniCredentials(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='alumni_credentials')
-#     fourth_year_marksheet = models.ImageField(upload_to='documents/marksheets/', blank=True, null=True)
-#     lc = models.ImageField(upload_to='documents/lc/', blank=True, null=True)
-#     id_card = models.ImageField(upload_to='documents/id_cards/', blank=True, null=True)
-#     graduation_certificate = models.ImageField(upload_to='documents/graduation_certificates/', blank=True, null=True)
-
-#     def full_name(self):
-#         return self.user.full_name
-
-#     def __str__(self):
-#         return f"Alumni - {self.user.username}"
 
 class Command(createsuperuser.Command):
     help = 'Custom createsuperuser command'

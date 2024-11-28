@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import axios from "axios";
 import Home from "../Dashboard/Home.js";
 import AuthContext from "../../context/AuthContext.js";
@@ -13,13 +13,15 @@ const AllStudentsContent = () => {
   const [loading, setLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const pageSize = 10;
+  const pageSize = 12;
+  const isFirstLoad = useRef(true); 
   const {
     isOpen,
     message,
     icon,
     title,
     showNotification,
+    setStudentFilters,
     handleClose,
     setFilter,
     setShowProfileOfId,
@@ -32,7 +34,8 @@ const AllStudentsContent = () => {
   } = useContext(AuthContext);
   setFilter(true);
 
-  console.log("studentfilter", studentFilters);
+  
+  
   
   const handleViewProfile = (userData) => {
     setShowProfileOfId(true);
@@ -49,12 +52,13 @@ const AllStudentsContent = () => {
     const filteredFilters = Object.fromEntries(
       Object.entries(studentFilters).filter(([_, value]) => value !== "")
     );
+    
 
-    const queryParams = new URLSearchParams({
-      page: pageNumber,
-      page_size: pageSize,
-      ...filteredFilters,
-    }).toString();
+   const queryParams = new URLSearchParams({
+     page: pageNumber,
+     page_size: pageSize,
+     ...(isFirstLoad.current ? {} : filteredFilters), 
+   }).toString();
 
     try {
       const response = await axios.get(
@@ -72,6 +76,17 @@ const AllStudentsContent = () => {
       }
     } catch (err) {
       console.error("Error fetching students: ", err);
+       if (
+         err.response?.status === 400 &&
+         err.response?.data?.error === "Invalid page."
+       ) {
+         console.warn("Invalid page number detected. Resetting to page 1.");
+         setPageNumber(1);
+       } else {
+         
+         console.error("Unexpected error: ", err.message);
+      }
+      
       setLoading(false);
     }
   };
@@ -80,6 +95,15 @@ const AllStudentsContent = () => {
   // Fetch alumni on component mount
   useEffect(() => {
     fetchStudents(pageNumber);
+
+     if (isFirstLoad.current) {
+       // On the first load, pass an empty object for filters
+      setStudentFilters({});
+      fetchStudents(pageNumber);
+       isFirstLoad.current = false; // Mark as no longer the first load
+     } else {
+        fetchStudents(pageNumber);
+     }
   }, [pageNumber, reloadFilter]);
 
   useEffect(() => {
@@ -155,8 +179,8 @@ const AllStudentsContent = () => {
                                 {students?.student_profile?.Heading
                                   ? students.student_profile.Heading
                                   : students?.student_profile?.job_title
-                                    ? students.student_profile.job_title
-                                    : "N/A"}
+                                  ? students.student_profile.job_title
+                                  : "N/A"}
                               </p>
                             </div>
                             <div className="col-5 text-center">
@@ -188,9 +212,13 @@ const AllStudentsContent = () => {
                                   <i className="fas fa-lg fa-folder mr-1" />
                                 </span>
                                 Portfolio:{" "}
-                                {!students?.portfolio_link == 'N/A' ? (
+                                {students?.portfolio_link !== "N/A" ? (
                                   <a
-                                    href={students.portfolio_link}
+                                    href={
+                                      students.portfolio_link.startsWith("http")
+                                        ? students.portfolio_link
+                                        : `https://${students.portfolio_link}`
+                                    }
                                     target="_blank"
                                     rel="noopener noreferrer"
                                   >
@@ -205,9 +233,13 @@ const AllStudentsContent = () => {
                                   <i className="fas fa-lg fa-file-alt mr-1" />
                                 </span>
                                 Resume:{" "}
-                                {!students.resume_link == 'N/A' ? (
+                                {students.resume_link !== "N/A" ? (
                                   <a
-                                    href={students.resume_link}
+                                    href={
+                                      students.resume_link.startsWith("http")
+                                        ? students.resume_link
+                                        : `https://${students.resume_link}`
+                                    }
                                     target="_blank"
                                     rel="noopener noreferrer"
                                   >
@@ -236,7 +268,9 @@ const AllStudentsContent = () => {
                                 </span>
                                 Email:{" "}
                                 {students?.email ? (
-                                  <a href={`mailto:${students.email}`}>{students.email}</a>
+                                  <a href={`mailto:${students.email}`}>
+                                    {students.email}
+                                  </a>
                                 ) : (
                                   "N/A"
                                 )}
@@ -246,9 +280,18 @@ const AllStudentsContent = () => {
                                   <i className="fab fa-lg fa-github mr-1" />
                                 </span>
                                 GitHub:{" "}
-                                {students?.Github && students.Github !== "N/A" ? (
-                                  <a href={students.Github} target="_blank" rel="noopener noreferrer">
-                                    Click here
+                                {students?.Github &&
+                                students.Github !== "N/A" ? (
+                                  <a
+                                    href={
+                                      students.Github.startsWith("http")
+                                        ? students.Github
+                                        : `https://${students.Github}`
+                                    }
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    {students.Github}
                                   </a>
                                 ) : (
                                   "N/A"
@@ -260,7 +303,15 @@ const AllStudentsContent = () => {
                                 </span>
                                 LinkedIn:{" "}
                                 {students?.linkedin ? (
-                                  <a href={students.linkedin} target="_blank" rel="noopener noreferrer">
+                                  <a
+                                    href={
+                                      students.linkedin.startsWith("http")
+                                        ? students.linkedin
+                                        : `https://${students.linkedin}`
+                                    }
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
                                     {students.linkedin}
                                   </a>
                                 ) : (
@@ -308,8 +359,9 @@ const AllStudentsContent = () => {
                   className={`page-item ${pageNumber === 1 ? "disabled" : ""}`}
                 >
                   <button
-                    className={`page-link ${pageNumber === 1 ? "opacity-50 cursor-not-allowed" : ""
-                      }`}
+                    className={`page-link ${
+                      pageNumber === 1 ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
                     onClick={() => setPageNumber(pageNumber - 1)}
                     disabled={pageNumber === 1}
                   >
@@ -329,14 +381,16 @@ const AllStudentsContent = () => {
 
                 {/* Next button */}
                 <li
-                  className={`page-item ${pageNumber === totalPages ? "disabled" : ""
-                    }`}
+                  className={`page-item ${
+                    pageNumber === totalPages ? "disabled" : ""
+                  }`}
                 >
                   <button
-                    className={`page-link ${pageNumber === totalPages
-                      ? "opacity-50 cursor-not-allowed"
-                      : ""
-                      }`}
+                    className={`page-link ${
+                      pageNumber === totalPages
+                        ? "opacity-50 cursor-not-allowed"
+                        : ""
+                    }`}
                     onClick={() => setPageNumber(pageNumber + 1)}
                     disabled={pageNumber === totalPages}
                   >

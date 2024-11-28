@@ -148,7 +148,7 @@ const AddAlumniPostContent = () => {
                   />
                 </div>
 
-                <div className="form-group">
+                {/* <div className="form-group">
                   <label>Image Upload</label>
                   <div className="input-group">
                     <input
@@ -170,7 +170,7 @@ const AddAlumniPostContent = () => {
                       onChange={(e) => setDocUrl(e.target.value)}
                     />
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className="card-footer">
                 <button type="submit" className="btn btn-primary">

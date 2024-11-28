@@ -50,7 +50,7 @@ setFilter(true);
       );
       setPosts(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -81,7 +81,7 @@ setFilter(true);
       );
       setSinglePost(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setLoading(false);
     }

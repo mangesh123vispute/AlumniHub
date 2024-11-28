@@ -33,7 +33,7 @@ const AddAdmin = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [allowSettings, setAllowSettings] = useState(false);
     const [allowAddAdmin, setAllowAddAdmin] = useState(false);
-    const [allowAccessLinkedinScrapping, setAllowAccessLinkedinScrapping] =
+    const [allowAccessAlumniPost, setallowAccessAlumniPost] =
       useState(false);
     const [allowAccessAlumniJoinRequest, setAllowAccessAlumniJoinRequest] =
         useState(false);
@@ -52,7 +52,7 @@ const AddAdmin = () => {
          is_allowedToAccessSettings: allowSettings,
          is_allowedToJoinAlumni: allowAccessAlumniJoinRequest,
          is_allowedToAddAdmin: allowAddAdmin,
-         is_allowedToAccessLinkedinScrappingTab: allowAccessLinkedinScrapping,
+         is_allowedToAccessPostRequestTab: allowAccessAlumniPost,
        };
        const token = localStorage.getItem("authTokens")
          ? JSON.parse(localStorage.getItem("authTokens"))
@@ -93,7 +93,7 @@ const AddAdmin = () => {
            toggleModal();
            setAllowSettings(false);
            setAllowAddAdmin(false);
-           setAllowAccessLinkedinScrapping(false);
+           setallowAccessAlumniPost(false);
            setAllowAccessAlumniJoinRequest(false);
            toggelreloadAdminData();
            toggleAddAdminModal();
@@ -318,17 +318,17 @@ const AddAdmin = () => {
                     <div className="form-group col-md-12">
                       <input
                         type="checkbox"
-                        id="allowAccessLinkedinScrapping"
-                        checked={allowAccessLinkedinScrapping}
+                        id="allowAccessAlumniPost"
+                        checked={allowAccessAlumniPost}
                         onChange={(e) =>
-                          setAllowAccessLinkedinScrapping(e.target.checked)
+                          setallowAccessAlumniPost(e.target.checked)
                         }
                       />
                       <label
-                        htmlFor="allowAccessLinkedinScrapping"
+                        htmlFor="allowAccessAlumniPost"
                         className="ml-2"
                       >
-                        Grant permission to use the LinkedIn Scraping tool
+                        Grant permission to use the Alumni Post tab 
                       </label>
                     </div>
                     <div className="form-group col-md-12">

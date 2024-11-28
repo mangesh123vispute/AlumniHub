@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState ,useEffect} from "react";
 import AuthContext from "../../context/AuthContext.js";
 
 const AlumniFilter = () => {
@@ -8,7 +8,9 @@ const AlumniFilter = () => {
     setAlumniFilters({ ...Alumnifilters, [e.target.name]: e.target.value });
   };
 
+  
   const handleReset = () => {
+    
     // Reset the Alumnifilters to an empty object or default values
     setAlumniFilters({});
     toggelFilter();
@@ -22,7 +24,7 @@ const AlumniFilter = () => {
   return (
     <div
       className="p-3"
-      style={{ height: "100vh", overflowY: "auto", overflowX: "hidden" }}
+      style={{ height: "90vh", overflowY: "auto", overflowX: "hidden" }}
     >
       <div
         style={{

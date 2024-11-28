@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+  .formbold-main-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+  }
+
+  .formbold-form-wrapper {
+    margin: 0 auto;
+    max-width: 570px;
+    width: 100%;
+    background: white;
+    padding: 40px;
+  }
+
+  .formbold-form-img {
+    margin-bottom: 45px;
+  }
+
+  .formbold-input-group {
+    margin-bottom: 18px;
+  }
+
+  .formbold-form-select {
+    width: 100%;
+    padding: 12px 22px;
+    border-radius: 5px;
+    border: 1px solid #dde3ec;
+    background: #ffffff;
+    font-size: 16px;
+    color: #536387;
+    outline: none;
+    resize: none;
+  }
+
+  .formbold-input-radio-wrapper {
+    margin-bottom: 25px;
+  }
+  .formbold-radio-flex {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .formbold-radio-label {
+    font-size: 14px;
+    line-height: 24px;
+    color: #07074d;
+    position: relative;
+    padding-left: 25px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  .formbold-input-radio {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .formbold-radio-checkmark {
+    position: absolute;
+    top: -1px;
+    left: 0;
+    height: 18px;
+    width: 18px;
+    background-color: #ffffff;
+    border: 1px solid #dde3ec;
+    border-radius: 50%;
+  }
+  .formbold-radio-label
+    .formbold-input-radio:checked
+    ~ .formbold-radio-checkmark {
+    background-color: #6a64f1;
+  }
+  .formbold-radio-checkmark:after {
+    content: '';
+    position: absolute;
+    display: none;
+  }
+
+  .formbold-radio-label
+    .formbold-input-radio:checked
+    ~ .formbold-radio-checkmark:after {
+    display: block;
+  }
+
+  .formbold-radio-label .formbold-radio-checkmark:after {
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ffffff;
+    transform: translate(-50%, -50%);
+  }
+
+  .formbold-form-input {
+    width: 100%;
+    padding: 13px 22px;
+    border-radius: 5px;
+    border: 1px solid #dde3ec;
+    background: #ffffff;
+    font-weight: 500;
+    font-size: 16px;
+    color: #07074d;
+    outline: none;
+    resize: none;
+  }
+  .formbold-form-input::placeholder {
+    color: #536387;
+  }
+  .formbold-form-input:focus {
+    border-color: #6a64f1;
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+  }
+  .formbold-form-label {
+    color: #07074d;
+    font-size: 14px;
+    line-height: 24px;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .formbold-btn {
+    text-align: center;
+    width: 100%;
+    font-size: 16px;
+    border-radius: 5px;
+    padding: 14px 25px;
+    border: none;
+    font-weight: 500;
+    background-color: #6a64f1;
+    color: white;
+    cursor: pointer;
+    margin-top: 25px;
+  }
+  .formbold-btn:hover {
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+  }
+</style>
+</head>
+<body>
+<div class="formbold-main-wrapper">
+  <!-- Author: FormBold Team -->
+  <!-- Learn More: https://formbold.com -->
+  <div class="formbold-form-wrapper">
+   
+   <div style="text-align: center;">
+        <img src="https://th.bing.com/th/id/OIP.mmgw2dNXmC4wjn9PudkNYwHaH0?rs=1&pid=ImgDetMain" style="width: 10vw; height: auto;">
+    </div>
+    <div style="font-weight: bold; font-size: 1.5em; text-align: center; margin-top: 0.5em; margin-bottom:0.5em;">
+Update Alumni Profile
+    </div>
+    <div style="text-align: center; margin-bottom: 1em;">
+        <span style="font-size: 1.5em;">
+           <i style="font-size: medium;"> Keep your alumni profile updated to strengthen your network and unlock future opportunities; <a href="http://localhost:3000/update_Alumni_profile_info/{{user.id}}/{{user.username}}/{{user.graduation_year}}/"><b>click "Update Profile" to edit your information</b></a>. </i>
+        </span>
+    </div>
+
+   <hr style=" margin-bottom: 1.5em;">
+    <form  action="#">
+        <div class="formbold-input-group">
+                <label for="name" class="formbold-form-label">Full Name</label>
+                <input type="text" name="name" id="name" class="formbold-form-input" value="{{ user.full_name }}" readonly>
+            </div>
+
+            <div class="formbold-input-group">
+                <label for="Education" class="formbold-form-label">Education</label>
+                <input type="text" name="Education" id="Education" class="formbold-form-input" value="{{ alumni_profile.Education }}" readonly>
+            </div>
+
+            <div class="formbold-input-group">
+                <label for="Branch" class="formbold-form-label">Branch</label>
+                <input type="text" name="Branch" id="Branch" class="formbold-form-input" value="{{ user.Branch }}" readonly>
+            </div>
+
+              <div class="formbold-input-group">
+                <label for="City" class="formbold-form-label">City</label>
+                <input type="text" name="City" id="City" class="formbold-form-input" value="{{ alumni_profile.current_city }}" readonly>
+            </div>
+
+             <div class="formbold-input-group">
+                <label for="Country" class="formbold-form-label">Country</label>
+                <input type="text" name="Country" id="Country" class="formbold-form-input" value="{{ alumni_profile.current_country }}" readonly>
+            </div>
+            
+            <div class="formbold-input-group">
+                <label for="Year_Joined" class="formbold-form-label">Admission Year</label>
+                <input type="number" name="Year_Joined" id="Year_Joined" class="formbold-form-input" value="{{ user.Year_Joined }}" readonly>
+            </div>
+
+             <div class="formbold-input-group">
+                <label for="Email" class="formbold-form-label">Email</label>
+                <input type="email" name="Email" id="Email" class="formbold-form-input" value="{{ user.email }}" readonly>
+            </div>
+
+            <div class="formbold-input-group">
+                <label for="mobile" class="formbold-form-label">Mobile No.</label>
+                <input type="text" name="mobile" id="mobile" class="formbold-form-input" value="{{ user.mobile }}" readonly>
+            </div>
+
+            <div class="formbold-input-group">
+                <label for="linkedin" class="formbold-form-label">LinkedIn</label>
+                <input type="text" name="linkedin" id="linkedin" class="formbold-form-input" value="{{ user.linkedin }}" readonly>
+            </div>
+
+            <div class="formbold-input-group">
+                <label for="instagram" class="formbold-form-label">Instagram</label>
+                <input type="text" name="instagram" id="instagram" class="formbold-form-input" value="{{ user.instagram }}" readonly>
+            </div>
+
+             <div class="formbold-input-group">
+                <label for="pref" class="formbold-form-label">Prefered Contact Method</label>
+                <input type="text" name="pref" id="pref" class="formbold-form-input" value="{{ alumni_profile.preferred_contact_method }}" readonly>
+            </div>
+
+            <div class="formbold-input-group">
+                <label for="Github" class="formbold-form-label">GitHub</label>
+                <input type="text" name="Github" id="Github" class="formbold-form-input" value="{{ user.Github }}" readonly>
+            </div>
+
+            <div class="formbold-input-group">
+                <label for="portfolio_link" class="formbold-form-label">Portfolio Link</label>
+                <input type="text" name="portfolio_link" id="portfolio_link" class="formbold-form-input" value="{{ user.portfolio_link }}" readonly>
+            </div>
+
+            <div class="formbold-input-group">
+                <label for="resume_link" class="formbold-form-label">Resume Link</label>
+                <input type="text" name="resume_link" id="resume_link" class="formbold-form-input" value="{{ user.resume_link }}" readonly>
+            </div>
+
+            
+            <div class="formbold-input-group">
+                <label for="Heading" class="formbold-form-label">Heading</label>
+                <textarea name="Heading" id="Heading" class="formbold-form-input" readonly style="resize: vertical; min-height: 150px;" >{{ alumni_profile.Heading }}</textarea>
+            </div>
+
+
+            <div class="formbold-input-group">
+                <label for="About" class="formbold-form-label">About</label>
+                <textarea name="About" id="About" class="formbold-form-input" readonly style="resize: vertical; min-height: 150px;" >{{ user.About }}</textarea>
+            </div>
+
+            <div class="formbold-input-group">
+                <label for="Work" class="formbold-form-label">Work</label>
+                <textarea name="Work" id="Work" class="formbold-form-input" readonly style="resize: vertical; min-height: 150px;">{{ user.Work }}</textarea>
+            </div>
+
+             <div class="formbold-input-group">
+                <label for="title" class="formbold-form-label">Job title</label>
+                <input type="text" name="title" id="title" class="formbold-form-input" value="{{ alumni_profile.job_title }}" readonly>
+            </div>
+
+            <div class="formbold-input-group">
+                <label for="company" class="formbold-form-label">Current Company</label>
+                <input type="text" name="company" id="company" class="formbold-form-input" value="{{ alumni_profile.current_company_name }}" readonly>
+            </div>
+
+            
+
+            <div class="formbold-input-group">
+                <label for="previous_c" class="formbold-form-label">Previous Companies</label>
+                <textarea name="previous_c" id="previous_c" class="formbold-form-input" readonly style="resize: vertical; min-height: 150px;">{{ alumni_profile.previous_companies }}</textarea>
+            </div>
+
+             <div class="formbold-input-group">
+                <label for="workexp" class="formbold-form-label">Work Experience</label>
+                <input type="text" name="workexp" id="workexp" class="formbold-form-input" value="{{ alumni_profile.years_of_experience }}" readonly>
+            </div>
+
+            <div class="formbold-input-group">
+                <label for="ind" class="formbold-form-label">Industry</label>
+                <input type="text" name="ind" id="ind" class="formbold-form-input" value="{{ alumni_profile.industry }}" readonly>
+            </div>
+
+            <div class="formbold-input-group">
+                <label for="achive" class="formbold-form-label">Achievement</label>
+                <textarea name="achive" id="achive" class="formbold-form-input" readonly style="resize: vertical; min-height: 150px;">{{ alumni_profile.achievements }}</textarea>
+            </div>
+
+            <div class="formbold-input-group">
+                <label for="skills" class="formbold-form-label">Skills</label>
+                <textarea name="skills" id="skills" class="formbold-form-input" readonly style="resize: vertical; min-height: 150px;">{{ user.skills }}</textarea>
+            </div>
+
+
+ <hr/>
+   <a href="http://localhost:3000/update_Alumni_profile_info/{{user.id}}/{{user.username}}/{{user.graduation_year}}/"><button class="formbold-btn">Update Profile</button></a>   
+     
+    </form>
+  </div>
+</div>
+
+
+  
+</body>
+</html>

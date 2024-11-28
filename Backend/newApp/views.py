@@ -24,6 +24,7 @@ from django.conf import settings
 from .updateAlumniProfileSerializers import ProfileUpdateSerializer
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from .editProfileSerializers import EditUserSerializer, EditStudentProfileSerializer,EditAlumniProfileSerializer
 
 class HodPrincipalPostPagination(PageNumberPagination):
     page_size = 10  # Number of posts per page
@@ -550,11 +551,14 @@ class PostListView(APIView):
 
     def get(self, request, *args, **kwargs):
         # Base query for AlumniPost and HodPrincipalPost
-        alumni_posts = AlumniPost.objects.filter(author__is_alumni=True)
-        hod_posts = HodPrincipalPost.objects.filter(author__is_superuser=True)
+        sort_order = request.query_params.get('sort_order', '-created_at')
+        
+        alumni_posts = AlumniPost.objects.filter(author__is_alumni=True,verified=True).order_by(sort_order)
+        hod_posts = HodPrincipalPost.objects.filter(author__is_superuser=True).order_by(sort_order)
+
 
         # Filtering parameters
-        filters = {
+        filters = {     
             'author__full_name__icontains': request.query_params.get('full_name', None),
             'created_at__gte': request.query_params.get('created_at_min', None),
             'created_at__lte': request.query_params.get('created_at_max', None),
@@ -598,11 +602,132 @@ class PostListView(APIView):
 
         # Combine the posts and paginate
         combined_posts = alumni_serializer.data + hod_serializer.data
+        combined_posts.sort(key=lambda x: x['created_at'], reverse=sort_order == '-created_at')
+        
         paginator = self.pagination_class()
         page = paginator.paginate_queryset(combined_posts, request)
 
         # Return paginated response
         return paginator.get_paginated_response(page)
+    
+    
+class UnverifiedAlumniPostListView(APIView):
+    permission_classes = [IsAuthenticated]
+    pagination_class = PostListPagination
+
+    def get(self, request, *args, **kwargs):
+
+        if not (
+                (request.user.username == "Admin" and request.user.is_superuser) or 
+                (request.user.is_superuser and request.user.is_allowedToAccessPostRequestTab)
+            ):
+                raise PermissionDenied("You do not have permission to access this resource.")
+
+        
+        sort_order = request.query_params.get('sort_order', '-created_at')
+        unverified_alumni_posts = AlumniPost.objects.filter(
+            author__is_alumni=True,
+            verified=False
+        ).order_by(sort_order)
+
+        
+        serializer = AlumniGETPostSerializer(unverified_alumni_posts, many=True)
+
+      
+        paginator = self.pagination_class()
+        page = paginator.paginate_queryset(serializer.data, request)
+
+        
+        return paginator.get_paginated_response(page)
+    
+
+class VerifyAlumniPostView(APIView):
+    def post(self, request, post_id):
+        
+        if not (
+            (request.user.username == "Admin" and request.user.is_superuser) or
+            (request.user.is_superuser and request.user.is_allowedToAccessPostRequestTab)
+        ):
+            raise PermissionDenied("You do not have permission to access this resource.")
+        
+       
+        try:
+            post = AlumniPost.objects.get(id=post_id)
+        except AlumniPost.DoesNotExist:
+            raise NotFound("The specified post does not exist.")
+
+       
+        post.verified = True
+        post.save()
+
+        subject = "Your Post has been Verified"
+        email_from = settings.DEFAULT_FROM_EMAIL
+        recipient_list = [post.author.email] 
+        combined_message = "Your post has been successfully verified by the AlumniHub."
+        url = "#"
+        context = {
+            'message': combined_message,
+            'url': url,
+            'message3': "Thank you for your contribution!"
+        }
+        html_message = render_to_string('account/BaseEmail.html', context)
+        plain_message = strip_tags(html_message)
+
+        message = EmailMultiAlternatives(
+            subject=subject,
+            body=plain_message,
+            from_email=email_from,
+            to=recipient_list
+        )
+        message.attach_alternative(html_message, "text/html")
+        message.send()
+
+
+        return Response({"detail": "Post verified successfully."}, status=status.HTTP_200_OK)
+    
+class RejectAlumniPostView(APIView):
+    def delete(self, request, post_id):
+        # Check if the user has the required permissions
+        if not (
+            (request.user.username == "Admin" and request.user.is_superuser) or
+            (request.user.is_superuser and request.user.is_allowedToAccessPostRequestTab)
+        ):
+            raise PermissionDenied("You do not have permission to access this resource.")
+        
+        # Get the post by ID
+        try:
+            post = AlumniPost.objects.get(id=post_id)
+        except AlumniPost.DoesNotExist:
+            raise NotFound("The specified post does not exist.")
+        
+        author_email = post.author.email
+        # Delete the post
+        post.delete()
+
+        subject = "Your Post has been Rejected and Deleted"
+        email_from = settings.DEFAULT_FROM_EMAIL
+        recipient_list = [author_email]
+        combined_message = "We appreciate your contribution to AlumniHub, but unfortunately, your recent post did not meet our criteria and has been removed; please reach out if you'd like more details or assistance."
+        url = "#"
+        context = {
+            'message': combined_message,
+            'url': url,
+            'message3': "For further queries, contact support."
+        }
+        html_message = render_to_string('account/BaseEmail.html', context)
+        plain_message = strip_tags(html_message)
+
+        message = EmailMultiAlternatives(
+            subject=subject,
+            body=plain_message,
+            from_email=email_from,
+            to=recipient_list
+        )
+        message.attach_alternative(html_message, "text/html")
+        message.send()
+
+
+        return Response({"detail": "Post rejected and deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
         
 
 class InactiveAlumniListView(generics.ListAPIView):
@@ -837,3 +962,139 @@ class UserDetailView(APIView):
         }
 
         return Response(user_data, status=status.HTTP_200_OK)
+
+
+class UpdateStudentProfileAPIView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request, user_id,username,graduation_year):
+        try:
+            # Fetch the user and their related student profile
+            user = User.objects.get(id=user_id, is_student=True)
+
+            # Cross-check provided data with the user's data
+            if user.username != username  or str(user.graduation_year) != str(graduation_year):
+                return Response({'detail': 'You are not authorized to access this data.'}, status=status.HTTP_403_FORBIDDEN)
+            
+            student_profile = StudentProfile.objects.get(user=user)
+
+            # Serialize the data
+            user_serializer = EditUserSerializer(user)
+            student_profile_serializer = EditStudentProfileSerializer(student_profile)
+
+            return Response({
+                'user': user_serializer.data,
+                'student_profile': student_profile_serializer.data
+            }, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({'detial': 'User not found or is not a student'}, status=status.HTTP_404_NOT_FOUND)
+        except StudentProfile.DoesNotExist:
+            return Response({'detail': 'Student profile not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, user_id,username,graduation_year):
+        try:
+            # Fetch the user and their related student profile
+            user = User.objects.get(id=user_id, is_student=True)
+
+            # Cross-check provided data with the user's data
+            if user.username != username  or str(user.graduation_year) != str(graduation_year):
+                return Response({'detail': 'You are not authorized to access this data.'}, status=status.HTTP_403_FORBIDDEN)
+
+            existing_user = User.objects.filter(email=request.data.get('email')).exclude(id=user_id).first()
+            if existing_user:
+                return Response({'detail': 'This email is already in use by another user.'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            mobile_number = request.data.get('mobile')
+            if mobile_number and len(mobile_number) > 10:
+                return Response({'detail': 'Mobile number should not be greater than 10 digits.'}, status=status.HTTP_400_BAD_REQUEST)
+
+            
+            student_profile = StudentProfile.objects.get(user=user)
+
+            # Partially update user and student profile
+            user_serializer = EditUserSerializer(user, data=request.data, partial=True)
+            student_profile_serializer = EditStudentProfileSerializer(student_profile, data=request.data, partial=True)
+
+            if user_serializer.is_valid() and student_profile_serializer.is_valid():
+                user_serializer.save()
+                student_profile_serializer.save()
+                return Response({
+                    'user': user_serializer.data,
+                    'student_profile': student_profile_serializer.data
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    'user_errors': user_serializer.errors,
+                    'student_profile_errors': student_profile_serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except User.DoesNotExist:
+            return Response({'detail': 'User not found or is not a student'}, status=status.HTTP_404_NOT_FOUND)
+        except StudentProfile.DoesNotExist:
+            return Response({'detail': 'Student profile not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class UpdateAlumniProfileAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, user_id, username, graduation_year):
+        try:
+            # Fetch the user and their related alumni profile
+            user = User.objects.get(id=user_id, is_alumni=True)
+
+            # Cross-check provided data with the user's data
+            if user.username != username  or str(user.graduation_year) != str(graduation_year):
+                return Response({'detail': 'You are not authorized to access this data.'}, status=status.HTTP_403_FORBIDDEN)
+
+            alumni_profile = AlumniProfile.objects.get(user=user)
+
+            # Serialize the data
+            user_serializer = EditUserSerializer(user)
+            alumni_profile_serializer = EditAlumniProfileSerializer(alumni_profile)
+
+            return Response({
+                'user': user_serializer.data,
+                'alumni_profile': alumni_profile_serializer.data
+            }, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({'detail': 'User not found or is not an alumni'}, status=status.HTTP_404_NOT_FOUND)
+        except AlumniProfile.DoesNotExist:
+            return Response({'detail': 'Alumni profile not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, user_id, username, graduation_year):
+        try:
+            # Fetch the user and their related alumni profile
+            user = User.objects.get(id=user_id, is_alumni=True)
+
+            # Cross-check provided data with the user's data
+            if user.username != username  or str(user.graduation_year) != str(graduation_year):
+                return Response({'detail': 'You are not authorized to access this data.'}, status=status.HTTP_403_FORBIDDEN)
+
+            existing_user = User.objects.filter(email=request.data.get('email')).exclude(id=user_id).first()
+            if existing_user:
+                return Response({'detail': 'This email is already in use by another user.'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            mobile_number = request.data.get('mobile')
+            if mobile_number and len(mobile_number) > 10:
+                return Response({'detail': 'Mobile number should not be greater than 10 digits.'}, status=status.HTTP_400_BAD_REQUEST)
+
+            alumni_profile = AlumniProfile.objects.get(user=user)
+
+            # Partially update user and alumni profile
+            user_serializer = EditUserSerializer(user, data=request.data, partial=True)
+            alumni_profile_serializer = EditAlumniProfileSerializer(alumni_profile, data=request.data, partial=True)
+
+            if user_serializer.is_valid() and alumni_profile_serializer.is_valid():
+                user_serializer.save()
+                alumni_profile_serializer.save()
+                return Response({
+                    'user': user_serializer.data,
+                    'alumni_profile': alumni_profile_serializer.data
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    'user_errors': user_serializer.errors,
+                    'alumni_profile_errors': alumni_profile_serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except User.DoesNotExist:
+            return Response({'detail': 'User not found or is not an alumni'}, status=status.HTTP_404_NOT_FOUND)
+        except AlumniProfile.DoesNotExist:
+            return Response({'detail': 'Alumni profile not found'}, status=status.HTTP_404_NOT_FOUND)

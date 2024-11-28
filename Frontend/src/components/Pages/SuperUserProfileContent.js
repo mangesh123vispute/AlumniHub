@@ -15,7 +15,7 @@ const SuperUserProfileContent = () => {
     showNotification,
     toggleimageRefresh,
   } = useContext(AuthContext);
-  console.log("userData", userData);
+
   const id = localStorage.getItem("id");
   const [user, setUser] = useState(null);
   const [reload, setReload] = useState(false);
@@ -47,7 +47,7 @@ const SuperUserProfileContent = () => {
   };
 
   const handleCropComplete = async (croppedImageBlob) => {
-    console.log("Cropped Image Data:", croppedImageBlob);
+   
 
     // Create FormData and append the cropped image Blob
     const formData = new FormData();
@@ -83,7 +83,7 @@ const SuperUserProfileContent = () => {
       const data = await response.json();
 
       if (response.ok) {
-        console.log("Image uploaded successfully:", data.detail);
+       
         showNotification("Image uploaded successfully", "success", "Success");
         toggleimageRefresh();
         toggleReload();
@@ -125,6 +125,7 @@ const SuperUserProfileContent = () => {
       linkedin: "",
       Github: "",
       instagram: "",
+    
     },
     profile: {
       user: {
@@ -137,6 +138,7 @@ const SuperUserProfileContent = () => {
         linkedin: "",
         Github: "",
         instagram: "",
+       
       },
       designation: "",
     },
@@ -195,7 +197,7 @@ const SuperUserProfileContent = () => {
       })
       .then((response) => {
         setUser(response.data);
-        console.log("This is user", response.data);
+        
         if (response.data) {
           setSuperUserData({
             user: {
@@ -353,25 +355,21 @@ const SuperUserProfileContent = () => {
 
   const fetchPosts = async (page) => {
     try {
-      console.log("page " + page);
+     
       const response = await axios.get(
         `${baseurl}/hodposts/author/${
           id || userData?.user_id
         }/?page=${page}&page_size=10`
       );
       setPosts(response.data.results); // Set fetched posts
-      console.log("res data " + response.data.results);
+   
       setHasMore(response.data.next !== null);
       // If 'next' is null, stop loading more posts
       const totalItems = response.data.count;
       setTotalPages(Math.ceil(totalItems / 10));
     } catch (error) {
       console.error("Error fetching posts:", error);
-      showNotification(
-        "Error fetching posts, please try again.",
-        "error",
-        "Error"
-      );
+      
     }
   };
 
@@ -399,13 +397,7 @@ const SuperUserProfileContent = () => {
     //   return;
     // }
 
-    console.log(
-      "post  ",
-      selectedPost?.title,
-      selectedPost?.content,
-      selectedPost?.tag,
-      selectedPost?.Image
-    );
+    
 
     if (!selectedPost?.title || !selectedPost?.content || !selectedPost?.tag) {
       showNotification(
@@ -483,11 +475,11 @@ const SuperUserProfileContent = () => {
       fetchPosts();
     } catch (error) {
       console.error("Error during Delete:", error);
-      showNotification(
-        error.response?.data?.detail || "Error Deleting the post.",
-        "warning",
-        "Delete failed"
-      );
+      // showNotification(
+      //   error.response?.data?.detail || "Error Deleting the post.",
+      //   "warning",
+      //   "Delete failed"
+      // );
     }
 
     setLoading(false);
@@ -919,21 +911,6 @@ const SuperUserProfileContent = () => {
                                             />
                                           </div>
                                           <div className="form-group">
-                                            <label>Content</label>
-                                            <textarea
-                                              className="form-control"
-                                              value={
-                                                selectedPost?.content || ""
-                                              }
-                                              onChange={(e) =>
-                                                setSelectedPost({
-                                                  ...selectedPost,
-                                                  content: e.target.value,
-                                                })
-                                              }
-                                            />
-                                          </div>
-                                          <div className="form-group">
                                             <label>Tag</label>
                                             <input
                                               type="text"
@@ -948,6 +925,22 @@ const SuperUserProfileContent = () => {
                                             />
                                           </div>
                                           <div className="form-group">
+                                            <label>Content</label>
+                                            <textarea
+                                              className="form-control"
+                                              value={
+                                                selectedPost?.content || ""
+                                              }
+                                              onChange={(e) =>
+                                                setSelectedPost({
+                                                  ...selectedPost,
+                                                  content: e.target.value,
+                                                })
+                                              }
+                                            />
+                                          </div>
+
+                                          {/* <div className="form-group">
                                             <label>Previous Image</label>
                                             <div className="col-auto">
                                               <a
@@ -1046,7 +1039,7 @@ const SuperUserProfileContent = () => {
                                                 })
                                               }
                                             />
-                                          </div>
+                                          </div> */}
                                         </div>
                                         <div className="modal-footer">
                                           <button
@@ -1084,121 +1077,6 @@ const SuperUserProfileContent = () => {
                                 >
                                   {post?.content || "Content"}
                                 </p>
-                                <div className="row">
-                                  {/* <div className="col-auto">
-                                      <a
-                                        href={post?.image_url || "#"}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="mr-3"
-                                      >
-                                        <i className="fas fa-image mr-1" />{" "}
-                                        Image
-                                      </a>
-                                    </div> */}
-
-                                  <div className="col-auto mt-3">
-                                    {console.log("post", post)}
-                                    {(post?.Image &&
-                                      !post.Image.includes(
-                                        "/media/default/def.jpeg"
-                                      )) && (
-                                        <a
-                                          href="#"
-                                          onClick={(e) => {
-                                            e.preventDefault();
-                                            handleImageClick();
-                                          }}
-                                          className="mr-3"
-                                        >
-                                          <i className="fas fa-image mr-1" />{" "}
-                                          Image
-                                        </a>
-                                      )}
-
-                                    {isImageOpen && (
-                                      <div
-                                        style={{
-                                          position: "fixed",
-                                          top: 0,
-                                          left: 0,
-                                          width: "100%",
-                                          height: "100%",
-                                          backgroundColor: "tranparent",
-                                          display: "flex",
-                                          justifyContent: "center",
-                                          alignItems: "center",
-                                          zIndex: 1050,
-                                        }}
-                                        onClick={handleCloseModal}
-                                      >
-                                        <div
-                                          style={{
-                                            position: "relative",
-                                            maxWidth: "100%",
-                                            maxHeight: "100%",
-                                            display: "flex",
-                                            justifyContent: "center",
-                                            alignItems: "center",
-                                          }}
-                                        >
-                                          <img
-                                            src={post?.Image}
-                                            alt="Post"
-                                            style={{
-                                              // maxWidth: "100%",
-                                              // maxHeight: "100%",
-                                              width: "100%",
-                                              height: "auto",
-                                              borderRadius: "5px",
-                                              boxShadow:
-                                                "0 4px 12px rgba(0, 0, 0, 0.3)",
-                                            }}
-                                          />
-                                          <span
-                                            style={{
-                                              position: "absolute",
-                                              top: "10px",
-                                              right: "10px",
-                                              fontSize: "1.5em",
-                                              color: "#fff",
-                                              cursor: "pointer",
-                                            }}
-                                            onClick={handleCloseModal}
-                                          >
-                                            &times;
-                                          </span>
-                                        </div>
-                                      </div>
-                                    )}
-                                  </div>
-                                  {post?.DocUrl && (
-                                    <div className="col-auto mt-3">
-                                      <a
-                                        href={post?.DocUrl || "#"}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="mr-3"
-                                      >
-                                        <i className="fas fa-file-alt mr-1" />{" "}
-                                        Document
-                                      </a>
-                                    </div>
-                                  )}
-
-                                  {post?.link && (
-                                    <div className="col-auto mt-3">
-                                      <a
-                                        href={post?.link || "#"}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="mr-3"
-                                      >
-                                        <i className="fas fa-link mr-1" /> Link
-                                      </a>
-                                    </div>
-                                  )}
-                                </div>
                               </div>
                             ))}
                           </>
@@ -1291,13 +1169,19 @@ const SuperUserProfileContent = () => {
 
                                 <strong>LinkedIn:</strong>
                                 <p className="text-muted font">
-                                  {user?.linkedin ? (
+                                  {user?.linkedin !== "N/A" ? (
                                     <a
-                                      href={user?.linkedin || "#"}
+                                      href={
+                                        user?.linkedin?.startsWith("http")
+                                          ? user.linkedin
+                                          : user?.linkedin
+                                          ? `https://${user.linkedin}`
+                                          : "#"
+                                      }
                                       target="_blank"
                                       rel="noopener noreferrer"
                                     >
-                                      {user?.linkedin ? user.linkedin : "N/A"}
+                                      {user?.linkedin}
                                     </a>
                                   ) : (
                                     "N/A"
@@ -1306,13 +1190,19 @@ const SuperUserProfileContent = () => {
 
                                 <strong>GitHub:</strong>
                                 <p className="text-muted font">
-                                  {user?.Github ? (
+                                  {user?.Github !== "N/A" ? (
                                     <a
-                                      href={user?.Github || "#"}
+                                      href={
+                                        user?.Github?.startsWith("http")
+                                          ? user.Github
+                                          : user?.Github
+                                          ? `https://${user.Github}`
+                                          : "#"
+                                      }
                                       target="_blank"
                                       rel="noopener noreferrer"
                                     >
-                                      {user?.Github ? user.Github : "N/A"}
+                                      {user?.Github}
                                     </a>
                                   ) : (
                                     "N/A"
@@ -1321,13 +1211,19 @@ const SuperUserProfileContent = () => {
 
                                 <strong>Instagram:</strong>
                                 <p className="text-muted font">
-                                  {user?.instagram ? (
+                                  {user?.instagram !== "N/A" ? (
                                     <a
-                                      href={user?.instagram || "#"}
+                                      href={
+                                        user?.instagram?.startsWith("http")
+                                          ? user.instagram
+                                          : user?.instagram
+                                          ? `https://${user.instagram}`
+                                          : "#"
+                                      }
                                       target="_blank"
                                       rel="noopener noreferrer"
                                     >
-                                      {user?.instagram ? user.instagram : "N/A"}
+                                      {user?.instagram}
                                     </a>
                                   ) : (
                                     "N/A"

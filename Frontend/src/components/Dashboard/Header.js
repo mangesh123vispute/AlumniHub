@@ -6,7 +6,7 @@
 
 
   const Header = () => {
-    // console.log("i am user", useContext(AuthContext));
+
     let {
       user,
       logoutUser,
@@ -19,7 +19,6 @@
       setFilterClicked,
       isAllAdminPage,
       userData,
-      toggleModal,
       toggleAddAdminModal,
       showNotification,
     } = useContext(AuthContext);

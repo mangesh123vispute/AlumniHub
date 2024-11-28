@@ -42,7 +42,7 @@ const ForgotUsername = () => {
       }
     } catch (error) {
       setLoading(false);
-      console.log(error);
+      console.error(error);
       showNotification(
         error.response.data.detail ||
           "Failed to reset username, Please try again",

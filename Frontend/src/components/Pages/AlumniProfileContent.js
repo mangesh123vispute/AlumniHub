@@ -23,7 +23,7 @@ const AlumniProfileContent = () => {
   useEffect(() => {
     setIsAllAdminPage(false);
   }, []);
-  console.log("userData", userData);
+
   
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -135,8 +135,7 @@ const handleCloseModal = () => {
     }
   };
   const handleCropComplete = async (croppedImageBlob) => {
-    console.log("Cropped Image Data:", croppedImageBlob);
-
+    
     // Create FormData and append the cropped image Blob
     const formData = new FormData();
      formData.append(
@@ -170,7 +169,7 @@ const handleCloseModal = () => {
       const data = await response.json();
 
       if (response.ok) {
-        console.log("Image uploaded successfully:", data.detail);
+        
         showNotification("Image uploaded successfully", "success", "Success");
         toggleimageRefresh();
         toggleReload();
@@ -414,7 +413,7 @@ setIsDropdownOpen(null);  // Open the modal
     localStorage.getItem("id") && localStorage.removeItem("id");
   }, [userData?.user_id, reload]);
 
-  console.log("user ", user);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -433,7 +432,7 @@ setIsDropdownOpen(null);  // Open the modal
           },
         }
       );
-      console.log("Profile updated successfully", response.data);
+      
 
       if (response.status === 200) {
         setLoading(false);
@@ -491,7 +490,7 @@ setIsDropdownOpen(null);  // Open the modal
 
   const fetchPosts = async (page) => {
     try {
-      console.log("page " + page);
+     
       const response = await axios.get(
         `${baseurl}/alumniPosts/author/${
           id || userData?.user_id
@@ -564,7 +563,7 @@ setIsDropdownOpen(null);  // Open the modal
   
     
 
-    console.log("post  ",selectedPost?.title ,selectedPost?.content ,selectedPost?.tag, selectedPost?.Image);
+ 
   
     if (!selectedPost?.title || !selectedPost?.content || !selectedPost?.tag ) {
       showNotification(
@@ -1198,6 +1197,20 @@ setIsDropdownOpen(null);  // Open the modal
                                               }
                                             />
                                           </div>
+                                           <div className="form-group">
+                                            <label>Tag</label>
+                                            <input
+                                              type="text"
+                                              className="form-control"
+                                              value={selectedPost?.tag || ""}
+                                              onChange={(e) =>
+                                                setSelectedPost({
+                                                  ...selectedPost,
+                                                  tag: e.target.value,
+                                                })
+                                              }
+                                            />
+                                          </div>
                                           <div className="form-group">
                                             <label>Content</label>
                                             <textarea
@@ -1213,21 +1226,8 @@ setIsDropdownOpen(null);  // Open the modal
                                               }
                                             />
                                           </div>
-                                          <div className="form-group">
-                                            <label>Tag</label>
-                                            <input
-                                              type="text"
-                                              className="form-control"
-                                              value={selectedPost?.tag || ""}
-                                              onChange={(e) =>
-                                                setSelectedPost({
-                                                  ...selectedPost,
-                                                  tag: e.target.value,
-                                                })
-                                              }
-                                            />
-                                          </div>
-                                          <div className="form-group">
+                                         
+                                          {/* <div className="form-group">
                                             <label>Previous Image</label>
                                             <div className="col-auto">
                                               <a
@@ -1325,7 +1325,7 @@ setIsDropdownOpen(null);  // Open the modal
                                                 })
                                               }
                                             />
-                                          </div>
+                                          </div> */}
                                         </div>
                                         <div className="modal-footer">
                                           <button
@@ -1363,114 +1363,7 @@ setIsDropdownOpen(null);  // Open the modal
                                 >
                                   {post?.content || "Content"}
                                 </p>
-                                <div className="row">
-                                  {/* <div className="col-auto">
-                                      <a
-                                        href={post?.image_url || "#"}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="mr-3"
-                                      >
-                                        <i className="fas fa-image mr-1" />{" "}
-                                        Image
-                                      </a>
-                                    </div> */}
-
-                                  <div className="col-auto mt-3">
-                                    <a
-                                      href="#"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        handleImageClick();
-                                      }}
-                                      className="mr-3"
-                                    >
-                                      <i className="fas fa-image mr-1" /> Image
-                                    </a>
-
-                                    {isImageOpen && (
-                                      <div
-                                        style={{
-                                          position: "fixed",
-                                          top: 0,
-                                          left: 0,
-                                          width: "100%",
-                                          height: "100%",
-                                          backgroundColor: "tranparent",
-                                          display: "flex",
-                                          justifyContent: "center",
-                                          alignItems: "center",
-                                          zIndex: 1050,
-                                        }}
-                                        onClick={handleCloseModal}
-                                      >
-                                        <div
-                                          style={{
-                                            position: "relative",
-                                            maxWidth: "100%",
-                                            maxHeight: "100%",
-                                            display: "flex",
-                                            justifyContent: "center",
-                                            alignItems: "center",
-                                          }}
-                                        >
-                                          <img
-                                            src={post?.Image}
-                                            alt="Post"
-                                            style={{
-                                              // maxWidth: "100%",
-                                              // maxHeight: "100%",
-                                              width: "100%",
-                                              height: "auto",
-                                              borderRadius: "5px",
-                                              boxShadow:
-                                                "0 4px 12px rgba(0, 0, 0, 0.3)",
-                                            }}
-                                          />
-                                          <span
-                                            style={{
-                                              position: "absolute",
-                                              top: "10px",
-                                              right: "10px",
-                                              fontSize: "1.5em",
-                                              color: "#fff",
-                                              cursor: "pointer",
-                                            }}
-                                            onClick={handleCloseModal}
-                                          >
-                                            &times;
-                                          </span>
-                                        </div>
-                                      </div>
-                                    )}
-                                  </div>
-                                  {post?.DocUrl && (
-                                    <div className="col-auto mt-3">
-                                      <a
-                                        href={post?.DocUrl || "#"}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="mr-3"
-                                      >
-                                        <i className="fas fa-file-alt mr-1" />{" "}
-                                        Document
-                                      </a>
-                                    </div>
-                                  )}
-
-                                  {post?.link && (
-                                    <div className="col-auto mt-3">
-                                      <a
-                                        href={post?.link || "#"}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="mr-3"
-                                      >
-                                        <i className="fas fa-link mr-1" /> Link
-                                      </a>
-                                    </div>
-                                  )}
-                                </div>
+                               
                               </div>
                             ))}
                           </>
@@ -1561,14 +1454,21 @@ setIsDropdownOpen(null);  // Open the modal
 
                                 <strong>LinkedIn:</strong>
                                 <p className="text-muted font">
-                                  {user?.linkedin ? (
-                                    <a
-                                      href={user?.linkedin || "#"}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      {user?.linkedin ? user.linkedin : "N/A"}
-                                    </a>
+                                  {user?.linkedin !=='N/A'? (
+                                   <a
+  href={
+    user?.linkedin?.startsWith("http")
+      ? user.linkedin
+      : user?.linkedin
+      ? `https://${user.linkedin}`
+      : "#"
+  }
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  {user?.linkedin}
+</a>
+
                                   ) : (
                                     "N/A"
                                   )}
@@ -1576,14 +1476,21 @@ setIsDropdownOpen(null);  // Open the modal
 
                                 <strong>GitHub:</strong>
                                 <p className="text-muted font">
-                                  {user?.Github ? (
+                                  {user?.Github!== 'N/A' ? (
                                     <a
-                                      href={user?.Github || "#"}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      {user?.Github ? user.Github : "N/A"}
-                                    </a>
+  href={
+    user?.Github?.startsWith("http")
+      ? user.Github
+      : user?.Github
+      ? `https://${user.Github}`
+      : "#"
+  }
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  {user?.Github}
+</a>
+
                                   ) : (
                                     "N/A"
                                   )}
@@ -1591,14 +1498,21 @@ setIsDropdownOpen(null);  // Open the modal
 
                                 <strong>Instagram:</strong>
                                 <p className="text-muted font">
-                                  {user?.instagram ? (
+                                  {user?.instagram !== 'N/A'? (
                                     <a
-                                      href={user?.instagram || "#"}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      {user?.instagram ? user.instagram : "N/A"}
-                                    </a>
+  href={
+    user?.instagram?.startsWith("http")
+      ? user.instagram
+      : user?.instagram
+      ? `https://${user.instagram}`
+      : "#"
+  }
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  {user?.instagram }
+</a>
+
                                   ) : (
                                     "N/A"
                                   )}
@@ -1633,16 +1547,21 @@ setIsDropdownOpen(null);  // Open the modal
                               <div className="timeline-body">
                                 <strong>Portfolio:</strong>
                                 <p className="text-muted font">
-                                  {user?.portfolio_link ? (
+                                  {user?.portfolio_link !=='N/A'? (
                                     <a
-                                      href={user?.portfolio_link || "#"}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      {user?.portfolio_link
-                                        ? user.portfolio_link
-                                        : "N/A"}
-                                    </a>
+  href={
+    user?.portfolio_link?.startsWith("http")
+      ? user.portfolio_link
+      : user?.portfolio_link
+      ? `https://${user.portfolio_link}`
+      : "#"
+  }
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  {user?.portfolio_link }
+</a>
+
                                   ) : (
                                     "N/A"
                                   )}
@@ -1650,16 +1569,21 @@ setIsDropdownOpen(null);  // Open the modal
 
                                 <strong>Resume:</strong>
                                 <p className="text-muted font">
-                                  {user?.resume_link ? (
-                                    <a
-                                      href={user?.resume_link || "#"}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      {user?.resume_link
-                                        ? user.resume_link
-                                        : "N/A"}
-                                    </a>
+                                  {user?.resume_link !== 'N/A'? (
+                                   <a
+  href={
+    user?.resume_link?.startsWith("http")
+      ? user.resume_link
+      : user?.resume_link
+      ? `https://${user.resume_link}`
+      : "#"
+  }
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  {user?.resume_link }
+</a>
+
                                   ) : (
                                     "N/A"
                                   )}
@@ -2275,7 +2199,7 @@ setIsDropdownOpen(null);  // Open the modal
                           className="form-horizontal"
                           onSubmit={handleGradSubmit}
                         >
-                          { console.log("alumniData::",alumniData)}
+                         
                           <p className="editheading" style={{ marginTop: "0" }}>
                             Update Graduation Details
                           </p>

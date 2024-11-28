@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import Home from "../Dashboard/Home";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
@@ -32,11 +32,12 @@ const AllPostContent = () => {
     setIsAllPostPage,
     postFilters,
     reloadFilter,
+    setPostFilters,
   } = useContext(AuthContext);
 setFilter(true);
   const navigate = useNavigate();
   
-
+const isFirstLoad = useRef(true); 
   const handleViewProfile = (userData) => {
     setShowProfileOfId(true);
     navigate("/profile", { state: userData });
@@ -64,29 +65,19 @@ const [isImageOpen, setIsImageOpen] = useState(false);
 
   useEffect(() => {
     getAllPosts(page);
+     if (isFirstLoad.current) {
+       setPostFilters({});
+       getAllPosts(page);
+       isFirstLoad.current = false;
+     } else {
+       getAllPosts(page);
+    }
+    
   }, [page, reloadFilter]);
 
  
 
-  // const getAllPosts = async (page) => {
-  //   setLoading(true);
-  //   try {
-  //     console.log("page " + page);
-  //     if(page===undefined){setPage(1);}
-  //     const response = await axios.get(`${baseurl}/posts?page=${page}&page_size=10`);
-  //     setPosts(response.data.results); // Set fetched posts
-  //     setHasMore(response.data.next !== null);
-  //      // If 'next' is null, stop loading more posts
-  //      const totalItems = response.data.count;
-  //      setTotalPages(Math.ceil(totalItems / 10));
-  //      setLoading(false);
-  //   } catch (error) {
-  //     console.error('Error fetching posts:', error);
-  //     showNotification("Error fetching posts, please try again.", "error", "Error");
-  //     setLoading(false);
-  //   }
-  // };
-
+ 
   const getAllPosts = async (pageNumber) => {
     setLoading(true);
 
@@ -98,7 +89,7 @@ const [isImageOpen, setIsImageOpen] = useState(false);
     const queryParams = new URLSearchParams({
       page: pageNumber || 1,
       page_size: 10,
-      ...filteredPostFilters,
+      ...(isFirstLoad.current ? {} : filteredPostFilters),
     }).toString();
 
     try {
@@ -110,13 +101,21 @@ const [isImageOpen, setIsImageOpen] = useState(false);
         setTotalPages(Math.ceil(totalItems / 10));
       }
     } catch (error) {
-      console.error("Error fetching posts:", error);
-      showNotification(
-        "Error fetching posts, please try again.",
-        "error",
-        "Error"
-      );
-    } finally {
+    console.error("Error fetching posts:", error);
+
+    // Check if the error matches the specific criteria
+    if (
+        error.message === "Request failed with status code 404" &&
+        error.name === "AxiosError" &&
+        error.code === "ERR_BAD_REQUEST" &&
+        error.response &&
+        error.response.status === 404
+    ) {
+        
+        setPage(1);
+    }
+}
+finally {
       setLoading(false);
     }
   };
@@ -179,7 +178,7 @@ const [isImageOpen, setIsImageOpen] = useState(false);
                   {" "}
                   {posts?.map((post, ind) => (
                     <div key={ind} className="post">
-                      {console.log(post)}
+                    
                       <div
                         className="user-block"
                         style={{
@@ -244,7 +243,7 @@ const [isImageOpen, setIsImageOpen] = useState(false);
                       >
                         {post?.content || "Content"}
                       </p>
-                      <div className="row">
+                      {/* <div className="row">
                         {post?.Image !== "/media/default/def.jpeg" &&
                           post?.Image && (
                             <div className="col-auto mt-3">
@@ -341,7 +340,7 @@ const [isImageOpen, setIsImageOpen] = useState(false);
                             </a>
                           </div>
                         )}
-                      </div>
+                      </div> */}
                     </div>
                   ))}
                 </>

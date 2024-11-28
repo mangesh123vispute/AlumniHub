@@ -402,7 +402,7 @@ class ResetUsernameAPIView(APIView):
             if default_token_generator.check_token(user, token):
                 # Reset password logic here
                 new_username = request.data.get('new_username')
-                if(User.objects.filter(username=new_username).exists()):
+                if(User.objects.filter(username=new_username).exclude(pk=user.pk).exists()):
                     return Response({"detail": "Username is already taken.Please Enter Other Username. "}, status=status.HTTP_400_BAD_REQUEST)
                 user.username = new_username
                 user.save()
@@ -540,7 +540,7 @@ class AdminRegistrationView(APIView):
             is_allowedToJoinAlumni=validated_data.get('is_allowedToJoinAlumni'),
             is_allowedToAccessSettings=validated_data.get('is_allowedToAccessSettings'),
             is_allowedToAddAdmin=validated_data.get('is_allowedToAddAdmin'),
-            is_allowedToAccessLinkedinScrappingTab=validated_data.get('is_allowedToAccessLinkedinScrappingTab'),
+            is_allowedToAccessPostRequestTab=validated_data.get('is_allowedToAccessPostRequestTab'),
             is_superuser=True,
             is_active=True,
         )
