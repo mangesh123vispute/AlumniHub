@@ -164,7 +164,7 @@ export const AuthProvider = ({ children }) => {
   
   //* logout
   let logoutUser = async () => {
-    console.log("logging out");
+   
     if(!window.confirm("Are You Sure Want to Logout ?"))
       return;
     try {
@@ -182,7 +182,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const getImage = async () => {
-    console.log("Fetching profile image...", userData);
+    
 
     try {
       if(userData?.user_id ){
@@ -197,7 +197,7 @@ export const AuthProvider = ({ children }) => {
       
         
     } catch (error) {
-        console.log("An error occurred while fetching profile image:", error);
+        console.errror("An error occurred while fetching profile image:", error);
     }
 };
 
@@ -206,8 +206,7 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem("authTokens") ? JSON.parse(localStorage.getItem("authTokens")) : null;
     try {
       if (!token) {
-        //  navigate("/login")
-        console.log("1.Token not found");
+        
         return -1;
       }
       // Verify access token
@@ -220,17 +219,16 @@ export const AuthProvider = ({ children }) => {
       });
 
      
-      console.log("verifyAccessTokenAndUpdate", response.status, response.ok);
       if (!response.ok) {
         localStorage.removeItem("authTokens");
         setAuthTokens(null);
         setUser(null);
         
-        console.log("2. Access token verification failed");
+        
         return -1;
       }  
       else {
-        console.log("3. Access token verification successful");
+       
         return 1;
       }
     } catch (error) {
@@ -238,7 +236,7 @@ export const AuthProvider = ({ children }) => {
         "An error occurred while verifying access token",
         error
       );
-      console.log("4. Access token verification failed");
+     
       return -1;
     }
   };

@@ -6,7 +6,7 @@ import AuthContext from "../../context/AuthContext.js";
 import AllPostFilter from "../Filter/AllPostFilter";
 const Footer = () => {
   let {
-    userData,
+    
     isAllStudentPage,
     isAllAdminPage,
     isAllAlumniPage,

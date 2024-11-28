@@ -111,7 +111,7 @@ const [isImageOpen, setIsImageOpen] = useState(false);
         error.response &&
         error.response.status === 404
     ) {
-        console.log("Specific error occurred. Resetting to page 1.");
+        
         setPage(1);
     }
 }
@@ -178,7 +178,7 @@ finally {
                   {" "}
                   {posts?.map((post, ind) => (
                     <div key={ind} className="post">
-                      {console.log(post)}
+                    
                       <div
                         className="user-block"
                         style={{

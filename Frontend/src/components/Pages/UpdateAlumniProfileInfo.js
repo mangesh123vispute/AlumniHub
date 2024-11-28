@@ -11,7 +11,7 @@ const UpdateAlumniProfileInfoContent = () => {
   const [loading, setLoading] = useState(false);
   const { id, username, graduation_year } = useParams();
 
-  console.log(id, username, graduation_year);
+  
 
   let { showNotification, message, icon, title, handleClose, isOpen } =
     useContext(AuthContext);
@@ -84,7 +84,7 @@ const UpdateAlumniProfileInfoContent = () => {
           achievements: alumniProfileData.achievements,
         });
       } else {
-        console.log("Error loading student profile");
+        console.error("Error fetching user data");
       }
     } catch (error) {
       console.error("Error fetching user data:", error.message);

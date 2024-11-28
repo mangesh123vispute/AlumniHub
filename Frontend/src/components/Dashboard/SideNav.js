@@ -13,7 +13,7 @@ const SideNav = () => {
     showNotification,
     toggleAddAdminModal,
   } = useContext(AuthContext);
-  console.log("userData", userData);
+ 
   const [activeDropdown, setActiveDropdown] = useState(null);
   // const [isOpen, setIsOpen] = useState(false); // State to control dropdown visibility
 

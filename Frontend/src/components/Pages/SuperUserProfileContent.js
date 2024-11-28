@@ -15,7 +15,7 @@ const SuperUserProfileContent = () => {
     showNotification,
     toggleimageRefresh,
   } = useContext(AuthContext);
-  console.log("userData", userData);
+
   const id = localStorage.getItem("id");
   const [user, setUser] = useState(null);
   const [reload, setReload] = useState(false);
@@ -47,7 +47,7 @@ const SuperUserProfileContent = () => {
   };
 
   const handleCropComplete = async (croppedImageBlob) => {
-    console.log("Cropped Image Data:", croppedImageBlob);
+   
 
     // Create FormData and append the cropped image Blob
     const formData = new FormData();
@@ -83,7 +83,7 @@ const SuperUserProfileContent = () => {
       const data = await response.json();
 
       if (response.ok) {
-        console.log("Image uploaded successfully:", data.detail);
+       
         showNotification("Image uploaded successfully", "success", "Success");
         toggleimageRefresh();
         toggleReload();
@@ -197,7 +197,7 @@ const SuperUserProfileContent = () => {
       })
       .then((response) => {
         setUser(response.data);
-        console.log("This is user", response.data);
+        
         if (response.data) {
           setSuperUserData({
             user: {
@@ -355,25 +355,21 @@ const SuperUserProfileContent = () => {
 
   const fetchPosts = async (page) => {
     try {
-      console.log("page " + page);
+     
       const response = await axios.get(
         `${baseurl}/hodposts/author/${
           id || userData?.user_id
         }/?page=${page}&page_size=10`
       );
       setPosts(response.data.results); // Set fetched posts
-      console.log("res data " + response.data.results);
+   
       setHasMore(response.data.next !== null);
       // If 'next' is null, stop loading more posts
       const totalItems = response.data.count;
       setTotalPages(Math.ceil(totalItems / 10));
     } catch (error) {
       console.error("Error fetching posts:", error);
-      showNotification(
-        "Error fetching posts, please try again.",
-        "error",
-        "Error"
-      );
+      
     }
   };
 
@@ -401,13 +397,7 @@ const SuperUserProfileContent = () => {
     //   return;
     // }
 
-    console.log(
-      "post  ",
-      selectedPost?.title,
-      selectedPost?.content,
-      selectedPost?.tag,
-      selectedPost?.Image
-    );
+    
 
     if (!selectedPost?.title || !selectedPost?.content || !selectedPost?.tag) {
       showNotification(

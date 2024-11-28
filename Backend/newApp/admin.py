@@ -412,10 +412,10 @@ class AluminiPostAdmin(ImportExportModelAdmin):
         'tag',
         'title',
         "content",
-        'image_url',
-        'DocUrl',
+        'verified',
         'created_at',
         'updated_at',
+
     ]
     ordering = ['created_at', 'updated_at']
 

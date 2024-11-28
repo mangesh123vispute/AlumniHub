@@ -33,7 +33,7 @@ const ActivateEmail = () => {
       }
 
       const data = await response.json();
-      console.log("User Details:", data);
+      
       return data;
     } catch (error) {
       console.error("Error fetching user details:", error);
@@ -43,7 +43,7 @@ const ActivateEmail = () => {
   useEffect(() => {
     fetchUserDetails(decodedUserEmail).then((data) => {
       if (data) {
-        console.log("1.Data",data)
+        
         setUsername(data.username);
         setEmail(data.email);
         setRole(data.role);

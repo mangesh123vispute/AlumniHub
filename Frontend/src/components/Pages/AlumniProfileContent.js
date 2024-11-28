@@ -23,7 +23,7 @@ const AlumniProfileContent = () => {
   useEffect(() => {
     setIsAllAdminPage(false);
   }, []);
-  console.log("userData", userData);
+
   
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -135,8 +135,7 @@ const handleCloseModal = () => {
     }
   };
   const handleCropComplete = async (croppedImageBlob) => {
-    console.log("Cropped Image Data:", croppedImageBlob);
-
+    
     // Create FormData and append the cropped image Blob
     const formData = new FormData();
      formData.append(
@@ -170,7 +169,7 @@ const handleCloseModal = () => {
       const data = await response.json();
 
       if (response.ok) {
-        console.log("Image uploaded successfully:", data.detail);
+        
         showNotification("Image uploaded successfully", "success", "Success");
         toggleimageRefresh();
         toggleReload();
@@ -414,7 +413,7 @@ setIsDropdownOpen(null);  // Open the modal
     localStorage.getItem("id") && localStorage.removeItem("id");
   }, [userData?.user_id, reload]);
 
-  console.log("user ", user);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -433,7 +432,7 @@ setIsDropdownOpen(null);  // Open the modal
           },
         }
       );
-      console.log("Profile updated successfully", response.data);
+      
 
       if (response.status === 200) {
         setLoading(false);
@@ -491,7 +490,7 @@ setIsDropdownOpen(null);  // Open the modal
 
   const fetchPosts = async (page) => {
     try {
-      console.log("page " + page);
+     
       const response = await axios.get(
         `${baseurl}/alumniPosts/author/${
           id || userData?.user_id
@@ -564,7 +563,7 @@ setIsDropdownOpen(null);  // Open the modal
   
     
 
-    console.log("post  ",selectedPost?.title ,selectedPost?.content ,selectedPost?.tag, selectedPost?.Image);
+ 
   
     if (!selectedPost?.title || !selectedPost?.content || !selectedPost?.tag ) {
       showNotification(
@@ -2200,7 +2199,7 @@ setIsDropdownOpen(null);  // Open the modal
                           className="form-horizontal"
                           onSubmit={handleGradSubmit}
                         >
-                          { console.log("alumniData::",alumniData)}
+                         
                           <p className="editheading" style={{ marginTop: "0" }}>
                             Update Graduation Details
                           </p>

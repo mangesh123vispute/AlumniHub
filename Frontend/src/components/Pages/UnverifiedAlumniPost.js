@@ -69,7 +69,7 @@ const UnverifiedAlumniPostContent = () => {
       } catch (error) {
         setLoading(false);
         console.error("Error verifying post:", error);
-        showNotification("Error verifying post", "success", "Success");
+       
         }
     };
     
@@ -98,7 +98,7 @@ const UnverifiedAlumniPostContent = () => {
     } catch (error) {
       console.error("Error rejecting post:", error);
       setLoading(false);
-      showNotification("Error rejecting post", "success", "Success");
+      
     }
   };
 
@@ -220,7 +220,7 @@ const UnverifiedAlumniPostContent = () => {
                   {" "}
                   {posts?.map((post, ind) => (
                     <div key={ind} className="post">
-                      {console.log(post)}
+                      
                       <div
                         className="user-block"
                         style={{

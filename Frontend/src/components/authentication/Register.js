@@ -173,7 +173,7 @@ const Register = () => {
      }
 
    } catch (error) {
-     console.error("1.Error:", error);
+     console.error("Error:", error);
      
        showNotification(
          error?.response?.data?.detail || "Something went wrong",
@@ -181,7 +181,6 @@ const Register = () => {
          "Error"
        );
     
-     console.error("Error adding alumni:", error);
      setLoading(false);
    }
  };

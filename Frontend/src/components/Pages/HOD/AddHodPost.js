@@ -100,7 +100,7 @@ const AddHodPostContent = () => {
       })
       .catch((error) => {
         console.error("Error during submission:", error);
-        console.log("err msg ",error.message);
+        
         showNotification(
           error.response.data.detail ||
           "Error submitting the post.",

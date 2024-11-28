@@ -34,7 +34,8 @@ const AllStudentsContent = () => {
   } = useContext(AuthContext);
   setFilter(true);
 
-  console.log("studentfilter", studentFilters);
+  
+  
   
   const handleViewProfile = (userData) => {
     setShowProfileOfId(true);

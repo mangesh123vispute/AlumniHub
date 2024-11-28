@@ -14,7 +14,7 @@ const StudentProfileContent = () => {
       setIsAllAdminPage,
       toggleimageRefresh,
     } = useContext(AuthContext);
-    console.log("userData", userData);
+    
    
     const id = localStorage.getItem("id");
     const [user, setUser] = useState(null);
@@ -29,7 +29,7 @@ const StudentProfileContent = () => {
     }, []);
   
    const handleCropComplete = async (croppedImageBlob) => {
-     console.log("Cropped Image Data:", croppedImageBlob);
+    
 
      // Create FormData and append the cropped image Blob
      const formData = new FormData();
@@ -64,7 +64,7 @@ const StudentProfileContent = () => {
        const data = await response.json();
 
        if (response.ok) {
-         console.log("Image uploaded successfully:", data.detail);
+        
          showNotification("Image uploaded successfully", "success", "Success");
          toggleimageRefresh();
          toggleReload();
@@ -158,7 +158,7 @@ const StudentProfileContent = () => {
       studentData.profile.Education,
       studentData.profile.current_year_of_study,
     ];
-    console.log(studentData.user.instagram);
+   
     // Check if the fields are not empty or equal to the default value (e.g., "N/A", 0)
     fieldsToCheck.forEach((field) => {
       if (
@@ -170,7 +170,7 @@ const StudentProfileContent = () => {
           field.trim() !== "/media/default/def.jpeg") ||
         (typeof field === "number" && field !== 0)
       ) {
-        console.log(field);
+       
         filledFields++;
       }
     });
@@ -251,7 +251,7 @@ const StudentProfileContent = () => {
        
     }, [userData?.user_id, reload]);
   
-    console.log("user ", user);
+   
   
   
       // Function to handle form submission

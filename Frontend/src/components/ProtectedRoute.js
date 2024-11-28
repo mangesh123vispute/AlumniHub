@@ -16,11 +16,10 @@ const ProtectedRoute = ({
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const location = useLocation();
 
-  console.log("userData1  ", userData);
   // Check authentication status asynchronously
   useEffect(() => {
     const checkAuthentication = async () => {
-      console.log("userData2", userData);
+      
       const token = localStorage.getItem("authTokens");
       if (!token) {
         await showNotification("Please login first", "warning", "Warning");

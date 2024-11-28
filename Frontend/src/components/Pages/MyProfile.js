@@ -39,7 +39,7 @@ const MyProfile = () => {
 
   
 localStorage.setItem('id',userData?.user_id);
-  console.log(" userData", userData);
+
   const getProfileContent = () => {
     if (userData.is_student) {
       return StudentProfileContent;

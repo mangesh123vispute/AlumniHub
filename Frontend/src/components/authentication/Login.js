@@ -52,7 +52,7 @@ const handleSubmit = async (e) => {
   }
 
   try {
-    console.log(formData);
+   
 
     const response = await fetch(`${baseurl}/login/`, {
       method: "POST",
@@ -85,8 +85,7 @@ const handleSubmit = async (e) => {
         navigate("/myprofile");
       }
     } else {
-      console.log("Login failed:", data);
-      // setMessage(data.detail || "Something went wrong.");
+      
      await showNotification(
         data.detail || "Something went wrong.",
         "warning",
