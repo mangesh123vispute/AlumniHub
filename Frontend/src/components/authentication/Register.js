@@ -495,11 +495,11 @@ const Register = () => {
                 </span>
                 <br></br>
                 <i style={{ fontSize: "12px", color: "red" }}>
-                  1. Submit at least one document for verification.
+                  1. submit linkedin profile for student verification.
                 </i>
                 <br></br>
                 <i style={{ fontSize: "12px", color: "red" }}>
-                  2. After registration, admin will verify your documents.
+                  2. After registration, admin will verify you as student of college.
                   You'll be notified by email and granted access to log in.
                 </i>
 
