@@ -1,13 +1,13 @@
 from django.shortcuts import  get_object_or_404
 from django.shortcuts import get_object_or_404
-from .models import User,AlumniPost,HodPrincipalPost,StudentProfile, AlumniProfile, HODPrincipalProfile 
+from .models import User,AlumniPost,HodPrincipalPost,StudentProfile, AlumniProfile, HODPrincipalProfile,Event,Job 
 from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from .serializers import HodPrincipalPostSerializer,UserAlumniSerializer,AlumniPostSerializer,UserHODSerializer,UserStudentSerializer
+from .serializers import HodPrincipalPostSerializer,UserAlumniSerializer,AlumniPostSerializer,UserHODSerializer,UserStudentSerializer,EventSerializer,JobSerializer
 from rest_framework.pagination import PageNumberPagination
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import DatabaseError
@@ -1098,3 +1098,11 @@ class UpdateAlumniProfileAPIView(APIView):
             return Response({'detail': 'User not found or is not an alumni'}, status=status.HTTP_404_NOT_FOUND)
         except AlumniProfile.DoesNotExist:
             return Response({'detail': 'Alumni profile not found'}, status=status.HTTP_404_NOT_FOUND)
+
+class EventListCreateView(generics.ListCreateAPIView):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+
+class JobListCreateView(generics.ListCreateAPIView):
+    queryset = Job.objects.all()
+    serializer_class = JobSerializer

@@ -45,7 +45,7 @@ const Footer = () => {
           </span>
         </strong>
 
-        <div
+        {/* <div
           className="float-right d-none d-sm-inline-block"
           style={{ color: "rgba(0, 255, 255, 0.7)", marginRight: "1rem" }}
         >
@@ -57,7 +57,7 @@ const Footer = () => {
             {" "}
             Version 1.0.0 | Mangesh Vispute
           </a>
-        </div>
+        </div> */}
       </footer>
       {/* Control Sidebar */}
       {filterClicked ? (
