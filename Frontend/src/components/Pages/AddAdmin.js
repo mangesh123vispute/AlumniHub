@@ -163,7 +163,7 @@ const AddAdmin = () => {
                     id={id}
                     value={formData[id]}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500  dark:text-white"
+                    className="w-full px-4 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 "
                     placeholder={`Enter ${label}`}
                     min={id.includes("password") ? 8 : undefined}
                     max={id.includes("password") ? 20 : undefined}
