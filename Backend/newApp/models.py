@@ -298,25 +298,5 @@ class Command(createsuperuser.Command):
             except self.UserModel.DoesNotExist:
                 raise CommandError("The user doesn't exist.")
 
-from django.db import models
 
-class Event(models.Model):
-    title = models.CharField(max_length=255)
-    date = models.DateField()
-    time = models.TimeField()
-    location = models.CharField(max_length=255)
-    mode = models.CharField(max_length=50, choices=[("Online", "Online"), ("In-Person", "In-Person"), ("Hybrid", "Hybrid")])
-    description = models.TextField()
-    category = models.CharField(max_length=100)
-    image = models.ImageField(upload_to="events/")
-    register_link = models.URLField(blank=True, null=True)
 
-class Job(models.Model):
-    title = models.CharField(max_length=255)
-    company = models.CharField(max_length=255)
-    location = models.CharField(max_length=255)
-    job_type = models.CharField(max_length=50, choices=[("Full-Time", "Full-Time"), ("Part-Time", "Part-Time"), ("Contract", "Contract"), ("Internship", "Internship")])
-    experience = models.CharField(max_length=50)
-    employment = models.CharField(max_length=50, choices=[("On-site", "On-site"), ("Remote", "Remote"), ("Hybrid", "Hybrid")])
-    description = models.TextField()
-    apply_link = models.URLField()

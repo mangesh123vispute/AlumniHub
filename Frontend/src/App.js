@@ -25,14 +25,9 @@ import GetActivationEmail from "./components/authentication/GetActivationEmail.j
 import ResetPassword from "./components/authentication/Reset_password.js";
 import ResetUsername from "./components/authentication/Reset_username.js";
 import MyProfile from "./components/Pages/MyProfile.js";
-import JobPortal from "./components/Pages/JobPortal.js";
-import EventPortal from "./components/Pages/Event.js";
-import DonationPage from "./components/Pages/Donation.js";
-import PostJobPage from "./components/Pages/PostJob.js";
-import PostEventPage from "./components/Pages/PostEvent.js";
 
 function App() {
-
+  
   return (
     <BrowserRouter>
       <AuthProvider>
@@ -95,15 +90,6 @@ function App() {
             element={<ProtectedRoute element={<AllPost />} />}
           />
 
-          <Route path="/JobPortal" element={<ProtectedRoute element={<JobPortal />} />} />
-
-          <Route path="/Event" element={<ProtectedRoute element={<EventPortal />} />} />
-
-          <Route path="/Donation" element={<ProtectedRoute element={<DonationPage/>} />} />
-
-          <Route path="/PostJob" element={<ProtectedRoute element={<PostJobPage/>} />} />
-          
-          <Route path="/PostEvent" element={<ProtectedRoute element={<PostEventPage/>} />} />
           {/* only admin  */}
 
           <Route
@@ -148,10 +134,8 @@ function App() {
 
           <Route
             path="/your_posts"
-            element={<ProtectedRoute element={<YourPosts />} notByStudent={true} />}
+            element={<ProtectedRoute element={<YourPosts  />} notByStudent={true} />}
           />
-
-
 
           <Route path="*" element={<Error />} />
         </Routes>

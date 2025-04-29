@@ -24,42 +24,42 @@ const AlumniProfileContent = () => {
     setIsAllAdminPage(false);
   }, []);
 
-
+  
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(1); 
   const [hasMore, setHasMore] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const id = localStorage.getItem('id');
-
+  
   const [reload, setReload] = useState(false);
 
   const [isImageOpen, setIsImageOpen] = useState(false);
 
   const [selectedPost, setSelectedPost] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [Image, setImage] = useState(null)
+  const [Image,setImage] = useState(null)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  
 
-
-  const toggleReload = () => {
-    setReload(!reload);
-  };
+ const toggleReload = () => {
+   setReload(!reload);
+ };
   const toggleDropdown = (postId) => {
-
+   
     setIsDropdownOpen(isDropdownOpen === postId ? null : postId);
-
+    
   };
 
 
-  const handleImageClick = () => {
-    setIsImageOpen(true);
-  };
+const handleImageClick = () => {
+  setIsImageOpen(true);
+};
 
-  const handleCloseModal = () => {
-    setIsImageOpen(false);
-  };
+const handleCloseModal = () => {
+  setIsImageOpen(false);
+};
 
   const handleGradSubmit = async (e) => {
     e.preventDefault();
@@ -86,42 +86,42 @@ const AlumniProfileContent = () => {
     }
     const gradYear = parseInt(alumniData?.user?.graduation_year);
     const gradMonth = parseInt(alumniData?.user?.graduation_month);
-
+    
     try {
       if (!isNaN(gradYear) && !isNaN(gradMonth)) {
-        const response = await axios.post(
-          `${baseurl}/update-alumni-profile/${id || userData?.user_id}/`,
-          { graduation_year: gradYear, graduation_month: gradMonth },
-          {
-            headers: {
-              Authorization: `Bearer ${token?.access}`,
-            },
-          }
-        );
+      const response = await axios.post(
+        `${baseurl}/update-alumni-profile/${id || userData?.user_id}/`,
+        {graduation_year: gradYear, graduation_month: gradMonth},
+        {
+          headers: {
+            Authorization: `Bearer ${token?.access}`,
+          },
+        }
+      );
 
-        if (response.status === 200) {
-          setLoading(false);
-          setReload(!reload);
+      if (response.status === 200) {
+        setLoading(false);
+        setReload(!reload);
 
-          // Check graduation year and month logic
-          if (
-            gradYear > currentYear ||
-            (gradYear === currentYear && gradMonth >= currentMonth)
-          ) {
-            showNotification(
-              "You are assigned with a Student profile.",
-              "success",
-              "Profile Updated to Student"
-            );
-            localStorage.removeItem("authTokens");
-          } else {
-            showNotification(
-              "You are assigned with the Alumni profile.",
-              "success",
-              "Profile Updated to Alumni"
-            );
-            localStorage.removeItem("authTokens");
-          }
+        // Check graduation year and month logic
+        if (
+          gradYear > currentYear ||
+          (gradYear === currentYear && gradMonth >= currentMonth)
+        ) {
+          showNotification(
+            "You are assigned with a Student profile.",
+            "success",
+            "Profile Updated to Student"
+          );
+          localStorage.removeItem("authTokens");
+        } else {
+          showNotification(
+            "You are assigned with the Alumni profile.",
+            "success",
+            "Profile Updated to Alumni"
+          );
+          localStorage.removeItem("authTokens");
+        }
         }
       }
     } catch (error) {
@@ -135,14 +135,14 @@ const AlumniProfileContent = () => {
     }
   };
   const handleCropComplete = async (croppedImageBlob) => {
-
+    
     // Create FormData and append the cropped image Blob
     const formData = new FormData();
-    formData.append(
-      "Image",
-      croppedImageBlob,
-      `${user.username}_${Date.now()}.jpg`
-    );
+     formData.append(
+       "Image",
+       croppedImageBlob,
+       `${user.username}_${Date.now()}.jpg`
+     );
 
     // Retrieve the token from local storage
     const token = localStorage.getItem("authTokens")
@@ -169,7 +169,7 @@ const AlumniProfileContent = () => {
       const data = await response.json();
 
       if (response.ok) {
-
+        
         showNotification("Image uploaded successfully", "success", "Success");
         toggleimageRefresh();
         toggleReload();
@@ -191,15 +191,15 @@ const AlumniProfileContent = () => {
       // Stop loading state
       setLoading(false);
     }
-  };
+  }; 
+  
+const handleEditClick = (post) => {
+setSelectedPost(post);
+setIsEditModalOpen(true);
+setIsDropdownOpen(null);  // Open the modal
+};
 
-  const handleEditClick = (post) => {
-    setSelectedPost(post);
-    setIsEditModalOpen(true);
-    setIsDropdownOpen(null);  // Open the modal
-  };
-
-
+ 
 
   const [alumniData, setAlumniData] = useState({
     user: {
@@ -329,7 +329,8 @@ const AlumniProfileContent = () => {
 
     axios
       .get(
-        `${baseurl}/getalumni/${id || userData?.user_id
+        `${baseurl}/getalumni/${
+           id || userData?.user_id
         }`,
         {
           headers: {
@@ -431,7 +432,7 @@ const AlumniProfileContent = () => {
           },
         }
       );
-
+      
 
       if (response.status === 200) {
         setLoading(false);
@@ -489,9 +490,10 @@ const AlumniProfileContent = () => {
 
   const fetchPosts = async (page) => {
     try {
-
+     
       const response = await axios.get(
-        `${baseurl}/alumniPosts/author/${id || userData?.user_id
+        `${baseurl}/alumniPosts/author/${
+          id || userData?.user_id
         }/?page=${page}&page_size=10`
       );
       setPosts(response.data.results); // Set fetched posts
@@ -544,26 +546,26 @@ const AlumniProfileContent = () => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-
+  
 
   useEffect(() => {
     fetchPosts(page); // Fetch the first page of posts when the component mounts
   }, [page]);
 
-
+  
 
   const handleUpdateSubmit = async (e) => {
     e.preventDefault();
     const accessToken = localStorage.getItem("authTokens")
-      ? JSON.parse(localStorage.getItem("authTokens")).access
-      : null;
+? JSON.parse(localStorage.getItem("authTokens")).access
+: null;
     setLoading(true);
+  
+    
 
-
-
-
-
-    if (!selectedPost?.title || !selectedPost?.content || !selectedPost?.tag) {
+ 
+  
+    if (!selectedPost?.title || !selectedPost?.content || !selectedPost?.tag ) {
       showNotification(
         "Please fill in all fields !",
         "warning",
@@ -572,16 +574,16 @@ const AlumniProfileContent = () => {
       setLoading(false);
       return;
     }
-
+  
     // Create FormData object for updating
     const formData = new FormData();
     formData.append("title", selectedPost?.title);
     formData.append("content", selectedPost?.content);
     formData.append("tag", selectedPost?.tag);
-    if (Image !== null)
-      formData.append("Image", Image); // Assuming `Image` is the updated file object
+      if(Image !== null)
+    formData.append("Image", Image); // Assuming `Image` is the updated file object
     formData.append("DocUrl", selectedPost?.DocUrl);
-
+  
     await axios
       .put(`${baseurl}/alumni/posts/${selectedPost?.id}/`, formData, {
         headers: {
@@ -590,22 +592,22 @@ const AlumniProfileContent = () => {
         },
       })
       .then((response) => {
-
-
+        
+        
         setSelectedPost(null)
-
-
+        
+        
         showNotification(
           "Post updated successfully.",
           "success",
           "Update successful"
         );
-
+  
         // Close modal and reset loading
-
+        
         setIsEditModalOpen(false);
         setLoading(false);
-
+       
       })
       .catch((error) => {
         console.error("Error during update:", error);
@@ -618,47 +620,47 @@ const AlumniProfileContent = () => {
         setSelectedPost(null)
         setLoading(false);
       });
-    window.location.reload()
-  };
+      window.location.reload()
+    };
 
-  const handleDeleteClick = async (post) => {
-    if (!window.confirm('Are You Sure want to Delete Post')) return;
+    const handleDeleteClick = async (post)=>{
+      if(!window.confirm('Are You Sure want to Delete Post'))return;
 
-    const accessToken = localStorage.getItem("authTokens")
+      const accessToken = localStorage.getItem("authTokens")
       ? JSON.parse(localStorage.getItem("authTokens")).access
       : null;
-    setLoading(true);
+          setLoading(true);
+       
+          try {
+           await axios.delete(`${baseurl}/alumni/posts/${post?.id}/`,{
+             headers: {
+               Authorization: `Bearer ${accessToken}`,
+              
+             },
+           })
 
-    try {
-      await axios.delete(`${baseurl}/alumni/posts/${post?.id}/`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
+           showNotification(
+             "Post Deleted successfully.",
+             "success",
+             "Delete successful"
+           );
 
-        },
-      })
+           fetchPosts()
 
-      showNotification(
-        "Post Deleted successfully.",
-        "success",
-        "Delete successful"
-      );
+          } catch (error) {
+           console.error("Error during Delete:", error);
+           showNotification(
+             error.response?.data?.detail || "Error Deleting the post.",
+             "warning",
+             "Delete failed"
+           );
+          }
+     
 
-      fetchPosts()
-
-    } catch (error) {
-      console.error("Error during Delete:", error);
-      showNotification(
-        error.response?.data?.detail || "Error Deleting the post.",
-        "warning",
-        "Delete failed"
-      );
-    }
-
-
-    setLoading(false);
-    setIsDropdownOpen(null);
-    window.location.reload()
-  }
+     setLoading(false);
+     setIsDropdownOpen(null);
+     window.location.reload()
+   }
 
 
 
@@ -673,8 +675,8 @@ const AlumniProfileContent = () => {
         <section className="content">
           <div className="container-fluid">
             <div className="row">
-              {/* {userData?.user_id === user?.id && (
-                <div className="col-12 mb-3 text-black">
+              {userData?.user_id === user?.id && (
+                <div className="col-12 mb-3">
                   <div>Profile Completed : {profileCompletion}%</div>
                   <div className="progress progress-sm active">
                     <div
@@ -687,7 +689,7 @@ const AlumniProfileContent = () => {
                     ></div>
                   </div>
                 </div>
-              )} */}
+              )}
               <div className="col-md-3 " style={{ fontSize: "0.9em" }}>
                 {/* Profile Image */}
                 <div className="card card-primary card-outline position-relative">
@@ -698,8 +700,8 @@ const AlumniProfileContent = () => {
                         ? user?.is_alumni
                           ? "Alumni"
                           : user?.is_student
-                            ? "Student"
-                            : "Admin"
+                          ? "Student"
+                          : "Admin"
                         : "User"}
                     </div>
                   </div>
@@ -849,7 +851,7 @@ const AlumniProfileContent = () => {
 
                 {/* About Box */}
                 <div className="card card-primary">
-                  <div className="card-header bg-gradient-to-br from-purple-300 to-purple-600 ">
+                  <div className="card-header">
                     <h3 className="card-title">About</h3>
                   </div>
                   {/* /.card-header */}
@@ -1195,7 +1197,7 @@ const AlumniProfileContent = () => {
                                               }
                                             />
                                           </div>
-                                          <div className="form-group">
+                                           <div className="form-group">
                                             <label>Tag</label>
                                             <input
                                               type="text"
@@ -1224,6 +1226,106 @@ const AlumniProfileContent = () => {
                                               }
                                             />
                                           </div>
+                                         
+                                          {/* <div className="form-group">
+                                            <label>Previous Image</label>
+                                            <div className="col-auto">
+                                              <a
+                                                href="#"
+                                                onClick={(e) => {
+                                                  e.preventDefault();
+                                                  handleImageClick();
+                                                }}
+                                                className="mr-3"
+                                              >
+                                                <i className="fas fa-image mr-1" />{" "}
+                                                Image
+                                              </a>
+
+                                              {isImageOpen && (
+                                                <div
+                                                  style={{
+                                                    position: "fixed",
+                                                    top: 0,
+                                                    left: 0,
+                                                    width: "100%",
+                                                    height: "100%",
+                                                    backgroundColor:
+                                                      "tranparent",
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                    alignItems: "center",
+                                                    zIndex: 1050,
+                                                  }}
+                                                  onClick={handleCloseModal}
+                                                >
+                                                  <div
+                                                    style={{
+                                                      position: "relative",
+                                                      maxWidth: "100%",
+                                                      maxHeight: "100%",
+                                                      display: "flex",
+                                                      justifyContent: "center",
+                                                      alignItems: "center",
+                                                    }}
+                                                  >
+                                                    <img
+                                                      src={selectedPost?.Image}
+                                                      alt="Post"
+                                                      style={{
+                                                        // maxWidth: "100%",
+                                                        // maxHeight: "100%",
+                                                        width: "100%",
+                                                        height: "auto",
+                                                        borderRadius: "5px",
+                                                        boxShadow:
+                                                          "0 4px 12px rgba(0, 0, 0, 0.3)",
+                                                      }}
+                                                    />
+                                                    <span
+                                                      style={{
+                                                        position: "absolute",
+                                                        top: "10px",
+                                                        right: "10px",
+                                                        fontSize: "1.5em",
+                                                        color: "#fff",
+                                                        cursor: "pointer",
+                                                      }}
+                                                      onClick={handleCloseModal}
+                                                    >
+                                                      &times;
+                                                    </span>
+                                                  </div>
+                                                </div>
+                                              )}
+                                            </div>
+                                          </div>
+                                          <div className="form-group">
+                                            <label>Image Upload </label>
+                                            <div className="input-group">
+                                              <input
+                                                type="file"
+                                                className="form-control"
+                                                onChange={(e) =>
+                                                  setImage(e.target.files[0])
+                                                }
+                                              />
+                                            </div>
+                                          </div>
+                                          <div className="form-group">
+                                            <label>Document URL</label>
+                                            <input
+                                              type="url"
+                                              className="form-control"
+                                              value={selectedPost?.DocUrl || ""}
+                                              onChange={(e) =>
+                                                setSelectedPost({
+                                                  ...selectedPost,
+                                                  DocUrl: e.target.value,
+                                                })
+                                              }
+                                            />
+                                          </div> */}
                                         </div>
                                         <div className="modal-footer">
                                           <button
@@ -1261,7 +1363,7 @@ const AlumniProfileContent = () => {
                                 >
                                   {post?.content || "Content"}
                                 </p>
-
+                               
                               </div>
                             ))}
                           </>
@@ -1273,14 +1375,16 @@ const AlumniProfileContent = () => {
                             <ul className="pagination justify-content-center m-0">
                               {/* Previous button */}
                               <li
-                                className={`page-item ${page === 1 ? "disabled" : ""
-                                  }`}
+                                className={`page-item ${
+                                  page === 1 ? "disabled" : ""
+                                }`}
                               >
                                 <button
-                                  className={`page-link ${page === 1
+                                  className={`page-link ${
+                                    page === 1
                                       ? "opacity-50 cursor-not-allowed"
                                       : ""
-                                    }`}
+                                  }`}
                                   onClick={() => setPage(page - 1)}
                                   disabled={page === 1}
                                 >
@@ -1300,14 +1404,16 @@ const AlumniProfileContent = () => {
 
                               {/* Next button */}
                               <li
-                                className={`page-item ${page === totalPages ? "disabled" : ""
-                                  }`}
+                                className={`page-item ${
+                                  page === totalPages ? "disabled" : ""
+                                }`}
                               >
                                 <button
-                                  className={`page-link ${page === totalPages
+                                  className={`page-link ${
+                                    page === totalPages
                                       ? "opacity-50 cursor-not-allowed"
                                       : ""
-                                    }`}
+                                  }`}
                                   onClick={() => setPage(page + 1)}
                                   disabled={page === totalPages}
                                 >
@@ -1328,8 +1434,7 @@ const AlumniProfileContent = () => {
                           {/* timeline time label */}
                           {/* timeline time label */}
                           <div className="time-label">
-                          <span className="bg-gradient-to-br from-purple-300 to-purple-200">
-                          Contact Details</span>
+                            <span className="bg-danger">Contact Details</span>
                           </div>
                           {/* / Contact-label */}
                           {/* Contact Details Item */}
@@ -1349,20 +1454,20 @@ const AlumniProfileContent = () => {
 
                                 <strong>LinkedIn:</strong>
                                 <p className="text-muted font">
-                                  {user?.linkedin !== 'N/A' ? (
-                                    <a
-                                      href={
-                                        user?.linkedin?.startsWith("http")
-                                          ? user.linkedin
-                                          : user?.linkedin
-                                            ? `https://${user.linkedin}`
-                                            : "#"
-                                      }
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      {user?.linkedin}
-                                    </a>
+                                  {user?.linkedin !=='N/A'? (
+                                   <a
+  href={
+    user?.linkedin?.startsWith("http")
+      ? user.linkedin
+      : user?.linkedin
+      ? `https://${user.linkedin}`
+      : "#"
+  }
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  {user?.linkedin}
+</a>
 
                                   ) : (
                                     "N/A"
@@ -1371,20 +1476,20 @@ const AlumniProfileContent = () => {
 
                                 <strong>GitHub:</strong>
                                 <p className="text-muted font">
-                                  {user?.Github !== 'N/A' ? (
+                                  {user?.Github!== 'N/A' ? (
                                     <a
-                                      href={
-                                        user?.Github?.startsWith("http")
-                                          ? user.Github
-                                          : user?.Github
-                                            ? `https://${user.Github}`
-                                            : "#"
-                                      }
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      {user?.Github}
-                                    </a>
+  href={
+    user?.Github?.startsWith("http")
+      ? user.Github
+      : user?.Github
+      ? `https://${user.Github}`
+      : "#"
+  }
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  {user?.Github}
+</a>
 
                                   ) : (
                                     "N/A"
@@ -1393,20 +1498,20 @@ const AlumniProfileContent = () => {
 
                                 <strong>Instagram:</strong>
                                 <p className="text-muted font">
-                                  {user?.instagram !== 'N/A' ? (
+                                  {user?.instagram !== 'N/A'? (
                                     <a
-                                      href={
-                                        user?.instagram?.startsWith("http")
-                                          ? user.instagram
-                                          : user?.instagram
-                                            ? `https://${user.instagram}`
-                                            : "#"
-                                      }
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      {user?.instagram}
-                                    </a>
+  href={
+    user?.instagram?.startsWith("http")
+      ? user.instagram
+      : user?.instagram
+      ? `https://${user.instagram}`
+      : "#"
+  }
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  {user?.instagram }
+</a>
 
                                   ) : (
                                     "N/A"
@@ -1423,16 +1528,16 @@ const AlumniProfileContent = () => {
                                 <p className="text-muted font">
                                   {user?.alumni_profile.preferred_contact_method
                                     ? capitalizeFirstLetter(
-                                      user.alumni_profile
-                                        .preferred_contact_method
-                                    )
+                                        user.alumni_profile
+                                          .preferred_contact_method
+                                      )
                                     : "N/A"}
                                 </p>
                               </div>
                             </div>
                           </div>
                           <div className="time-label">
-                            <span className="bg-gradient-to-br from-purple-300 to-purple-200">
+                            <span className="bg-danger">
                               Portfolio & Resume
                             </span>
                           </div>
@@ -1442,20 +1547,20 @@ const AlumniProfileContent = () => {
                               <div className="timeline-body">
                                 <strong>Portfolio:</strong>
                                 <p className="text-muted font">
-                                  {user?.portfolio_link !== 'N/A' ? (
+                                  {user?.portfolio_link !=='N/A'? (
                                     <a
-                                      href={
-                                        user?.portfolio_link?.startsWith("http")
-                                          ? user.portfolio_link
-                                          : user?.portfolio_link
-                                            ? `https://${user.portfolio_link}`
-                                            : "#"
-                                      }
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      {user?.portfolio_link}
-                                    </a>
+  href={
+    user?.portfolio_link?.startsWith("http")
+      ? user.portfolio_link
+      : user?.portfolio_link
+      ? `https://${user.portfolio_link}`
+      : "#"
+  }
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  {user?.portfolio_link }
+</a>
 
                                   ) : (
                                     "N/A"
@@ -1464,20 +1569,20 @@ const AlumniProfileContent = () => {
 
                                 <strong>Resume:</strong>
                                 <p className="text-muted font">
-                                  {user?.resume_link !== 'N/A' ? (
-                                    <a
-                                      href={
-                                        user?.resume_link?.startsWith("http")
-                                          ? user.resume_link
-                                          : user?.resume_link
-                                            ? `https://${user.resume_link}`
-                                            : "#"
-                                      }
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      {user?.resume_link}
-                                    </a>
+                                  {user?.resume_link !== 'N/A'? (
+                                   <a
+  href={
+    user?.resume_link?.startsWith("http")
+      ? user.resume_link
+      : user?.resume_link
+      ? `https://${user.resume_link}`
+      : "#"
+  }
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  {user?.resume_link }
+</a>
 
                                   ) : (
                                     "N/A"
@@ -1627,7 +1732,25 @@ const AlumniProfileContent = () => {
                               />
                             </div>
                           </div>
-
+                          {/* <div className="form-group row">
+                              <label
+                                htmlFor="inputLinkedIn"
+                                className="col-sm-2 col-form-label"
+                              >
+                                Graduation Year
+                              </label>
+                              <div className="col-sm-10">
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  id="graduation_year"
+                                  name="graduation_year"
+                                  value={alumniData?.user?.graduation_year}
+                                  onChange={handleUserChange}
+                                  placeholder="Graduation Year "
+                                />
+                              </div>
+                            </div> */}
                           <hr
                             style={{
                               border: "1px solid black",
@@ -2076,7 +2199,7 @@ const AlumniProfileContent = () => {
                           className="form-horizontal"
                           onSubmit={handleGradSubmit}
                         >
-
+                         
                           <p className="editheading" style={{ marginTop: "0" }}>
                             Update Graduation Details
                           </p>
@@ -2098,7 +2221,7 @@ const AlumniProfileContent = () => {
                             }}
                           ></hr>
                           <div className="form-group row">
-
+                           
                             <label
                               htmlFor="inputFullName"
                               className="col-sm-2 col-form-label"

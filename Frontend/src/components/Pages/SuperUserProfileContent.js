@@ -496,7 +496,7 @@ const SuperUserProfileContent = () => {
         <section className="content">
           <div className="container-fluid">
             <div className="row">
-              {/* {userData?.user_id === user?.id && (
+              {userData?.user_id === user?.id && (
                 <div className="col-12 mb-3">
                   <div>
                     Profile Completed : {calculateAdminProfileCompletion()}%
@@ -512,7 +512,7 @@ const SuperUserProfileContent = () => {
                     ></div>
                   </div>
                 </div>
-              )} */}
+              )}
               <div className="col-md-3" style={{ fontSize: "0.9em" }}>
                 {/* Profile Image */}
                 <div className="card card-primary card-outline position-relative">

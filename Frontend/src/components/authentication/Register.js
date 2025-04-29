@@ -2,13 +2,13 @@
 import React, { useState, useContext } from "react";
 import AuthContext from "../../context/AuthContext.js";
 import LoadingSpinner from "../Loading/Loading.js";
-import { useNavigate, Link } from "react-router-dom";
-import Notification from "../Notification/Notification.js";
+import { useNavigate } from "react-router-dom";
+import Notification from "../Notification/Notification.js"
 import baseurl from "../const.js";
-
+import { Link } from "react-router-dom";
 const Register = () => {
   const navigate = useNavigate();
-  const {
+  let {
     isOpen,
     message,
     icon,
@@ -17,25 +17,35 @@ const Register = () => {
     handleClose,
     setFilter
   } = useContext(AuthContext);
-
-  setFilter(false);
-
+ setFilter(false);
   const [Loading, setLoading] = useState(false);
+  // const [selectedDocument, setSelectedDocument] = useState("");
+
+  // const handleDocumentSelect = (e) => {
+  //   setSelectedDocument(e.target.value);
+  //   setFormData({ ...formData, document_type: e.target.value });
+  // };
+  // const handleFileChange = (e) => {
+  //   setFormData({ ...formData, document_file: e.target.files[0] });
+  // };
   const [formData, setFormData] = useState({
-    full_name: "",
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    graduation_year: "",
-    graduation_month: "",
-    linkedin: "",
-  });
+     full_name: "",
+     username: "",
+     email: "",
+     password: "",
+     confirmPassword: "",
+     graduation_year: "",
+     graduation_month: "",
+     linkedin: "",
+    //  document_type: "",
+    //  document_file: null,
+   });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+ 
   const validateForm = () => {
     const {
       full_name,
@@ -46,6 +56,8 @@ const Register = () => {
       graduation_year,
       graduation_month,
       linkedin,
+      // document_type,
+      // document_file,
     } = formData;
 
     if (
@@ -57,6 +69,8 @@ const Register = () => {
       !graduation_year ||
       !graduation_month ||
       !linkedin
+      // !document_type ||
+      // !document_file
     ) {
       showNotification("All fields are required!", "warning", "Warning");
       return false;
@@ -75,17 +89,16 @@ const Register = () => {
       );
       return false;
     }
-
-    const linkedinPattern =
-      /^https:\/\/(www\.)?linkedin\.com\/[a-zA-Z0-9\/._-]+\/?$/;
-    if (!linkedinPattern.test(linkedin)) {
-      showNotification(
-        "Please enter a valid LinkedIn Profile",
-        "warning",
-        "Warning"
-      );
-      return false;
-    }
+   const linkedinPattern =
+     /^https:\/\/(www\.)?linkedin\.com\/[a-zA-Z0-9\/._-]+\/?$/;
+   if (!linkedinPattern.test(linkedin)) {
+     showNotification(
+       "Please enter a valid LinkedIn Profile",
+       "warning",
+       "Warning"
+     );
+     return false;
+   }
 
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth() + 1;
@@ -106,67 +119,72 @@ const Register = () => {
     return true;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
 
-    if (!validateForm()) {
-      setLoading(false);
-      return;
-    }
+ const handleSubmit = async (e) => {
+   e.preventDefault();
+   setLoading(true);
 
-    const formDataToSend = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
-      if (value) {
-        formDataToSend.append(key, value);
-      }
-    });
+   if (!validateForm()) {
+     setLoading(false);
+     return;
+   }
 
-    try {
-      const response = await fetch(`${baseurl}/register-alumni/`, {
-        method: "POST",
-        body: formDataToSend,
-      });
+   const formDataToSend = new FormData();
+   Object.entries(formData).forEach(([key, value]) => {
+     if (value) {
+       formDataToSend.append(key, value);
+     }
+   });
 
-      const data = await response.json();
-      setLoading(false);
+   try {
+     const response = await fetch(`${baseurl}/register-alumni/`, {
+       method: "POST",
+       body: formDataToSend,
+     });
 
-      if (response.ok && response.status === 201) {
-        await showNotification(
-          data?.detail || "Registration successful!",
-          "success",
-          "Success"
-        );
-      } else {
-        let errorMessage = "";
-        for (const key in data) {
-          if (Array.isArray(data[key]) && data[key].length > 0) {
-            errorMessage += `${key.charAt(0).toUpperCase() + key.slice(1)}: ${
-              data[key][0]
-            }\n`;
-          } else if (typeof data[key] === "string") {
-            errorMessage += `${key.charAt(0).toUpperCase() + key.slice(1)}: ${
-              data[key]
-            }\n`;
-          }
-        }
+     const data = await response.json();
+     setLoading(false);
 
-        if (!errorMessage) {
-          errorMessage = "Something went wrong.";
-        }
+     if (response.ok && response.status === 201) {
+       await showNotification(
+         data?.detail || "Registration successful!",
+         "success",
+         "Success"
+       );
+     } else {
+       let errorMessage = "";
+       for (const key in data) {
+         if (Array.isArray(data[key]) && data[key].length > 0) {
+           errorMessage += `${key.charAt(0).toUpperCase() + key.slice(1)}: ${
+             data[key][0]
+           }\n`;
+         } else if (typeof data[key] === "string") {
+           errorMessage += `${key.charAt(0).toUpperCase() + key.slice(1)}: ${
+             data[key]
+           }\n`;
+         }
+       }
 
-        await showNotification(errorMessage.trim(), "error", "Error");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      showNotification(
-        error?.response?.data?.detail || "Something went wrong",
-        "error",
-        "Error"
-      );
-      setLoading(false);
-    }
-  };
+       if (!errorMessage) {
+         errorMessage = "Something went wrong.";
+       }
+
+       await showNotification(errorMessage.trim(), "error", "Error");
+     }
+
+   } catch (error) {
+     console.error("Error:", error);
+     
+       showNotification(
+         error?.response?.data?.detail || "Something went wrong",
+         "error",
+         "Error"
+       );
+    
+     setLoading(false);
+   }
+ };
+
 
   return (
     <>
@@ -178,129 +196,349 @@ const Register = () => {
         icon={icon}
         title={title}
       />
-
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-100 to-white py-12 px-4 sm:px-6 lg:px-8">
-        <div className="w-full max-w-3xl bg-white bg-opacity-90 backdrop-blur-md shadow-2xl rounded-2xl p-8 animate-fade-in">
-          <div className="text-center mb-6">
-            <Link to="/" className="text-3xl font-bold text-purple-600">
-              AlumniX | <span className="text-gray-700">SSBT COET</span>
+      <div className="hold-transition register-page">
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>AlumniHub | Registration Page</title>
+        {/* Google Font: Source Sans Pro */}
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
+        />
+        {/* Font Awesome */}
+        <link
+          rel="stylesheet"
+          href="../../plugins/fontawesome-free/css/all.min.css"
+        />
+        {/* icheck bootstrap */}
+        <link
+          rel="stylesheet"
+          href="../../plugins/icheck-bootstrap/icheck-bootstrap.min.css"
+        />
+        {/* Theme style */}
+        <link rel="stylesheet" href="../../dist/css/adminlte.min.css" />
+        <div className="register-box">
+          <div className="register-logo">
+            <Link to="/" style={{ color: "#007bff" }}>
+              <b>
+                AlumniHub |
+                <span
+                  style={{
+                    fontSize: "25px",
+                    marginLeft: "5px",
+                  }}
+                >
+                  SSBT COET
+                </span>
+              </b>
             </Link>
-            <p className="mt-2 text-sm text-gray-600">
-              Register as an <b>Alumni</b>
-            </p>
           </div>
+          <div className="card">
+            <div className="card-body register-card-body">
+              <p className="login-box-msg" style={{ marginBottom: "0px" }}>
+                {" "}
+                Register as a <b>Alumni</b>
+              </p>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Basic Info */}
-            <div>
-              <h3 className="text-lg font-semibold text-purple-600 mb-2">
-                Basic Information
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <InputField
-                  icon="fas fa-user"
-                  placeholder="Full Name"
-                  name="full_name"
-                  value={formData.full_name}
-                  onChange={handleChange}
-                />
-                <InputField
-                  icon="fas fa-user"
-                  placeholder="Username"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleChange}
-                />
-                <InputField
-                  icon="fas fa-envelope"
-                  placeholder="Email"
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-                <InputField
-                  icon="fas fa-calendar-alt"
-                  placeholder="Graduation Month (1-12)"
-                  type="number"
-                  name="graduation_month"
-                  min="1"
-                  max="12"
-                  value={formData.graduation_month}
-                  onChange={handleChange}
-                />
-                <InputField
-                  icon="fas fa-calendar"
-                  placeholder="Graduation Year"
-                  type="number"
-                  name="graduation_year"
-                  min="1983"
-                  max="2100"
-                  value={formData.graduation_year}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-
-            {/* Credentials */}
-            <div>
-              <h3 className="text-lg font-semibold text-purple-600 mb-2">
-                Credentials
-              </h3>
-              <InputField
-                icon="fab fa-linkedin"
-                placeholder="LinkedIn Profile URL"
-                name="linkedin"
-                value={formData.linkedin}
-                onChange={handleChange}
+              <hr
+                style={{
+                  border: "1px solid #d2d6df",
+                  marginBottom: "20px",
+                  marginTop: "0px",
+                }}
               />
-            </div>
+              <div
+                style={{
+                  height: "50vh",
+                  overflowY: "auto",
+                  overflowX: "hidden",
+                }}
+              >
+                <form onSubmit={handleSubmit} style={{ padding: "10px" }}>
+                  {/* Basic Information Section */}
+                  <h5
+                    style={{
+                      color: "#007bff",
+                      fontWeight: "bold",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    Basic Information
+                  </h5>
+                  <div className="input-group mb-3">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Full Name"
+                      name="full_name"
+                      value={formData.full_name}
+                      onChange={handleChange}
+                      required
+                    />
+                    <div className="input-group-append">
+                      <div className="input-group-text">
+                        <span className="fas fa-user" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="input-group mb-3">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Username"
+                      name="username"
+                      value={formData.username}
+                      onChange={handleChange}
+                      required
+                    />
+                    <div className="input-group-append">
+                      <div className="input-group-text">
+                        <span className="fas fa-user" />
+                      </div>
+                    </div>
+                  </div>
 
-            {/* Passwords */}
-            <div>
-              <h3 className="text-lg font-semibold text-purple-600 mb-2">
-                Security
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <InputField
-                  icon="fas fa-lock"
-                  placeholder="Password"
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
+                  <div className="input-group mb-3">
+                    <input
+                      type="email"
+                      className="form-control"
+                      placeholder="Email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                    />
+                    <div className="input-group-append">
+                      <div className="input-group-text">
+                        <span className="fas fa-envelope" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="form-row mb-3">
+                    <div className="col-6">
+                      <div className="input-group">
+                        <input
+                          type="number"
+                          className="form-control"
+                          placeholder="Grad Mth."
+                          name="graduation_month"
+                          value={formData.graduation_month}
+                          onChange={handleChange}
+                          min="1"
+                          max="12"
+                          required
+                        />
+                        <div className="input-group-append">
+                          <div
+                            className="input-group-text"
+                            style={{ padding: "0px 5px" }}
+                          >
+                            <span className="fas fa-calendar-alt" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="col-6">
+                      <div className="input-group">
+                        <input
+                          type="number"
+                          className="form-control"
+                          placeholder="Grad Yr."
+                          name="graduation_year"
+                          value={formData.graduation_year}
+                          onChange={handleChange}
+                          min="1983"
+                          max="2100"
+                          required
+                        />
+                        <div className="input-group-append">
+                          <div className="input-group-text">
+                            <span className="fas fa-calendar" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Credentials & Security Section */}
+                  <hr
+                    style={{
+                      border: "1px solid #d2d6df",
+                      marginTop: "20px",
+                      marginBottom: "20px",
+                    }}
+                  />
+                  <h5
+                    style={{
+                      color: "#007bff",
+                      fontWeight: "bold",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    Credentials
+                  </h5>
+                  <div className="input-group mb-3">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="LinkedIn profile link"
+                      name="linkedin"
+                      value={formData.linkedin}
+                      onChange={handleChange}
+                      required
+                    />
+                    <div className="input-group-append">
+                      <div className="input-group-text">
+                        <span className="fab fa-linkedin" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* <div className="form-group">
+                    <select
+                      onChange={handleDocumentSelect}
+                      className="form-control select2"
+                      style={{ width: "100%" }}
+                    >
+                      <option value="">Select a Document</option>
+                      <option value="lc">Leaving Certificate (LC)</option>
+                      <option value="id_card">ID Card</option>
+                      <option value="fourth_year_marksheet">
+                        Fourth Year Marksheet
+                      </option>
+                      <option value="graduation_certificate">
+                        Graduation Certificate
+                      </option>
+                    </select>
+                  </div> */}
+
+                  {/* {selectedDocument && (
+                    <div className="form-group">
+                      <span>
+                        Select Document: <b>{selectedDocument}</b>
+                      </span>
+                      <input
+                        type="file"
+                        className="form-control"
+                        name="document_file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        required
+                      />
+                    </div>
+                  )} */}
+                  <hr
+                    style={{
+                      border: "1px solid #d2d6df",
+                      marginTop: "20px",
+                      marginBottom: "20px",
+                    }}
+                  />
+                  <div className="input-group mb-3">
+                    <input
+                      type="password"
+                      className="form-control"
+                      placeholder="Password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                    />
+                    <div className="input-group-append">
+                      <div className="input-group-text">
+                        <span className="fas fa-lock" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="input-group mb-3">
+                    <input
+                      type="password"
+                      className="form-control"
+                      placeholder="Confirm Password"
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      required
+                    />
+                    <div className="input-group-append">
+                      <div className="input-group-text">
+                        <span className="fas fa-lock" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Submit Button */}
+                  <div className="row">
+                    <div className="col-12">
+                      <button
+                        type="submit"
+                        className="btn btn-primary btn-block"
+                      >
+                        Register
+                      </button>
+                    </div>
+                  </div>
+                </form>
+
+                <hr
+                  style={{
+                    border: "1px solid #d2d6df",
+                    marginTop: "20px",
+                    marginBottom: "20px",
+                  }}
                 />
-                <InputField
-                  icon="fas fa-lock"
-                  placeholder="Confirm Password"
-                  type="password"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                />
+                <span>
+                  <i style={{ fontSize: "15px", color: "red" }}>Note:</i>
+                </span>
+                <br></br>
+                <i style={{ fontSize: "12px", color: "red" }}>
+                  1. submit linkedin profile for student verification.
+                </i>
+                <br></br>
+                <i style={{ fontSize: "12px", color: "red" }}>
+                  2. After registration, admin will verify you as student of college.
+                  You'll be notified by email and granted access to log in.
+                </i>
+
+                <br />
+                <i style={{ fontSize: "12px", color: "red" }}>
+                  3.SSBT COET students: Contact your class teacher or HOD to
+                  register; they will complete the registration for you.
+                </i>
+              </div>
+              <hr
+                style={{
+                  border: "1px solid #d2d6df",
+                  marginTop: "10px",
+                  marginBottom: "10px",
+                }}
+              />
+
+              <div className="row">
+                <div className="col-4">
+                  <Link to="/" style={{ color: "#007bff" }}>
+                    <i className="fas fa-home"></i> Home
+                  </Link>
+                </div>
+                <div className="col-4">
+                  <Link
+                    to="/send_activation_Email"
+                    style={{ color: "#007bff" }}
+                  >
+                    <i className="fas fa-check-circle"></i> Activate
+                  </Link>
+                </div>
+
+                <div className="col-3">
+                  <Link to="/login" style={{ color: "#007bff" }}>
+                    <i className="fas fa-sign-in-alt"></i> Login
+                  </Link>
+                </div>
               </div>
             </div>
-
-            {/* Button */}
-            <button
-              type="submit"
-              className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-purple-700 transition duration-300 ease-in-out transform hover:-translate-y-0.5"
-            >
-              Register
-            </button>
-          </form>
-
-          {/* Navigation */}
-          <div className="mt-6 flex justify-around text-purple-600 text-sm">
-            <Link to="/" className="hover:underline">
-              <i className="fas fa-home mr-1"></i> Home
-            </Link>
-            <Link to="/send_activation_Email" className="hover:underline">
-              <i className="fas fa-check-circle mr-1"></i> Activate
-            </Link>
-            <Link to="/login" className="hover:underline">
-              <i className="fas fa-sign-in-alt mr-1"></i> Login
-            </Link>
           </div>
         </div>
       </div>
@@ -309,31 +547,3 @@ const Register = () => {
 };
 
 export default Register;
-
-export const InputField = ({
-  icon,
-  type = "text",
-  placeholder,
-  name,
-  value,
-  onChange,
-  min,
-  max,
-}) => (
-  <div className="relative">
-    <input
-      type={type}
-      placeholder={placeholder}
-      name={name}
-      value={value}
-      onChange={onChange}
-      required
-      min={min}
-      max={max}
-      className="w-full pl-10 pr-4 py-2 rounded-md border border-gray-300 shadow-sm focus:ring-2 focus:ring-purple-500 focus:outline-none transition duration-300"
-    />
-    <div className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-      <i className={icon}></i>
-    </div>
-  </div>
-);

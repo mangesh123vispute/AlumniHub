@@ -14,9 +14,11 @@ const AddHodPostContent = () => {
   const [Title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tag, setTag] = useState("");
+
   const [docUrl, setDocUrl] = useState("");
-  const [Image, setImage] = useState(null);
+  const [Image,setImage] = useState(null)
   const [Loading, setLoading] = useState(false);
+
 
   const {
     verifyaccessToken,
@@ -41,14 +43,15 @@ const AddHodPostContent = () => {
     setFilter(false);
     setIsAllPostPage(false);
   }, []);
-
+  // Handle form submission (upload post details)
   const handleSubmit = async (e) => {
-    e.preventDefault();
     setLoading(true);
+    e.preventDefault();
+    if ((await verifyaccessToken()) === -1) {
+      return;
+    }
 
-    if ((await verifyaccessToken()) === -1) return;
-
-    if (!Title || !content || !tag) {
+    if (!Title || !content || !tag ) {
       showNotification(
         "Please fill in all fields and upload an image.",
         "warning",
@@ -58,32 +61,49 @@ const AddHodPostContent = () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("title", Title);
-    formData.append("content", content);
-    formData.append("tag", tag);
-    if (Image) formData.append("Image", Image);
-    formData.append("DocUrl", docUrl);
+    // const postData = {
+    //   title:Title,
+    //   content,
+    //   tag,
+    //   Image,
+    //   DocUrl: docUrl,
+    // };
 
-    axios
-      .post(`${baseurl}/hodposts/${userData.user_id}/`, formData, {
+       // Create FormData object
+  const formData = new FormData();
+  formData.append("title", Title);
+  formData.append("content", content);
+  formData.append("tag", tag);
+  if(Image){formData.append("Image", Image); } 
+  formData.append("DocUrl", docUrl);
+
+    await axios
+      .post(`${baseurl}/hodposts/${userData.user_id }/`, formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "multipart/form-data"
         },
       })
-      .then(() => {
+      .then((response) => {
+        
         setTitle("");
         setContent("");
         setTag("");
         setImage(null);
         setDocUrl("");
-        showNotification("Post created successfully.", "success", "Post created");
+        showNotification(
+          "Post created successfully.",
+          "success",
+          "Post created"
+        );
         setLoading(false);
       })
       .catch((error) => {
+        console.error("Error during submission:", error);
+        
         showNotification(
-          error.response?.data?.detail || "Error submitting the post.",
+          error.response.data.detail ||
+          "Error submitting the post.",
           "warning",
           "Submission failed"
         );
@@ -101,75 +121,74 @@ const AddHodPostContent = () => {
         icon={icon}
         title={title}
       />
-
-      <section className="min-h-screen p-4">
-        <div className="max-w-4xl mx-auto bg-white shadow-2xl rounded-xl overflow-hidden animate-fade-in-up">
-          <div className="bg-gradient-to-r from-purple-600 to-indigo-600 px-6 py-4">
-            <h3 className="text-white text-2xl font-bold">Create New Post</h3>
+      <section className="content">
+        <div className="container-fluid">
+          <div className="card card-primary">
+            <div className="card-header">
+              <h3 className="card-title">Create New Post</h3>
+            </div>
+            <form onSubmit={handleSubmit}>
+              <div className="card-body">
+                <div className="form-group">
+                  <label>Title</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Enter title"
+                    value={Title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Tag</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Enter tag (e.g., event, news)"
+                    value={tag} 
+                    onChange={(e) => setTag(e.target.value)}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Content</label>
+                  <textarea
+                    className="form-control"
+                    placeholder="Enter content"
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                  />
+                </div>
+{/* 
+                <div className="form-group">
+                  <label>Image Upload </label>
+                  <div className="input-group">
+                    <input
+                      type="file"
+                      className="form-control"
+                      onChange={(e) => setImage(e.target.files[0])}
+                    />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label>Document Upload</label>
+                  <div className="input-group">
+                    <input
+                      type="url"
+                      className="form-control"
+                      placeholder="Enter document URL"
+                      value={docUrl}
+                      onChange={(e) => setDocUrl(e.target.value)}
+                    />
+                  </div>
+                </div> */}
+              </div>
+              <div className="card-footer">
+                <button type="submit" className="btn btn-primary">
+                  Submit
+                </button>
+              </div>
+            </form>
           </div>
-          <form onSubmit={handleSubmit} className="p-6 space-y-5">
-            <div>
-              <label className="block text-purple-700 font-semibold mb-1">Title</label>
-              <input
-                type="text"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
-                placeholder="Enter title"
-                value={Title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </div>
-
-            <div>
-              <label className="block text-purple-700 font-semibold mb-1">Tag</label>
-              <input
-                type="text"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
-                placeholder="Enter tag (e.g., event, news)"
-                value={tag}
-                onChange={(e) => setTag(e.target.value)}
-              />
-            </div>
-
-            <div>
-              <label className="block text-purple-700 font-semibold mb-1">Content</label>
-              <textarea
-                rows="5"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
-                placeholder="Enter content"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-              ></textarea>
-            </div>
-
-            <div>
-              <label className="block text-purple-700 font-semibold mb-1">Image Upload</label>
-              <input
-                type="file"
-                className="w-full px-3 py-2 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
-                onChange={(e) => setImage(e.target.files[0])}
-              />
-            </div>
-
-            <div>
-              <label className="block text-purple-700 font-semibold mb-1">Document URL</label>
-              <input
-                type="url"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
-                placeholder="Enter document URL"
-                value={docUrl}
-                onChange={(e) => setDocUrl(e.target.value)}
-              />
-            </div>
-
-            <div className="pt-2">
-              <button
-                type="submit"
-                className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105"
-              >
-                Submit Post
-              </button>
-            </div>
-          </form>
         </div>
       </section>
     </>
@@ -178,7 +197,11 @@ const AddHodPostContent = () => {
 
 const AddHodPost = () => {
   return (
-    <Home DynamicContent={AddHodPostContent} url="Add Post" heading="Add Post" />
+    <Home
+      DynamicContent={AddHodPostContent}
+      url="Add Post"
+      heading="Add Post"
+    />
   );
 };
 

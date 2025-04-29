@@ -76,5 +76,5 @@ virtualenvwrapper==4.8.4
 virtualenvwrapper-win==1.2.7
 wheel==0.45.1
 whitenoise==6.6.0
-# windows-curses==2.4.1
+windows-curses==2.4.1
 yarl==1.18.3
