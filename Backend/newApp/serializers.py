@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import HodPrincipalPost ,AlumniProfile,AlumniPost,HODPrincipalProfile,StudentProfile
+from .models import HodPrincipalPost ,AlumniProfile,AlumniPost,HODPrincipalProfile,StudentProfile,Event,Job
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -123,4 +123,13 @@ class UserStudentSerializer(serializers.ModelSerializer):
             'About', 'Work', 'Year_Joined', 'Branch', 'mobile', 'linkedin', 'Github','skills' ,
             'instagram', 'student_profile'
         ]
-    
+
+class EventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Event
+        fields = "__all__"
+
+class JobSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Job
+        fields = "__all__"

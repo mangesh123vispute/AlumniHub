@@ -2,7 +2,7 @@ from django.urls import path
 from django.conf import settings
 from . import views
 from django.conf.urls.static import static
-from .views import HodPrincipalPostAPIView,GETAlumni,HodAuthorPostListView,AlumniPostAPIView,GETHODs,GETStudent,UserImageUploadView,AlumniAuthorPostListView,PostListView,InactiveAlumniListView,AlumniActivationAPIView,AcceptAllAlumni,UserImageRetrieveView,UpdateAlumniProfileView,UserDetailView,UnverifiedAlumniPostListView, VerifyAlumniPostView, RejectAlumniPostView,UpdateStudentProfileAPIView,UpdateAlumniProfileAPIView
+from .views import HodPrincipalPostAPIView,GETAlumni,HodAuthorPostListView,AlumniPostAPIView,GETHODs,GETStudent,UserImageUploadView,AlumniAuthorPostListView,PostListView,InactiveAlumniListView,AlumniActivationAPIView,AcceptAllAlumni,UserImageRetrieveView,UpdateAlumniProfileView,UserDetailView,UnverifiedAlumniPostListView, VerifyAlumniPostView, RejectAlumniPostView,UpdateStudentProfileAPIView,UpdateAlumniProfileAPIView,EventListCreateView,JobListCreateView
 
 
 
@@ -61,6 +61,11 @@ urlpatterns = [
          name='update_alumni_profile'),
 
     path('user-detail/', UserDetailView.as_view(), name='user-detail'),
+
+    path("api/events/", EventListCreateView.as_view(), name="event-list-create"),
+    
+    path("api/jobs/", JobListCreateView.as_view(), name="job-list-create"),
+
 
    
 ]+static(settings.MEDIA_URL, document_root=settings. MEDIA_ROOT)    

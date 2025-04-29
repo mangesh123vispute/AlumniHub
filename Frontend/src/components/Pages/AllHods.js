@@ -1,16 +1,25 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Home from "../Dashboard/Home.js";
 import AuthContext from "../../context/AuthContext.js";
 import LoadingSpinner from "../Loading/Loading.js";
 import Notification from "../Notification/Notification.js";
-import { useNavigate } from "react-router-dom";
 import baseurl from "../const.js";
 
-const AllAlumnisContent = () => {
-  const [adminData, setAdminData] = useState(null); // Changed to hold the entire data object
-  const navigate = useNavigate();
+gsap.registerPlugin(ScrollTrigger);
+
+const AllHODsContent = () => {
+  const [hodData, setHodData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const pageSize = 12;
+  const isFirstLoad = useRef(true);
+  const navigate = useNavigate();
+
   const {
     isOpen,
     message,
@@ -25,100 +34,69 @@ const AllAlumnisContent = () => {
     setIsAllAdminPage,
     hodFilters,
     setHODFilters,
-    isModalOpen,
-    toggleModal,
-    toggleAddAdminModal,
-    isAddAdminModalOpen,
-    userData,
-    setIsAllPostPage,
     reloadFilter,
-    toggelreloadAdminData,
     reloadAdminData,
-    setAlumniFilters,
+    setIsAllPostPage,
   } = useContext(AuthContext);
 
-const [pageNumber, setPageNumber] = useState(1);
-const [totalPages, setTotalPages] = useState(1);
-
-const isFirstLoad = useRef(true); 
-  
-  const pageSize = 12;
-
-  const handleViewProfile = (userData) => {
-    setShowProfileOfId(true);
-    navigate("/profile", { state: userData });
-  };
-
-
-  const fetchAdmins = async (pageNumber) => {
-    setLoading(true);
-    const token = localStorage.getItem("authTokens")
-      ? JSON.parse(localStorage.getItem("authTokens"))
-      : null;
-
-    const filteredFilters = Object.fromEntries(
-      Object.entries(hodFilters).filter(([_, value]) => value !== "")
-    );
-    
-    // Construct query parameters from hodFilters
-    const queryParams = new URLSearchParams({
-      page: pageNumber,
-      page_size: pageSize,
-      ...(isFirstLoad.current ? {} : filteredFilters),
-    }).toString();
-
-    try {
-      const response = await axios.get(
-        `${baseurl}/hods/?${queryParams}`,
-        {
-          headers: { Authorization: `Bearer ${token?.access}` },
-        }
-      );
-      if (response.status === 200) {
-        setAdminData(response.data);
-        const totalItems = response.data.count;
-        setTotalPages(Math.ceil(totalItems / pageSize));
-        setLoading(false);
-      }
-    } catch (err) {
-      console.error("Error fetching admins: ", err);
-       if (
-         err.response?.status === 400 &&
-         err.response?.data?.error === "Invalid page."
-       ) {
-         console.warn("Invalid page number detected. Resetting to page 1.");
-         setPageNumber(1); 
-        
-       } else {
-         // Handle other errors
-         console.error("Unexpected error: ", err.message);
-       }
-      setLoading(false);
-    }
-  };
-
-  // Fetch alumni on component mount
   useEffect(() => {
-
-    if (isFirstLoad.current) {
-     setHODFilters({})
-      fetchAdmins(pageNumber);
-      isFirstLoad.current = false; 
-    } else {
-      fetchAdmins(pageNumber);
-    }
-  }, [pageNumber, reloadFilter, reloadAdminData]);
-
-  useEffect(() => {
+    setFilter(true);
     setIsAllAdminPage(true);
     setIsAllStudentPage(false);
     setIsAllAlumniPage(false);
     setIsAllPostPage(false);
-    setFilter(true);
   }, []);
 
+  const fetchHODs = async (page, filters) => {
+    setLoading(true);
+    const token = JSON.parse(localStorage.getItem("authTokens") || "null");
+    const params = new URLSearchParams({ page, page_size: pageSize, ...filters });
+    try {
+      const res = await axios.get(`${baseurl}/hods/?${params}`, {
+        headers: { Authorization: `Bearer ${token?.access}` },
+      });
+      setHodData(res.data);
+      setTotalPages(Math.ceil(res.data.count / pageSize));
+    } catch (err) {
+      console.error(err);
+      showNotification("Error loading admin data.", "error", "Error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isFirstLoad.current) {
+      setHODFilters({});
+      fetchHODs(1, {});
+      isFirstLoad.current = false;
+    } else {
+      fetchHODs(pageNumber, hodFilters);
+    }
+  }, [pageNumber, reloadFilter, reloadAdminData]);
+
+  useEffect(() => {
+    const cards = gsap.utils.toArray(".hod-card");
+    gsap.from(cards, {
+      opacity: 0,
+      y: 50,
+      stagger: 0.1,
+      duration: 0.6,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: ".hod-grid",
+        start: "top 85%",
+      },
+    });
+  }, [hodData]);
+
+  const handleViewProfile = (hod) => {
+    setShowProfileOfId(true);
+    navigate("/profile", { state: hod });
+  };
+
   return (
-    <div>
+    <div className="space-y-6 pb-10">
       <LoadingSpinner isLoading={loading} />
       <Notification
         message={message}
@@ -127,167 +105,78 @@ const isFirstLoad = useRef(true);
         icon={icon}
         title={title}
       />
-      <section className="content">
-        <div className="card card-solid">
-          <div
-            className="card-body pb-0"
-            style={{ height: "150vh", overflowY: "auto" }}
-          >
-            <div className="row">
-              {adminData?.results?.length === 0 ? (
-                <div
-                  className="col-12"
-                  style={{ textAlign: "center", height: "200vh" }}
-                >
-                  <h3
-                    className="text-center"
-                    style={{ marginTop: "50px", fontSize: "30px" }}
-                  >
-                    No Admin found !!{" "}
-                  </h3>
+
+      {/* HOD Cards Grid */}
+      <div className="hod-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 auto-rows-fr">
+        {hodData?.results?.length ? (
+          hodData.results.map((hod) => (
+            <div
+              key={hod.id}
+              className="hod-card flex flex-col h-full bg-white rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300"
+            >
+              <div className="bg-gradient-to-br from-purple-300 to-purple-600 p-6 flex flex-col items-center">
+                <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white mb-4">
+                  <img
+                    src={hod.Image ? `${baseurl}/${hod.Image}` : "/default-avatar.png"}
+                    alt={hod.full_name || hod.username}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-              ) : (
-                <>
-                  {adminData?.results?.map((admins) => (
-                    <div
-                      key={admins.id}
-                      className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column"
-                    >
-                      <div className="card card-widget widget-user">
-                        {/* Add the bg color to the header using any of the bg-* classes */}
-                        <div className="widget-user-header bg-info">
-                          <h3
-                            className="widget-user-username mb-1"
-                            style={{ fontSize: "1rem" }}
-                          >
-                            {admins.full_name || admins.username}
-                          </h3>
-                          <h5 className="widget-user-desc">
-                            <b style={{ marginRight: "0.1rem" }}>{`${
-                              admins?.hod_profile?.designation
-                                ? admins.hod_profile?.designation
-                                : "Senior Faculty"
-                            } `}</b>
-                            at SSBT COET ,Jalgaon ,Maharashtra.
-                            <div
-                              className="mt-1"
-                              style={{ fontWeight: "bold" }}
-                            >
-                              Branch : {admins?.Branch || "N/A"}
-                            </div>
-                          </h5>
-                        </div>
-                        <div
-                          className="widget-user-image"
-                          style={{ marginTop: "1.5rem" }}
-                        >
-                          <img
-                            className="img-circle elevation-2"
-                            src={
-                              admins?.Image
-                                ? `${baseurl}/${admins?.Image}`
-                                : `../../dist/img/user1-128x128.jpg`
-                            }
-                            alt="User Avatar"
-                          />
-                        </div>
-                        <div
-                          className="card-footer"
-                          style={{ marginTop: "1.5rem" }}
-                        >
-                          <div
-                            style={{ display: "flex", justifyContent: "right" }}
-                          >
-                            <div>
-                              <button
-                                onClick={() => handleViewProfile(admins)}
-                                className="btn btn-sm btn-primary"
-                                aria-label={`View profile of ${admins.full_name}`}
-                              >
-                                <i className="fas fa-user" /> View Profile
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </>
-              )}
+                <h3 className="text-lg font-bold text-white text-center">
+                  {hod.full_name || hod.username}
+                </h3>
+                <p className="text-sm text-purple-200 text-center mt-1">
+                  {hod.hod_profile?.designation || "Senior Faculty"}
+                </p>
+                <p className="text-xs text-purple-100 text-center mt-2">
+                  Branch: {hod.Branch || "N/A"}
+                </p>
+              </div>
+              <div className="p-4 bg-gray-50 text-right mt-auto">
+                <button
+                  onClick={() => handleViewProfile(hod)}
+                  className="bg-purple-600 text-white px-4 py-2 rounded-full hover:bg-purple-700 transition-colors"
+                >
+                  View Profile
+                </button>
+              </div>
             </div>
+          ))
+        ) : (
+          <div className="col-span-full text-center py-20">
+            <p className="text-gray-500 text-xl">No Admin Found!</p>
           </div>
-          {/* /.card-body */}
+        )}
+      </div>
 
-          <div className="card-footer">
-            <nav aria-label="Page Navigation">
-              <ul className="pagination justify-content-center m-0">
-                {/* Previous button */}
-                <li
-                  className={`page-item ${pageNumber === 1 ? "disabled" : ""}`}
-                >
-                  <button
-                    className={`page-link ${
-                      pageNumber === 1 ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
-                    onClick={() => setPageNumber(pageNumber - 1)}
-                    disabled={pageNumber === 1}
-                  >
-                    <i
-                      className="fas fa-arrow-left"
-                      style={{ fontSize: "1em" }}
-                    />
-                  </button>
-                </li>
-
-                {/* Current page */}
-                <li className="page-item active">
-                  <button className="page-link" disabled>
-                    {pageNumber}
-                  </button>
-                </li>
-
-                {/* Next button */}
-                <li
-                  className={`page-item ${
-                    pageNumber === totalPages ? "disabled" : ""
-                  }`}
-                >
-                  <button
-                    className={`page-link ${
-                      pageNumber === totalPages
-                        ? "opacity-50 cursor-not-allowed"
-                        : ""
-                    }`}
-                    onClick={() => setPageNumber(pageNumber + 1)}
-                    disabled={pageNumber === totalPages}
-                  >
-                    <i
-                      className="fas fa-arrow-right"
-                      style={{ fontSize: "1em" }}
-                    />
-                  </button>
-                </li>
-              </ul>
-            </nav>
-          </div>
-          {/* /.card-footer */}
-        </div>
-        {/* /.card */}
-      </section>
-      
+      {/* Pagination */}
+      <div className="flex justify-center items-center space-x-4 pt-10">
+        <button
+          onClick={() => setPageNumber((p) => Math.max(1, p - 1))}
+          className="p-3 bg-purple-600 text-white rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-purple-700 transition"
+          disabled={pageNumber === 1}
+        >
+          &larr;
+        </button>
+        <span className="text-purple-700 font-bold">Page {pageNumber}</span>
+        <button
+          onClick={() => setPageNumber((p) => Math.min(totalPages, p + 1))}
+          className="p-3 bg-purple-600 text-white rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-purple-700 transition"
+          disabled={pageNumber === totalPages}
+        >
+          &rarr;
+        </button>
+      </div>
     </div>
   );
 };
 
+const AllHODs = () => (
+  <Home
+    DynamicContent={AllHODsContent}
+    url="all_hods"
+    heading="All Admin"
+  />
+);
 
-const AllAlumnis = () => {
-  return (
-    <Home
-      DynamicContent={AllAlumnisContent}
-      url="all_hods"
-      heading="All Admin"
-    />
-  );
-};
-
-export default AllAlumnis;
+export default AllHODs;

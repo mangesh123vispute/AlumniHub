@@ -1,0 +1,17 @@
+/* static/css/custom_admin.css */
+fieldset.module {
+    border-left: 5px solid #6f42c1 !important;
+}
+
+.module h2 {
+    color: #6f42c1;
+}
+
+#header, #branding h1 {
+    background-color: #6f42c1;
+    color: white;
+}
+
+.change-form .form-row {
+    background-color: #f8f9fa;
+}
