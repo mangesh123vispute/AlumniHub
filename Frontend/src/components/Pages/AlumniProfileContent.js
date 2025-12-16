@@ -692,56 +692,133 @@ setIsDropdownOpen(null);  // Open the modal
               )}
               <div className="col-md-3 " style={{ fontSize: "0.9em" }}>
                 {/* Profile Image */}
-                <div className="card card-primary card-outline position-relative">
+                <div
+                  className="card position-relative"
+                  style={{
+                    borderRadius: "16px",
+                    border: "none",
+                    boxShadow: "0 4px 16px rgba(0, 0, 0, 0.08)",
+                    overflow: "hidden",
+                    marginBottom: "24px",
+                  }}
+                >
                   {/* Ribbon */}
-                  <div className="ribbon-wrapper ribbon-lg">
-                    <div className="ribbon bg-primary">
-                      {user
-                        ? user?.is_alumni
-                          ? "Alumni"
-                          : user?.is_student
-                          ? "Student"
-                          : "Admin"
-                        : "User"}
-                    </div>
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "20px",
+                      right: "-30px",
+                      transform: "rotate(45deg)",
+                      zIndex: 10,
+                      backgroundColor: "#007bff",
+                      color: "white",
+                      padding: "6px 40px",
+                      fontSize: "0.75rem",
+                      fontWeight: "700",
+                      letterSpacing: "1px",
+                      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
+                    }}
+                  >
+                    {user
+                      ? user?.is_alumni
+                        ? "ALUMNI"
+                        : user?.is_student
+                        ? "STUDENT"
+                        : "ADMIN"
+                      : "USER"}
                   </div>
 
-                  <div className="card-body box-profile">
-                    <div className="text-center postion-relative ">
+                  <div
+                    className="card-body"
+                    style={{
+                      padding: "24px",
+                      background:
+                        "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                      paddingTop: "40px",
+                    }}
+                  >
+                    <div
+                      className="text-center"
+                      style={{ position: "relative", marginBottom: "20px" }}
+                    >
                       <img
-                        className="profile-user-img img-fluid img-circle"
+                        className="img-fluid img-circle"
                         src={
                           user?.Image
                             ? `${baseurl}/${user?.Image}`
                             : `../../dist/img/user1-128x128.jpg`
                         }
                         alt="User profile"
+                        style={{
+                          width: "140px",
+                          height: "140px",
+                          objectFit: "cover",
+                          border: "4px solid white",
+                          boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
+                        }}
+                        onError={(e) => {
+                          e.target.src = `../../dist/img/user1-128x128.jpg`;
+                        }}
                       />
                       {userData?.user_id === user?.id && (
                         <button
-                          className="btn btn-primary btn-xs elevation-2"
                           style={{
-                            backgroundColor: "#007bff",
+                            backgroundColor: "#28a745",
                             color: "white",
                             border: "none",
                             borderRadius: "50%",
                             cursor: "pointer",
                             position: "absolute",
-                            top: "10px", // Position at the top
-                            left: "10px", // Position at the left
-                            zIndex: 10, // Ensure it's on top of the image
+                            bottom: "10px",
+                            right: "calc(50% - 70px)",
+                            width: "36px",
+                            height: "36px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.3)",
+                            transition: "all 0.2s ease",
+                            zIndex: 5,
                           }}
                           onClick={() => {
                             setIsModalOpen(true);
                           }}
+                          onMouseEnter={(e) => {
+                            e.target.style.transform = "scale(1.1)";
+                            e.target.style.backgroundColor = "#218838";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.transform = "scale(1)";
+                            e.target.style.backgroundColor = "#28a745";
+                          }}
                         >
-                          <i className="fas fa-pencil-alt"></i>
+                          <i className="fas fa-pencil-alt" style={{ fontSize: "0.875rem" }}></i>
                         </button>
                       )}
                     </div>
-                    <h3 className="profile-username text-center ">
+                    <h3
+                      className="text-center"
+                      style={{
+                        color: "white",
+                        margin: "0 0 8px 0",
+                        fontSize: "1.5rem",
+                        fontWeight: "700",
+                      }}
+                    >
                       {user ? user.full_name || user.username : "User"}
                     </h3>
+                    <p
+                      className="text-center"
+                      style={{
+                        color: "rgba(255, 255, 255, 0.9)",
+                        margin: 0,
+                        fontSize: "1rem",
+                        fontWeight: "500",
+                      }}
+                    >
+                      {user?.alumni_profile?.Heading || "Professional"}
+                    </p>
+                  </div>
                     {isModalOpen && (
                       <div
                         style={{
@@ -834,25 +911,43 @@ setIsDropdownOpen(null);  // Open the modal
                         </div>
                       </div>
                     )}
-                    <hr
-                      style={{
-                        border: "1px solid #888888",
-                        marginBottom: "0.5em",
-                        marginTop: "0.5em",
-                      }}
-                    />
-                    <p className="text-muted text-center font ">
-                      {user?.alumni_profile?.Heading || "N/A"}
-                    </p>
-                  </div>
-                  {/* /.card-body */}
                 </div>
                 {/* /.card */}
 
                 {/* About Box */}
-                <div className="card card-primary">
-                  <div className="card-header">
-                    <h3 className="card-title">About</h3>
+                <div
+                  className="card"
+                  style={{
+                    borderRadius: "16px",
+                    border: "none",
+                    boxShadow: "0 4px 16px rgba(0, 0, 0, 0.08)",
+                    marginBottom: "24px",
+                  }}
+                >
+                  <div
+                    className="card-header"
+                    style={{
+                      backgroundColor: "#f8f9fa",
+                      borderBottom: "2px solid #e9ecef",
+                      padding: "16px 20px",
+                      borderRadius: "16px 16px 0 0",
+                    }}
+                  >
+                    <h3
+                      className="card-title"
+                      style={{
+                        margin: 0,
+                        fontSize: "1.25rem",
+                        fontWeight: "700",
+                        color: "#2c3e50",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                      }}
+                    >
+                      <i className="fas fa-info-circle" style={{ color: "#007bff" }}></i>
+                      About
+                    </h3>
                   </div>
                   {/* /.card-header */}
                   <div
@@ -861,133 +956,247 @@ setIsDropdownOpen(null);  // Open the modal
                       maxHeight: "80vh",
                       overflowX: "auto",
                       overflowY: "auto",
+                      padding: "20px",
                     }}
                   >
-                    <strong>
-                      <i className="fas fa-info-circle mr-1" /> About
-                    </strong>
-                    <p className="text-muted aboutfont">
-                      <span className="tag tag-danger">
-                        {user?.About || "N/A"}
-                      </span>{" "}
-                      <br />
-                    </p>
+                    <div
+                      style={{
+                        marginBottom: "20px",
+                        padding: "16px",
+                        backgroundColor: "#f8f9fa",
+                        borderRadius: "8px",
+                        borderLeft: "4px solid #007bff",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          marginBottom: "8px",
+                        }}
+                      >
+                        <i
+                          className="fas fa-info-circle"
+                          style={{ color: "#007bff", marginRight: "10px", width: "20px" }}
+                        ></i>
+                        <strong style={{ color: "#2c3e50", fontSize: "0.95rem" }}>About</strong>
+                      </div>
+                      <p
+                        className="aboutfont"
+                        style={{
+                          margin: 0,
+                          color: "#495057",
+                          lineHeight: "1.6",
+                          fontSize: "0.9rem",
+                        }}
+                      >
+                        {user?.About || "No information available"}
+                      </p>
+                    </div>
 
-                    <strong>
-                      <i className="fas fa-briefcase mr-1" /> Work
-                    </strong>
-                    <p className="text-muted workfont aboutfont">
-                      <span className="tag tag-success">
-                        {user?.Work || "N/A"}
-                      </span>
-                    </p>
+                    {/* Info Items Grid */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                      {/* Work */}
+                      {user?.Work && user.Work !== "N/A" && (
+                        <div
+                          style={{
+                            padding: "12px 16px",
+                            backgroundColor: "#fff",
+                            borderRadius: "8px",
+                            border: "1px solid #e9ecef",
+                          }}
+                        >
+                          <div style={{ display: "flex", alignItems: "center", marginBottom: "6px" }}>
+                            <i className="fas fa-briefcase" style={{ color: "#28a745", marginRight: "10px", width: "20px" }}></i>
+                            <strong style={{ color: "#2c3e50", fontSize: "0.9rem" }}>Work</strong>
+                          </div>
+                          <p style={{ margin: 0, color: "#495057", fontSize: "0.875rem" }}>{user.Work}</p>
+                        </div>
+                      )}
 
-                    <strong>
-                      <i className="fas fa-graduation-cap mr-1" /> Education
-                    </strong>
-                    <p className="text-muted aboutfont">
-                      {user?.alumni_profile?.Education || "N/A"}
-                    </p>
+                      {/* Education */}
+                      {user?.alumni_profile?.Education && user.alumni_profile.Education !== "N/A" && (
+                        <div
+                          style={{
+                            padding: "12px 16px",
+                            backgroundColor: "#fff",
+                            borderRadius: "8px",
+                            border: "1px solid #e9ecef",
+                          }}
+                        >
+                          <div style={{ display: "flex", alignItems: "center", marginBottom: "6px" }}>
+                            <i className="fas fa-graduation-cap" style={{ color: "#007bff", marginRight: "10px", width: "20px" }}></i>
+                            <strong style={{ color: "#2c3e50", fontSize: "0.9rem" }}>Education</strong>
+                          </div>
+                          <p style={{ margin: 0, color: "#495057", fontSize: "0.875rem" }}>{user.alumni_profile.Education}</p>
+                        </div>
+                      )}
 
-                    <strong>
-                      <i className="fas fa-graduation-cap mr-1" /> Graduation
-                      Year:
-                    </strong>
-                    <p className="text-muted aboutfont">
-                      {user?.graduation_year || "N/A"}
-                    </p>
+                      {/* Branch & Graduation Year */}
+                      <div
+                        style={{
+                          padding: "12px 16px",
+                          backgroundColor: "#fff",
+                          borderRadius: "8px",
+                          border: "1px solid #e9ecef",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          flexWrap: "wrap",
+                          gap: "12px",
+                        }}
+                      >
+                        {user?.Branch && user.Branch !== "N/A" && (
+                          <div style={{ flex: 1, minWidth: "120px" }}>
+                            <div style={{ display: "flex", alignItems: "center", marginBottom: "6px" }}>
+                              <i className="fas fa-code-branch" style={{ color: "#dc3545", marginRight: "8px", width: "18px" }}></i>
+                              <strong style={{ color: "#2c3e50", fontSize: "0.85rem" }}>Branch</strong>
+                            </div>
+                            <span
+                              style={{
+                                display: "inline-block",
+                                padding: "4px 10px",
+                                backgroundColor: "#fee",
+                                color: "#c33",
+                                borderRadius: "4px",
+                                fontSize: "0.8rem",
+                                fontWeight: "600",
+                              }}
+                            >
+                              {user.Branch}
+                            </span>
+                          </div>
+                        )}
+                        {user?.graduation_year && (
+                          <div style={{ flex: 1, minWidth: "120px" }}>
+                            <div style={{ display: "flex", alignItems: "center", marginBottom: "6px" }}>
+                              <i className="fas fa-calendar" style={{ color: "#17a2b8", marginRight: "8px", width: "18px" }}></i>
+                              <strong style={{ color: "#2c3e50", fontSize: "0.85rem" }}>Graduated</strong>
+                            </div>
+                            <p style={{ margin: 0, color: "#495057", fontSize: "0.875rem", fontWeight: "600" }}>{user.graduation_year}</p>
+                          </div>
+                        )}
+                      </div>
 
-                    <strong>
-                      <i className="fas fa-code-branch mr-1 " /> Branch
-                    </strong>
-                    <p className="text-muted aboutfont">
-                      <span className="tag tag-danger">
-                        {user?.Branch || "N/A"}
-                      </span>{" "}
-                      <br />
-                    </p>
+                      {/* Location */}
+                      {(user?.alumni_profile?.current_city || user?.alumni_profile?.current_country) && (
+                        <div
+                          style={{
+                            padding: "12px 16px",
+                            backgroundColor: "#fff",
+                            borderRadius: "8px",
+                            border: "1px solid #e9ecef",
+                          }}
+                        >
+                          <div style={{ display: "flex", alignItems: "center", marginBottom: "6px" }}>
+                            <i className="fas fa-map-marker-alt" style={{ color: "#ffc107", marginRight: "10px", width: "20px" }}></i>
+                            <strong style={{ color: "#2c3e50", fontSize: "0.9rem" }}>Location</strong>
+                          </div>
+                          <p style={{ margin: 0, color: "#495057", fontSize: "0.875rem" }}>
+                            {[user?.alumni_profile?.current_city, user?.alumni_profile?.current_country].filter(Boolean).join(", ") || "N/A"}
+                          </p>
+                        </div>
+                      )}
 
-                    <strong>
-                      <i className="fas fa-map-marker-alt mr-1" /> Location
-                    </strong>
-                    <p className="text-muted aboutfont">
-                      {user?.alumni_profile?.current_city || "N/A"},{" "}
-                      {user?.alumni_profile?.current_country || "N/A"}
-                    </p>
+                      {/* Company & Role */}
+                      {user?.alumni_profile?.current_company_name && user.alumni_profile.current_company_name !== "N/A" && (
+                        <div
+                          style={{
+                            padding: "12px 16px",
+                            backgroundColor: "#e7f3ff",
+                            borderRadius: "8px",
+                            borderLeft: "4px solid #007bff",
+                          }}
+                        >
+                          <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
+                            <i className="fas fa-building" style={{ color: "#007bff", marginRight: "10px", width: "20px" }}></i>
+                            <strong style={{ color: "#2c3e50", fontSize: "0.9rem" }}>Current Company</strong>
+                          </div>
+                          <p style={{ margin: "4px 0 8px 0", color: "#495057", fontSize: "0.875rem", fontWeight: "600" }}>
+                            {user.alumni_profile.current_company_name}
+                          </p>
+                          {user?.alumni_profile?.job_title && (
+                            <div style={{ display: "flex", alignItems: "center" }}>
+                              <i className="fas fa-id-badge" style={{ color: "#28a745", marginRight: "10px", width: "20px" }}></i>
+                              <span style={{ color: "#495057", fontSize: "0.875rem" }}>{user.alumni_profile.job_title}</span>
+                            </div>
+                          )}
+                        </div>
+                      )}
 
-                    <strong>
-                      <i className="fas fa-building mr-1" /> Current Company
-                    </strong>
-                    <p className="text-muted aboutfont">
-                      <span className="tag tag-danger">
-                        {user?.alumni_profile?.current_company_name || "N/A"}
-                      </span>{" "}
-                      <br />
-                    </p>
+                      {/* Experience */}
+                      {user?.alumni_profile?.years_of_experience && user.alumni_profile.years_of_experience !== "N/A" && (
+                        <div
+                          style={{
+                            padding: "12px 16px",
+                            backgroundColor: "#fff",
+                            borderRadius: "8px",
+                            border: "1px solid #e9ecef",
+                          }}
+                        >
+                          <div style={{ display: "flex", alignItems: "center", marginBottom: "6px" }}>
+                            <i className="fas fa-briefcase" style={{ color: "#6f42c1", marginRight: "10px", width: "20px" }}></i>
+                            <strong style={{ color: "#2c3e50", fontSize: "0.9rem" }}>Experience</strong>
+                          </div>
+                          <p style={{ margin: 0, color: "#495057", fontSize: "0.875rem", fontWeight: "600" }}>
+                            {user.alumni_profile.years_of_experience} {parseInt(user.alumni_profile.years_of_experience) === 1 ? "Year" : "Years"}
+                          </p>
+                        </div>
+                      )}
 
-                    <strong>
-                      <i className="fas fa-building mr-1" /> Role:
-                    </strong>
-                    <p className="text-muted aboutfont">
-                      {user?.alumni_profile?.job_title || "N/A"}
+                      {/* Skills */}
+                      {user?.skills && user.skills !== "N/A" && (
+                        <div
+                          style={{
+                            padding: "12px 16px",
+                            backgroundColor: "#fff",
+                            borderRadius: "8px",
+                            border: "1px solid #e9ecef",
+                          }}
+                        >
+                          <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
+                            <i className="fas fa-laptop-code" style={{ color: "#17a2b8", marginRight: "10px", width: "20px" }}></i>
+                            <strong style={{ color: "#2c3e50", fontSize: "0.9rem" }}>Skills</strong>
+                          </div>
+                          <p style={{ margin: 0, color: "#495057", fontSize: "0.875rem", lineHeight: "1.5" }}>{user.skills}</p>
+                        </div>
+                      )}
 
-                      <br />
-                    </p>
+                      {/* Industry */}
+                      {user?.alumni_profile?.industry && user.alumni_profile.industry !== "N/A" && (
+                        <div
+                          style={{
+                            padding: "12px 16px",
+                            backgroundColor: "#fff",
+                            borderRadius: "8px",
+                            border: "1px solid #e9ecef",
+                          }}
+                        >
+                          <div style={{ display: "flex", alignItems: "center", marginBottom: "6px" }}>
+                            <i className="fas fa-industry" style={{ color: "#fd7e14", marginRight: "10px", width: "20px" }}></i>
+                            <strong style={{ color: "#2c3e50", fontSize: "0.9rem" }}>Industry</strong>
+                          </div>
+                          <p style={{ margin: 0, color: "#495057", fontSize: "0.875rem" }}>{user.alumni_profile.industry}</p>
+                        </div>
+                      )}
 
-                    <strong>
-                      <i className="fas fa-building mr-1" /> Previous Companies
-                    </strong>
-                    <p className="text-muted aboutfont">
-                      {user?.alumni_profile?.previous_companies ||
-                        "No Notes Available"}
-                    </p>
-                    <strong>
-                      <i className="fas fa-briefcase mr-1" /> Years of
-                      Experience
-                    </strong>
-                    <p className="text-muted aboutfont">
-                      <span className="tag tag-danger">
-                        {user?.alumni_profile?.years_of_experience || "N/A"}
-                      </span>{" "}
-                      <br />
-                    </p>
-
-                    <strong>
-                      <i className="fas fa-laptop-code mr-1" /> Skills
-                    </strong>
-                    <p className="text-muted aboutfont">
-                      <span className="tag tag-danger">
-                        {user?.skills || "N/A"}
-                      </span>{" "}
-                      <br />
-                    </p>
-
-                    <strong>
-                      <i className="fas fa-industry mr-1" /> Industry
-                    </strong>
-                    <p className="text-muted aboutfont">
-                      <span className="tag tag-danger">
-                        {user?.alumni_profile?.industry || "N/A"}
-                      </span>{" "}
-                      <br />
-                    </p>
-
-                    <strong>
-                      <i className="fas fa-trophy mr-1" /> Achievements
-                    </strong>
-                    <p className="text-muted aboutfont">
-                      <span className="tag tag-success">
-                        {user?.alumni_profile?.achievements ||
-                          "No Achievements"}
-                      </span>
-                    </p>
-
-                    <strong>
-                      <i className="fas fa-calendar-alt mr-1" /> Year Joined
-                    </strong>
-                    <p className="text-muted aboutfont">
-                      {user?.Year_Joined || "N/A"}
-                    </p>
+                      {/* Achievements */}
+                      {user?.alumni_profile?.achievements && user.alumni_profile.achievements !== "No Achievements" && user.alumni_profile.achievements !== "N/A" && (
+                        <div
+                          style={{
+                            padding: "12px 16px",
+                            backgroundColor: "#fff3cd",
+                            borderRadius: "8px",
+                            borderLeft: "4px solid #ffc107",
+                          }}
+                        >
+                          <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
+                            <i className="fas fa-trophy" style={{ color: "#ffc107", marginRight: "10px", width: "20px" }}></i>
+                            <strong style={{ color: "#2c3e50", fontSize: "0.9rem" }}>Achievements</strong>
+                          </div>
+                          <p style={{ margin: 0, color: "#856404", fontSize: "0.875rem", lineHeight: "1.5" }}>{user.alumni_profile.achievements}</p>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
                 {/* /.card */}
@@ -995,23 +1204,83 @@ setIsDropdownOpen(null);  // Open the modal
 
               {/* /.col */}
               <div className="col-md-9">
-                <div className="card">
-                  <div className="card-header p-2">
-                    <ul className="nav nav-pills">
-                      <li className="nav-item ">
+                <div
+                  className="card"
+                  style={{
+                    borderRadius: "16px",
+                    border: "none",
+                    boxShadow: "0 4px 16px rgba(0, 0, 0, 0.08)",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div
+                    className="card-header"
+                    style={{
+                      backgroundColor: "#f8f9fa",
+                      borderBottom: "2px solid #e9ecef",
+                      padding: "0",
+                    }}
+                  >
+                    <ul
+                      className="nav nav-pills"
+                      style={{
+                        border: "none",
+                        margin: 0,
+                      }}
+                    >
+                      <li className="nav-item" style={{ margin: 0 }}>
                         <a
                           className="nav-link active"
                           href="#timeline"
                           data-toggle="tab"
+                          style={{
+                            borderRadius: "0",
+                            padding: "16px 24px",
+                            color: "#007bff",
+                            backgroundColor: "#fff",
+                            borderBottom: "3px solid #007bff",
+                            fontWeight: "600",
+                            transition: "all 0.3s ease",
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!e.target.classList.contains("active")) {
+                              e.target.style.backgroundColor = "#f0f7ff";
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (!e.target.classList.contains("active")) {
+                              e.target.style.backgroundColor = "transparent";
+                            }
+                          }}
                         >
                           <i className="fas fa-address-book mr-1"></i> Contacts
                         </a>
                       </li>
-                      <li className="nav-item ">
+                      <li className="nav-item" style={{ margin: 0 }}>
                         <a
                           className="nav-link"
                           href="#activity"
                           data-toggle="tab"
+                          style={{
+                            borderRadius: "0",
+                            padding: "16px 24px",
+                            color: "#6c757d",
+                            backgroundColor: "transparent",
+                            fontWeight: "600",
+                            transition: "all 0.3s ease",
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!e.target.classList.contains("active")) {
+                              e.target.style.backgroundColor = "#f0f7ff";
+                              e.target.style.color = "#007bff";
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (!e.target.classList.contains("active")) {
+                              e.target.style.backgroundColor = "transparent";
+                              e.target.style.color = "#6c757d";
+                            }
+                          }}
                         >
                           <i className="fas fa-file-alt mr-1"></i> Posts
                         </a>
@@ -1429,165 +1698,371 @@ setIsDropdownOpen(null);  // Open the modal
                       </div>
                       {/* /.tab-pane */}
                       <div className="active tab-pane" id="timeline">
-                        {/* The timeline */}
-                        <div className="timeline timeline-inverse">
-                          {/* timeline time label */}
-                          {/* timeline time label */}
-                          <div className="time-label">
-                            <span className="bg-danger">Contact Details</span>
-                          </div>
-                          {/* / Contact-label */}
-                          {/* Contact Details Item */}
-                          <div>
-                            <i className="fas fa-address-book bg-primary" />
-                            <div className="timeline-item">
-                              <div className="timeline-body">
-                                <strong>Email:</strong>
-                                <p className="text-muted font">
-                                  {user?.email || "N/A"}
-                                </p>
-
-                                {/* <strong>Mobile:</strong>
-                                <p className="text-muted font">
-                                  {user?.mobile || "N/A"}
-                                </p> */}
-
-                                <strong>LinkedIn:</strong>
-                                <p className="text-muted font">
-                                  {user?.linkedin !=='N/A'? (
-                                   <a
-  href={
-    user?.linkedin?.startsWith("http")
-      ? user.linkedin
-      : user?.linkedin
-      ? `https://${user.linkedin}`
-      : "#"
-  }
-  target="_blank"
-  rel="noopener noreferrer"
->
-  {user?.linkedin}
-</a>
-
-                                  ) : (
-                                    "N/A"
-                                  )}
-                                </p>
-
-                                <strong>GitHub:</strong>
-                                <p className="text-muted font">
-                                  {user?.Github!== 'N/A' ? (
-                                    <a
-  href={
-    user?.Github?.startsWith("http")
-      ? user.Github
-      : user?.Github
-      ? `https://${user.Github}`
-      : "#"
-  }
-  target="_blank"
-  rel="noopener noreferrer"
->
-  {user?.Github}
-</a>
-
-                                  ) : (
-                                    "N/A"
-                                  )}
-                                </p>
-
-                                <strong>Instagram:</strong>
-                                <p className="text-muted font">
-                                  {user?.instagram !== 'N/A'? (
-                                    <a
-  href={
-    user?.instagram?.startsWith("http")
-      ? user.instagram
-      : user?.instagram
-      ? `https://${user.instagram}`
-      : "#"
-  }
-  target="_blank"
-  rel="noopener noreferrer"
->
-  {user?.instagram }
-</a>
-
-                                  ) : (
-                                    "N/A"
-                                  )}
-                                </p>
-                                <hr
+                        <div style={{ padding: "24px", backgroundColor: "#f8f9fa", minHeight: "100%" }}>
+                          {/* Contact Details Card */}
+                          <div
+                            className="card"
+                            style={{
+                              borderRadius: "16px",
+                              border: "none",
+                              boxShadow: "0 4px 16px rgba(0, 0, 0, 0.08)",
+                              marginBottom: "24px",
+                              overflow: "hidden",
+                            }}
+                          >
+                            <div
+                              style={{
+                                background: "linear-gradient(135deg, #dc3545 0%, #c82333 100%)",
+                                padding: "16px 24px",
+                                color: "white",
+                              }}
+                            >
+                              <h4
+                                style={{
+                                  margin: 0,
+                                  fontSize: "1.25rem",
+                                  fontWeight: "700",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: "12px",
+                                }}
+                              >
+                                <i className="fas fa-address-book"></i>
+                                Contact Details
+                              </h4>
+                            </div>
+                            <div className="card-body" style={{ padding: "24px" }}>
+                              <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                                {/* Email */}
+                                <div
                                   style={{
-                                    border: "1px solid #888888",
-                                    marginBottom: "0.5em",
-                                    marginTop: "0.5em",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    padding: "12px 16px",
+                                    backgroundColor: "#fff",
+                                    borderRadius: "8px",
+                                    border: "1px solid #e9ecef",
                                   }}
-                                />
-                                <strong>Preferred Contact:</strong>
-                                <p className="text-muted font">
-                                  {user?.alumni_profile.preferred_contact_method
-                                    ? capitalizeFirstLetter(
-                                        user.alumni_profile
-                                          .preferred_contact_method
-                                      )
-                                    : "N/A"}
-                                </p>
+                                >
+                                  <i
+                                    className="fas fa-envelope"
+                                    style={{
+                                      color: "#007bff",
+                                      fontSize: "1.25rem",
+                                      marginRight: "16px",
+                                      width: "24px",
+                                    }}
+                                  ></i>
+                                  <div style={{ flex: 1 }}>
+                                    <strong style={{ color: "#2c3e50", fontSize: "0.875rem", display: "block", marginBottom: "4px" }}>Email</strong>
+                                    {user?.email && user.email !== "N/A" ? (
+                                      <a
+                                        href={`mailto:${user.email}`}
+                                        style={{
+                                          color: "#007bff",
+                                          textDecoration: "none",
+                                          fontSize: "0.9rem",
+                                          transition: "color 0.2s ease",
+                                        }}
+                                        onMouseEnter={(e) => (e.target.style.color = "#0056b3")}
+                                        onMouseLeave={(e) => (e.target.style.color = "#007bff")}
+                                      >
+                                        {user.email}
+                                      </a>
+                                    ) : (
+                                      <span style={{ color: "#6c757d", fontSize: "0.9rem" }}>N/A</span>
+                                    )}
+                                  </div>
+                                </div>
+
+                                {/* LinkedIn */}
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    padding: "12px 16px",
+                                    backgroundColor: "#fff",
+                                    borderRadius: "8px",
+                                    border: "1px solid #e9ecef",
+                                  }}
+                                >
+                                  <i
+                                    className="fab fa-linkedin"
+                                    style={{
+                                      color: "#0077b5",
+                                      fontSize: "1.25rem",
+                                      marginRight: "16px",
+                                      width: "24px",
+                                    }}
+                                  ></i>
+                                  <div style={{ flex: 1 }}>
+                                    <strong style={{ color: "#2c3e50", fontSize: "0.875rem", display: "block", marginBottom: "4px" }}>LinkedIn</strong>
+                                    {user?.linkedin && user.linkedin !== "N/A" ? (
+                                      <a
+                                        href={user.linkedin.startsWith("http") ? user.linkedin : `https://${user.linkedin}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{
+                                          color: "#0077b5",
+                                          textDecoration: "none",
+                                          fontSize: "0.9rem",
+                                          transition: "color 0.2s ease",
+                                        }}
+                                        onMouseEnter={(e) => (e.target.style.color = "#005682")}
+                                        onMouseLeave={(e) => (e.target.style.color = "#0077b5")}
+                                      >
+                                        View Profile
+                                      </a>
+                                    ) : (
+                                      <span style={{ color: "#6c757d", fontSize: "0.9rem" }}>N/A</span>
+                                    )}
+                                  </div>
+                                </div>
+
+                                {/* GitHub */}
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    padding: "12px 16px",
+                                    backgroundColor: "#fff",
+                                    borderRadius: "8px",
+                                    border: "1px solid #e9ecef",
+                                  }}
+                                >
+                                  <i
+                                    className="fab fa-github"
+                                    style={{
+                                      color: "#24292e",
+                                      fontSize: "1.25rem",
+                                      marginRight: "16px",
+                                      width: "24px",
+                                    }}
+                                  ></i>
+                                  <div style={{ flex: 1 }}>
+                                    <strong style={{ color: "#2c3e50", fontSize: "0.875rem", display: "block", marginBottom: "4px" }}>GitHub</strong>
+                                    {user?.Github && user.Github !== "N/A" ? (
+                                      <a
+                                        href={user.Github.startsWith("http") ? user.Github : `https://${user.Github}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{
+                                          color: "#24292e",
+                                          textDecoration: "none",
+                                          fontSize: "0.9rem",
+                                          transition: "color 0.2s ease",
+                                        }}
+                                        onMouseEnter={(e) => (e.target.style.color = "#000")}
+                                        onMouseLeave={(e) => (e.target.style.color = "#24292e")}
+                                      >
+                                        View Profile
+                                      </a>
+                                    ) : (
+                                      <span style={{ color: "#6c757d", fontSize: "0.9rem" }}>N/A</span>
+                                    )}
+                                  </div>
+                                </div>
+
+                                {/* Instagram */}
+                                {user?.instagram && user.instagram !== "N/A" && (
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      padding: "12px 16px",
+                                      backgroundColor: "#fff",
+                                      borderRadius: "8px",
+                                      border: "1px solid #e9ecef",
+                                    }}
+                                  >
+                                    <i
+                                      className="fab fa-instagram"
+                                      style={{
+                                        color: "#E4405F",
+                                        fontSize: "1.25rem",
+                                        marginRight: "16px",
+                                        width: "24px",
+                                      }}
+                                    ></i>
+                                    <div style={{ flex: 1 }}>
+                                      <strong style={{ color: "#2c3e50", fontSize: "0.875rem", display: "block", marginBottom: "4px" }}>Instagram</strong>
+                                      <a
+                                        href={user.instagram.startsWith("http") ? user.instagram : `https://${user.instagram}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{
+                                          color: "#E4405F",
+                                          textDecoration: "none",
+                                          fontSize: "0.9rem",
+                                          transition: "color 0.2s ease",
+                                        }}
+                                        onMouseEnter={(e) => (e.target.style.color = "#C13584")}
+                                        onMouseLeave={(e) => (e.target.style.color = "#E4405F")}
+                                      >
+                                        View Profile
+                                      </a>
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Preferred Contact */}
+                                {user?.alumni_profile?.preferred_contact_method && (
+                                  <div
+                                    style={{
+                                      padding: "12px 16px",
+                                      backgroundColor: "#e7f3ff",
+                                      borderRadius: "8px",
+                                      borderLeft: "4px solid #007bff",
+                                    }}
+                                  >
+                                    <strong style={{ color: "#2c3e50", fontSize: "0.875rem", display: "block", marginBottom: "4px" }}>Preferred Contact Method</strong>
+                                    <p style={{ margin: 0, color: "#495057", fontSize: "0.9rem" }}>
+                                      {capitalizeFirstLetter(user.alumni_profile.preferred_contact_method)}
+                                    </p>
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </div>
-                          <div className="time-label">
-                            <span className="bg-danger">
-                              Portfolio & Resume
-                            </span>
-                          </div>
-                          <div>
-                            <i className="fas fa-address-book bg-primary" />
-                            <div className="timeline-item">
-                              <div className="timeline-body">
-                                <strong>Portfolio:</strong>
-                                <p className="text-muted font">
-                                  {user?.portfolio_link !=='N/A'? (
+
+                          {/* Portfolio & Resume Card */}
+                          <div
+                            className="card"
+                            style={{
+                              borderRadius: "16px",
+                              border: "none",
+                              boxShadow: "0 4px 16px rgba(0, 0, 0, 0.08)",
+                              overflow: "hidden",
+                            }}
+                          >
+                            <div
+                              style={{
+                                background: "linear-gradient(135deg, #dc3545 0%, #c82333 100%)",
+                                padding: "16px 24px",
+                                color: "white",
+                              }}
+                            >
+                              <h4
+                                style={{
+                                  margin: 0,
+                                  fontSize: "1.25rem",
+                                  fontWeight: "700",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: "12px",
+                                }}
+                              >
+                                <i className="fas fa-folder-open"></i>
+                                Portfolio & Resume
+                              </h4>
+                            </div>
+                            <div className="card-body" style={{ padding: "24px" }}>
+                              <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                                {/* Portfolio */}
+                                <div
+                                  style={{
+                                    padding: "16px",
+                                    backgroundColor: "#fff",
+                                    borderRadius: "8px",
+                                    border: "1px solid #e9ecef",
+                                  }}
+                                >
+                                  <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
+                                    <i
+                                      className="fas fa-folder"
+                                      style={{
+                                        color: "#007bff",
+                                        fontSize: "1.25rem",
+                                        marginRight: "12px",
+                                        width: "24px",
+                                      }}
+                                    ></i>
+                                    <strong style={{ color: "#2c3e50", fontSize: "0.95rem" }}>Portfolio</strong>
+                                  </div>
+                                  {user?.portfolio_link && user.portfolio_link !== "N/A" ? (
                                     <a
-  href={
-    user?.portfolio_link?.startsWith("http")
-      ? user.portfolio_link
-      : user?.portfolio_link
-      ? `https://${user.portfolio_link}`
-      : "#"
-  }
-  target="_blank"
-  rel="noopener noreferrer"
->
-  {user?.portfolio_link }
-</a>
-
+                                      href={user.portfolio_link.startsWith("http") ? user.portfolio_link : `https://${user.portfolio_link}`}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      style={{
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        padding: "8px 16px",
+                                        backgroundColor: "#e7f3ff",
+                                        color: "#007bff",
+                                        borderRadius: "6px",
+                                        textDecoration: "none",
+                                        fontSize: "0.9rem",
+                                        fontWeight: "600",
+                                        transition: "all 0.2s ease",
+                                      }}
+                                      onMouseEnter={(e) => {
+                                        e.target.style.backgroundColor = "#cfe2ff";
+                                      }}
+                                      onMouseLeave={(e) => {
+                                        e.target.style.backgroundColor = "#e7f3ff";
+                                      }}
+                                    >
+                                      <i className="fas fa-external-link-alt" style={{ marginRight: "8px" }}></i>
+                                      Visit Portfolio
+                                    </a>
                                   ) : (
-                                    "N/A"
+                                    <span style={{ color: "#6c757d", fontSize: "0.9rem" }}>N/A</span>
                                   )}
-                                </p>
+                                </div>
 
-                                <strong>Resume:</strong>
-                                <p className="text-muted font">
-                                  {user?.resume_link !== 'N/A'? (
-                                   <a
-  href={
-    user?.resume_link?.startsWith("http")
-      ? user.resume_link
-      : user?.resume_link
-      ? `https://${user.resume_link}`
-      : "#"
-  }
-  target="_blank"
-  rel="noopener noreferrer"
->
-  {user?.resume_link }
-</a>
-
+                                {/* Resume */}
+                                <div
+                                  style={{
+                                    padding: "16px",
+                                    backgroundColor: "#fff",
+                                    borderRadius: "8px",
+                                    border: "1px solid #e9ecef",
+                                  }}
+                                >
+                                  <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
+                                    <i
+                                      className="fas fa-file-alt"
+                                      style={{
+                                        color: "#28a745",
+                                        fontSize: "1.25rem",
+                                        marginRight: "12px",
+                                        width: "24px",
+                                      }}
+                                    ></i>
+                                    <strong style={{ color: "#2c3e50", fontSize: "0.95rem" }}>Resume</strong>
+                                  </div>
+                                  {user?.resume_link && user.resume_link !== "N/A" ? (
+                                    <a
+                                      href={user.resume_link.startsWith("http") ? user.resume_link : `https://${user.resume_link}`}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      style={{
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        padding: "8px 16px",
+                                        backgroundColor: "#fff3cd",
+                                        color: "#856404",
+                                        borderRadius: "6px",
+                                        textDecoration: "none",
+                                        fontSize: "0.9rem",
+                                        fontWeight: "600",
+                                        transition: "all 0.2s ease",
+                                      }}
+                                      onMouseEnter={(e) => {
+                                        e.target.style.backgroundColor = "#ffe69c";
+                                      }}
+                                      onMouseLeave={(e) => {
+                                        e.target.style.backgroundColor = "#fff3cd";
+                                      }}
+                                    >
+                                      <i className="fas fa-download" style={{ marginRight: "8px" }}></i>
+                                      View Resume
+                                    </a>
                                   ) : (
-                                    "N/A"
+                                    <span style={{ color: "#6c757d", fontSize: "0.9rem" }}>N/A</span>
                                   )}
-                                </p>
+                                </div>
                               </div>
                             </div>
                           </div>

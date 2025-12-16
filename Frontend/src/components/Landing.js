@@ -268,7 +268,7 @@ function Landing() {
 
       {/* Additional Sections */}
       <TopAlumni />
-      <TeamSection />
+      {/* <TeamSection /> */}
       <ContactSection />
       <FooterSection />
     </div>

@@ -21,7 +21,6 @@ const AllAlumnisContent = () => {
     message,
     icon,
     title,
-    showNotification,
     handleClose,
     setFilter,
     setShowProfileOfId,
@@ -98,6 +97,7 @@ const AllAlumnisContent = () => {
   } else {
     fetchAlumni(pageNumber, Alumnifilters);
   }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNumber, reloadFilter]);
 
   useEffect(() => {
@@ -105,7 +105,8 @@ const AllAlumnisContent = () => {
     setIsAllAdminPage(false);
     setIsAllAlumniPage(true); 
     setFilter(true);
-    setIsAllPostPage(false);    
+    setIsAllPostPage(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   console.log("Als=umni data ", alumniData);
@@ -125,7 +126,12 @@ const AllAlumnisContent = () => {
         <div className="card card-solid">
           <div
             className="card-body pb-0"
-            style={{ height: "150vh", overflowY: "auto" }}
+            style={{
+              height: "150vh",
+              overflowY: "auto",
+              backgroundColor: "#f8f9fa",
+              padding: "24px",
+            }}
           >
             <div className="row">
               <>
@@ -147,212 +153,500 @@ const AllAlumnisContent = () => {
                       <div
                         key={alumnus.id}
                         className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column"
+                        style={{ marginBottom: "24px" }}
                       >
-                        <div className="card bg-light d-flex flex-fill">
-                          <div className="card-header text-muted border-bottom-0">
-                            <b>{alumnus?.full_name || "N/A"} </b>
-                            <br />
-                            <small className="text-muted float-left">
-                              <b>
-                                Branch: {alumnus?.Branch || "N/A"} | Grad Year:{" "}
-                                {alumnus?.graduation_year || "N/A"} |
-                                Experience:{" "}
-                                {alumnus?.alumni_profile?.years_of_experience ||
-                                  "N/A"}{" "}
-                                Yr.
-                              </b>
-                            </small>
-                          </div>
-
-                          <hr
+                        <div
+                          className="card d-flex flex-fill"
+                          style={{
+                            borderRadius: "16px",
+                            border: "none",
+                            boxShadow: "0 2px 12px rgba(0, 0, 0, 0.08)",
+                            transition: "all 0.3s ease",
+                            overflow: "hidden",
+                            backgroundColor: "#ffffff",
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.boxShadow =
+                              "0 8px 24px rgba(0, 0, 0, 0.12)";
+                            e.currentTarget.style.transform = "translateY(-4px)";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.boxShadow =
+                              "0 2px 12px rgba(0, 0, 0, 0.08)";
+                            e.currentTarget.style.transform = "translateY(0)";
+                          }}
+                        >
+                          {/* Header Section with Gradient */}
+                          <div
                             style={{
-                              border: "1px solid #d2d6df",
-                              marginBottom: "10px",
+                              background:
+                                "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                              padding: "20px",
+                              color: "white",
+                              position: "relative",
                             }}
-                          />
-                          <div className="card-body pt-0">
-                            <div className="row">
-                              <div className="col-7">
-                                <p className="text-muted text-sm">
-                                  {alumnus?.alumni_profile?.Heading
-                                    ? alumnus.alumni_profile.Heading
-                                    : alumnus?.alumni_profile?.job_title
-                                    ? alumnus.alumni_profile.job_title
-                                    : "N/A"}
-                                </p>
-
-                                <ul className="ml-4 mb-0 fa-ul text-muted">
-                                  <li className="small">
-                                    <span className="fa-li">
-                                      <i className="fas fa-lg fa-building" />
-                                    </span>
-                                    Company:{" "}
-                                    {alumnus.alumni_profile
-                                      ?.current_company_name || "N/A"}
-                                  </li>
-                                  <li className="small mt-1">
-                                    <span className="fa-li">
-                                      <i className="fas fa-lg fa-id-badge" />
-                                    </span>
-                                    Role:{" "}
-                                    {alumnus.alumni_profile?.job_title || "N/A"}
-                                  </li>
-                                </ul>
-                              </div>
-                              <div className="col-5 text-center">
-                                <img
-                                  src={
-                                    alumnus?.Image
-                                      ? `${baseurl}/${alumnus?.Image}`
-                                      : `../../dist/img/user1-128x128.jpg`
-                                  } // Replace with dynamic image path if needed
-                                  alt="user-avatar"
-                                  className="img-circle img-fluid"
-                                />
-                              </div>
-                            </div>
-                            <hr
+                          >
+                            <div
                               style={{
-                                border: "1px solid #d2d6df",
-                                marginBottom: "10px",
-                                marginTop: "20px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                marginBottom: "12px",
                               }}
-                            />
-                            <div className="text-muted">
-                              <div className="text-muted mb-2">
-                                Portfolio and Resume
-                              </div>
-                              <ul className="ml-4 mb-0 fa-ul text-muted">
-                                <li className="small mt-1">
-                                  <span className="fa-li">
-                                    <i className="fas fa-lg fa-folder mr-1" />
+                            >
+                              <h4
+                                style={{
+                                  margin: 0,
+                                  fontSize: "1.25rem",
+                                  fontWeight: "700",
+                                  color: "white",
+                                }}
+                              >
+                                {alumnus?.full_name || "N/A"}
+                              </h4>
+                              {alumnus?.alumni_profile?.years_of_experience &&
+                                alumnus.alumni_profile.years_of_experience !==
+                                  "N/A" && (
+                                  <span
+                                    style={{
+                                      backgroundColor: "rgba(255, 255, 255, 0.25)",
+                                      padding: "4px 12px",
+                                      borderRadius: "20px",
+                                      fontSize: "0.75rem",
+                                      fontWeight: "600",
+                                      backdropFilter: "blur(10px)",
+                                    }}
+                                  >
+                                    {alumnus.alumni_profile.years_of_experience} Yrs Exp
                                   </span>
-                                  Portfolio{" "}
-                                  {alumnus?.portfolio_link !== "N/A" ? (
-                                    <a
-                                      href={
-                                        alumnus.portfolio_link.startsWith(
-                                          "http"
-                                        )
-                                          ? alumnus.portfolio_link
-                                          : `https://${alumnus.portfolio_link}`
-                                      }
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      Click here
-                                    </a>
-                                  ) : (
-                                    "N/A"
-                                  )}
-                                </li>
-                                <li className="small mt-1">
-                                  <span className="fa-li">
-                                    <i className="fas fa-lg fa-file-alt mr-1" />
-                                  </span>
-                                  Resume:{" "}
-                                  {alumnus?.resume_link !== "N/A" ? (
-                                    <a
-                                      href={
-                                        alumnus.resume_link.startsWith("http")
-                                          ? alumnus.resume_link
-                                          : `https://${alumnus.resume_link}`
-                                      }
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      Click here
-                                    </a>
-                                  ) : (
-                                    "N/A"
-                                  )}
-                                </li>
-                              </ul>
+                                )}
                             </div>
-                            <hr
-                              style={{
-                                border: "1px solid #d2d6df",
-                                marginBottom: "10px",
-                                marginTop: "10px",
-                              }}
-                            />
-                            {/* Additional Information Section */}
-                            <div className="text-muted">
-                              <div className="text-muted mb-2">
-                                Contact Info:
+                            <div style={{ fontSize: "0.875rem", opacity: 0.95 }}>
+                              <div style={{ marginBottom: "4px" }}>
+                                <i
+                                  className="fas fa-graduation-cap"
+                                  style={{ marginRight: "6px" }}
+                                ></i>
+                                {alumnus?.Branch || "N/A"} • Class of{" "}
+                                {alumnus?.graduation_year || "N/A"}
                               </div>
-                              <ul className="ml-4 mb-0 fa-ul text-muted">
-                                <li className="small mt-1">
-                                  <span className="fa-li">
-                                    <i className="fas fa-lg fa-envelope mr-1" />
-                                  </span>
-                                  Email:{" "}
-                                  {alumnus?.email && alumnus.email !== "N/A" ? (
-                                    <a href={`mailto:${alumnus.email}`}>
-                                      {alumnus.email}
-                                    </a>
-                                  ) : (
-                                    "N/A"
-                                  )}
-                                </li>
-                                <li className="small mt-1">
-                                  <span className="fa-li">
-                                    <i className="fab fa-lg fa-github mr-1" />
-                                  </span>
-                                  GitHub:{" "}
-                                  {alumnus?.Github &&
-                                  alumnus.Github !== "N/A" ? (
-                                    <a
-                                      href={
-                                        alumnus.Github.startsWith("http")
-                                          ? alumnus.Github
-                                          : `https://${alumnus.Github}`
-                                      }
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      {alumnus.Github}
-                                    </a>
-                                  ) : (
-                                    "N/A"
-                                  )}
-                                </li>
-                                <li className="small mt-1">
-                                  <span className="fa-li">
-                                    <i className="fab fa-lg fa-linkedin mr-1" />
-                                  </span>
-                                  LinkedIn:{" "}
-                                  {alumnus?.linkedin &&
-                                  alumnus.linkedin !== "N/A" ? (
-                                    <a
-                                      href={
-                                        alumnus.linkedin.startsWith("http")
-                                          ? alumnus.linkedin
-                                          : `https://${alumnus.linkedin}`
-                                      }
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      {alumnus.linkedin}
-                                    </a>
-                                  ) : (
-                                    "N/A"
-                                  )}
-                                </li>
-                               
-                              </ul>
                             </div>
                           </div>
-                          <div className="card-footer">
-                            <div className="text-right">
-                              <button
-                                onClick={() => handleViewProfile(alumnus)}
-                                className="btn btn-sm btn-primary"
-                                aria-label={`View profile of ${alumnus.full_name}`}
-                              >
-                                <i className="fas fa-user" /> View Profile
-                              </button>
+
+                          {/* Profile Image Section */}
+                          <div
+                            style={{
+                              textAlign: "center",
+                              marginTop: "-40px",
+                              position: "relative",
+                              zIndex: 1,
+                            }}
+                          >
+                            <div
+                              style={{
+                                display: "inline-block",
+                                position: "relative",
+                              }}
+                            >
+                              <img
+                                src={
+                                  alumnus?.Image
+                                    ? `${baseurl}/${alumnus?.Image}`
+                                    : `../../dist/img/user1-128x128.jpg`
+                                }
+                                alt={alumnus?.full_name || "Alumnus"}
+                                style={{
+                                  width: "100px",
+                                  height: "100px",
+                                  borderRadius: "50%",
+                                  border: "4px solid white",
+                                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+                                  objectFit: "cover",
+                                }}
+                                onError={(e) => {
+                                  e.target.src = `../../dist/img/user1-128x128.jpg`;
+                                }}
+                              />
                             </div>
+                          </div>
+
+                          {/* Body Content */}
+                          <div className="card-body" style={{ padding: "24px 20px" }}>
+                            {/* Job Title/Heading */}
+                            <div style={{ textAlign: "center", marginBottom: "16px" }}>
+                              <p
+                                style={{
+                                  margin: 0,
+                                  fontSize: "0.95rem",
+                                  fontWeight: "600",
+                                  color: "#2c3e50",
+                                  marginTop: "16px",
+                                }}
+                              >
+                                {alumnus?.alumni_profile?.Heading
+                                  ? alumnus.alumni_profile.Heading
+                                  : alumnus?.alumni_profile?.job_title
+                                  ? alumnus.alumni_profile.job_title
+                                  : "Professional"}
+                              </p>
+                            </div>
+
+                            {/* Company and Role */}
+                            <div
+                              style={{
+                                backgroundColor: "#f8f9fa",
+                                borderRadius: "8px",
+                                padding: "12px",
+                                marginBottom: "16px",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  marginBottom: "8px",
+                                }}
+                              >
+                                <i
+                                  className="fas fa-building"
+                                  style={{
+                                    color: "#007bff",
+                                    marginRight: "10px",
+                                    width: "20px",
+                                  }}
+                                ></i>
+                                <span
+                                  style={{
+                                    fontSize: "0.875rem",
+                                    color: "#495057",
+                                    fontWeight: "500",
+                                  }}
+                                >
+                                  {alumnus.alumni_profile?.current_company_name ||
+                                    "Not Specified"}
+                                </span>
+                              </div>
+                              <div style={{ display: "flex", alignItems: "center" }}>
+                                <i
+                                  className="fas fa-id-badge"
+                                  style={{
+                                    color: "#28a745",
+                                    marginRight: "10px",
+                                    width: "20px",
+                                  }}
+                                ></i>
+                                <span
+                                  style={{
+                                    fontSize: "0.875rem",
+                                    color: "#495057",
+                                    fontWeight: "500",
+                                  }}
+                                >
+                                  {alumnus.alumni_profile?.job_title || "Not Specified"}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Portfolio and Resume */}
+                            <div style={{ marginBottom: "16px" }}>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  gap: "12px",
+                                  justifyContent: "space-between",
+                                }}
+                              >
+                                {alumnus?.portfolio_link &&
+                                alumnus.portfolio_link !== "N/A" ? (
+                                  <a
+                                    href={
+                                      alumnus.portfolio_link.startsWith("http")
+                                        ? alumnus.portfolio_link
+                                        : `https://${alumnus.portfolio_link}`
+                                    }
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{
+                                      flex: 1,
+                                      padding: "8px 12px",
+                                      backgroundColor: "#e7f3ff",
+                                      color: "#007bff",
+                                      borderRadius: "6px",
+                                      textAlign: "center",
+                                      textDecoration: "none",
+                                      fontSize: "0.875rem",
+                                      fontWeight: "600",
+                                      transition: "all 0.2s ease",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      gap: "6px",
+                                    }}
+                                    onMouseEnter={(e) => {
+                                      e.target.style.backgroundColor = "#cfe2ff";
+                                    }}
+                                    onMouseLeave={(e) => {
+                                      e.target.style.backgroundColor = "#e7f3ff";
+                                    }}
+                                  >
+                                    <i className="fas fa-folder"></i>
+                                    Portfolio
+                                  </a>
+                                ) : (
+                                  <div
+                                    style={{
+                                      flex: 1,
+                                      padding: "8px 12px",
+                                      backgroundColor: "#f8f9fa",
+                                      color: "#6c757d",
+                                      borderRadius: "6px",
+                                      textAlign: "center",
+                                      fontSize: "0.875rem",
+                                    }}
+                                  >
+                                    <i className="fas fa-folder"></i> Portfolio N/A
+                                  </div>
+                                )}
+
+                                {alumnus?.resume_link &&
+                                alumnus.resume_link !== "N/A" ? (
+                                  <a
+                                    href={
+                                      alumnus.resume_link.startsWith("http")
+                                        ? alumnus.resume_link
+                                        : `https://${alumnus.resume_link}`
+                                    }
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{
+                                      flex: 1,
+                                      padding: "8px 12px",
+                                      backgroundColor: "#fff3cd",
+                                      color: "#856404",
+                                      borderRadius: "6px",
+                                      textAlign: "center",
+                                      textDecoration: "none",
+                                      fontSize: "0.875rem",
+                                      fontWeight: "600",
+                                      transition: "all 0.2s ease",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      gap: "6px",
+                                    }}
+                                    onMouseEnter={(e) => {
+                                      e.target.style.backgroundColor = "#ffe69c";
+                                    }}
+                                    onMouseLeave={(e) => {
+                                      e.target.style.backgroundColor = "#fff3cd";
+                                    }}
+                                  >
+                                    <i className="fas fa-file-alt"></i>
+                                    Resume
+                                  </a>
+                                ) : (
+                                  <div
+                                    style={{
+                                      flex: 1,
+                                      padding: "8px 12px",
+                                      backgroundColor: "#f8f9fa",
+                                      color: "#6c757d",
+                                      borderRadius: "6px",
+                                      textAlign: "center",
+                                      fontSize: "0.875rem",
+                                    }}
+                                  >
+                                    <i className="fas fa-file-alt"></i> Resume N/A
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Contact Info */}
+                            <div
+                              style={{
+                                borderTop: "1px solid #e9ecef",
+                                paddingTop: "16px",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  fontSize: "0.875rem",
+                                  fontWeight: "600",
+                                  color: "#495057",
+                                  marginBottom: "12px",
+                                }}
+                              >
+                                <i className="fas fa-envelope" style={{ marginRight: "6px" }}></i>
+                                Contact
+                              </div>
+                              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                                {alumnus?.email && alumnus.email !== "N/A" ? (
+                                  <a
+                                    href={`mailto:${alumnus.email}`}
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      fontSize: "0.8rem",
+                                      color: "#495057",
+                                      textDecoration: "none",
+                                      transition: "color 0.2s ease",
+                                    }}
+                                    onMouseEnter={(e) => {
+                                      e.target.style.color = "#007bff";
+                                    }}
+                                    onMouseLeave={(e) => {
+                                      e.target.style.color = "#495057";
+                                    }}
+                                  >
+                                    <i
+                                      className="fas fa-envelope"
+                                      style={{
+                                        marginRight: "8px",
+                                        width: "16px",
+                                        color: "#007bff",
+                                      }}
+                                    ></i>
+                                    <span
+                                      style={{
+                                        overflow: "hidden",
+                                        textOverflow: "ellipsis",
+                                        whiteSpace: "nowrap",
+                                      }}
+                                    >
+                                      {alumnus.email}
+                                    </span>
+                                  </a>
+                                ) : null}
+
+                                {alumnus?.Github && alumnus.Github !== "N/A" ? (
+                                  <a
+                                    href={
+                                      alumnus.Github.startsWith("http")
+                                        ? alumnus.Github
+                                        : `https://${alumnus.Github}`
+                                    }
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      fontSize: "0.8rem",
+                                      color: "#495057",
+                                      textDecoration: "none",
+                                      transition: "color 0.2s ease",
+                                    }}
+                                    onMouseEnter={(e) => {
+                                      e.target.style.color = "#007bff";
+                                    }}
+                                    onMouseLeave={(e) => {
+                                      e.target.style.color = "#495057";
+                                    }}
+                                  >
+                                    <i
+                                      className="fab fa-github"
+                                      style={{
+                                        marginRight: "8px",
+                                        width: "16px",
+                                        color: "#24292e",
+                                      }}
+                                    ></i>
+                                    <span
+                                      style={{
+                                        overflow: "hidden",
+                                        textOverflow: "ellipsis",
+                                        whiteSpace: "nowrap",
+                                      }}
+                                    >
+                                      GitHub Profile
+                                    </span>
+                                  </a>
+                                ) : null}
+
+                                {alumnus?.linkedin && alumnus.linkedin !== "N/A" ? (
+                                  <a
+                                    href={
+                                      alumnus.linkedin.startsWith("http")
+                                        ? alumnus.linkedin
+                                        : `https://${alumnus.linkedin}`
+                                    }
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      fontSize: "0.8rem",
+                                      color: "#495057",
+                                      textDecoration: "none",
+                                      transition: "color 0.2s ease",
+                                    }}
+                                    onMouseEnter={(e) => {
+                                      e.target.style.color = "#007bff";
+                                    }}
+                                    onMouseLeave={(e) => {
+                                      e.target.style.color = "#495057";
+                                    }}
+                                  >
+                                    <i
+                                      className="fab fa-linkedin"
+                                      style={{
+                                        marginRight: "8px",
+                                        width: "16px",
+                                        color: "#0077b5",
+                                      }}
+                                    ></i>
+                                    <span
+                                      style={{
+                                        overflow: "hidden",
+                                        textOverflow: "ellipsis",
+                                        whiteSpace: "nowrap",
+                                      }}
+                                    >
+                                      LinkedIn Profile
+                                    </span>
+                                  </a>
+                                ) : null}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Footer with View Profile Button */}
+                          <div
+                            className="card-footer"
+                            style={{
+                              backgroundColor: "#f8f9fa",
+                              borderTop: "1px solid #e9ecef",
+                              padding: "16px 20px",
+                            }}
+                          >
+                            <button
+                              onClick={() => handleViewProfile(alumnus)}
+                              className="btn btn-primary"
+                              aria-label={`View profile of ${alumnus.full_name}`}
+                              style={{
+                                width: "100%",
+                                borderRadius: "8px",
+                                fontWeight: "600",
+                                padding: "10px",
+                                fontSize: "0.95rem",
+                                boxShadow: "0 2px 8px rgba(0, 123, 255, 0.2)",
+                                transition: "all 0.3s ease",
+                                border: "none",
+                              }}
+                              onMouseEnter={(e) => {
+                                e.target.style.transform = "translateY(-2px)";
+                                e.target.style.boxShadow =
+                                  "0 4px 12px rgba(0, 123, 255, 0.3)";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.target.style.transform = "translateY(0)";
+                                e.target.style.boxShadow =
+                                  "0 2px 8px rgba(0, 123, 255, 0.2)";
+                              }}
+                            >
+                              <i className="fas fa-user" style={{ marginRight: "8px" }}></i>
+                              View Profile
+                            </button>
                           </div>
                         </div>
                       </div>

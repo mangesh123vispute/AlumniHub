@@ -4,26 +4,21 @@ import axios from "axios";
 import AuthContext from "../../context/AuthContext";
 import LoadingSpinner from "../Loading/Loading";
 import Notification from "../Notification/Notification";
-import moment from "moment"; // Optional library for better date formatting
 import baseurl from "../const";
 import { useNavigate } from "react-router-dom";
 
 const AllPostContent = () => {
   const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState([]);
-  const [user, setUser] = useState(null);
   const [page, setPage] = useState(1);     // Keep track of the page number
-  const [hasMore, setHasMore] = useState(true);
   const [totalPages,setTotalPages] = useState(1)
   const [singlePost, setSinglePost] = useState(null);
   const {
-    verifyaccessToken,
     isOpen,
     message,
     icon,
     title,
     handleClose,
-    showNotification,
     setFilter,
     setShowProfileOfId,
     setIsAllStudentPage,
@@ -60,6 +55,7 @@ const [isImageOpen, setIsImageOpen] = useState(false);
     setIsAllAlumniPage(false);
     setIsAllPostPage(true);
     setFilter(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   
 
@@ -72,7 +68,7 @@ const [isImageOpen, setIsImageOpen] = useState(false);
      } else {
        getAllPosts(page);
     }
-    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, reloadFilter]);
 
  
@@ -96,7 +92,6 @@ const [isImageOpen, setIsImageOpen] = useState(false);
       const response = await axios.get(`${baseurl}/posts?${queryParams}`);
       if (response.status === 200) {
         setPosts(response.data.results); // Set fetched posts
-        setHasMore(response.data.next !== null); // Determine if there are more posts
         const totalItems = response.data.count;
         setTotalPages(Math.ceil(totalItems / 10));
       }
@@ -156,9 +151,10 @@ finally {
                 maxHeight: "131vh",
                 overflowY: "auto",
                 overflowX: "hidden",
-                padding: "15px",
+                padding: "24px",
                 boxSizing: "border-box",
                 width: "auto",
+                backgroundColor: "#f8f9fa",
               }}
             >
               {/* Post */}
@@ -169,178 +165,343 @@ finally {
                     fontSize: "1.5em",
                     fontWeight: "bold",
                     height: "100vh",
+                    paddingTop: "50px",
+                    color: "#6c757d",
                   }}
                 >
                   No Posts Available
                 </div>
               ) : (
                 <>
-                  {" "}
                   {posts?.map((post, ind) => (
-                    <div key={ind} className="post">
-                    
+                    <div
+                      key={ind}
+                      className="post"
+                      style={{
+                        backgroundColor: "#ffffff",
+                        borderRadius: "12px",
+                        padding: "24px",
+                        marginBottom: "24px",
+                        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
+                        border: "1px solid #e9ecef",
+                        transition: "all 0.3s ease",
+                        cursor: "default",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.boxShadow =
+                          "0 4px 16px rgba(0, 0, 0, 0.12)";
+                        e.currentTarget.style.transform = "translateY(-2px)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.boxShadow =
+                          "0 2px 8px rgba(0, 0, 0, 0.08)";
+                        e.currentTarget.style.transform = "translateY(0)";
+                      }}
+                    >
+                      {/* Author Header Section */}
                       <div
-                        className="user-block"
                         style={{
-                          borderBottom: "0.8px dashed  #ccc",
-                          paddingBottom: "10px", // Change the width and color as needed
+                          display: "flex",
+                          alignItems: "center",
+                          marginBottom: "16px",
+                          paddingBottom: "16px",
+                          borderBottom: "1px solid #e9ecef",
                         }}
                       >
-                        <img
-                          className="img-circle img-bordered-sm"
-                          src={`${baseurl}/${post?.author?.Image || "#"}`}
-                          alt="user image"
-                        />
-
-                        <span className="username">
-                          <a
-                            onClick={() => handleViewProfile(post?.author)}
-                            className="view-profile-button "
+                        <div
+                          style={{
+                            position: "relative",
+                            marginRight: "16px",
+                          }}
+                        >
+                          <img
+                            src={`${baseurl}/${post?.author?.Image || "#"}`}
+                            alt={post?.author?.full_name || "Author"}
                             style={{
-                              cursor: "pointer",
+                              width: "56px",
+                              height: "56px",
+                              borderRadius: "50%",
+                              objectFit: "cover",
+                              border: "3px solid #f0f0f0",
+                              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                            }}
+                            onError={(e) => {
+                              e.target.src = "https://via.placeholder.com/56?text=N/A";
+                              e.target.style.backgroundColor = "#e9ecef";
+                            }}
+                          />
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              flexWrap: "wrap",
+                              gap: "12px",
+                              marginBottom: "4px",
                             }}
                           >
-                            {post?.author?.full_name || "Author"}
-                          </a>
-                        </span>
-
-                        <span className="description">
-                          {formatDate(post?.created_at) || "Date"}
-                          <br></br>
-                          <span>
-                            {" "}
-                            <b
+                            <button
+                              onClick={() => handleViewProfile(post?.author)}
                               style={{
-                                color: "Green",
-                                textTransform: "capitalize",
+                                cursor: "pointer",
+                                fontSize: "1.1rem",
+                                fontWeight: "600",
+                                color: "#2c3e50",
+                                textDecoration: "none",
+                                transition: "color 0.2s ease",
+                                background: "none",
+                                border: "none",
+                                padding: 0,
+                                textAlign: "left",
+                              }}
+                              onMouseEnter={(e) => {
+                                e.target.style.color = "#007bff";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.target.style.color = "#2c3e50";
                               }}
                             >
-                              {post?.tag || "Tag"}
-                            </b>
-                          </span>
-                        </span>
+                              {post?.author?.full_name || "Author"}
+                            </button>
+                            {post?.tag && (
+                              <span
+                                style={{
+                                  display: "inline-block",
+                                  padding: "4px 12px",
+                                  borderRadius: "20px",
+                                  backgroundColor: "#e8f5e9",
+                                  color: "#2e7d32",
+                                  fontSize: "0.85rem",
+                                  fontWeight: "600",
+                                  textTransform: "capitalize",
+                                  letterSpacing: "0.3px",
+                                }}
+                              >
+                                {post?.tag}
+                              </span>
+                            )}
+                          </div>
+                          <div
+                            style={{
+                              fontSize: "0.875rem",
+                              color: "#6c757d",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "6px",
+                            }}
+                          >
+                            <i
+                              className="fas fa-clock"
+                              style={{ fontSize: "0.75rem" }}
+                            ></i>
+                            <span>{formatDate(post?.created_at) || "Date"}</span>
+                          </div>
+                        </div>
                       </div>
-                      <span
+
+                      {/* Post Title */}
+                      <h3
                         style={{
-                          fontWeight: "bold",
-                          fontSize: "1.09em",
+                          fontWeight: "700",
+                          fontSize: "1.5rem",
+                          color: "#1a1a1a",
+                          marginBottom: "12px",
+                          lineHeight: "1.4",
+                          letterSpacing: "-0.3px",
                         }}
                       >
                         {post?.title || "Title"}
-                      </span>
-                      <p
+                      </h3>
+
+                      {/* Post Content */}
+                      <div
                         className="postfont"
                         style={{
-                          marginTop: "0.5em",
-                          marginBottom: "0.5em",
+                          fontSize: "1rem",
+                          lineHeight: "1.7",
+                          color: "#4a4a4a",
                           whiteSpace: "pre-wrap",
                           wordWrap: "break-word",
                           hyphens: "auto",
                           overflowWrap: "break-word",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
+                          marginTop: "0.5em",
+                          marginBottom: "0.5em",
+                          textAlign: "justify",
                         }}
                       >
                         {post?.content || "Content"}
-                      </p>
-                      {/* <div className="row">
-                        {post?.Image !== "/media/default/def.jpeg" &&
-                          post?.Image && (
-                            <div className="col-auto mt-3">
-                              <a
-                                href="#"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  handleImageClick();
-                                }}
-                                className="mr-3"
-                              >
-                                <i className="fas fa-image mr-1" /> Image
-                              </a>
+                      </div>
 
-                              {isImageOpen && (
-                                <div
-                                  style={{
-                                    position: "fixed",
-                                    top: 0,
-                                    left: 0,
-                                    width: "100%",
-                                    height: "100%",
-                                    backgroundColor: "tranparent",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    zIndex: 1050,
-                                  }}
-                                  onClick={handleCloseModal}
-                                >
-                                  <div
-                                    style={{
-                                      position: "relative",
-                                      maxWidth: "100%",
-                                      maxHeight: "100%",
-                                      display: "flex",
-                                      justifyContent: "center",
-                                      alignItems: "center",
-                                    }}
-                                  >
-                                    <img
-                                      src={post?.Image}
-                                      alt="Post"
-                                      style={{
-                                        // maxWidth: "100%",
-                                        // maxHeight: "100%",
-                                        width: "100%",
-                                        height: "auto",
-                                        borderRadius: "5px",
-                                        boxShadow:
-                                          "0 4px 12px rgba(0, 0, 0, 0.3)",
-                                      }}
-                                    />
-                                    <span
-                                      style={{
-                                        position: "absolute",
-                                        top: "10px",
-                                        right: "10px",
-                                        fontSize: "1.5em",
-                                        color: "#fff",
-                                        cursor: "pointer",
-                                      }}
-                                      onClick={handleCloseModal}
-                                    >
-                                      &times;
-                                    </span>
-                                  </div>
-                                </div>
-                              )}
-                            </div>
+                      {/* Optional: Post Actions Footer */}
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "flex-start",
+                          gap: "20px",
+                          marginTop: "16px",
+                          paddingTop: "16px",
+                          borderTop: "1px solid #f0f0f0",
+                        }}
+                      >
+                        {post?.Image &&
+                          post?.Image !== "/media/default/def.jpeg" && (
+                            <button
+                              onClick={() => {
+                                handleImageClick();
+                                setSinglePost(post);
+                              }}
+                              style={{
+                                color: "#6c757d",
+                                textDecoration: "none",
+                                fontSize: "0.9rem",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "6px",
+                                transition: "color 0.2s ease",
+                                background: "none",
+                                border: "none",
+                                padding: 0,
+                                cursor: "pointer",
+                              }}
+                              onMouseEnter={(e) => {
+                                e.target.style.color = "#007bff";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.target.style.color = "#6c757d";
+                              }}
+                            >
+                              <i className="fas fa-image"></i>
+                              <span>Image</span>
+                            </button>
                           )}
 
                         {post?.DocUrl && (
-                          <div className="col-auto mt-3">
-                            <a
-                              href={post?.DocUrl || "#"}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="mr-3"
-                            >
-                              <i className="fas fa-file-alt mr-1" /> Document
-                            </a>
-                          </div>
+                          <a
+                            href={post?.DocUrl || "#"}
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{
+                              color: "#6c757d",
+                              textDecoration: "none",
+                              fontSize: "0.9rem",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "6px",
+                              transition: "color 0.2s ease",
+                            }}
+                            onMouseEnter={(e) => {
+                              e.target.style.color = "#007bff";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.color = "#6c757d";
+                            }}
+                          >
+                            <i className="fas fa-file-alt"></i>
+                            <span>Document</span>
+                          </a>
                         )}
+
                         {post?.link && (
-                          <div className="col-auto">
-                            <a
-                              href={post?.link || "#"}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="mr-3"
-                            >
-                              <i className="fas fa-link mr-1" /> Link
-                            </a>
-                          </div>
+                          <a
+                            href={post?.link || "#"}
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{
+                              color: "#6c757d",
+                              textDecoration: "none",
+                              fontSize: "0.9rem",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "6px",
+                              transition: "color 0.2s ease",
+                            }}
+                            onMouseEnter={(e) => {
+                              e.target.style.color = "#007bff";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.color = "#6c757d";
+                            }}
+                          >
+                            <i className="fas fa-link"></i>
+                            <span>Link</span>
+                          </a>
                         )}
-                      </div> */}
+                      </div>
+
+                      {/* Image Modal */}
+                      {isImageOpen && singlePost?.Image && (
+                        <div
+                          style={{
+                            position: "fixed",
+                            top: 0,
+                            left: 0,
+                            width: "100%",
+                            height: "100%",
+                            backgroundColor: "rgba(0, 0, 0, 0.85)",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            zIndex: 1050,
+                            cursor: "pointer",
+                          }}
+                          onClick={handleCloseModal}
+                        >
+                          <div
+                            style={{
+                              position: "relative",
+                              maxWidth: "90%",
+                              maxHeight: "90%",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <img
+                              src={`${baseurl}/${singlePost?.Image}`}
+                              alt="Post"
+                              style={{
+                                maxWidth: "100%",
+                                maxHeight: "90vh",
+                                borderRadius: "8px",
+                                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.5)",
+                              }}
+                            />
+                            <button
+                              onClick={handleCloseModal}
+                              style={{
+                                position: "absolute",
+                                top: "15px",
+                                right: "15px",
+                                fontSize: "2rem",
+                                color: "#fff",
+                                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                                border: "none",
+                                borderRadius: "50%",
+                                width: "40px",
+                                height: "40px",
+                                cursor: "pointer",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                transition: "background-color 0.2s ease",
+                              }}
+                              onMouseEnter={(e) => {
+                                e.target.style.backgroundColor =
+                                  "rgba(0, 0, 0, 0.8)";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.target.style.backgroundColor =
+                                  "rgba(0, 0, 0, 0.5)";
+                              }}
+                            >
+                              &times;
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </>
